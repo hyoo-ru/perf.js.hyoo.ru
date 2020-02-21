@@ -1,4 +1,4 @@
-$mol_app_jsperf $mol_page
+$hyoo_jsperf $mol_page
 	title @ \JS Performance
 	attr *
 		^
@@ -21,7 +21,7 @@ $mol_app_jsperf $mol_page
 		<= Postfix $mol_textarea
 			value?val <=> postfix?val \
 			hint <= postfix_hint @ \Teardown code for all cases. Use {#} to insert iterations count.
-	Case!index $mol_app_jsperf_case
+	Case!index $hyoo_jsperf_case
 		source?val <=> source!index?val \
 		results?val <=> results!index?val \
 	tools /
@@ -43,17 +43,17 @@ $mol_app_jsperf $mol_page
 			title <= run_title @ \Run
 			click?event <=> run?event null
 
-$mol_app_jsperf_case $mol_view
+$hyoo_jsperf_case $mol_view
 	results /
 	sub <= columns /
 		<= Source $mol_textarea
 			value?val <=> source?val \
 			hint <= source_hint @ \Case source code. Use {#} to insert iteration number.
-	Result!level $mol_app_jsperf_case_result
-		result <= result!level $mol_app_jsperf_stats
+	Result!level $hyoo_jsperf_case_result
+		result <= result!level $hyoo_jsperf_stats
 
-$mol_app_jsperf_case_result $mol_view
-	result $mol_app_jsperf_stats
+$hyoo_jsperf_case_result $mol_view
+	result $hyoo_jsperf_stats
 	sub /
 		<= Stats $mol_view sub /
 			<= Frequency $mol_view sub / <= frequency \
