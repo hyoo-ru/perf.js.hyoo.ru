@@ -1,0 +1,10 @@
+{
+	"$hyoo_jsperf_case_source_hint": "Case source code. Use {#} to insert iteration number.",
+	"$hyoo_jsperf_new_hint": "New benchmark",
+	"$hyoo_jsperf_optimized_title": "Optimized",
+	"$hyoo_jsperf_parmalink_hint": "Permamemnt short link",
+	"$hyoo_jsperf_postfix_hint": "Teardown code for all cases. Use {#} to insert iterations count.",
+	"$hyoo_jsperf_prefix_hint": "Setup code for all cases. Use {#} to insert iterations count. Use  $mol_import.script( uri ) to load external.",
+	"$hyoo_jsperf_run_title": "Run",
+	"$hyoo_jsperf_title": "JS Performance"
+}
