@@ -3378,17 +3378,33 @@ var $;
                 depth: 0,
                 ignoreInitial: true,
             });
-            watcher.on('all', (type, path) => $.$mol_fiber_unlimit(() => {
+            const handler = (type, path) => $.$mol_fiber_unlimit(() => {
                 const file = $mol_file.relative(path.replace(/\\/g, '/'));
-                file.stat(undefined, $.$mol_mem_force_cache);
+                file.reset();
                 if (type === 'change')
                     return;
-                file.parent().stat(undefined, $.$mol_mem_force_cache);
-            }));
+                file.parent().reset();
+            });
+            watcher.on('all', handler);
             watcher.on('error', (error) => {
                 this.stat(error, $.$mol_mem_force_cache);
             });
-            return watcher;
+            return {
+                destructor() {
+                    watcher.removeAllListeners();
+                }
+            };
+        }
+        reset() {
+            try {
+                this.stat(undefined, $.$mol_mem_force_cache);
+                return true;
+            }
+            catch (error) {
+                if (error.code !== 'ENOENT')
+                    return $.$mol_fail_hidden(error);
+                return false;
+            }
         }
         stat(next, force) {
             const path = this.path();
