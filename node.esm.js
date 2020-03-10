@@ -2437,6 +2437,9 @@ var $;
             });
             return min;
         }
+        maximal_width() {
+            return this.minimal_width();
+        }
         minimal_height() {
             let min = 0;
             try {
@@ -2670,6 +2673,89 @@ var $;
 //element.js.map
 ;
 "use strict";
+//deep.js.map
+;
+"use strict";
+//override.js.map
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_decor {
+        constructor(value) {
+            this.value = value;
+        }
+        prefix() { return ''; }
+        valueOf() { return this.value; }
+        postfix() { return ''; }
+        toString() {
+            return `${this.prefix()}${this.valueOf()}${this.postfix()}`;
+        }
+    }
+    $.$mol_decor = $mol_decor;
+})($ || ($ = {}));
+//decor.js.map
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_style_unit extends $.$mol_decor {
+        constructor(value, literal) {
+            super(value);
+            this.literal = literal;
+        }
+        postfix() {
+            return this.literal;
+        }
+        static per(value) { return new $mol_style_unit(value, '%'); }
+        static px(value) { return new $mol_style_unit(value, 'px'); }
+        static mm(value) { return new $mol_style_unit(value, 'mm'); }
+        static cm(value) { return new $mol_style_unit(value, 'cm'); }
+        static Q(value) { return new $mol_style_unit(value, 'Q'); }
+        static in(value) { return new $mol_style_unit(value, 'in'); }
+        static pc(value) { return new $mol_style_unit(value, 'pc'); }
+        static pt(value) { return new $mol_style_unit(value, 'pt'); }
+        static cap(value) { return new $mol_style_unit(value, 'cap'); }
+        static ch(value) { return new $mol_style_unit(value, 'ch'); }
+        static em(value) { return new $mol_style_unit(value, 'em'); }
+        static rem(value) { return new $mol_style_unit(value, 'rem'); }
+        static ex(value) { return new $mol_style_unit(value, 'ex'); }
+        static ic(value) { return new $mol_style_unit(value, 'ic'); }
+        static lh(value) { return new $mol_style_unit(value, 'lh'); }
+        static rlh(value) { return new $mol_style_unit(value, 'rlh'); }
+        static vh(value) { return new $mol_style_unit(value, 'vh'); }
+        static vw(value) { return new $mol_style_unit(value, 'vw'); }
+        static vi(value) { return new $mol_style_unit(value, 'vi'); }
+        static vb(value) { return new $mol_style_unit(value, 'vb'); }
+        static vmin(value) { return new $mol_style_unit(value, 'vmin'); }
+        static vmax(value) { return new $mol_style_unit(value, 'vmax'); }
+    }
+    $.$mol_style_unit = $mol_style_unit;
+})($ || ($ = {}));
+//unit.js.map
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_style_func extends $.$mol_decor {
+        constructor(value, name) {
+            super(value);
+            this.name = name;
+        }
+        prefix() { return this.name + '('; }
+        postfix() { return ')'; }
+        static calc(value) {
+            return new $mol_style_func(value, 'calc');
+        }
+        static fit_content(value) {
+            return new $mol_style_func(value, 'fit-content');
+        }
+    }
+    $.$mol_style_func = $mol_style_func;
+})($ || ($ = {}));
+//func.js.map
+;
+"use strict";
 //properties.js.map
 ;
 "use strict";
@@ -2686,7 +2772,14 @@ var $;
                 if (/^[a-z]/.test(key)) {
                     const name = key.replace(/[A-Z]/g, letter => '-' + letter.toLowerCase());
                     const val = config[key];
-                    props.push(`\t${name}: ${val};\n`);
+                    if (val.constructor === Object) {
+                        for (let suffix in val) {
+                            props.push(`\t${name}-${suffix}: ${val[suffix]};\n`);
+                        }
+                    }
+                    else {
+                        props.push(`\t${name}: ${val};\n`);
+                    }
                 }
                 else if (/^[A-Z]/.test(key)) {
                     make_class(prefix + '_' + key.toLowerCase(), suffix, config[key]);
@@ -3107,7 +3200,11 @@ var $;
         $.$mol_style_define($$.$mol_scroll, {
             display: 'block',
             overflow: 'auto',
-            flex: '1 1 auto',
+            flex: {
+                grow: 1,
+                shrink: 1,
+                basis: 'auto',
+            },
             alignSelf: 'stretch',
             boxSizing: 'border-box',
             willChange: 'scroll-position',
@@ -3132,8 +3229,8 @@ var $;
             '@media': {
                 'print': {
                     overflow: 'visible',
-                }
-            }
+                },
+            },
         });
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
@@ -3255,7 +3352,11 @@ var $;
             display: 'flex',
             margin: '0',
             flexDirection: 'column',
-            flex: '1 1 auto',
+            flex: {
+                grow: 1,
+                shrink: 1,
+                basis: 'auto',
+            },
             position: 'relative',
             alignSelf: 'stretch',
             maxWidth: '100%',
@@ -3273,14 +3374,22 @@ var $;
                 display: 'flex',
                 flexWrap: 'wrap',
                 justifyContent: 'space-between',
-                flex: '0 0 auto',
+                flex: {
+                    grow: 0,
+                    shrink: 0,
+                    basis: 'auto',
+                },
                 position: 'relative',
                 margin: '0',
                 minHeight: 'calc( 1.5em + 2rem )',
                 padding: '.5rem',
             },
             Title: {
-                flex: '1000 1 50%',
+                flex: {
+                    grow: 1000,
+                    shrink: 1,
+                    basis: $.$mol_style_unit.per(50),
+                },
                 padding: '.5rem',
                 wordBreak: 'normal',
                 cursor: 'default',
@@ -3289,7 +3398,11 @@ var $;
                 },
             },
             Tools: {
-                flex: '1 1 auto',
+                flex: {
+                    grow: 1,
+                    shrink: 1,
+                    basis: 'auto',
+                },
                 display: 'flex',
                 justifyContent: 'flex-end',
                 ':empty': {
@@ -3297,16 +3410,24 @@ var $;
                 },
             },
             Body: {
-                flex: '1000 1 100%',
+                flex: {
+                    grow: 1000,
+                    shrink: 1,
+                    basis: $.$mol_style_unit.per(100),
+                },
                 margin: '0',
             },
             Foot: {
                 display: 'flex',
                 justifyContent: 'space-between',
-                flex: '0 0 auto',
+                flex: {
+                    grow: 0,
+                    shrink: 0,
+                    basis: 'auto',
+                },
                 margin: '0',
                 overflow: 'hidden',
-            }
+            },
         });
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
@@ -4839,6 +4960,63 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_paragraph extends $.$mol_view {
+        line_height() {
+            return 24;
+        }
+        letter_width() {
+            return 8;
+        }
+    }
+    $.$mol_paragraph = $mol_paragraph;
+})($ || ($ = {}));
+//paragraph.view.tree.js.map
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_paragraph extends $.$mol_paragraph {
+            maximal_width() {
+                let width = 0;
+                const letter = this.letter_width();
+                for (const kid of this.sub()) {
+                    if (!kid)
+                        continue;
+                    if (kid instanceof $.$mol_view) {
+                        width += kid.maximal_width();
+                    }
+                    else if (typeof kid !== 'object') {
+                        width += String(kid).length * letter;
+                    }
+                }
+                return width;
+            }
+            minimal_width() {
+                return Math.max(Math.min(this.$.$mol_window.size().width, this.maximal_width()), this.letter_width());
+            }
+            minimal_height() {
+                return Math.ceil(this.maximal_width() / this.minimal_width()) * this.line_height();
+            }
+        }
+        __decorate([
+            $.$mol_mem
+        ], $mol_paragraph.prototype, "maximal_width", null);
+        __decorate([
+            $.$mol_mem
+        ], $mol_paragraph.prototype, "minimal_width", null);
+        __decorate([
+            $.$mol_mem
+        ], $mol_paragraph.prototype, "minimal_height", null);
+        $$.$mol_paragraph = $mol_paragraph;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//paragraph.view.js.map
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_link extends $.$mol_view {
         dom_name() {
             return "a";
@@ -5096,10 +5274,7 @@ var $;
     $.$mol_text = $mol_text;
 })($ || ($ = {}));
 (function ($) {
-    class $mol_text_row extends $.$mol_view {
-        minimal_height() {
-            return 40;
-        }
+    class $mol_text_row extends $.$mol_paragraph {
         attr() {
             return (Object.assign(Object.assign({}, super.attr()), { "mol_text_type": this.type() }));
         }
@@ -5110,12 +5285,9 @@ var $;
     $.$mol_text_row = $mol_text_row;
 })($ || ($ = {}));
 (function ($) {
-    class $mol_text_header extends $.$mol_view {
+    class $mol_text_header extends $.$mol_paragraph {
         dom_name() {
             return "h";
-        }
-        minimal_height() {
-            return 50;
         }
         attr() {
             return (Object.assign(Object.assign({}, super.attr()), { "mol_text_header_level": this.level() }));
@@ -5136,7 +5308,7 @@ var $;
     $.$mol_text_header = $mol_text_header;
 })($ || ($ = {}));
 (function ($) {
-    class $mol_text_span extends $.$mol_view {
+    class $mol_text_span extends $.$mol_paragraph {
         dom_name() {
             return "span";
         }
