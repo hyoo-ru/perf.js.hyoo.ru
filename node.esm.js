@@ -1322,7 +1322,7 @@ var $;
                 if (next === undefined) {
                     const cache = get_cache(this);
                     if (force === $.$mol_mem_force_cache)
-                        cache.obsolete(Number.NaN);
+                        return cache.obsolete(Number.NaN);
                     if ($.$mol_atom2.current)
                         return cache.get();
                     else
@@ -1436,7 +1436,7 @@ var $;
                 if (next === undefined) {
                     const cache = get_cache(this, key);
                     if (force === $.$mol_mem_force_cache)
-                        cache.obsolete();
+                        return cache.obsolete();
                     if ($.$mol_atom2.current)
                         return cache.get();
                     else
@@ -1765,7 +1765,7 @@ var $;
             super(message);
             this.errors = errors;
             if (errors.length) {
-                const stacks = [...errors.map(error => error.stack), this.stack];
+                const stacks = [...errors.map(error => error.message), this.stack];
                 const diff = $.$mol_diff_path(...stacks.map(stack => {
                     if (!stack)
                         return [];
@@ -3494,85 +3494,46 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    function $mol_base64_decode(base64) {
-        throw new Error('Not implemented');
+    var _a;
+    const TextDecoder = (_a = globalThis.TextDecoder) !== null && _a !== void 0 ? _a : $node.util.TextDecoder;
+    function $mol_charset_decode(value, code = 'utf8') {
+        return new TextDecoder(code).decode(value);
     }
-    $.$mol_base64_decode = $mol_base64_decode;
+    $.$mol_charset_decode = $mol_charset_decode;
 })($ || ($ = {}));
 //decode.js.map
 ;
 "use strict";
 var $;
 (function ($) {
-    function $mol_base64_decode_node(base64Str) {
-        return new Uint8Array(Buffer.from(base64Str, 'base64'));
+    var _a;
+    const TextEncoder = (_a = globalThis.TextEncoder) !== null && _a !== void 0 ? _a : $node.util.TextEncoder;
+    const encoder = new TextEncoder();
+    function $mol_charset_encode(value) {
+        return encoder.encode(value);
     }
-    $.$mol_base64_decode_node = $mol_base64_decode_node;
-    $.$mol_base64_decode = $mol_base64_decode_node;
-})($ || ($ = {}));
-//decode.node.js.map
-;
-"use strict";
-var $;
-(function ($) {
-    function $mol_base64_encode(src) {
-        throw new Error('Not implemented');
-    }
-    $.$mol_base64_encode = $mol_base64_encode;
+    $.$mol_charset_encode = $mol_charset_encode;
 })($ || ($ = {}));
 //encode.js.map
 ;
 "use strict";
 var $;
 (function ($) {
-    function $mol_base64_encode_node(str) {
-        if (!str)
-            return '';
-        if (Buffer.isBuffer(str))
-            return str.toString('base64');
-        return Buffer.from(str).toString('base64');
+    function $mol_compare_array(a, b) {
+        if (a === b)
+            return true;
+        if (Object.getPrototypeOf(a) !== Object.getPrototypeOf(b))
+            return false;
+        if (a.length !== b.length)
+            return false;
+        for (let i = 0; i < a.length; i++)
+            if (a[i] !== b[i])
+                return false;
+        return true;
     }
-    $.$mol_base64_encode_node = $mol_base64_encode_node;
-    $.$mol_base64_encode = $mol_base64_encode_node;
+    $.$mol_compare_array = $mol_compare_array;
 })($ || ($ = {}));
-//encode.node.js.map
-;
-"use strict";
-var $;
-(function ($) {
-    var _a, _b;
-    const TextEncoder = (_a = globalThis.TextEncoder) !== null && _a !== void 0 ? _a : $node.util.TextEncoder;
-    const TextDecoder = (_b = globalThis.TextDecoder) !== null && _b !== void 0 ? _b : $node.util.TextDecoder;
-    const encoder = new TextEncoder();
-    class $mol_buffer extends $.$mol_object2 {
-        get length() {
-            return this.native.length;
-        }
-        static from(value, code = 'utf8') {
-            return $mol_buffer.create(t => {
-                if (typeof value === 'string') {
-                    if (code === 'base64')
-                        t.native = $.$mol_base64_decode(value);
-                    else
-                        t.native = encoder.encode(value);
-                }
-                else
-                    t.native = value;
-            });
-        }
-        toString(code = 'utf8') {
-            if (code === 'base64')
-                return $.$mol_base64_encode(this.native);
-            return new TextDecoder(code).decode(this.native);
-        }
-    }
-    $.$mol_buffer = $mol_buffer;
-    $.$mol_conform_handler($mol_buffer, (target, source) => {
-        const original = $.$mol_conform_array(target.native, source.native);
-        return original !== source.native ? target : source;
-    });
-})($ || ($ = {}));
-//buffer.js.map
+//array.js.map
 ;
 "use strict";
 var $;
@@ -3638,7 +3599,7 @@ var $;
             return match ? match[1].substring(1) : '';
         }
         text(next, force) {
-            return this.buffer(next === undefined ? undefined : $.$mol_buffer.from(next), force).toString();
+            return $.$mol_charset_decode(this.buffer(next === undefined ? undefined : $.$mol_charset_encode(next), force));
         }
         fail(error) {
             this.buffer(error, $.$mol_mem_force_fail);
@@ -3657,7 +3618,7 @@ var $;
             this.stat(stat, $.$mol_mem_force_cache);
         }
         text_cached(content) {
-            this.buffer_cached($.$mol_buffer.from(content));
+            this.buffer_cached($.$mol_charset_encode(content));
         }
         find(include, exclude) {
             const found = [];
@@ -3705,6 +3666,9 @@ var $;
             ctime: stat.ctime
         };
     }
+    function buffer_normalize(buf) {
+        return new Uint8Array(buf.buffer, buf.byteOffset, buf.byteLength);
+    }
     class $mol_file_node extends $.$mol_file {
         static absolute(path) {
             return this.make({
@@ -3724,12 +3688,23 @@ var $;
                     stabilityThreshold: 100,
                 },
             });
+            const { magenta, magentaBright } = $node.colorette;
             const handler = (type, path) => $.$mol_fiber_unlimit(() => {
                 const file = $.$mol_file.relative(path.replace(/\\/g, '/'));
-                file.reset();
-                if (type === 'change')
-                    return;
-                file.parent().reset();
+                if (type === 'change') {
+                    const cached = $.$mol_mem_cached(() => file.buffer());
+                    const actual = buffer_normalize($node.fs.readFileSync(file.path()));
+                    if ($.$mol_compare_array(cached, actual))
+                        return;
+                    console.log(magenta(`$mol_file ${type} ${magentaBright(file.relate())}`));
+                    file.reset();
+                    file.buffer(actual, $.$mol_mem_force_cache);
+                }
+                else {
+                    console.log(magenta(`$mol_file ${type} ${magentaBright(file.relate())}`));
+                    file.reset();
+                    file.parent().reset();
+                }
             });
             watcher.on('all', handler);
             watcher.on('error', (error) => {
@@ -3764,10 +3739,10 @@ var $;
         buffer(next, force) {
             if (next === undefined) {
                 this.stat();
-                return $.$mol_buffer.from($node.fs.readFileSync(this.path()));
+                return buffer_normalize($node.fs.readFileSync(this.path()));
             }
             this.parent().exists(true);
-            $node.fs.writeFileSync(this.path(), next.native);
+            $node.fs.writeFileSync(this.path(), next);
             return next;
         }
         sub() {
@@ -3786,7 +3761,7 @@ var $;
             return $node.path.relative(base.path(), this.path()).replace(/\\/g, '/');
         }
         append(next) {
-            $node.fs.appendFileSync(this.path(), next instanceof $.$mol_buffer ? next.native : next);
+            $node.fs.appendFileSync(this.path(), next);
         }
     }
     __decorate([
