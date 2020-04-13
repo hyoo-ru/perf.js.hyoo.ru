@@ -303,9 +303,6 @@ $mol_check_expand $mol_check
 	checked?val <=> expanded?val false
 	enabled <= expandable false
 
-$mol_check_box $mol_check
-	Icon $mol_icon_tick
-
 $mol_icon $mol_svg_root
 	view_box \0 0 24 24
 	minimal_width 16
@@ -334,8 +331,6 @@ $mol_svg_path $mol_svg
 		^
 		d <= geometry \
 
-
-$mol_icon_tick $mol_icon path \M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z
 
 $mol_icon_chevron $mol_icon path \M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z
 
@@ -689,6 +684,11 @@ $mol_plot_ruler_hor $mol_plot_ruler
 $mol_icon_external $mol_icon path \M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z
 
 $mol_icon_plus $mol_icon path \M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z
+
+$mol_check_box $mol_check
+	Icon $mol_icon_tick
+
+$mol_icon_tick $mol_icon path \M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z
 
 $mol_portion_indicator $mol_view
 	style *
