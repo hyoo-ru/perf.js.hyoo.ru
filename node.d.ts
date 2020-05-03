@@ -401,88 +401,7 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_atom_wait extends Promise<void> {
-        message: string;
-        constructor(message?: string);
-    }
-}
-
-declare namespace $ {
     function $mol_style_attach(id: string, text: string): HTMLStyleElement | null;
-}
-
-declare namespace $ {
-    const enum $mol_theme {
-        back = "var(--mol_theme_back)",
-        hover = "var(--mol_theme_hover)",
-        current = "var(--mol_theme_current)",
-        text = "var(--mol_theme_text)",
-        control = "var(--mol_theme_control)",
-        shade = "var(--mol_theme_shade)",
-        line = "var(--mol_theme_line)",
-        focus = "var(--mol_theme_focus)",
-        field = "var(--mol_theme_field)"
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    function $mol_diff_path<Item>(...paths: Item[][]): {
-        prefix: Item[];
-        suffix: Item[][];
-    };
-}
-
-declare namespace $ {
-    class $mol_error_mix extends Error {
-        errors: Error[];
-        constructor(message: string, ...errors: Error[]);
-    }
-}
-
-declare namespace $ {
-    function $mol_compare_deep<Value>(a: Value, b: Value): boolean;
-}
-
-declare namespace $ {
-    function $mol_assert_ok(value: any): void;
-    function $mol_assert_not(value: any): void;
-    function $mol_assert_fail(handler: () => any, ErrorRight?: any): any;
-    function $mol_assert_equal<Value>(...args: Value[]): void;
-    function $mol_assert_unique(...args: any[]): void;
-    function $mol_assert_like<Value>(head: Value, ...tail: Value[]): undefined;
-}
-
-declare namespace $ {
-    function $mol_offline(uri?: string): void;
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    class $mol_import extends $mol_object2 {
-        static script(uri: string, next?: any, force?: $mol_mem_force): any;
-    }
-}
-
-declare namespace $ {
-    class $mol_state_session<Value> extends $mol_object {
-        static 'native()': Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
-        static native(): Storage | {
-            getItem(key: string): any;
-            setItem(key: string, value: string): void;
-            removeItem(key: string): void;
-        };
-        static value<Value>(key: string, next?: Value): Value;
-        prefix(): string;
-        value(key: string, next?: Value): Value;
-    }
 }
 
 declare namespace $ {
@@ -537,14 +456,90 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    type $mol_style_func_name = 'calc' | 'fit-content';
+    type $mol_style_func_name = 'calc' | 'hsla' | 'rgba' | 'var' | 'url';
     class $mol_style_func<Name extends $mol_style_func_name, Value = unknown> extends $mol_decor<Value> {
         readonly name: Name;
-        constructor(value: Value, name: Name);
+        constructor(name: Name, value: Value);
         prefix(): string;
         postfix(): string;
         static calc<Value>(value: Value): $mol_style_func<"calc", Value>;
-        static fit_content(value: number | $mol_style_unit<$mol_style_unit_length> | $mol_style_func<'calc'>): $mol_style_func<"fit-content", number | $mol_style_unit<$mol_style_unit_length> | $mol_style_func<"calc", unknown>>;
+        static vary<Name extends string>(name: Name): $mol_style_func<"var", Name>;
+        static url<Href extends string>(href: Href): $mol_style_func<"url", string>;
+        static hsla(hue: number, saturation: number, lightness: number, alpha: number): $mol_style_func<"hsla", (number | $mol_style_unit<"%">)[]>;
+    }
+}
+
+declare namespace $ {
+    const $mol_theme: {
+        back: $mol_style_func<"var", "--mol_theme_back">;
+        hover: $mol_style_func<"var", "--mol_theme_hover">;
+        current: $mol_style_func<"var", "--mol_theme_current">;
+        text: $mol_style_func<"var", "--mol_theme_text">;
+        control: $mol_style_func<"var", "--mol_theme_control">;
+        shade: $mol_style_func<"var", "--mol_theme_shade">;
+        line: $mol_style_func<"var", "--mol_theme_line">;
+        focus: $mol_style_func<"var", "--mol_theme_focus">;
+        field: $mol_style_func<"var", "--mol_theme_field">;
+    };
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    function $mol_diff_path<Item>(...paths: Item[][]): {
+        prefix: Item[];
+        suffix: Item[][];
+    };
+}
+
+declare namespace $ {
+    class $mol_error_mix extends Error {
+        errors: Error[];
+        constructor(message: string, ...errors: Error[]);
+    }
+}
+
+declare namespace $ {
+    function $mol_compare_deep<Value>(a: Value, b: Value): boolean;
+}
+
+declare namespace $ {
+    function $mol_assert_ok(value: any): void;
+    function $mol_assert_not(value: any): void;
+    function $mol_assert_fail(handler: () => any, ErrorRight?: any): any;
+    function $mol_assert_equal<Value>(...args: Value[]): void;
+    function $mol_assert_unique(...args: any[]): void;
+    function $mol_assert_like<Value>(head: Value, ...tail: Value[]): undefined;
+}
+
+declare namespace $ {
+    function $mol_offline(uri?: string): void;
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_import extends $mol_object2 {
+        static script(uri: string): any;
+    }
+}
+
+declare namespace $ {
+    class $mol_state_session<Value> extends $mol_object {
+        static 'native()': Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
+        static native(): Storage | {
+            getItem(key: string): any;
+            setItem(key: string, value: string): void;
+            removeItem(key: string): void;
+        };
+        static value<Value>(key: string, next?: Value): Value;
+        prefix(): string;
+        value(key: string, next?: Value): Value;
     }
 }
 
@@ -702,8 +697,8 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    type $mol_type_error<Message> = '$mol_type_error' & {
-        $mol_type_error: Message;
+    type $mol_type_error<Message, Info = {}> = Message & {
+        $mol_type_error: Info;
     };
 }
 
@@ -712,8 +707,161 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    const $mol_colors: {
+        readonly aliceblue: "#f0f8ff";
+        readonly antiquewhite: "#faebd7";
+        readonly aqua: "#00ffff";
+        readonly aquamarine: "#7fffd4";
+        readonly azure: "#f0ffff";
+        readonly beige: "#f5f5dc";
+        readonly bisque: "#ffe4c4";
+        readonly black: "#000000";
+        readonly blanchedalmond: "#ffebcd";
+        readonly blue: "#0000ff";
+        readonly blueviolet: "#8a2be2";
+        readonly brown: "#a52a2a";
+        readonly burlywood: "#deb887";
+        readonly cadetblue: "#5f9ea0";
+        readonly chartreuse: "#7fff00";
+        readonly chocolate: "#d2691e";
+        readonly coral: "#ff7f50";
+        readonly cornflowerblue: "#6495ed";
+        readonly cornsilk: "#fff8dc";
+        readonly crimson: "#dc143c";
+        readonly cyan: "#00ffff";
+        readonly darkblue: "#00008b";
+        readonly darkcyan: "#008b8b";
+        readonly darkgoldenrod: "#b8860b";
+        readonly darkgray: "#a9a9a9";
+        readonly darkgreen: "#006400";
+        readonly darkgrey: "#a9a9a9";
+        readonly darkkhaki: "#bdb76b";
+        readonly darkmagenta: "#8b008b";
+        readonly darkolivegreen: "#556b2f";
+        readonly darkorange: "#ff8c00";
+        readonly darkorchid: "#9932cc";
+        readonly darkred: "#8b0000";
+        readonly darksalmon: "#e9967a";
+        readonly darkseagreen: "#8fbc8f";
+        readonly darkslateblue: "#483d8b";
+        readonly darkslategrey: "#2f4f4f";
+        readonly darkturquoise: "#00ced1";
+        readonly darkviolet: "#9400d3";
+        readonly deeppink: "#ff1493";
+        readonly deepskyblue: "#00bfff";
+        readonly dimgray: "#696969";
+        readonly dimgrey: "#696969";
+        readonly dodgerblue: "#1e90ff";
+        readonly firebrick: "#b22222";
+        readonly floralwhite: "#fffaf0";
+        readonly forestgreen: "#228b22";
+        readonly fuchsia: "#ff00ff";
+        readonly gainsboro: "#dcdcdc";
+        readonly ghostwhite: "#f8f8ff";
+        readonly gold: "#ffd700";
+        readonly goldenrod: "#daa520";
+        readonly gray: "#808080";
+        readonly green: "#008000";
+        readonly greenyellow: "#adff2f";
+        readonly grey: "#808080";
+        readonly honeydew: "#f0fff0";
+        readonly hotpink: "#ff69b4";
+        readonly indianred: "#cd5c5c";
+        readonly indigo: "#4b0082";
+        readonly ivory: "#fffff0";
+        readonly khaki: "#f0e68c";
+        readonly lavender: "#e6e6fa";
+        readonly lavenderblush: "#fff0f5";
+        readonly lawngreen: "#7cfc00";
+        readonly lemonchiffon: "#fffacd";
+        readonly lightblue: "#add8e6";
+        readonly lightcoral: "#f08080";
+        readonly lightcyan: "#e0ffff";
+        readonly lightgoldenrodyellow: "#fafad2";
+        readonly lightgray: "#d3d3d3";
+        readonly lightgreen: "#90ee90";
+        readonly lightgrey: "#d3d3d3";
+        readonly lightpink: "#ffb6c1";
+        readonly lightsalmon: "#ffa07a";
+        readonly lightseagreen: "#20b2aa";
+        readonly lightskyblue: "#87cefa";
+        readonly lightslategray: "#778899";
+        readonly lightslategrey: "#778899";
+        readonly lightsteelblue: "#b0c4de";
+        readonly lightyellow: "#ffffe0";
+        readonly lime: "#00ff00";
+        readonly limegreen: "#32cd32";
+        readonly linen: "#faf0e6";
+        readonly magenta: "#ff00ff";
+        readonly maroon: "#800000";
+        readonly mediumaquamarine: "#66cdaa";
+        readonly mediumblue: "#0000cd";
+        readonly mediumorchid: "#ba55d3";
+        readonly mediumpurple: "#9370db";
+        readonly mediumseagreen: "#3cb371";
+        readonly mediumslateblue: "#7b68ee";
+        readonly mediumspringgreen: "#00fa9a";
+        readonly mediumturquoise: "#48d1cc";
+        readonly mediumvioletred: "#c71585";
+        readonly midnightblue: "#191970";
+        readonly mintcream: "#f5fffa";
+        readonly mistyrose: "#ffe4e1";
+        readonly moccasin: "#ffe4b5";
+        readonly navajowhite: "#ffdead";
+        readonly navy: "#000080";
+        readonly oldlace: "#fdf5e6";
+        readonly olive: "#808000";
+        readonly olivedrab: "#6b8e23";
+        readonly orange: "#ffa500";
+        readonly orangered: "#ff4500";
+        readonly orchid: "#da70d6";
+        readonly palegoldenrod: "#eee8aa";
+        readonly palegreen: "#98fb98";
+        readonly paleturquoise: "#afeeee";
+        readonly palevioletred: "#db7093";
+        readonly papayawhip: "#ffefd5";
+        readonly peachpuff: "#ffdab9";
+        readonly peru: "#cd853f";
+        readonly pink: "#ffc0cb";
+        readonly plum: "#dda0dd";
+        readonly powderblue: "#b0e0e6";
+        readonly purple: "#800080";
+        readonly rebeccapurple: "#663399";
+        readonly red: "#ff0000";
+        readonly rosybrown: "#bc8f8f";
+        readonly royalblue: "#4169e1";
+        readonly saddlebrown: "#8b4513";
+        readonly salmon: "#fa8072";
+        readonly sandybrown: "#f4a460";
+        readonly seagreen: "#2e8b57";
+        readonly seashell: "#fff5ee";
+        readonly sienna: "#a0522d";
+        readonly silver: "#c0c0c0";
+        readonly skyblue: "#87ceeb";
+        readonly slateblue: "#6a5acd";
+        readonly slategray: "#708090";
+        readonly slategrey: "#708090";
+        readonly snow: "#fffafa";
+        readonly springgreen: "#00ff7f";
+        readonly steelblue: "#4682b4";
+        readonly tan: "#d2b48c";
+        readonly teal: "#008080";
+        readonly thistle: "#d8bfd8";
+        readonly tomato: "#ff6347";
+        readonly turquoise: "#40e0d0";
+        readonly violet: "#ee82ee";
+        readonly wheat: "#f5deb3";
+        readonly white: "#ffffff";
+        readonly whitesmoke: "#f5f5f5";
+        readonly yellow: "#ffff00";
+        readonly yellowgreen: "#9acd32";
+    };
+}
+
+declare namespace $ {
     export type $mol_style_properties = Partial<$mol_type_override<CSSStyleDeclaration, Overrides>>;
     type Common = 'inherit' | 'initial' | 'unset';
+    type Color = keyof typeof $mol_colors | 'transparent' | 'currentcolor' | $mol_style_func<'hsla' | 'rgba' | 'var'>;
     type Length = 0 | $mol_style_unit<$mol_style_unit_length> | $mol_style_func<'calc'>;
     type Size = 'auto' | 'max-content' | 'min-content' | 'fit-content' | Length | Common;
     type Directions<Value> = Value | [Value, Value] | {
@@ -725,6 +873,21 @@ declare namespace $ {
     type Overflow = 'visible' | 'hidden' | 'clip' | 'scroll' | 'auto' | 'overlay' | Common;
     interface Overrides {
         alignContent?: 'baseline' | 'start' | 'end' | 'flex-start' | 'flex-end' | 'center' | 'normal' | 'space-between' | 'space-around' | 'space-evenly' | 'stretch' | ['first' | 'last', 'baseline'] | ['safe' | 'unsafe', 'start' | 'end' | 'flex-start' | 'flex-end'] | Common;
+        background?: {
+            color?: Color | Common;
+            image?: [$mol_style_func<'url'>][];
+        };
+        box?: {
+            shadow?: readonly {
+                inset: boolean;
+                x: Length;
+                y: Length;
+                blur: Length;
+                spread: Length;
+                color: Color;
+            }[];
+        };
+        color?: Color | Common;
         display?: 'block' | 'inline' | 'run-in' | 'list-item' | 'none' | 'flow' | 'flow-root' | 'table' | 'flex' | 'grid' | 'contents' | 'table-row-group' | 'table-header-group' | 'table-footer-group' | 'table-column-group' | 'table-row' | 'table-cell' | 'table-column' | 'table-caption' | 'inline-block' | 'inline-table' | 'inline-flex' | 'inline-grid' | 'ruby' | 'ruby-base' | 'ruby-text' | 'ruby-base-container' | 'ruby-text-container' | Common;
         overflow?: Overflow | {
             x?: Overflow | Common;
@@ -747,6 +910,7 @@ declare namespace $ {
             direction?: 'row' | 'row-reverse' | 'column' | 'column-reverse';
             wrap?: 'wrap' | 'nowrap' | 'wrap-reverse' | Common;
         };
+        zIndex: number;
     }
     export {};
 }
@@ -762,18 +926,20 @@ declare namespace $ {
 declare namespace $ {
     type Descendant<Name extends keyof $mol_view_all, Config> = $mol_style_guard<Extract<$mol_type_result<$mol_view_all[Name]>, $mol_view>, Config>;
     type Kids<Config> = {
-        [view in keyof Config]: view extends keyof $mol_view_all ? Descendant<view, Config[view]> : $mol_type_error<['Unknown View', view]>;
+        [view in keyof Config]: view extends keyof $mol_view_all ? Descendant<view, Config[view]> : $mol_type_error<'Unknown View'>;
     };
     type Attrs<View extends $mol_view, Config> = {
         [name in keyof Config]: name extends keyof ReturnType<View['attr']> ? {
             [val in keyof Config[name]]: $mol_style_guard<View, Config[name][val]>;
-        } : $mol_type_error<['Unknown Attribute', name]>;
+        } : $mol_type_error<'Unknown attribute'>;
     };
     type Medias<View extends $mol_view, Config> = {
         [query in keyof Config]: $mol_style_guard<View, Config[query]>;
     };
     export type $mol_style_guard<View extends $mol_view, Config> = $mol_style_properties & {
-        [key in keyof Config]: key extends keyof $mol_style_properties ? unknown : key extends $mol_style_pseudo_class | $mol_style_pseudo_element ? $mol_style_guard<View, Config[key]> : key extends '>' ? Kids<Config[key]> : key extends '@' ? Attrs<View, Config[key]> : key extends '@media' ? Medias<View, Config[key]> : key extends keyof $mol_view_all ? Descendant<key, Config[key]> : key extends keyof View ? View[key] extends (id?: any) => infer Sub ? Sub extends $mol_view ? $mol_style_guard<Sub, Config[key]> : $mol_type_error<['Wrong Property', key]> : $mol_type_error<['Property is not Element', key]> : $mol_type_error<['Unknown Property', key]>;
+        [key in keyof Config]: key extends keyof $mol_style_properties ? unknown : key extends $mol_style_pseudo_class | $mol_style_pseudo_element ? $mol_style_guard<View, Config[key]> : key extends '>' ? Kids<Config[key]> : key extends '@' ? Attrs<View, Config[key]> : key extends '@media' ? Medias<View, Config[key]> : key extends keyof $mol_view_all ? Descendant<key, Config[key]> : key extends keyof View ? View[key] extends (id?: any) => infer Sub ? Sub extends $mol_view ? $mol_style_guard<Sub, Config[key]> : $mol_type_error<'Property returns non $mol_view', {
+            Returns: Sub;
+        }> : $mol_type_error<'Field is not a Property'> : $mol_type_error<'Unknown Property or View'>;
     };
     export {};
 }
@@ -965,13 +1131,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_after_frame extends $mol_after_timeout {
-        task: () => void;
-        constructor(task: () => void);
-    }
-}
-
-declare namespace $ {
     class $mol_scroll extends $mol_view {
         minimal_height(): number;
         _event_scroll_timer(val?: any, force?: $mol_mem_force): any;
@@ -992,7 +1151,7 @@ declare namespace $.$$ {
     class $mol_scroll extends $.$mol_scroll {
         scroll_top(next?: number): number;
         scroll_left(next?: number): number;
-        _event_scroll_timer(next?: $mol_after_frame | null): $mol_after_frame | null | undefined;
+        _event_scroll_timer(next?: $mol_after_timeout | null): $mol_after_timeout | null | undefined;
         event_scroll(next?: Event): void;
     }
 }
@@ -1020,9 +1179,6 @@ declare namespace $ {
 declare namespace $.$$ {
     class $mol_page extends $.$mol_page {
         body_scroll_top(next?: number): number;
-        style(): {
-            minWidth: number;
-        };
     }
 }
 
@@ -1079,7 +1235,7 @@ declare namespace $ {
         abstract watcher(): {
             destructor(): void;
         };
-        exists(next?: boolean): boolean;
+        exists(next?: boolean, force?: $mol_mem_force): boolean;
         type(): $mol_file_type;
         name(): string;
         ext(): string;
@@ -1174,41 +1330,58 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    interface $mol_syntax_token {
-        name: string;
-        found: string;
-        chunks: string[];
-    }
-    class $mol_syntax {
-        constructor(lexems: {
-            [name: string]: RegExp;
-        });
-        'lexems()': {
-            [name: string]: RegExp;
-        };
-        lexems(): {
-            [name: string]: RegExp;
-        };
-        'rules()': {
+    class $mol_syntax2<Lexems extends {
+        [name: string]: RegExp;
+    }> {
+        lexems: Lexems;
+        constructor(lexems: Lexems);
+        rules: {
             regExp: RegExp;
             name: string;
             size: number;
         }[];
-        rules(): {
-            regExp: RegExp;
-            name: string;
-            size: number;
-        }[];
-        'regExp()': RegExp;
-        regExp(): RegExp;
-        tokenize(text: string): $mol_syntax_token[];
+        regexp: RegExp;
+        tokenize(text: string, handle: (name: string, found: string, chunks: string[], offset: number) => void): void;
+        parse(text: string, handlers: {
+            [key in keyof Lexems | '']: (found: string, chunks: string[], offset: number) => void;
+        }): void;
     }
 }
 
 declare namespace $ {
-    var $mol_syntax_md_flow: $mol_syntax;
-    var $mol_syntax_md_line: $mol_syntax;
-    const $mol_syntax_md_code: $mol_syntax;
+    var $mol_syntax2_md_flow: $mol_syntax2<{
+        quote: RegExp;
+        header: RegExp;
+        list: RegExp;
+        code: RegExp;
+        'code-indent': RegExp;
+        table: RegExp;
+        block: RegExp;
+    }>;
+    var $mol_syntax2_md_line: $mol_syntax2<{
+        strong: RegExp;
+        emphasis: RegExp;
+        code3: RegExp;
+        code: RegExp;
+        strike: RegExp;
+        'text-link': RegExp;
+        'image-link': RegExp;
+    }>;
+    const $mol_syntax2_md_code: $mol_syntax2<{
+        'code-docs': RegExp;
+        'code-comment-block': RegExp;
+        'code-link': RegExp;
+        'code-comment-inline': RegExp;
+        'code-string': RegExp;
+        'code-number': RegExp;
+        'code-call': RegExp;
+        'code-field': RegExp;
+        'code-keyword': RegExp;
+        'code-global': RegExp;
+        'code-decorator': RegExp;
+        'code-tag': RegExp;
+        'code-punctuation': RegExp;
+    }>;
 }
 
 declare namespace $ {
@@ -1275,6 +1448,13 @@ declare namespace $.$$ {
     class $mol_check extends $.$mol_check {
         click(next?: Event): void;
         sub(): any[];
+    }
+}
+
+declare namespace $ {
+    class $mol_after_frame extends $mol_after_timeout {
+        task: () => void;
+        constructor(task: () => void);
     }
 }
 
@@ -1473,7 +1653,7 @@ declare namespace $.$$ {
         col_head_content(colId: string): readonly string[];
         rows(): readonly $mol_view[];
         cells(row_id: string[]): readonly $mol_view[];
-        col_type(col_id: string): "text" | "number" | "branch";
+        col_type(col_id: string): "number" | "text" | "branch";
         Cell(id: {
             row: string[];
             col: string;
@@ -1561,10 +1741,47 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $mol_image extends $mol_view {
+        dom_name(): string;
+        field(): {
+            src: string;
+            alt: string;
+        };
+        uri(): string;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_link_iconed extends $mol_link {
+        sub(): readonly any[];
+        Icon(): $mol_image;
+        icon(): string;
+        content(): readonly any[];
+        title(): string;
+        host(): string;
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_link_iconed extends $.$mol_link_iconed {
+        icon(): string;
+        host(): string;
+        title(): string;
+        sub(): any[];
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
     class $mol_text extends $mol_list {
         uri_base(): string;
         text(): string;
-        tokens(): readonly $mol_syntax_token[];
+        tokens(): readonly any[];
         Quote(id: any): $$.$mol_text;
         quote_text(id: any): string;
         Row(id: any): $mol_text_row;
@@ -1617,7 +1834,7 @@ declare namespace $ {
     }
 }
 declare namespace $ {
-    class $mol_text_link extends $mol_link {
+    class $mol_text_link extends $mol_link_iconed {
         attr(): {
             mol_text_type: any;
             href: string;
@@ -1629,7 +1846,6 @@ declare namespace $ {
         type(val?: any, force?: $mol_mem_force): any;
         uri(): any;
         link(val?: any, force?: $mol_mem_force): any;
-        sub(): any;
         content(val?: any, force?: $mol_mem_force): any;
     }
 }
@@ -1650,10 +1866,14 @@ declare namespace $ {
 
 declare namespace $.$$ {
     class $mol_text extends $.$mol_text {
-        tokens(): readonly $mol_syntax_token[];
+        tokens(): readonly {
+            name: string;
+            found: string;
+            chunks: string[];
+        }[];
         rows(): ($mol_grid | $mol_text | $mol_text_row | $mol_text_header)[];
         header_level(index: number): number;
-        header_content(index: number): ($mol_text_span | $mol_text_link | $mol_text_image)[];
+        header_content(index: number): $mol_view[];
         quote_text(index: number): string;
         block_type(index: number): string;
         cell_contents(indexBlock: number): string[][];
@@ -1667,11 +1887,11 @@ declare namespace $.$$ {
             block: number;
             row: number;
             cell: number;
-        }): ($mol_text_span | $mol_text_link | $mol_text_image)[];
+        }): $mol_view[];
         uri_base(): string;
         uri_resolve(uri: string): string;
-        text2spans(prefix: string, text: string): ($mol_text_span | $mol_text_link | $mol_text_image)[];
-        code2spans(prefix: string, text: string): $mol_text_span[];
+        text2spans(prefix: string, text: string): $mol_view[];
+        code2spans(prefix: string, text: string): $mol_view[];
         block_content(indexBlock: number): ($mol_view | string)[];
     }
 }

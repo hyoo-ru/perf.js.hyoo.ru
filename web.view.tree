@@ -67,7 +67,6 @@ $hyoo_jsperf_case_result $mol_view
 $mol_page $mol_view
 	sub /
 		<= Head $mol_view
-			attr * mol_theme \$mol_theme_base
 			sub <= head /
 				<= Title $mol_button
 					sub /
@@ -79,7 +78,6 @@ $mol_page $mol_view
 			scroll_top?val <=> body_scroll_top?val 0
 			sub <= body /$mol_view_content
 		<= Foot $mol_view
-			attr * mol_theme \$mol_theme_base
 			sub <= foot /$mol_view
 
 $mol_button $mol_view
@@ -158,7 +156,7 @@ $mol_string $mol_view
 $mol_text $mol_list
 	uri_base \
 	text \
-	tokens /$mol_syntax_token
+	tokens /
 	Quote!id $mol_text
 		text <= quote_text!id \
 	Row!id $mol_text_row
@@ -199,12 +197,12 @@ $mol_text_span $mol_paragraph
 		mol_text_type <= type?val \
 	sub <= content?val /
 
-$mol_text_link $mol_link
+$mol_text_link $mol_link_iconed
 	attr *
 		^
 		mol_text_type <= type?val \
 	uri <= link?val \
-	sub <= content?val /
+	content <= content?val /
 
 $mol_text_image $mol_view
 	dom_name \object
@@ -361,6 +359,22 @@ $mol_link $mol_view
 	event *
 		^
 		click?event <=> click?event <=> event_click?event null
+
+$mol_link_iconed $mol_link
+	sub /
+		<= Icon $mol_image
+			uri <= icon \
+			title \
+	content /
+		<= title <= uri
+	host \
+
+$mol_image $mol_view
+	dom_name \img
+	field *
+		^
+		src <= uri \
+		alt <= title
 
 $mol_plot_pane $mol_svg_root
 	aspect \none
