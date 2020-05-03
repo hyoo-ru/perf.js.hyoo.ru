@@ -2,10 +2,10 @@ namespace $.$$ {
 
 	export class $hyoo_jsperf_stats extends $mol_object2 {
 		
-		elapsed : number
-		iterations : number
-		portion : number
-		error : string
+		elapsed! : number
+		iterations! : number
+		portion! : number
+		error! : string
 
 		get time() { return this.elapsed / this.iterations }
 		get frequency() { return this.iterations * 1000 / this.elapsed }
@@ -102,7 +102,7 @@ namespace $.$$ {
 			return measure
 		}
 
-		@ $mol_fiber_solid.method
+		@ $mol_fiber.method
 		run() {
 
 			function measure( inner : string , outer = [ '' , '' ] ) {
@@ -131,7 +131,7 @@ namespace $.$$ {
 						let func = new Function( '' , source )
 						
 						time_run = func()
-						func = null
+						func = null as any
 
 						measure_time += performance.now()
 		
@@ -146,7 +146,7 @@ namespace $.$$ {
 				
 				} catch( error ) {
 
-					if( error instanceof $mol_atom_wait ) $mol_fail_hidden( error )
+					if( 'then' in error ) $mol_fail_hidden( error )
 
 					console.error( error )
 
