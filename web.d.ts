@@ -20,6 +20,7 @@ declare namespace $ {
     class $mol_error_mix extends Error {
         errors: Error[];
         constructor(message: string, ...errors: Error[]);
+        toJSON(): string;
     }
 }
 
@@ -88,6 +89,31 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    type $mol_log3_event<Fields> = {
+        [key in string]: unknown;
+    } & {
+        time?: string;
+        place: unknown;
+        message: string;
+    } & Fields;
+    type $mol_log3_logger<Fields, Res = void> = (this: $mol_ambient_context, event: $mol_log3_event<Fields>) => Res;
+    let $mol_log3_come: $mol_log3_logger<{}>;
+    let $mol_log3_done: $mol_log3_logger<{}>;
+    let $mol_log3_fail: $mol_log3_logger<{}>;
+    let $mol_log3_warn: $mol_log3_logger<{
+        hint: string;
+    }>;
+    let $mol_log3_rise: $mol_log3_logger<{}>;
+    let $mol_log3_area: $mol_log3_logger<{}, () => void>;
+    function $mol_log3_area_lazy(this: $mol_ambient_context, event: $mol_log3_event<{}>): () => void;
+    let $mol_log3_stack: (() => void)[];
+}
+
+declare namespace $ {
+    function $mol_log3_web_make<Close>(level: keyof Console, color: string): (this: $mol_ambient_context, event: $mol_log3_event<{}>) => () => void;
+}
+
+declare namespace $ {
     class $mol_wrapper extends $mol_object2 {
         static wrap: (task: (...ags: any[]) => any) => (...ags: any[]) => any;
         static run<Result>(task: () => Result): Result;
@@ -96,99 +122,6 @@ declare namespace $ {
         static get method(): <Host, Field extends keyof Host, Args extends any[], Result>(obj: Host, name: Field, descr: TypedPropertyDescriptor<(this: Host, ...args: Args) => Result>) => TypedPropertyDescriptor<(this: Host, ...args: Args) => Result>;
         static get field(): <Host, Field extends keyof Host, Args extends any[], Result>(obj: Host, name: Field, descr: TypedPropertyDescriptor<Result>) => TypedPropertyDescriptor<Result>;
     }
-}
-
-declare namespace $ {
-    function $mol_dev_format_register(config: {
-        header: (val: any, config: any) => any;
-        hasBody: (val: any, config: any) => false;
-    } | {
-        header: (val: any, config: any) => any;
-        hasBody: (val: any, config: any) => boolean;
-        body: (val: any, config: any) => any;
-    }): void;
-    let $mol_dev_format_head: symbol;
-    let $mol_dev_format_body: symbol;
-    function $mol_dev_format_native(obj: any): any;
-    function $mol_dev_format_auto(obj: any): any;
-    function $mol_dev_format_element(element: string, style: object, ...content: any[]): any[];
-    function $mol_dev_format_span(style: object, ...content: any[]): any[];
-    let $mol_dev_format_div: (style: object, ...content: any[]) => any[];
-    let $mol_dev_format_ol: (style: object, ...content: any[]) => any[];
-    let $mol_dev_format_li: (style: object, ...content: any[]) => any[];
-    let $mol_dev_format_table: (style: object, ...content: any[]) => any[];
-    let $mol_dev_format_tr: (style: object, ...content: any[]) => any[];
-    let $mol_dev_format_td: (style: object, ...content: any[]) => any[];
-    let $mol_dev_format_accent: (...args: any[]) => any[];
-    let $mol_dev_format_strong: (...args: any[]) => any[];
-    let $mol_dev_format_string: (...args: any[]) => any[];
-    let $mol_dev_format_shade: (...args: any[]) => any[];
-    let $mol_dev_format_indent: (...args: any[]) => any[];
-}
-
-declare namespace $ {
-    function $mol_maybe<Value>(value: Value | null | undefined): Value[];
-}
-
-declare namespace $ {
-    function $mol_log(path: any, ...values: any[]): void;
-}
-
-declare namespace $ {
-    function $mol_log_context(next?: (() => void) | null): (() => void) | null;
-}
-
-declare namespace $ {
-    function $mol_log_debug(next?: string): string | null;
-}
-
-declare namespace $ {
-    var $mol_log_filter: (next?: string | null | undefined) => string | null;
-}
-
-declare namespace $ {
-    function $mol_log_group<Task extends Function, This>(name: string, task: Task): Task;
-}
-
-declare namespace $ {
-    class $mol_log2 extends $mol_wrapper {
-        readonly host: any;
-        readonly id: string;
-        readonly args: any[];
-        static current: $mol_log2 | null;
-        static wrap<This extends {
-            $: $mol_ambient_context;
-        }, Args extends any[], Result>(task: (this: This, ...args: Args) => Result): (this: This, ...args: Args) => Result;
-        constructor(host: any, id: string, args: any[]);
-        stream: $mol_log2_line[];
-        flush(): void;
-        info(...values: any[]): void;
-        static info(...values: any[]): void;
-        static excludes: (RegExp | undefined)[] | null;
-        static prefix: any[];
-    }
-    class $mol_log2_indent extends $mol_wrapper {
-        static wrap<This extends {
-            $: $mol_ambient_context;
-        }, Args extends any[], Result>(task: (this: This, ...args: Args) => Result): (this: This, ...args: Args) => Result;
-    }
-    class $mol_log2_table extends $mol_log2 {
-    }
-    class $mol_log2_hidden extends $mol_log2 {
-        flush(): void;
-    }
-    class $mol_log2_line extends Array<any> {
-        constructor(...items: any[]);
-    }
-    class $mol_log2_token extends Array<any> {
-        constructor(...items: any[]);
-    }
-    let $mol_log2_token_empty: $mol_log2_token;
-    let $mol_log2_token_indent: $mol_log2_token;
-    let $mol_log2_legend: $mol_log2_table;
-}
-
-declare namespace $ {
 }
 
 declare namespace $ {
@@ -223,6 +156,34 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    function $mol_dev_format_register(config: {
+        header: (val: any, config: any) => any;
+        hasBody: (val: any, config: any) => false;
+    } | {
+        header: (val: any, config: any) => any;
+        hasBody: (val: any, config: any) => boolean;
+        body: (val: any, config: any) => any;
+    }): void;
+    let $mol_dev_format_head: symbol;
+    let $mol_dev_format_body: symbol;
+    function $mol_dev_format_native(obj: any): any;
+    function $mol_dev_format_auto(obj: any): any;
+    function $mol_dev_format_element(element: string, style: object, ...content: any[]): any[];
+    function $mol_dev_format_span(style: object, ...content: any[]): any[];
+    let $mol_dev_format_div: (style: object, ...content: any[]) => any[];
+    let $mol_dev_format_ol: (style: object, ...content: any[]) => any[];
+    let $mol_dev_format_li: (style: object, ...content: any[]) => any[];
+    let $mol_dev_format_table: (style: object, ...content: any[]) => any[];
+    let $mol_dev_format_tr: (style: object, ...content: any[]) => any[];
+    let $mol_dev_format_td: (style: object, ...content: any[]) => any[];
+    let $mol_dev_format_accent: (...args: any[]) => any[];
+    let $mol_dev_format_strong: (...args: any[]) => any[];
+    let $mol_dev_format_string: (...args: any[]) => any[];
+    let $mol_dev_format_shade: (...args: any[]) => any[];
+    let $mol_dev_format_indent: (...args: any[]) => any[];
+}
+
+declare namespace $ {
     const enum $mol_fiber_status {
         persist = -3,
         actual = -2,
@@ -242,6 +203,7 @@ declare namespace $ {
         static func<This, Args extends any[], Result>(task: (this: This, ...args: Args) => Result): (this: This, ...args: Args) => Result;
     }
     class $mol_fiber<Value = any> extends $mol_wrapper {
+        static logs: boolean;
         static wrap<Func extends (...args: any[]) => any>(task: Func): (this: ThisParameterType<Func>, ...args: Parameters<Func>) => any;
         static quant: number;
         static deadline: number;
@@ -259,7 +221,7 @@ declare namespace $ {
         schedule(): void;
         wake(): Value | undefined;
         push(value: Value): Value;
-        fail(error: Error | PromiseLike<Value>): Error | PromiseLike<Value>;
+        fail(error: Error): Error;
         wait(promise: PromiseLike<Value>): PromiseLike<Value>;
         complete(): void;
         complete_master(master_index: number): void;
@@ -280,13 +242,6 @@ declare namespace $ {
         abort(): boolean;
         destructor(): void;
     }
-    let $mol_fiber_token_runned: $mol_log2_token;
-    let $mol_fiber_token_changed1: $mol_log2_token;
-    let $mol_fiber_token_changed2: $mol_log2_token;
-    let $mol_fiber_token_actualized: $mol_log2_token;
-    let $mol_fiber_token_sleeped: $mol_log2_token;
-    let $mol_fiber_token_failed: $mol_log2_token;
-    let $mol_fiber_token_destructed: $mol_log2_token;
 }
 
 declare namespace $ {
@@ -302,6 +257,7 @@ declare namespace $ {
 declare namespace $ {
     function $mol_atom2_value<Value>(task: () => Value): Value | undefined;
     class $mol_atom2<Value = any> extends $mol_fiber<Value> {
+        static logs: boolean;
         static get current(): $mol_atom2<any> | null;
         static cached: boolean;
         static reap_task: $mol_fiber<any> | null;
@@ -326,18 +282,11 @@ declare namespace $ {
         doubt(master_index?: number): void;
         obsolete_slaves(): void;
         doubt_slaves(): void;
-        get fresh(): (this: void) => void;
+        get fresh(): () => void;
         get alone(): boolean;
         get derived(): boolean;
         destructor(): void;
     }
-    let $mol_atom2_token_revalidation: $mol_log2_token;
-    let $mol_atom2_token_stumbled: $mol_log2_token;
-    let $mol_atom2_token_revalidated: $mol_log2_token;
-    let $mol_atom2_token_leaded: $mol_log2_token;
-    let $mol_atom2_token_disleaded: $mol_log2_token;
-    let $mol_atom2_token_obsoleted: $mol_log2_token;
-    let $mol_atom2_token_doubted: $mol_log2_token;
 }
 
 declare namespace $ {
@@ -492,6 +441,26 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    function $mol_log(path: any, ...values: any[]): void;
+}
+
+declare namespace $ {
+    function $mol_log_context(next?: (() => void) | null): (() => void) | null;
+}
+
+declare namespace $ {
+    function $mol_log_debug(next?: string): string | null;
+}
+
+declare namespace $ {
+    var $mol_log_filter: (next?: string | null | undefined) => string | null;
+}
+
+declare namespace $ {
+    function $mol_log_group<Task extends Function, This>(name: string, task: Task): Task;
+}
+
+declare namespace $ {
     class $mol_window extends $mol_object {
         static size(next?: {
             width: number;
@@ -587,7 +556,9 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    function $mol_deprecated(message: string): <Method extends (this: Host, ...args: readonly any[]) => any, Host extends { [key in Field]: Method; }, Field extends keyof Host>(host: Host, field: Field, descr: TypedPropertyDescriptor<Method>) => void;
+    function $mol_deprecated(message: string): <Method extends (this: Host, ...args: readonly any[]) => any, Host extends { [key in Field]: Method; } & {
+        $: $mol_ambient_context;
+    }, Field extends keyof Host>(host: Host, field: Field, descr: TypedPropertyDescriptor<Method>) => void;
 }
 
 declare namespace $ {
@@ -614,8 +585,8 @@ declare namespace $ {
         state_key(suffix?: string): string;
         dom_name(): string;
         dom_name_space(): string;
-        sub(): readonly (string | number | boolean | Node | $mol_view)[];
-        sub_visible(): readonly (string | number | boolean | Node | $mol_view)[];
+        sub(): readonly (string | number | boolean | $mol_view | Node)[];
+        sub_visible(): readonly (string | number | boolean | $mol_view | Node)[];
         minimal_width(): number;
         maximal_width(): number;
         minimal_height(): number;
@@ -949,7 +920,7 @@ declare namespace $ {
         disabled(): boolean;
         tab_index(): number;
         hint(): string;
-        sub(): readonly (string | number | boolean | Node | $mol_view)[];
+        sub(): readonly (string | number | boolean | $mol_view | Node)[];
     }
 }
 
@@ -1127,10 +1098,10 @@ declare namespace $ {
         Title(): $$.$mol_button;
         event_top(val?: any, force?: $mol_mem_force): any;
         Tools(): $mol_view;
-        tools(): readonly (string | number | boolean | Node | $mol_view)[];
+        tools(): readonly (string | number | boolean | $mol_view | Node)[];
         Body(): $$.$mol_scroll;
         body_scroll_top(val?: any, force?: $mol_mem_force): any;
-        body(): readonly (string | number | boolean | Node | $mol_view)[];
+        body(): readonly (string | number | boolean | $mol_view | Node)[];
         Foot(): $mol_view;
         foot(): readonly $mol_view[];
     }
@@ -1396,6 +1367,10 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    function $mol_maybe<Value>(value: Value | null | undefined): Value[];
+}
+
+declare namespace $ {
 }
 
 declare namespace $.$$ {
@@ -1513,8 +1488,8 @@ declare namespace $ {
     class $mol_dimmer extends $mol_view {
         haystack(): string;
         needle(): string;
-        sub(): readonly (string | number | boolean | Node | $mol_view)[];
-        parts(): readonly (string | number | boolean | Node | $mol_view)[];
+        sub(): readonly (string | number | boolean | $mol_view | Node)[];
+        parts(): readonly (string | number | boolean | $mol_view | Node)[];
         Low(id: any): $mol_view;
         string(id: any): string;
     }
@@ -1551,12 +1526,12 @@ declare namespace $ {
         Cell(id: any): $mol_view;
         cell(id: any): any;
         Cell_text(id: any): $mol_grid_cell;
-        cell_content_text(id: any): readonly (string | number | boolean | Node | $mol_view)[];
-        cell_content(id: any): readonly (string | number | boolean | Node | $mol_view)[];
+        cell_content_text(id: any): readonly (string | number | boolean | $mol_view | Node)[];
+        cell_content(id: any): readonly (string | number | boolean | $mol_view | Node)[];
         Cell_number(id: any): $mol_grid_number;
-        cell_content_number(id: any): readonly (string | number | boolean | Node | $mol_view)[];
+        cell_content_number(id: any): readonly (string | number | boolean | $mol_view | Node)[];
         Col_head(id: any): $mol_float;
-        col_head_content(id: any): readonly (string | number | boolean | Node | $mol_view)[];
+        col_head_content(id: any): readonly (string | number | boolean | $mol_view | Node)[];
         Cell_branch(id: any): $$.$mol_check_expand;
         cell_level(id: any): number;
         cell_expanded(id: any, val?: any, force?: $mol_mem_force): any;
@@ -1664,7 +1639,7 @@ declare namespace $ {
         target(): string;
         file_name(): string;
         current(): boolean;
-        sub(): readonly (string | number | boolean | Node | $mol_view)[];
+        sub(): readonly (string | number | boolean | $mol_view | Node)[];
         arg(): {};
         event(): {
             click: (event?: any) => any;
