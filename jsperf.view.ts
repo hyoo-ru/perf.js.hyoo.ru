@@ -81,7 +81,9 @@ namespace $.$$ {
 		@ $mol_mem
 		max_frequency() {
 			return this.measures().reduce( ( max , measure )=> {
-				return measure.reduce( ( max , level )=> Math.max( max , level.frequency ) , 0 )
+				return Math.max( max , measure.reduce( ( max , level )=> {
+					return Math.max( max , level.frequency )
+				} , 0 ) )
 			} , 0 )
 		}
 		
