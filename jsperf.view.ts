@@ -101,7 +101,7 @@ namespace $.$$ {
 		@ $mol_fiber.method
 		run() {
 
-			const measure = $mol_fiber.func(( inner : string , outer = [ '' , '' ] ) {
+			const measure = $mol_fiber.func(( inner : string , outer = [ '' , '' ] )=> {
 
 				try {
 				
