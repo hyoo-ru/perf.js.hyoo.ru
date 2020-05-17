@@ -190,7 +190,8 @@ namespace $.$$ {
 
 		@ $mol_mem
 		result_columns() {
-			return $mol_range2( level => this.Result( level ) , ()=> this.results().length )
+			return [ this.Result( 0 ) ]
+			// return $mol_range2( level => this.Result( level ) , ()=> this.results().length )
 		}
 
 		result( level : number ) {
@@ -202,7 +203,8 @@ namespace $.$$ {
 	export class $hyoo_jsperf_case_result extends $.$hyoo_jsperf_case_result {
 
 		sub() {
-			return this.result().error ? [ this.Error() ] : [ this.Stats() ]
+			if( !this.result() ) return []
+			return this.result().error ? [ this.Error() ] : [ this.Stats() , this.Portion() ]
 		}
 
 		error() {

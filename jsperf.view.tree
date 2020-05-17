@@ -3,24 +3,16 @@ $hyoo_jsperf $mol_page
 	attr *
 		^
 		mol_theme \$mol_theme_dark
-	body /
-		<= Prefix $mol_textarea
-			value?val <=> prefix?val \
-			hint <= prefix_hint @ \Setup code for all cases. Use {#} to insert iterations count. Use  $mol_import.script( uri ) to load external.
-		<= Cases $mol_view sub <= cases /
-		<= Chart $mol_plot_pane
-			gap_bottom 0
-			graphs /
-				<= Frequencies $mol_plot_bar
-					series_y <= frequencies /number
-				<= Frequencies_ruler $mol_plot_ruler_vert
-					title \
-				<= Frequencies_mark_hor $mol_plot_mark_hor
-					title \
-					labels <= labels /string
-		<= Postfix $mol_textarea
-			value?val <=> postfix?val \
-			hint <= postfix_hint @ \Teardown code for all cases. Use {#} to insert iterations count.
+	Body $mol_book2 pages /
+		<= Common $mol_scroll sub /
+			<= Prefix $mol_textarea
+				value?val <=> prefix?val \
+				hint <= prefix_hint @ \Setup code for all cases. Use {#} to insert iterations count. Use  $mol_import.script( uri ) to load external.
+			<= Postfix $mol_textarea
+				value?val <=> postfix?val \
+				hint <= postfix_hint @ \Teardown code for all cases. Use {#} to insert iterations count.
+		<= Cases_pane $mol_scroll sub /
+			<= Cases $mol_view sub <= cases /
 	Case!index $hyoo_jsperf_case
 		source?val <=> source!index?val \
 		results?val <=> results!index?val \

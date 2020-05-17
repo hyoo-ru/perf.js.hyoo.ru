@@ -1,8 +1,12 @@
 [hyoo_jsperf_body] {
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
 	justify-content: space-between;
-	font-size: .75em;
+}
+
+[hyoo_jsperf_common] {
+	flex-direction: column;
+	flex: 1000 0 40rem;
 }
 
 [hyoo_jsperf_prefix] {
@@ -13,33 +17,29 @@
 	flex: none;
 }
 
-[hyoo_jsperf_chart] {
-	flex: 1 1 auto;
-	min-height: 16rem;
-	margin-bottom: 1rem;
+[hyoo_jsperf_cases_pane] {
+	flex: 1000 0 auto;
 }
 
 [hyoo_jsperf_cases] {
-	display: flex;
-	flex: none;
-	align-items: flex-start;
-	align-items: stretch;
+	display: table;
 }
 
 [hyoo_jsperf_case] {
-	display: flex;
-	flex-direction: column;
-	flex: 1 0 20em;
+	display: table-row;
+	flex: 0 1 auto;
 }
 
 [hyoo_jsperf_case_source] {
+	display: table-cell;
 	font-family: var(--mol_skin_font_monospace);
 }
 
 [hyoo_jsperf_case_result] {
-	display: flex;
+	display: table-cell;
 	flex-direction: column;
-	margin: .5rem;
+	padding: .75rem;
+	width: 24rem;
 }
 
 [hyoo_jsperf_case_result] > * {
@@ -48,8 +48,8 @@
 
 [hyoo_jsperf_case_result_stats] {
 	display: flex;
-	flex-wrap: wrap;
-	padding: 0 .5rem;
+	white-space: nowrap;
+	padding: 0 .75rem;
 }
 
 [hyoo_jsperf_case_result_stats] > * {
@@ -62,9 +62,8 @@
 }
 
 [hyoo_jsperf_case_result_portion] {
-	flex: 1 1 auto;
+	flex: none;
 	width: auto;
-	/* max-height: 2rem; */
 }
 
 [hyoo_jsperf_case_result_error] {
