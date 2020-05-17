@@ -6,7 +6,8 @@
 
 [hyoo_jsperf_common] {
 	flex-direction: column;
-	flex: 1000 0 40rem;
+	flex: 1000 0 auto;
+	min-width: 20rem;
 }
 
 [hyoo_jsperf_prefix] {
@@ -19,6 +20,7 @@
 
 [hyoo_jsperf_cases_pane] {
 	flex: 1000 0 auto;
+	min-width: 46rem;
 }
 
 [hyoo_jsperf_cases] {
@@ -39,7 +41,7 @@
 	display: table-cell;
 	flex-direction: column;
 	padding: .75rem;
-	width: 24rem;
+	width: 22rem;
 }
 
 [hyoo_jsperf_case_result] > * {
@@ -49,7 +51,6 @@
 [hyoo_jsperf_case_result_stats] {
 	display: flex;
 	white-space: nowrap;
-	padding: 0 .75rem;
 }
 
 [hyoo_jsperf_case_result_stats] > * {
