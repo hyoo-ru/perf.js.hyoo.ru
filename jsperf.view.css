@@ -43,10 +43,11 @@
 [hyoo_jsperf_case_result_rows] {
 	display: table-cell;
 	padding: .75rem;
+	width: 25rem;
 }
 
 [hyoo_jsperf_case_result] {
-	min-width: 22rem;
+	width: 24rem;
 	padding: .5rem .75rem;
 	flex-direction: column;
 }
