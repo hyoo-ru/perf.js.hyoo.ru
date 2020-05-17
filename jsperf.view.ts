@@ -40,11 +40,6 @@ namespace $.$$ {
 			return 'https://tinyurl.com/create.php?url=' + encodeURIComponent( win.location.href )
 		}
 
-		@ $mol_mem
-		optimized( next? : boolean ) : boolean {
-			return this.$.$mol_state_arg.value( 'optimized' , ( next === undefined ) ? undefined : `${ next }` ) !== 'false'
-		}
-
 		cases() {
 			return $mol_range2( index => this.Case( index ) , ()=> this.sources().length + 1 )
 		}
@@ -63,7 +58,6 @@ namespace $.$$ {
 
 		@ $mol_mem
 		measures( next? : $hyoo_jsperf_stats[][] ) {
-			this.optimized()
 			this.sources()
 			return next || []
 		}
@@ -84,9 +78,11 @@ namespace $.$$ {
 			return this.measures().map( (measure, i) => String(i) )
 		}
 
-		@ $mol_mem_key
-		max_frequency( level : number ) {
-			return this.measures().reduce( ( max , measure )=> Math.max( max , measure[ level ].frequency ) , 0 )
+		@ $mol_mem
+		max_frequency() {
+			return this.measures().reduce( ( max , measure )=> {
+				return measure.reduce( ( max , level )=> Math.max( max , level.frequency ) , 0 )
+			} , 0 )
 		}
 		
 		@ $mol_mem_key 
@@ -96,7 +92,7 @@ namespace $.$$ {
 			if( !measure ) return []
 			
 			for( const [ level , stats ] of measure.entries() ) {
-				stats.portion = stats.frequency / this.max_frequency( level )
+				stats.portion = stats.frequency / this.max_frequency()
 			}
 
 			return measure
@@ -105,7 +101,7 @@ namespace $.$$ {
 		@ $mol_fiber.method
 		run() {
 
-			function measure( inner : string , outer = [ '' , '' ] ) {
+			const measure = $mol_fiber.func(( inner : string , outer = [ '' , '' ] ) {
 
 				try {
 				
@@ -158,18 +154,20 @@ namespace $.$$ {
 					
 				}
 
-			}
+			} )
 			
 			const measures = this.sources().map( inner => {
 
 				const outer = [ this.prefix() , this.postfix() ]
 
-				if( this.optimized() ) {
-					outer[0] += ';const $hyoo_jsperf_case = $hyoo_jsperf_iteration => {\n' + inner.replace( /\{#\}/g , '$hyoo_jsperf_iteration' ) + '\n};'
-					inner = '$hyoo_jsperf_case({#});'
-				}
-	
-				return [ measure( inner , outer ) ]
+				return [
+					measure( inner , outer ) , 
+					measure( '$hyoo_jsperf_case({#});' , [
+						outer[0] + ';const $hyoo_jsperf_case = $hyoo_jsperf_iteration => {\n' + inner.replace( /\{#\}/g , '$hyoo_jsperf_iteration' ) + '\n};',
+						outer[1],
+					] ) ,
+				]
+
 			} )
 
 			this.measures( measures )
@@ -181,21 +179,17 @@ namespace $.$$ {
 	export class $hyoo_jsperf_case extends $.$hyoo_jsperf_case {
 
 		@ $mol_mem
-		columns() {
-			return [
-				... super.columns() ,
-				... this.result_columns() ,
-			]
-		}
-
-		@ $mol_mem
-		result_columns() {
-			return [ this.Result( 0 ) ]
+		result_rows() {
+			return [ this.Result( 0 ) , this.Result( 1 ) ]
 			// return $mol_range2( level => this.Result( level ) , ()=> this.results().length )
 		}
 
 		result( level : number ) {
 			return this.results()[ level ]
+		}
+
+		result_title( level : number ) {
+			return [ 'Cold: ' , 'Hot: ' ][ level ] ?? ''
 		}
 
 	}

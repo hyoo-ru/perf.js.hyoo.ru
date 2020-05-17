@@ -28,9 +28,6 @@ $hyoo_jsperf $mol_page
 			hint <= new_hint @ \New benchmark
 			sub /
 				<= New_icon $mol_icon_plus
-		<= Optimized $mol_check_box
-			title <= optimized_title @ \Optimized
-			checked?val <=> optimized?val true
 		<= Run $mol_button_major
 			title <= run_title @ \Run
 			click?event <=> run?event null
@@ -41,13 +38,16 @@ $hyoo_jsperf_case $mol_view
 		<= Source $mol_textarea
 			value?val <=> source?val \
 			hint <= source_hint @ \Case source code. Use {#} to insert iteration number.
+		<= Result_rows $mol_list rows <= result_rows /
 	Result!level $hyoo_jsperf_case_result
+		title <= result_title!level \
 		result <= result!level $hyoo_jsperf_stats
 
 $hyoo_jsperf_case_result $mol_view
 	result $hyoo_jsperf_stats
 	sub /
 		<= Stats $mol_view sub /
+			<= title \
 			<= Frequency $mol_view sub / <= frequency \
 			\ ≈ 
 			<= Time $mol_view sub / <= time \

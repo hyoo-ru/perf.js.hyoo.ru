@@ -12,10 +12,12 @@
 
 [hyoo_jsperf_prefix] {
 	flex: none;
+	min-height: 8.5rem;
 }
 
 [hyoo_jsperf_postfix] {
 	flex: none;
+	min-height: 8.5rem;
 }
 
 [hyoo_jsperf_cases_pane] {
@@ -35,13 +37,18 @@
 [hyoo_jsperf_case_source] {
 	display: table-cell;
 	font-family: var(--mol_skin_font_monospace);
+	height: 8.5rem;
+}
+
+[hyoo_jsperf_case_result_rows] {
+	display: table-cell;
+	padding: .75rem;
 }
 
 [hyoo_jsperf_case_result] {
-	display: table-cell;
+	min-width: 22rem;
+	padding: .5rem .75rem;
 	flex-direction: column;
-	padding: .75rem;
-	width: 22rem;
 }
 
 [hyoo_jsperf_case_result] > * {
@@ -71,4 +78,12 @@
 	padding: .5rem 1rem;;
 	background: var(--mol_skin_bad);
 	color: var(--mol_skin_bad_text);
+}
+
+[hyoo_jsperf_case_result]:nth-child(1) [hyoo_jsperf_case_result_portion_indicator] {
+	background-color: royalblue;
+}
+
+[hyoo_jsperf_case_result]:nth-child(2) [hyoo_jsperf_case_result_portion_indicator] {
+	background-color: orange;
 }
