@@ -3231,7 +3231,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $.$mol_style_attach("mol/button/button.view.css", "[mol_button] {\n\tborder: none;\n\tfont: inherit;\n\tbackground-color: none;\n\tdisplay: inline-flex;\n\tflex-shrink: 0;\n\ttext-decoration: inherit;\n\tcursor: inherit;\n\tposition: relative;\n\tbox-sizing: border-box;\n\tword-break: normal;\n\tcursor: default;\n}\n[mol_button]:focus {\n\toutline: none;\n}\n");
+    $.$mol_style_attach("mol/button/button.view.css", "[mol_button] {\n\tborder: none;\n\tfont: inherit;\n\tbackground-color: none;\n\tdisplay: inline-flex;\n\tflex-shrink: 0;\n\ttext-decoration: inherit;\n\tcursor: inherit;\n\tposition: relative;\n\tbox-sizing: border-box;\n\tword-break: normal;\n\tcursor: default;\n\tuser-select: none;\n}\n[mol_button]:focus {\n\toutline: none;\n}\n");
 })($ || ($ = {}));
 //button.view.css.js.map
 ;
@@ -3626,7 +3626,7 @@ var $;
                 flex: {
                     grow: 1000,
                     shrink: 1,
-                    basis: per(50),
+                    basis: 'auto',
                 },
                 minHeight: rem(2),
                 padding: [rem(.5), rem(.75)],
@@ -6417,45 +6417,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $mol_icon_tick extends $.$mol_icon {
-        path() {
-            return "M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z";
-        }
-    }
-    $.$mol_icon_tick = $mol_icon_tick;
-})($ || ($ = {}));
-//tick.view.tree.js.map
-;
-"use strict";
-var $;
-(function ($) {
-    let $mol_check_box = (() => {
-        class $mol_check_box extends $.$mol_check {
-            Icon() {
-                return ((obj) => {
-                    return obj;
-                })(new this.$.$mol_icon_tick());
-            }
-        }
-        __decorate([
-            $.$mol_mem
-        ], $mol_check_box.prototype, "Icon", null);
-        return $mol_check_box;
-    })();
-    $.$mol_check_box = $mol_check_box;
-})($ || ($ = {}));
-//box.view.tree.js.map
-;
-"use strict";
-var $;
-(function ($) {
-    $.$mol_style_attach("mol/check/box/box.view.css", "[mol_check_box_icon] {\n\tborder-radius: var(--mol_skin_round);\n\tbox-shadow: inset 0 0 0 1px var(--mol_theme_line);\n}\n\n[mol_check]:not([mol_check_checked]) > [mol_check_box_icon] {\n\tfill: transparent;\n}\n\n[mol_check]:not([disabled]) > [mol_check_box_icon] {\n\tbackground: var(--mol_theme_field);\n\tcolor: var(--mol_theme_text);\n}\n");
-})($ || ($ = {}));
-//box.view.css.js.map
-;
-"use strict";
-var $;
-(function ($) {
     class $mol_button_major extends $.$mol_button_typed {
         attr() {
             return (Object.assign(Object.assign({}, super.attr()), { "mol_theme": "$mol_theme_accent" }));
@@ -6613,7 +6574,7 @@ var $;
                 return (val !== void 0) ? val : "";
             }
             tools() {
-                return [this.Permalink(), this.New(), this.Optimized(), this.Run()];
+                return [this.Permalink(), this.New(), this.Run()];
             }
             Permalink() {
                 return ((obj) => {
@@ -6650,19 +6611,6 @@ var $;
                 return ((obj) => {
                     return obj;
                 })(new this.$.$mol_icon_plus());
-            }
-            Optimized() {
-                return ((obj) => {
-                    obj.title = () => this.optimized_title();
-                    obj.checked = (val) => this.optimized(val);
-                    return obj;
-                })(new this.$.$mol_check_box());
-            }
-            optimized_title() {
-                return this.$.$mol_locale.text("$hyoo_jsperf_optimized_title");
-            }
-            optimized(val, force) {
-                return (val !== void 0) ? val : true;
             }
             Run() {
                 return ((obj) => {
@@ -6725,12 +6673,6 @@ var $;
         ], $hyoo_jsperf.prototype, "New_icon", null);
         __decorate([
             $.$mol_mem
-        ], $hyoo_jsperf.prototype, "Optimized", null);
-        __decorate([
-            $.$mol_mem
-        ], $hyoo_jsperf.prototype, "optimized", null);
-        __decorate([
-            $.$mol_mem
         ], $hyoo_jsperf.prototype, "Run", null);
         __decorate([
             $.$mol_mem
@@ -6749,7 +6691,7 @@ var $;
                 return this.columns();
             }
             columns() {
-                return [this.Source()];
+                return [this.Source(), this.Result_rows()];
             }
             Source() {
                 return ((obj) => {
@@ -6764,11 +6706,24 @@ var $;
             source_hint() {
                 return this.$.$mol_locale.text("$hyoo_jsperf_case_source_hint");
             }
+            Result_rows() {
+                return ((obj) => {
+                    obj.rows = () => this.result_rows();
+                    return obj;
+                })(new this.$.$mol_list());
+            }
+            result_rows() {
+                return [];
+            }
             Result(level) {
                 return ((obj) => {
+                    obj.title = () => this.result_title(level);
                     obj.result = () => this.result(level);
                     return obj;
                 })(new this.$.$hyoo_jsperf_case_result());
+            }
+            result_title(level) {
+                return "";
             }
             result(level) {
                 return ((obj) => {
@@ -6782,6 +6737,9 @@ var $;
         __decorate([
             $.$mol_mem
         ], $hyoo_jsperf_case.prototype, "source", null);
+        __decorate([
+            $.$mol_mem
+        ], $hyoo_jsperf_case.prototype, "Result_rows", null);
         __decorate([
             $.$mol_mem_key
         ], $hyoo_jsperf_case.prototype, "Result", null);
@@ -6805,9 +6763,12 @@ var $;
             }
             Stats() {
                 return ((obj) => {
-                    obj.sub = () => [this.Frequency(), " ≈ ", this.Time(), " ⋅ ", this.Iterations()];
+                    obj.sub = () => [this.title(), this.Frequency(), " ≈ ", this.Time(), " ⋅ ", this.Iterations()];
                     return obj;
                 })(new this.$.$mol_view());
+            }
+            title() {
+                return "";
             }
             Frequency() {
                 return ((obj) => {
@@ -6986,7 +6947,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $.$mol_style_attach("hyoo/jsperf/jsperf.view.css", "[hyoo_jsperf_body] {\n\tdisplay: flex;\n\tflex-direction: row;\n\tjustify-content: space-between;\n}\n\n[hyoo_jsperf_common] {\n\tflex-direction: column;\n\tflex: 1000 0 auto;\n\tmin-width: 20rem;\n}\n\n[hyoo_jsperf_prefix] {\n\tflex: none;\n}\n\n[hyoo_jsperf_postfix] {\n\tflex: none;\n}\n\n[hyoo_jsperf_cases_pane] {\n\tflex: 1000 0 auto;\n\tmin-width: 46rem;\n}\n\n[hyoo_jsperf_cases] {\n\tdisplay: table;\n}\n\n[hyoo_jsperf_case] {\n\tdisplay: table-row;\n\tflex: 0 1 auto;\n}\n\n[hyoo_jsperf_case_source] {\n\tdisplay: table-cell;\n\tfont-family: var(--mol_skin_font_monospace);\n}\n\n[hyoo_jsperf_case_result] {\n\tdisplay: table-cell;\n\tflex-direction: column;\n\tpadding: .75rem;\n\twidth: 22rem;\n}\n\n[hyoo_jsperf_case_result] > * {\n\tdisplay: flex;\n}\n\n[hyoo_jsperf_case_result_stats] {\n\tdisplay: flex;\n\twhite-space: nowrap;\n}\n\n[hyoo_jsperf_case_result_stats] > * {\n\tword-break: keep-all;\n\twhite-space: nowrap;\n\tmargin: 0 .5rem;\n}\n[hyoo_jsperf_case_result_frequency] {\n\tfont-weight: bolder;\n}\n\n[hyoo_jsperf_case_result_portion] {\n\tflex: none;\n\twidth: auto;\n}\n\n[hyoo_jsperf_case_result_error] {\n\tpadding: .5rem 1rem;;\n\tbackground: var(--mol_skin_bad);\n\tcolor: var(--mol_skin_bad_text);\n}\n");
+    $.$mol_style_attach("hyoo/jsperf/jsperf.view.css", "[hyoo_jsperf_body] {\n\tdisplay: flex;\n\tflex-direction: row;\n\tjustify-content: space-between;\n}\n\n[hyoo_jsperf_common] {\n\tflex-direction: column;\n\tflex: 1000 0 auto;\n\tmin-width: 20rem;\n}\n\n[hyoo_jsperf_prefix] {\n\tflex: none;\n\tmin-height: 8.5rem;\n}\n\n[hyoo_jsperf_postfix] {\n\tflex: none;\n\tmin-height: 8.5rem;\n}\n\n[hyoo_jsperf_cases_pane] {\n\tflex: 1000 0 auto;\n\tmin-width: 46rem;\n}\n\n[hyoo_jsperf_cases] {\n\tdisplay: table;\n}\n\n[hyoo_jsperf_case] {\n\tdisplay: table-row;\n\tflex: 0 1 auto;\n}\n\n[hyoo_jsperf_case_source] {\n\tdisplay: table-cell;\n\tfont-family: var(--mol_skin_font_monospace);\n\theight: 8.5rem;\n}\n\n[hyoo_jsperf_case_result_rows] {\n\tdisplay: table-cell;\n\tpadding: .75rem;\n\twidth: 25rem;\n}\n\n[hyoo_jsperf_case_result] {\n\twidth: 24rem;\n\tpadding: .5rem .75rem;\n\tflex-direction: column;\n}\n\n[hyoo_jsperf_case_result] > * {\n\tdisplay: flex;\n}\n\n[hyoo_jsperf_case_result_stats] {\n\tdisplay: flex;\n\twhite-space: nowrap;\n}\n\n[hyoo_jsperf_case_result_stats] > * {\n\tword-break: keep-all;\n\twhite-space: nowrap;\n\tmargin: 0 .5rem;\n}\n[hyoo_jsperf_case_result_frequency] {\n\tfont-weight: bolder;\n}\n\n[hyoo_jsperf_case_result_portion] {\n\tflex: none;\n\twidth: auto;\n}\n\n[hyoo_jsperf_case_result_error] {\n\tpadding: .5rem 1rem;;\n\tbackground: var(--mol_skin_bad);\n\tcolor: var(--mol_skin_bad_text);\n}\n\n[hyoo_jsperf_case_result]:nth-child(1) [hyoo_jsperf_case_result_portion_indicator] {\n\tbackground-color: royalblue;\n}\n\n[hyoo_jsperf_case_result]:nth-child(2) [hyoo_jsperf_case_result_portion_indicator] {\n\tbackground-color: orange;\n}\n");
 })($ || ($ = {}));
 //jsperf.view.css.js.map
 ;
@@ -7022,9 +6983,6 @@ var $;
                     const win = this.$.$mol_dom_context;
                     return 'https://tinyurl.com/create.php?url=' + encodeURIComponent(win.location.href);
                 }
-                optimized(next) {
-                    return this.$.$mol_state_arg.value('optimized', (next === undefined) ? undefined : `${next}`) !== 'false';
-                }
                 cases() {
                     return $.$mol_range2(index => this.Case(index), () => this.sources().length + 1);
                 }
@@ -7038,7 +6996,6 @@ var $;
                     return next;
                 }
                 measures(next) {
-                    this.optimized();
                     this.sources();
                     return next || [];
                 }
@@ -7052,20 +7009,22 @@ var $;
                 labels() {
                     return this.measures().map((measure, i) => String(i));
                 }
-                max_frequency(level) {
-                    return this.measures().reduce((max, measure) => Math.max(max, measure[level].frequency), 0);
+                max_frequency() {
+                    return this.measures().reduce((max, measure) => {
+                        return measure.reduce((max, level) => Math.max(max, level.frequency), 0);
+                    }, 0);
                 }
                 results(index) {
                     const measure = this.measures()[index];
                     if (!measure)
                         return [];
                     for (const [level, stats] of measure.entries()) {
-                        stats.portion = stats.frequency / this.max_frequency(level);
+                        stats.portion = stats.frequency / this.max_frequency();
                     }
                     return measure;
                 }
                 run() {
-                    function measure(inner, outer = ['', '']) {
+                    const measure = $.$mol_fiber.func((inner, outer = ['', '']) => {
                         try {
                             let current = '';
                             let time_run = 0;
@@ -7103,14 +7062,16 @@ var $;
                                 stats.iterations = Number.NEGATIVE_INFINITY;
                             });
                         }
-                    }
+                    });
                     const measures = this.sources().map(inner => {
                         const outer = [this.prefix(), this.postfix()];
-                        if (this.optimized()) {
-                            outer[0] += ';const $hyoo_jsperf_case = $hyoo_jsperf_iteration => {\n' + inner.replace(/\{#\}/g, '$hyoo_jsperf_iteration') + '\n};';
-                            inner = '$hyoo_jsperf_case({#});';
-                        }
-                        return [measure(inner, outer)];
+                        return [
+                            measure(inner, outer),
+                            measure('$hyoo_jsperf_case({#});', [
+                                outer[0] + ';const $hyoo_jsperf_case = $hyoo_jsperf_iteration => {\n' + inner.replace(/\{#\}/g, '$hyoo_jsperf_iteration') + '\n};',
+                                outer[1],
+                            ]),
+                        ];
                     });
                     this.measures(measures);
                 }
@@ -7126,9 +7087,6 @@ var $;
             ], $hyoo_jsperf.prototype, "postfix", null);
             __decorate([
                 $.$mol_mem
-            ], $hyoo_jsperf.prototype, "optimized", null);
-            __decorate([
-                $.$mol_mem
             ], $hyoo_jsperf.prototype, "measures", null);
             __decorate([
                 $.$mol_mem
@@ -7140,7 +7098,7 @@ var $;
                 $.$mol_mem
             ], $hyoo_jsperf.prototype, "labels", null);
             __decorate([
-                $.$mol_mem_key
+                $.$mol_mem
             ], $hyoo_jsperf.prototype, "max_frequency", null);
             __decorate([
                 $.$mol_mem_key
@@ -7153,25 +7111,20 @@ var $;
         $$.$hyoo_jsperf = $hyoo_jsperf;
         let $hyoo_jsperf_case = (() => {
             class $hyoo_jsperf_case extends $.$hyoo_jsperf_case {
-                columns() {
-                    return [
-                        ...super.columns(),
-                        ...this.result_columns(),
-                    ];
-                }
-                result_columns() {
-                    return [this.Result(0)];
+                result_rows() {
+                    return [this.Result(0), this.Result(1)];
                 }
                 result(level) {
                     return this.results()[level];
                 }
+                result_title(level) {
+                    var _a;
+                    return (_a = ['Cold: ', 'Hot: '][level]) !== null && _a !== void 0 ? _a : '';
+                }
             }
             __decorate([
                 $.$mol_mem
-            ], $hyoo_jsperf_case.prototype, "columns", null);
-            __decorate([
-                $.$mol_mem
-            ], $hyoo_jsperf_case.prototype, "result_columns", null);
+            ], $hyoo_jsperf_case.prototype, "result_rows", null);
             return $hyoo_jsperf_case;
         })();
         $$.$hyoo_jsperf_case = $hyoo_jsperf_case;

@@ -1969,21 +1969,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_icon_tick extends $mol_icon {
-        path(): string;
-    }
-}
-
-declare namespace $ {
-    class $mol_check_box extends $mol_check {
-        Icon(): $mol_icon_tick;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
     class $mol_button_major extends $mol_button_typed {
         attr(): {
             mol_theme: string;
@@ -2052,9 +2037,6 @@ declare namespace $ {
         New(): $$.$mol_link;
         new_hint(): string;
         New_icon(): $mol_icon_plus;
-        Optimized(): $mol_check_box;
-        optimized_title(): string;
-        optimized(val?: any, force?: $mol_mem_force): any;
         Run(): $mol_button_major;
         run_title(): string;
         run(event?: any, force?: $mol_mem_force): any;
@@ -2068,7 +2050,10 @@ declare namespace $ {
         Source(): $$.$mol_textarea;
         source(val?: any, force?: $mol_mem_force): any;
         source_hint(): string;
+        Result_rows(): $$.$mol_list;
+        result_rows(): readonly any[];
         Result(level: any): $$.$hyoo_jsperf_case_result;
+        result_title(level: any): string;
         result(level: any): $$.$hyoo_jsperf_stats;
     }
 }
@@ -2077,6 +2062,7 @@ declare namespace $ {
         result(): $$.$hyoo_jsperf_stats;
         sub(): readonly any[];
         Stats(): $mol_view;
+        title(): string;
         Frequency(): $mol_view;
         frequency(): string;
         Time(): $mol_view;
@@ -2121,21 +2107,20 @@ declare namespace $.$$ {
         prefix(next?: string): string;
         postfix(next?: string): string;
         permalink(): string;
-        optimized(next?: boolean): boolean;
         cases(): $hyoo_jsperf_case[];
         source(index: number, next?: string): string;
         measures(next?: $hyoo_jsperf_stats[][]): $hyoo_jsperf_stats[][];
         level_count(): number;
         frequencies(): number[];
         labels(): string[];
-        max_frequency(level: number): number;
+        max_frequency(): number;
         results(index: number): $hyoo_jsperf_stats[];
         run(): void;
     }
     class $hyoo_jsperf_case extends $.$hyoo_jsperf_case {
-        columns(): any[];
-        result_columns(): $hyoo_jsperf_case_result[];
+        result_rows(): $hyoo_jsperf_case_result[];
         result(level: number): any;
+        result_title(level: number): string;
     }
     class $hyoo_jsperf_case_result extends $.$hyoo_jsperf_case_result {
         sub(): ($mol_view | $mol_portion)[];
