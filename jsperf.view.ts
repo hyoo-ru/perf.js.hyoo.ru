@@ -191,7 +191,7 @@ namespace $.$$ {
 		}
 
 		result_title( level : number ) {
-			return [ 'Cold: ' , 'Hot: ' ][ level ] ?? ''
+			return [ '❄' , '🔥' ][ level ] ?? ''
 		}
 
 	}
