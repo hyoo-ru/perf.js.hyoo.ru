@@ -7091,7 +7091,7 @@ var $;
                 }
                 result_title(level) {
                     var _a;
-                    return (_a = ['Cold: ', 'Hot: '][level]) !== null && _a !== void 0 ? _a : '';
+                    return (_a = ['❄', '🔥'][level]) !== null && _a !== void 0 ? _a : '';
                 }
             }
             __decorate([
