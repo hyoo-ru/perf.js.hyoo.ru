@@ -3608,8 +3608,6 @@ var $;
             },
             color: $.$mol_theme.text,
             zIndex: 0,
-            overflow: 'hidden',
-            boxShadow: `0 0 .5rem hsla(0,0%,0%,.25)`,
             ':focus': {
                 outline: 'none',
             },
@@ -3620,18 +3618,19 @@ var $;
                 flex: 'none',
                 position: 'relative',
                 margin: 0,
+                minHeight: rem(4),
                 padding: rem(.75),
                 background: {
                     color: $.$mol_theme.back,
                 },
-                boxShadow: `0 0 .5rem hsla(0,0%,0%,.25)`,
+                boxShadow: `0 0.5rem 0.5rem -0.5rem hsla(0,0%,0%,.25)`,
                 zIndex: 1,
             },
             Title: {
                 flex: {
                     grow: 1000,
                     shrink: 1,
-                    basis: 'auto',
+                    basis: per(50),
                 },
                 minHeight: rem(2),
                 padding: [rem(.5), rem(.75)],
@@ -6090,7 +6089,7 @@ var $;
         'code-keyword': /\b(throw|readonly|unknown|keyof|typeof|never|from|class|interface|type|function|extends|implements|module|namespace|import|export|include|require|var|let|const|for|do|while|until|in|of|new|if|then|else|switch|case|this|return|async|await|try|catch|break|continue|get|set|public|private|protected|string|boolean|number|null|undefined|true|false|void)\b/,
         'code-global': /[$]\w*|\b[A-Z]\w*/,
         'code-decorator': /@\s*\S+/,
-        'code-tag': /<\/?[\w-]+\/?>?/,
+        'code-tag': /<\/?[\w-]+\/?>?|&\w+;/,
         'code-punctuation': /[\-\[\]\{\}\(\)<=>`~!\?@#\$%&\*_\+\\\/\|'";:\.,\^]/,
     });
 })($ || ($ = {}));
