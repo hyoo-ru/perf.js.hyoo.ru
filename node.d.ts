@@ -32,8 +32,8 @@ declare namespace $ {
     function $mol_assert_ok(value: any): void;
     function $mol_assert_not(value: any): void;
     function $mol_assert_fail(handler: () => any, ErrorRight?: any): any;
-    function $mol_assert_equal<Value>(...args: Value[]): void;
-    function $mol_assert_unique(...args: any[]): void;
+    function $mol_assert_equal<Value>(...args: [Value, Value, ...Value[]]): void;
+    function $mol_assert_unique(...args: [any, any, ...any[]]): void;
     function $mol_assert_like<Value>(head: Value, ...tail: Value[]): undefined;
 }
 
