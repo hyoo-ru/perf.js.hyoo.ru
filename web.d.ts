@@ -1428,6 +1428,7 @@ declare namespace $.$$ {
     class $mol_check extends $.$mol_check {
         click(next?: Event): void;
         sub(): any[];
+        label(): readonly any[];
     }
 }
 
