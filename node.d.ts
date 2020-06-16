@@ -1237,13 +1237,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_after_frame extends $mol_after_timeout {
-        task: () => void;
-        constructor(task: () => void);
-    }
-}
-
-declare namespace $ {
 }
 
 declare namespace $.$$ {
@@ -1418,6 +1411,13 @@ declare namespace $ {
         text_width(text?: any, force?: $mol_mem_force): any;
         font_size(): number;
         font_family(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_after_frame extends $mol_after_timeout {
+        task: () => void;
+        constructor(task: () => void);
     }
 }
 
