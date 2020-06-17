@@ -48,10 +48,18 @@ $mol_book2 $mol_scroll
 	minimal_width 0
 	Placeholder $mol_view
 
+$mol_hotkey $mol_plugin
+	event *
+		^
+		keydown?event <=> keydown?event null
+	key *
+	mod_ctrl false
+	mod_alt false
+	mod_shift false
+
 $mol_string $mol_view
 	dom_name \input
 	enabled true
-	debounce 0
 	minimal_height 40
 	autocomplete false
 	field *
@@ -69,6 +77,9 @@ $mol_string $mol_view
 		^
 		input?event <=> event_change?event null
 		keydown?event <=> event_key_press?event null
+	plugins /
+		<= Submit $mol_hotkey
+			key * enter?event <=> submit?event null
 
 $mol_list $mol_view
 	render_visible_only true
@@ -306,7 +317,6 @@ $mol_textarea $mol_view
 			dom_name \textarea
 			value?val <=> value?val \
 			hint <= hint \
-			debounce 0
 			enabled <= enabled true
 		<= View $mol_text
 			text <= text \
