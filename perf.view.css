@@ -1,90 +1,91 @@
-[hyoo_jsperf_body] {
+[hyoo_js_perf_body] {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
+	padding: .75rem;
 }
 
-[hyoo_jsperf_common] {
+[hyoo_js_perf_common] {
 	flex-direction: column;
 	flex: 1000 0 auto;
 	min-width: 20rem;
 }
 
-[hyoo_jsperf_prefix] {
+[hyoo_js_perf_prefix] {
 	flex: none;
 	min-height: 8.5rem;
 }
 
-[hyoo_jsperf_postfix] {
+[hyoo_js_perf_postfix] {
 	flex: none;
 	min-height: 8.5rem;
 }
 
-[hyoo_jsperf_cases_pane] {
+[hyoo_js_perf_cases_pane] {
 	flex: 1000 0 auto;
 	min-width: 46rem;
 }
 
-[hyoo_jsperf_cases] {
+[hyoo_js_perf_cases] {
 	display: table;
 }
 
-[hyoo_jsperf_case] {
+[hyoo_js_perf_case] {
 	display: table-row;
 	flex: 0 1 auto;
 }
 
-[hyoo_jsperf_case_source] {
+[hyoo_js_perf_case_source] {
 	display: table-cell;
 	font-family: var(--mol_skin_font_monospace);
 	height: 8.5rem;
 }
 
-[hyoo_jsperf_case_result_rows] {
+[hyoo_js_perf_case_result_rows] {
 	display: table-cell;
 	padding: .75rem;
 	width: 25rem;
 }
 
-[hyoo_jsperf_case_result] {
+[hyoo_js_perf_case_result] {
 	width: 24rem;
 	padding: .5rem .75rem;
 	flex-direction: column;
 }
 
-[hyoo_jsperf_case_result] > * {
+[hyoo_js_perf_case_result] > * {
 	display: flex;
 }
 
-[hyoo_jsperf_case_result_stats] {
+[hyoo_js_perf_case_result_stats] {
 	display: flex;
 	white-space: nowrap;
 }
 
-[hyoo_jsperf_case_result_stats] > * {
+[hyoo_js_perf_case_result_stats] > * {
 	word-break: keep-all;
 	white-space: nowrap;
 	margin: 0 .5rem;
 }
-[hyoo_jsperf_case_result_frequency] {
+[hyoo_js_perf_case_result_frequency] {
 	font-weight: bolder;
 }
 
-[hyoo_jsperf_case_result_portion] {
+[hyoo_js_perf_case_result_portion] {
 	flex: none;
 	width: auto;
 }
 
-[hyoo_jsperf_case_result_error] {
+[hyoo_js_perf_case_result_error] {
 	padding: .5rem 1rem;;
 	background: var(--mol_skin_bad);
 	color: var(--mol_skin_bad_text);
 }
 
-[hyoo_jsperf_case_result]:nth-child(1) [hyoo_jsperf_case_result_portion_indicator] {
+[hyoo_js_perf_case_result]:nth-child(1) [hyoo_js_perf_case_result_portion_indicator] {
 	background-color: royalblue;
 }
 
-[hyoo_jsperf_case_result]:nth-child(2) [hyoo_jsperf_case_result_portion_indicator] {
+[hyoo_js_perf_case_result]:nth-child(2) [hyoo_js_perf_case_result_portion_indicator] {
 	background-color: orange;
 }

@@ -12,17 +12,14 @@ jobs:
     
     steps:
     
-    - name: Checkout sources
-      uses: actions/checkout@v1
-    
     - name: Build app
       uses: hyoo-ru/mam_build@master
       with:
-        module: 'hyoo/jsperf'
+        package: 'hyoo/js/perf'
     
     - name: Deploy on GitHub Pages
       if: github.ref == 'refs/heads/master'
       uses: alex-page/blazing-fast-gh-pages-deploy@v1.1.0
       with:
         repo-token: ${{ secrets.GH_PAT }}
-        site-directory: '.'
+        site-directory: 'hyoo/js/perf/-'

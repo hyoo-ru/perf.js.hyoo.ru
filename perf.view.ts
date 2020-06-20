@@ -1,6 +1,6 @@
 namespace $.$$ {
 
-	export class $hyoo_jsperf_stats extends $mol_object2 {
+	export class $hyoo_js_perf_stats extends $mol_object2 {
 		
 		elapsed! : number
 		iterations! : number
@@ -12,7 +12,7 @@ namespace $.$$ {
 
 	}
 
-	export class $hyoo_jsperf extends $.$hyoo_jsperf {
+	export class $hyoo_js_perf extends $.$hyoo_js_perf {
 
 		@ $mol_mem
 		sources( next? : string[] ) : string[] {
@@ -57,7 +57,7 @@ namespace $.$$ {
 		}
 
 		@ $mol_mem
-		measures( next? : $hyoo_jsperf_stats[][] ) {
+		measures( next? : $hyoo_js_perf_stats[][] ) {
 			this.sources()
 			return next || []
 		}
@@ -122,8 +122,8 @@ namespace $.$$ {
 						}
 						
 						const prefix = outer[0].replace( /\{#\}/g , `${ iteration }` )
-						const wrapped = `; let $hyoo_jsperf = -performance.now();\n${ current }\n $hyoo_jsperf += performance.now() ;\n`
-						const postfix = outer[1].replace( /\{#\}/g , `${ iteration }` ) + ';return $hyoo_jsperf'
+						const wrapped = `; let $hyoo_js_perf = -performance.now();\n${ current }\n $hyoo_js_perf += performance.now() ;\n`
+						const postfix = outer[1].replace( /\{#\}/g , `${ iteration }` ) + ';return $hyoo_js_perf'
 						const source = prefix + wrapped + postfix
 						
 						let func = new Function( '' , source )
@@ -137,7 +137,7 @@ namespace $.$$ {
 
 					}
 
-					return $hyoo_jsperf_stats.create( stats => {
+					return $hyoo_js_perf_stats.create( stats => {
 						stats.elapsed = time_run
 						stats.iterations = iteration
 					} )
@@ -148,7 +148,7 @@ namespace $.$$ {
 
 					console.error( error )
 
-					return $hyoo_jsperf_stats.create( stats => {
+					return $hyoo_js_perf_stats.create( stats => {
 						stats.error = error.message
 						stats.elapsed = 0
 						stats.iterations = Number.NEGATIVE_INFINITY
@@ -164,8 +164,8 @@ namespace $.$$ {
 
 				return [
 					measure( inner , outer ) , 
-					measure( '$hyoo_jsperf_case({#});' , [
-						outer[0] + ';const $hyoo_jsperf_case = $hyoo_jsperf_iteration => {\n' + inner.replace( /\{#\}/g , '$hyoo_jsperf_iteration' ) + '\n};',
+					measure( '$hyoo_js_perf_case({#});' , [
+						outer[0] + ';const $hyoo_js_perf_case = $hyoo_js_perf_iteration => {\n' + inner.replace( /\{#\}/g , '$hyoo_js_perf_iteration' ) + '\n};',
 						outer[1],
 					] ) ,
 				]
@@ -178,7 +178,7 @@ namespace $.$$ {
 
 	}
 
-	export class $hyoo_jsperf_case extends $.$hyoo_jsperf_case {
+	export class $hyoo_js_perf_case extends $.$hyoo_js_perf_case {
 
 		@ $mol_mem
 		result_rows() {
@@ -196,7 +196,7 @@ namespace $.$$ {
 
 	}
 
-	export class $hyoo_jsperf_case_result extends $.$hyoo_jsperf_case_result {
+	export class $hyoo_js_perf_case_result extends $.$hyoo_js_perf_case_result {
 
 		sub() {
 			if( !this.result() ) return []
