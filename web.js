@@ -6498,9 +6498,9 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $hyoo_jsperf extends $.$mol_page {
+    class $hyoo_js_perf extends $.$mol_page {
         title() {
-            return this.$.$mol_locale.text("$hyoo_jsperf_title");
+            return this.$.$mol_locale.text("$hyoo_js_perf_title");
         }
         attr() {
             return (Object.assign(Object.assign({}, super.attr()), { "mol_theme": "$mol_theme_dark" }));
@@ -6528,7 +6528,7 @@ var $;
             return (val !== void 0) ? val : "";
         }
         prefix_hint() {
-            return this.$.$mol_locale.text("$hyoo_jsperf_prefix_hint");
+            return this.$.$mol_locale.text("$hyoo_js_perf_prefix_hint");
         }
         Postfix() {
             return ((obj) => {
@@ -6541,7 +6541,7 @@ var $;
             return (val !== void 0) ? val : "";
         }
         postfix_hint() {
-            return this.$.$mol_locale.text("$hyoo_jsperf_postfix_hint");
+            return this.$.$mol_locale.text("$hyoo_js_perf_postfix_hint");
         }
         Cases_pane() {
             return ((obj) => {
@@ -6563,7 +6563,7 @@ var $;
                 obj.source = (val) => this.source(index, val);
                 obj.results = (val) => this.results(index, val);
                 return obj;
-            })(new this.$.$hyoo_jsperf_case());
+            })(new this.$.$hyoo_js_perf_case());
         }
         source(index, val, force) {
             return (val !== void 0) ? val : "";
@@ -6587,7 +6587,7 @@ var $;
             return "";
         }
         parmalink_hint() {
-            return this.$.$mol_locale.text("$hyoo_jsperf_parmalink_hint");
+            return this.$.$mol_locale.text("$hyoo_js_perf_parmalink_hint");
         }
         Permalink_icon() {
             return ((obj) => {
@@ -6603,7 +6603,7 @@ var $;
             })(new this.$.$mol_link());
         }
         new_hint() {
-            return this.$.$mol_locale.text("$hyoo_jsperf_new_hint");
+            return this.$.$mol_locale.text("$hyoo_js_perf_new_hint");
         }
         New_icon() {
             return ((obj) => {
@@ -6618,7 +6618,7 @@ var $;
             })(new this.$.$mol_button_major());
         }
         run_title() {
-            return this.$.$mol_locale.text("$hyoo_jsperf_run_title");
+            return this.$.$mol_locale.text("$hyoo_js_perf_run_title");
         }
         run(event, force) {
             return (event !== void 0) ? event : null;
@@ -6626,59 +6626,59 @@ var $;
     }
     __decorate([
         $.$mol_mem
-    ], $hyoo_jsperf.prototype, "Body", null);
+    ], $hyoo_js_perf.prototype, "Body", null);
     __decorate([
         $.$mol_mem
-    ], $hyoo_jsperf.prototype, "Common", null);
+    ], $hyoo_js_perf.prototype, "Common", null);
     __decorate([
         $.$mol_mem
-    ], $hyoo_jsperf.prototype, "Prefix", null);
+    ], $hyoo_js_perf.prototype, "Prefix", null);
     __decorate([
         $.$mol_mem
-    ], $hyoo_jsperf.prototype, "prefix", null);
+    ], $hyoo_js_perf.prototype, "prefix", null);
     __decorate([
         $.$mol_mem
-    ], $hyoo_jsperf.prototype, "Postfix", null);
+    ], $hyoo_js_perf.prototype, "Postfix", null);
     __decorate([
         $.$mol_mem
-    ], $hyoo_jsperf.prototype, "postfix", null);
+    ], $hyoo_js_perf.prototype, "postfix", null);
     __decorate([
         $.$mol_mem
-    ], $hyoo_jsperf.prototype, "Cases_pane", null);
+    ], $hyoo_js_perf.prototype, "Cases_pane", null);
     __decorate([
         $.$mol_mem
-    ], $hyoo_jsperf.prototype, "Cases", null);
+    ], $hyoo_js_perf.prototype, "Cases", null);
     __decorate([
         $.$mol_mem_key
-    ], $hyoo_jsperf.prototype, "Case", null);
+    ], $hyoo_js_perf.prototype, "Case", null);
     __decorate([
         $.$mol_mem_key
-    ], $hyoo_jsperf.prototype, "source", null);
+    ], $hyoo_js_perf.prototype, "source", null);
     __decorate([
         $.$mol_mem_key
-    ], $hyoo_jsperf.prototype, "results", null);
+    ], $hyoo_js_perf.prototype, "results", null);
     __decorate([
         $.$mol_mem
-    ], $hyoo_jsperf.prototype, "Permalink", null);
+    ], $hyoo_js_perf.prototype, "Permalink", null);
     __decorate([
         $.$mol_mem
-    ], $hyoo_jsperf.prototype, "Permalink_icon", null);
+    ], $hyoo_js_perf.prototype, "Permalink_icon", null);
     __decorate([
         $.$mol_mem
-    ], $hyoo_jsperf.prototype, "New", null);
+    ], $hyoo_js_perf.prototype, "New", null);
     __decorate([
         $.$mol_mem
-    ], $hyoo_jsperf.prototype, "New_icon", null);
+    ], $hyoo_js_perf.prototype, "New_icon", null);
     __decorate([
         $.$mol_mem
-    ], $hyoo_jsperf.prototype, "Run", null);
+    ], $hyoo_js_perf.prototype, "Run", null);
     __decorate([
         $.$mol_mem
-    ], $hyoo_jsperf.prototype, "run", null);
-    $.$hyoo_jsperf = $hyoo_jsperf;
+    ], $hyoo_js_perf.prototype, "run", null);
+    $.$hyoo_js_perf = $hyoo_js_perf;
 })($ || ($ = {}));
 (function ($) {
-    class $hyoo_jsperf_case extends $.$mol_view {
+    class $hyoo_js_perf_case extends $.$mol_view {
         results() {
             return [];
         }
@@ -6699,7 +6699,7 @@ var $;
             return (val !== void 0) ? val : "";
         }
         source_hint() {
-            return this.$.$mol_locale.text("$hyoo_jsperf_case_source_hint");
+            return this.$.$mol_locale.text("$hyoo_js_perf_case_source_hint");
         }
         Result_rows() {
             return ((obj) => {
@@ -6715,7 +6715,7 @@ var $;
                 obj.title = () => this.result_title(level);
                 obj.result = () => this.result(level);
                 return obj;
-            })(new this.$.$hyoo_jsperf_case_result());
+            })(new this.$.$hyoo_js_perf_case_result());
         }
         result_title(level) {
             return "";
@@ -6723,32 +6723,32 @@ var $;
         result(level) {
             return ((obj) => {
                 return obj;
-            })(new this.$.$hyoo_jsperf_stats());
+            })(new this.$.$hyoo_js_perf_stats());
         }
     }
     __decorate([
         $.$mol_mem
-    ], $hyoo_jsperf_case.prototype, "Source", null);
+    ], $hyoo_js_perf_case.prototype, "Source", null);
     __decorate([
         $.$mol_mem
-    ], $hyoo_jsperf_case.prototype, "source", null);
+    ], $hyoo_js_perf_case.prototype, "source", null);
     __decorate([
         $.$mol_mem
-    ], $hyoo_jsperf_case.prototype, "Result_rows", null);
+    ], $hyoo_js_perf_case.prototype, "Result_rows", null);
     __decorate([
         $.$mol_mem_key
-    ], $hyoo_jsperf_case.prototype, "Result", null);
+    ], $hyoo_js_perf_case.prototype, "Result", null);
     __decorate([
         $.$mol_mem_key
-    ], $hyoo_jsperf_case.prototype, "result", null);
-    $.$hyoo_jsperf_case = $hyoo_jsperf_case;
+    ], $hyoo_js_perf_case.prototype, "result", null);
+    $.$hyoo_js_perf_case = $hyoo_js_perf_case;
 })($ || ($ = {}));
 (function ($) {
-    class $hyoo_jsperf_case_result extends $.$mol_view {
+    class $hyoo_js_perf_case_result extends $.$mol_view {
         result() {
             return ((obj) => {
                 return obj;
-            })(new this.$.$hyoo_jsperf_stats());
+            })(new this.$.$hyoo_js_perf_stats());
         }
         sub() {
             return [this.Stats(), this.Portion(), this.Error()];
@@ -6810,28 +6810,28 @@ var $;
     }
     __decorate([
         $.$mol_mem
-    ], $hyoo_jsperf_case_result.prototype, "result", null);
+    ], $hyoo_js_perf_case_result.prototype, "result", null);
     __decorate([
         $.$mol_mem
-    ], $hyoo_jsperf_case_result.prototype, "Stats", null);
+    ], $hyoo_js_perf_case_result.prototype, "Stats", null);
     __decorate([
         $.$mol_mem
-    ], $hyoo_jsperf_case_result.prototype, "Frequency", null);
+    ], $hyoo_js_perf_case_result.prototype, "Frequency", null);
     __decorate([
         $.$mol_mem
-    ], $hyoo_jsperf_case_result.prototype, "Time", null);
+    ], $hyoo_js_perf_case_result.prototype, "Time", null);
     __decorate([
         $.$mol_mem
-    ], $hyoo_jsperf_case_result.prototype, "Iterations", null);
+    ], $hyoo_js_perf_case_result.prototype, "Iterations", null);
     __decorate([
         $.$mol_mem
-    ], $hyoo_jsperf_case_result.prototype, "Portion", null);
+    ], $hyoo_js_perf_case_result.prototype, "Portion", null);
     __decorate([
         $.$mol_mem
-    ], $hyoo_jsperf_case_result.prototype, "Error", null);
-    $.$hyoo_jsperf_case_result = $hyoo_jsperf_case_result;
+    ], $hyoo_js_perf_case_result.prototype, "Error", null);
+    $.$hyoo_js_perf_case_result = $hyoo_js_perf_case_result;
 })($ || ($ = {}));
-//jsperf.view.tree.js.map
+//perf.view.tree.js.map
 ;
 "use strict";
 var $;
@@ -6937,21 +6937,21 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $.$mol_style_attach("hyoo/jsperf/jsperf.view.css", "[hyoo_jsperf_body] {\n\tdisplay: flex;\n\tflex-direction: row;\n\tjustify-content: space-between;\n}\n\n[hyoo_jsperf_common] {\n\tflex-direction: column;\n\tflex: 1000 0 auto;\n\tmin-width: 20rem;\n}\n\n[hyoo_jsperf_prefix] {\n\tflex: none;\n\tmin-height: 8.5rem;\n}\n\n[hyoo_jsperf_postfix] {\n\tflex: none;\n\tmin-height: 8.5rem;\n}\n\n[hyoo_jsperf_cases_pane] {\n\tflex: 1000 0 auto;\n\tmin-width: 46rem;\n}\n\n[hyoo_jsperf_cases] {\n\tdisplay: table;\n}\n\n[hyoo_jsperf_case] {\n\tdisplay: table-row;\n\tflex: 0 1 auto;\n}\n\n[hyoo_jsperf_case_source] {\n\tdisplay: table-cell;\n\tfont-family: var(--mol_skin_font_monospace);\n\theight: 8.5rem;\n}\n\n[hyoo_jsperf_case_result_rows] {\n\tdisplay: table-cell;\n\tpadding: .75rem;\n\twidth: 25rem;\n}\n\n[hyoo_jsperf_case_result] {\n\twidth: 24rem;\n\tpadding: .5rem .75rem;\n\tflex-direction: column;\n}\n\n[hyoo_jsperf_case_result] > * {\n\tdisplay: flex;\n}\n\n[hyoo_jsperf_case_result_stats] {\n\tdisplay: flex;\n\twhite-space: nowrap;\n}\n\n[hyoo_jsperf_case_result_stats] > * {\n\tword-break: keep-all;\n\twhite-space: nowrap;\n\tmargin: 0 .5rem;\n}\n[hyoo_jsperf_case_result_frequency] {\n\tfont-weight: bolder;\n}\n\n[hyoo_jsperf_case_result_portion] {\n\tflex: none;\n\twidth: auto;\n}\n\n[hyoo_jsperf_case_result_error] {\n\tpadding: .5rem 1rem;;\n\tbackground: var(--mol_skin_bad);\n\tcolor: var(--mol_skin_bad_text);\n}\n\n[hyoo_jsperf_case_result]:nth-child(1) [hyoo_jsperf_case_result_portion_indicator] {\n\tbackground-color: royalblue;\n}\n\n[hyoo_jsperf_case_result]:nth-child(2) [hyoo_jsperf_case_result_portion_indicator] {\n\tbackground-color: orange;\n}\n");
+    $.$mol_style_attach("hyoo/js/perf/perf.view.css", "[hyoo_js_perf_body] {\n\tdisplay: flex;\n\tflex-direction: row;\n\tjustify-content: space-between;\n\tpadding: .75rem;\n}\n\n[hyoo_js_perf_common] {\n\tflex-direction: column;\n\tflex: 1000 0 auto;\n\tmin-width: 20rem;\n}\n\n[hyoo_js_perf_prefix] {\n\tflex: none;\n\tmin-height: 8.5rem;\n}\n\n[hyoo_js_perf_postfix] {\n\tflex: none;\n\tmin-height: 8.5rem;\n}\n\n[hyoo_js_perf_cases_pane] {\n\tflex: 1000 0 auto;\n\tmin-width: 46rem;\n}\n\n[hyoo_js_perf_cases] {\n\tdisplay: table;\n}\n\n[hyoo_js_perf_case] {\n\tdisplay: table-row;\n\tflex: 0 1 auto;\n}\n\n[hyoo_js_perf_case_source] {\n\tdisplay: table-cell;\n\tfont-family: var(--mol_skin_font_monospace);\n\theight: 8.5rem;\n}\n\n[hyoo_js_perf_case_result_rows] {\n\tdisplay: table-cell;\n\tpadding: .75rem;\n\twidth: 25rem;\n}\n\n[hyoo_js_perf_case_result] {\n\twidth: 24rem;\n\tpadding: .5rem .75rem;\n\tflex-direction: column;\n}\n\n[hyoo_js_perf_case_result] > * {\n\tdisplay: flex;\n}\n\n[hyoo_js_perf_case_result_stats] {\n\tdisplay: flex;\n\twhite-space: nowrap;\n}\n\n[hyoo_js_perf_case_result_stats] > * {\n\tword-break: keep-all;\n\twhite-space: nowrap;\n\tmargin: 0 .5rem;\n}\n[hyoo_js_perf_case_result_frequency] {\n\tfont-weight: bolder;\n}\n\n[hyoo_js_perf_case_result_portion] {\n\tflex: none;\n\twidth: auto;\n}\n\n[hyoo_js_perf_case_result_error] {\n\tpadding: .5rem 1rem;;\n\tbackground: var(--mol_skin_bad);\n\tcolor: var(--mol_skin_bad_text);\n}\n\n[hyoo_js_perf_case_result]:nth-child(1) [hyoo_js_perf_case_result_portion_indicator] {\n\tbackground-color: royalblue;\n}\n\n[hyoo_js_perf_case_result]:nth-child(2) [hyoo_js_perf_case_result_portion_indicator] {\n\tbackground-color: orange;\n}\n");
 })($ || ($ = {}));
-//jsperf.view.css.js.map
+//perf.view.css.js.map
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
-        class $hyoo_jsperf_stats extends $.$mol_object2 {
+        class $hyoo_js_perf_stats extends $.$mol_object2 {
             get time() { return this.elapsed / this.iterations; }
             get frequency() { return this.iterations * 1000 / this.elapsed; }
         }
-        $$.$hyoo_jsperf_stats = $hyoo_jsperf_stats;
-        class $hyoo_jsperf extends $.$hyoo_jsperf {
+        $$.$hyoo_js_perf_stats = $hyoo_js_perf_stats;
+        class $hyoo_js_perf extends $.$hyoo_js_perf {
             sources(next) {
                 return JSON.parse(this.$.$mol_state_arg.value('sources', next === undefined ? undefined : JSON.stringify(next)) || '[]');
             }
@@ -7028,8 +7028,8 @@ var $;
                                 iteration++;
                             }
                             const prefix = outer[0].replace(/\{#\}/g, `${iteration}`);
-                            const wrapped = `; let $hyoo_jsperf = -performance.now();\n${current}\n $hyoo_jsperf += performance.now() ;\n`;
-                            const postfix = outer[1].replace(/\{#\}/g, `${iteration}`) + ';return $hyoo_jsperf';
+                            const wrapped = `; let $hyoo_js_perf = -performance.now();\n${current}\n $hyoo_js_perf += performance.now() ;\n`;
+                            const postfix = outer[1].replace(/\{#\}/g, `${iteration}`) + ';return $hyoo_js_perf';
                             const source = prefix + wrapped + postfix;
                             let func = new Function('', source);
                             time_run = func();
@@ -7038,7 +7038,7 @@ var $;
                             if (measure_time > 1000)
                                 break;
                         }
-                        return $hyoo_jsperf_stats.create(stats => {
+                        return $hyoo_js_perf_stats.create(stats => {
                             stats.elapsed = time_run;
                             stats.iterations = iteration;
                         });
@@ -7047,7 +7047,7 @@ var $;
                         if ('then' in error)
                             $.$mol_fail_hidden(error);
                         console.error(error);
-                        return $hyoo_jsperf_stats.create(stats => {
+                        return $hyoo_js_perf_stats.create(stats => {
                             stats.error = error.message;
                             stats.elapsed = 0;
                             stats.iterations = Number.NEGATIVE_INFINITY;
@@ -7058,8 +7058,8 @@ var $;
                     const outer = [this.prefix(), this.postfix()];
                     return [
                         measure(inner, outer),
-                        measure('$hyoo_jsperf_case({#});', [
-                            outer[0] + ';const $hyoo_jsperf_case = $hyoo_jsperf_iteration => {\n' + inner.replace(/\{#\}/g, '$hyoo_jsperf_iteration') + '\n};',
+                        measure('$hyoo_js_perf_case({#});', [
+                            outer[0] + ';const $hyoo_js_perf_case = $hyoo_js_perf_iteration => {\n' + inner.replace(/\{#\}/g, '$hyoo_js_perf_iteration') + '\n};',
                             outer[1],
                         ]),
                     ];
@@ -7069,36 +7069,36 @@ var $;
         }
         __decorate([
             $.$mol_mem
-        ], $hyoo_jsperf.prototype, "sources", null);
+        ], $hyoo_js_perf.prototype, "sources", null);
         __decorate([
             $.$mol_mem
-        ], $hyoo_jsperf.prototype, "prefix", null);
+        ], $hyoo_js_perf.prototype, "prefix", null);
         __decorate([
             $.$mol_mem
-        ], $hyoo_jsperf.prototype, "postfix", null);
+        ], $hyoo_js_perf.prototype, "postfix", null);
         __decorate([
             $.$mol_mem
-        ], $hyoo_jsperf.prototype, "measures", null);
+        ], $hyoo_js_perf.prototype, "measures", null);
         __decorate([
             $.$mol_mem
-        ], $hyoo_jsperf.prototype, "level_count", null);
+        ], $hyoo_js_perf.prototype, "level_count", null);
         __decorate([
             $.$mol_mem
-        ], $hyoo_jsperf.prototype, "frequencies", null);
+        ], $hyoo_js_perf.prototype, "frequencies", null);
         __decorate([
             $.$mol_mem
-        ], $hyoo_jsperf.prototype, "labels", null);
+        ], $hyoo_js_perf.prototype, "labels", null);
         __decorate([
             $.$mol_mem
-        ], $hyoo_jsperf.prototype, "max_frequency", null);
+        ], $hyoo_js_perf.prototype, "max_frequency", null);
         __decorate([
             $.$mol_mem_key
-        ], $hyoo_jsperf.prototype, "results", null);
+        ], $hyoo_js_perf.prototype, "results", null);
         __decorate([
             $.$mol_fiber.method
-        ], $hyoo_jsperf.prototype, "run", null);
-        $$.$hyoo_jsperf = $hyoo_jsperf;
-        class $hyoo_jsperf_case extends $.$hyoo_jsperf_case {
+        ], $hyoo_js_perf.prototype, "run", null);
+        $$.$hyoo_js_perf = $hyoo_js_perf;
+        class $hyoo_js_perf_case extends $.$hyoo_js_perf_case {
             result_rows() {
                 return [this.Result(0), this.Result(1)];
             }
@@ -7112,9 +7112,9 @@ var $;
         }
         __decorate([
             $.$mol_mem
-        ], $hyoo_jsperf_case.prototype, "result_rows", null);
-        $$.$hyoo_jsperf_case = $hyoo_jsperf_case;
-        class $hyoo_jsperf_case_result extends $.$hyoo_jsperf_case_result {
+        ], $hyoo_js_perf_case.prototype, "result_rows", null);
+        $$.$hyoo_js_perf_case = $hyoo_js_perf_case;
+        class $hyoo_js_perf_case_result extends $.$hyoo_js_perf_case_result {
             sub() {
                 if (!this.result())
                     return [];
@@ -7136,9 +7136,9 @@ var $;
                 return this.result().portion;
             }
         }
-        $$.$hyoo_jsperf_case_result = $hyoo_jsperf_case_result;
+        $$.$hyoo_js_perf_case_result = $hyoo_js_perf_case_result;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
-//jsperf.view.js.map
+//perf.view.js.map
 
 //# sourceMappingURL=web.js.map

@@ -341,7 +341,7 @@ $mol_portion $mol_view
 		<= indicator $mol_portion_indicator
 			width_style <= indicator_width_style \0
 
-$hyoo_jsperf $mol_page
+$hyoo_js_perf $mol_page
 	title @ \JS Performance
 	attr *
 		^
@@ -356,7 +356,7 @@ $hyoo_jsperf $mol_page
 				hint <= postfix_hint @ \Teardown code for all cases. Use {#} to insert iterations count.
 		<= Cases_pane $mol_scroll sub /
 			<= Cases $mol_view sub <= cases /
-	Case!index $hyoo_jsperf_case
+	Case!index $hyoo_js_perf_case
 		source?val <=> source!index?val \
 		results?val <=> results!index?val \
 	tools /
@@ -375,19 +375,19 @@ $hyoo_jsperf $mol_page
 			title <= run_title @ \Run
 			click?event <=> run?event null
 
-$hyoo_jsperf_case $mol_view
+$hyoo_js_perf_case $mol_view
 	results /
 	sub <= columns /
 		<= Source $mol_textarea
 			value?val <=> source?val \
 			hint <= source_hint @ \Case source code. Use {#} to insert iteration number.
 		<= Result_rows $mol_list rows <= result_rows /
-	Result!level $hyoo_jsperf_case_result
+	Result!level $hyoo_js_perf_case_result
 		title <= result_title!level \
-		result <= result!level $hyoo_jsperf_stats
+		result <= result!level $hyoo_js_perf_stats
 
-$hyoo_jsperf_case_result $mol_view
-	result $hyoo_jsperf_stats
+$hyoo_js_perf_case_result $mol_view
+	result $hyoo_js_perf_stats
 	sub /
 		<= Stats $mol_view sub /
 			<= title \

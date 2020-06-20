@@ -1,5 +1,5 @@
 {
-  "name": "hyoo_jsperf",
+  "name": "hyoo_js_perf",
   "version": "0.0.1",
   "main": "node.js",
   "module": "node.esm.js",
