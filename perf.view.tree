@@ -1,8 +1,7 @@
 $hyoo_js_perf $mol_page
 	title @ \JS Performance
-	attr *
-		^
-		mol_theme \$mol_theme_dark
+	plugins /
+		<= Theme $mol_theme_auto
 	Body $mol_book2 pages /
 		<= Common $mol_scroll sub /
 			<= Prefix $mol_textarea
@@ -17,6 +16,9 @@ $hyoo_js_perf $mol_page
 		source?val <=> source!index?val \
 		results?val <=> results!index?val \
 	tools /
+		<= Lights $mol_lights_toggle
+		<= Source $mol_link_source
+			uri \https://github.com/hyoo-ru/perf.js.hyoo.ru
 		<= Permalink $mol_link
 			uri <= permalink \
 			hint <= parmalink_hint @ \Permamemnt short link
