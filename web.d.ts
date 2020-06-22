@@ -1256,6 +1256,38 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $mol_plugin extends $mol_view {
+        dom_node(next?: Element): Element;
+        attr_static(): {
+            [key: string]: string | number | boolean;
+        };
+        event(): {
+            [key: string]: (event: Event) => void;
+        };
+        render(): void;
+    }
+}
+
+declare namespace $ {
+    class $mol_theme_auto extends $mol_plugin {
+        attr(): {
+            mol_theme: string;
+        };
+        theme(): string;
+    }
+}
+
+declare namespace $ {
+    function $mol_lights(this: $mol_ambient_context, next?: boolean): boolean;
+}
+
+declare namespace $.$$ {
+    class $mol_theme_auto extends $.$mol_theme_auto {
+        theme(): "$mol_theme_light" | "$mol_theme_dark";
+    }
+}
+
+declare namespace $ {
     class $mol_book2 extends $mol_scroll {
         sub(): readonly $mol_view[];
         pages(): readonly $mol_view[];
@@ -1271,19 +1303,6 @@ declare namespace $.$$ {
     class $mol_book2 extends $.$mol_book2 {
         title(): string;
         sub(): $mol_view[];
-    }
-}
-
-declare namespace $ {
-    class $mol_plugin extends $mol_view {
-        dom_node(next?: Element): Element;
-        attr_static(): {
-            [key: string]: string | number | boolean;
-        };
-        event(): {
-            [key: string]: (event: Event) => void;
-        };
-        render(): void;
     }
 }
 
@@ -2130,6 +2149,53 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
+    class $mol_check_icon extends $mol_check {
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_icon_brightness_6 extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_lights_toggle extends $mol_check_icon {
+        Icon(): $mol_icon_brightness_6;
+        Lights_icon(): $mol_icon_brightness_6;
+        hint(): string;
+        checked(val?: any, force?: $mol_mem_force): any;
+        lights(val?: any, force?: $mol_mem_force): any;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $.$$ {
+    class $mol_lights_toggle extends $.$mol_lights_toggle {
+        lights(next?: boolean): boolean;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_github_circle extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_link_source extends $mol_link {
+        hint(): string;
+        sub(): readonly any[];
+        Icon(): $mol_icon_github_circle;
+    }
+}
+
+declare namespace $ {
     class $mol_icon_external extends $mol_icon {
         path(): string;
     }
@@ -2185,9 +2251,8 @@ declare namespace $.$$ {
 declare namespace $ {
     class $hyoo_js_perf extends $mol_page {
         title(): string;
-        attr(): {
-            mol_theme: string;
-        };
+        plugins(): readonly any[];
+        Theme(): $$.$mol_theme_auto;
         Body(): $$.$mol_book2;
         Common(): $$.$mol_scroll;
         Prefix(): $$.$mol_textarea;
@@ -2203,6 +2268,8 @@ declare namespace $ {
         source(index: any, val?: any, force?: $mol_mem_force): any;
         results(index: any, val?: any, force?: $mol_mem_force): any;
         tools(): readonly any[];
+        Lights(): $$.$mol_lights_toggle;
+        Source(): $mol_link_source;
         Permalink(): $$.$mol_link;
         permalink(): string;
         parmalink_hint(): string;
