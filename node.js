@@ -1566,8 +1566,8 @@ var $;
             this.masters.push(master, this.masters[cursor + 1]);
         }
         subscribe(promise) {
-            const fresh = this.fresh;
-            return promise.then(fresh, fresh);
+            const obsolete = () => this.obsolete();
+            return promise.then(obsolete, obsolete);
         }
         get() {
             if ($mol_atom2.cached)
@@ -1880,11 +1880,11 @@ var $;
 (function ($) {
     function $mol_dict_key(value) {
         if (!value)
-            return value;
+            return JSON.stringify(value);
         if (typeof value !== 'object')
-            return value;
+            return JSON.stringify(value);
         if (Array.isArray(value))
-            return value.map($mol_dict_key).join(' , ');
+            return JSON.stringify(value);
         if (Object.getPrototypeOf(Object.getPrototypeOf(value)) === null)
             return JSON.stringify(value);
         return value;
