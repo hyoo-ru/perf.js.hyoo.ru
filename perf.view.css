@@ -12,12 +12,12 @@
 }
 
 [hyoo_js_perf_prefix] {
-	flex: none;
+	flex: 1 0 auto;
 	min-height: 8.5rem;
 }
 
 [hyoo_js_perf_postfix] {
-	flex: none;
+	flex: 1 0 auto;
 	min-height: 8.5rem;
 }
 
