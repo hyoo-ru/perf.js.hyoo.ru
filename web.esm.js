@@ -1568,7 +1568,7 @@ var $;
     function $mol_dict_key(value) {
         if (!value)
             return JSON.stringify(value);
-        if (typeof value !== 'object')
+        if (typeof value !== 'object' && typeof value !== 'function')
             return JSON.stringify(value);
         if (Array.isArray(value))
             return JSON.stringify(value);
@@ -1634,14 +1634,15 @@ var $;
             let dict = store.get(host);
             if (!dict)
                 store.set(host, dict = new $.$mol_dict);
-            let cache = dict.get(key);
+            const key_str = $.$mol_dict_key(key);
+            let cache = dict.get(key_str);
             if (cache)
                 return cache;
             let cache2 = new $.$mol_atom2;
-            cache2[Symbol.toStringTag] = `${host}.${name}(${$.$mol_dict_key(key)})`;
+            cache2[Symbol.toStringTag] = `${host}.${name}(${key_str})`;
             cache2.calculate = value.bind(host, key);
             cache2.abort = () => {
-                dict.delete(key);
+                dict.delete(key_str);
                 if (dict.size === 0)
                     store.delete(host);
                 cache2.forget();
@@ -1649,7 +1650,7 @@ var $;
             };
             $.$mol_owning_catch(host, cache2);
             cache2[$.$mol_object_field] = name;
-            dict.set(key, cache2);
+            dict.set(key_str, cache2);
             return cache2;
         };
         return {
@@ -1893,117 +1894,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    function $mol_log(path, ...values) {
-        if ($.$mol_log_filter() == null)
-            return;
-        path = String(path);
-        if (path.indexOf($.$mol_log_filter()) === -1)
-            return;
-        const context = $.$mol_log_context();
-        if (context)
-            context();
-        console.debug(path, ...values);
-        if ($.$mol_log_debug() == null)
-            return;
-        if (path.indexOf($.$mol_log_debug()) === -1)
-            return;
-        debugger;
-    }
-    $.$mol_log = $mol_log;
-})($ || ($ = {}));
-//log.js.map
-;
-"use strict";
-var $;
-(function ($) {
-    let context = null;
-    function $mol_log_context(next = context) {
-        return context = next;
-    }
-    $.$mol_log_context = $mol_log_context;
-})($ || ($ = {}));
-//log_context.js.map
-;
-"use strict";
-var $;
-(function ($) {
-    function $mol_log_debug(next) {
-        if (next !== undefined) {
-            if (next == null) {
-                sessionStorage.removeItem('$mol_log_debug()');
-            }
-            else {
-                sessionStorage.setItem('$mol_log_debug()', next);
-            }
-        }
-        return sessionStorage.getItem('$mol_log_debug()');
-    }
-    $.$mol_log_debug = $mol_log_debug;
-})($ || ($ = {}));
-//log_debug.web.js.map
-;
-"use strict";
-var $;
-(function ($) {
-    let filter = undefined;
-    $.$mol_log_filter = function $mol_log_filter(next) {
-        if (next !== undefined) {
-            if (next == null) {
-                sessionStorage.removeItem('$mol_log_filter()');
-            }
-            else {
-                sessionStorage.setItem('$mol_log_filter()', next);
-            }
-            filter = next;
-        }
-        if (filter !== undefined)
-            return filter;
-        return filter = sessionStorage.getItem('$mol_log_filter()');
-    };
-    if (typeof sessionStorage === 'undefined')
-        $.$mol_log_filter = (next = null) => filter = next;
-    if ($.$mol_log_filter() == null)
-        console.info('Use $mol_log_filter( needle : string|null ) to toggle logs');
-})($ || ($ = {}));
-//log_filter.web.js.map
-;
-"use strict";
-var $;
-(function ($) {
-    function $mol_log_group(name, task) {
-        const filter = $.$mol_log_filter();
-        if (filter == null)
-            return task;
-        return function $mol_log_group_wrapper(...args) {
-            let started = false;
-            let prev = $.$mol_log_context();
-            $.$mol_log_context(() => {
-                if (prev)
-                    prev();
-                started = true;
-                if (filter || prev)
-                    console.group(name);
-                else
-                    console.groupCollapsed(name);
-                $.$mol_log_context(prev = null);
-            });
-            try {
-                return task.apply(this, args);
-            }
-            finally {
-                if (started)
-                    console.groupEnd();
-                $.$mol_log_context(prev);
-            }
-        };
-    }
-    $.$mol_log_group = $mol_log_group;
-})($ || ($ = {}));
-//log_group.js.map
-;
-"use strict";
-var $;
-(function ($) {
     class $mol_window extends $.$mol_object {
         static size(next, force) {
             return next || {
@@ -2016,9 +1906,10 @@ var $;
         $.$mol_mem
     ], $mol_window, "size", null);
     $.$mol_window = $mol_window;
-    self.addEventListener('resize', $.$mol_fiber_root($.$mol_log_group(`$mol_window resize`, () => {
+    const $mol_window_resize = () => {
         $mol_window.size(undefined, $.$mol_mem_force_cache);
-    })));
+    };
+    self.addEventListener('resize', $.$mol_fiber_root($mol_window_resize));
 })($ || ($ = {}));
 //window.web.js.map
 ;
@@ -2312,13 +2203,33 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_memo extends $.$mol_wrapper {
+        static wrap(task) {
+            const store = new WeakMap();
+            return function (next) {
+                var _a;
+                if (next === undefined && store.has(this))
+                    return store.get(this);
+                const val = (_a = task.call(this, next)) !== null && _a !== void 0 ? _a : next;
+                store.set(this, val);
+                return val;
+            };
+        }
+    }
+    $.$mol_memo = $mol_memo;
+})($ || ($ = {}));
+//memo.js.map
+;
+"use strict";
+var $;
+(function ($) {
     function $mol_func_name(func) {
         let name = func.name;
         if ((name === null || name === void 0 ? void 0 : name.length) > 1)
             return name;
-        for (let key in $) {
+        for (let key in this) {
             try {
-                if ($[key] !== func)
+                if (this[key] !== func)
                     continue;
                 name = key;
                 Object.defineProperty(func, 'name', { value: name });
@@ -2565,7 +2476,7 @@ var $;
                 const suffix2 = '_' + suffix[0].toLowerCase() + suffix.substring(1);
                 for (let Class of owner.constructor.view_classes()) {
                     if (suffix in Class.prototype)
-                        names.push($.$mol_func_name(Class) + suffix2);
+                        names.push(this.$.$mol_func_name(Class) + suffix2);
                     else
                         break;
                 }
@@ -2582,7 +2493,7 @@ var $;
                     names.push(name);
             }
             for (let Class of this.constructor.view_classes()) {
-                const name = $.$mol_func_name(Class);
+                const name = this.$.$mol_func_name(Class);
                 if (!name)
                     continue;
                 if (names.indexOf(name) < 0)
@@ -2659,7 +2570,7 @@ var $;
         $.$mol_mem_key
     ], $mol_view, "Root", null);
     __decorate([
-        $.$mol_mem
+        $.$mol_memo.method
     ], $mol_view, "view_classes", null);
     $.$mol_view = $mol_view;
 })($ || ($ = {}));
@@ -2668,7 +2579,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $.$mol_style_attach("mol/view/view/view.css", "[mol_view] {\n\ttransition-property: background-color, height, width, min-height, min-width, max-width, max-height, transform;\n\ttransition-duration: .2s;\n\ttransition-timing-function: ease-out;\n\t-webkit-appearance: none;\n\tword-break: break-word;\n\tbox-sizing: border-box;\n\tdisplay: flex;\n}\n\n[mol_view] > * {\n\tword-break: inherit;\n}\n\n[mol_view_root] {\n\tmargin: 0;\n\tpadding: 0;\n\twidth: 100%;\n\theight: 100%;\n\tbox-sizing: border-box;\n\tfont: var(--mol_skin_font);\n\tbackground: var(--mol_theme_back);\n\tcolor: var(--mol_theme_text);\n}\n\n[mol_view][mol_view_error]:not([mol_view_error=\"Promise\"]) {\n\tbackground-image: repeating-linear-gradient(\n\t\t135deg,\n\t\trgba(255,220,220,1),\n\t\trgba(255,220,220,1) 11px,\n\t\trgba(255,255,220,1) 10px,\n\t\trgba(255,255,220,1) 20px\n\t);\n\tbackground-size: 28px 28px;\n\tcolor: black;\n}\n\n@keyframes mol_view_wait_move {\n\tfrom {\n\t\tbackground-position: 0 0;\n\t}\n\tto {\n\t\tbackground-position: 200vmax 0;\n\t}\n}\n\n@keyframes mol_view_wait_show {\n\tto {\n\t\tbackground-image: repeating-linear-gradient(\n\t\t\t45deg,\n\t\t\thsla( 0 , 0% , 50% , .25 ) 0% ,\n\t\t\thsla( 0 , 0% , 50% , 0 ) 5% ,\n\t\t\thsla( 0 , 0% , 50% , 0 ) 45% ,\n\t\t\thsla( 0 , 0% , 50% , .25 ) 50% ,\n\t\t\thsla( 0 , 0% , 50% , 0 ) 55% ,\n\t\t\thsla( 0 , 0% , 50% , 0 ) 95% ,\n\t\t\thsla( 0 , 0% , 50% , .25 ) 100%\n\t\t);\n\t\tbackground-size: 200vmax 200vmax;\n\t}\n}\n\n[mol_view][mol_view_error=\"Promise\"] {\n\tanimation: mol_view_wait_show .5s .5s linear forwards , mol_view_wait_move 1s linear infinite;\n\topacity: .75;\n}\n");
+    $.$mol_style_attach("mol/view/view/view.css", "[mol_view] {\n\ttransition-property: background-color, height, width, min-height, min-width, max-width, max-height, transform;\n\ttransition-duration: .2s;\n\ttransition-timing-function: ease-out;\n\t-webkit-appearance: none;\n\tword-break: break-word;\n\tbox-sizing: border-box;\n\tdisplay: flex;\n\tflex-shrink: 0;\n}\n\n[mol_view] > * {\n\tword-break: inherit;\n}\n\n[mol_view_root] {\n\tmargin: 0;\n\tpadding: 0;\n\twidth: 100%;\n\theight: 100%;\n\tbox-sizing: border-box;\n\tfont: var(--mol_skin_font);\n\tbackground: var(--mol_theme_back);\n\tcolor: var(--mol_theme_text);\n}\n\n[mol_view][mol_view_error]:not([mol_view_error=\"Promise\"]) {\n\tbackground-image: repeating-linear-gradient(\n\t\t135deg,\n\t\trgba(255,220,220,1),\n\t\trgba(255,220,220,1) 11px,\n\t\trgba(255,255,220,1) 10px,\n\t\trgba(255,255,220,1) 20px\n\t);\n\tbackground-size: 28px 28px;\n\tcolor: black;\n}\n\n@keyframes mol_view_wait_move {\n\tfrom {\n\t\tbackground-position: 0 0;\n\t}\n\tto {\n\t\tbackground-position: 200vmax 0;\n\t}\n}\n\n@keyframes mol_view_wait_show {\n\tto {\n\t\tbackground-image: repeating-linear-gradient(\n\t\t\t45deg,\n\t\t\thsla( 0 , 0% , 50% , .25 ) 0% ,\n\t\t\thsla( 0 , 0% , 50% , 0 ) 5% ,\n\t\t\thsla( 0 , 0% , 50% , 0 ) 45% ,\n\t\t\thsla( 0 , 0% , 50% , .25 ) 50% ,\n\t\t\thsla( 0 , 0% , 50% , 0 ) 55% ,\n\t\t\thsla( 0 , 0% , 50% , 0 ) 95% ,\n\t\t\thsla( 0 , 0% , 50% , .25 ) 100%\n\t\t);\n\t\tbackground-size: 200vmax 200vmax;\n\t}\n}\n\n[mol_view][mol_view_error=\"Promise\"] {\n\tanimation: mol_view_wait_show .5s .5s linear forwards , mol_view_wait_move 1s linear infinite;\n\topacity: .75;\n}\n");
 })($ || ($ = {}));
 //view.css.js.map
 ;
@@ -2683,13 +2594,14 @@ var $;
         }));
         function $mol_view_watch() {
             $.$mol_fiber_unlimit(() => {
-                new $.$mol_after_frame($mol_view_watch);
+                new $.$mol_after_frame(watch);
                 for (const view of $.$mol_view.watchers) {
                     view.view_rect_cache(view.dom_node().getBoundingClientRect().toJSON());
                 }
             });
         }
-        $mol_view_watch();
+        const watch = $.$mol_fiber_root($mol_view_watch);
+        watch();
     }
 })($ || ($ = {}));
 //view.web.js.map
@@ -2872,7 +2784,7 @@ var $;
 (function ($) {
     function $mol_style_sheet(Component, config0) {
         let rules = [];
-        const block = $.$mol_dom_qname($.$mol_func_name(Component));
+        const block = $.$mol_dom_qname($.$mol_ambient({}).$mol_func_name(Component));
         const kebab = (name) => name.replace(/[A-Z]/g, letter => '-' + letter.toLowerCase());
         const make_class = (prefix, path, config) => {
             const props = [];
@@ -2989,7 +2901,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $.$mol_style_attach("mol/speck/speck.view.css", "[mol_speck] {\n\tfont-size: .75rem;\n\tborder-radius: 1rem;\n\tmargin: 0 -.75em;\n\talign-self: flex-start;\n\tmin-height: 1em;\n\tmin-width: .5em;\n\tvertical-align: sub;\n\tpadding: .25em .5em;\n\tposition: absolute;\n\tz-index: 2;\n    text-align: center;\n    line-height: 1;\n    display: inline-block;\n\ttext-shadow: 1px 1px 0 black;\n}\n");
+    $.$mol_style_attach("mol/speck/speck.view.css", "[mol_speck] {\n\tfont-size: .75rem;\n\tborder-radius: 1rem;\n\tmargin: -.75em;\n\talign-self: flex-start;\n\tmin-height: 1em;\n\tmin-width: .5em;\n\tvertical-align: sub;\n\tpadding: .25em .5em;\n\tposition: absolute;\n\tz-index: 2;\n    text-align: center;\n    line-height: 1;\n    display: inline-block;\n\ttext-shadow: 1px 1px 0 black;\n}\n");
 })($ || ($ = {}));
 //speck.view.css.js.map
 ;
@@ -3330,26 +3242,6 @@ var $;
     $.$mol_state_session = $mol_state_session;
 })($ || ($ = {}));
 //session.js.map
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_memo extends $.$mol_wrapper {
-        static wrap(task) {
-            const store = new WeakMap();
-            return function (next) {
-                var _a;
-                if (next === undefined && store.has(this))
-                    return store.get(this);
-                const val = (_a = task.call(this, next)) !== null && _a !== void 0 ? _a : next;
-                store.set(this, val);
-                return val;
-            };
-        }
-    }
-    $.$mol_memo = $mol_memo;
-})($ || ($ = {}));
-//memo.js.map
 ;
 "use strict";
 var $;
@@ -3760,10 +3652,12 @@ var $;
                 this.stat();
             }
             catch (error) {
-                if (error instanceof $mol_file_not_found)
+                if (error instanceof $mol_file_not_found) {
                     exists = false;
-                else
+                }
+                else {
                     return $.$mol_fail_hidden(error);
+                }
             }
             if (next === undefined)
                 return exists;
@@ -4833,9 +4727,6 @@ var $;
         dom_name_space() {
             return "http://www.w3.org/2000/svg";
         }
-        text_width(text, force) {
-            return (text !== void 0) ? text : 0;
-        }
         font_size() {
             return 16;
         }
@@ -4843,9 +4734,6 @@ var $;
             return "";
         }
     }
-    __decorate([
-        $.$mol_mem
-    ], $mol_svg.prototype, "text_width", null);
     $.$mol_svg = $mol_svg;
 })($ || ($ = {}));
 //svg.view.tree.js.map
@@ -4874,31 +4762,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    let canvas;
-    function $mol_font_canvas(next = canvas) {
-        if (!next)
-            next = $.$mol_dom_context.document.createElement('canvas').getContext('2d');
-        return canvas = next;
-    }
-    $.$mol_font_canvas = $mol_font_canvas;
-})($ || ($ = {}));
-//canvas.js.map
-;
-"use strict";
-var $;
-(function ($) {
-    function $mol_font_measure(size, face, text) {
-        const canvas = $.$mol_font_canvas();
-        canvas.font = size + 'px ' + face;
-        return canvas.measureText(text).width;
-    }
-    $.$mol_font_measure = $mol_font_measure;
-})($ || ($ = {}));
-//measure.js.map
-;
-"use strict";
-var $;
-(function ($) {
     var $$;
     (function ($$) {
         class $mol_svg extends $.$mol_svg {
@@ -4914,9 +4777,6 @@ var $;
             }
             font_family() {
                 return this.computed_style()['font-family'];
-            }
-            text_width(text) {
-                return $.$mol_font_measure(this.font_size(), this.font_family(), text);
             }
         }
         __decorate([
@@ -5639,21 +5499,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    function $mol_merge_dict(target, source) {
-        let result = {};
-        for (let key in target)
-            result[key] = target[key];
-        for (let key in source)
-            result[key] = source[key];
-        return result;
-    }
-    $.$mol_merge_dict = $mol_merge_dict;
-})($ || ($ = {}));
-//dict.js.map
-;
-"use strict";
-var $;
-(function ($) {
     class $mol_state_arg extends $.$mol_object {
         constructor(prefix = '') {
             super();
@@ -5688,12 +5533,12 @@ var $;
             return cut;
         }
         static value(key, next) {
-            const nextDict = (next === void 0) ? void 0 : $.$mol_merge_dict(this.dict(), { [key]: next });
+            const nextDict = (next === void 0) ? void 0 : Object.assign(Object.assign({}, this.dict()), { [key]: next });
             const next2 = this.dict(nextDict)[key];
             return (next2 == null) ? null : next2;
         }
         static link(next) {
-            return this.make_link($.$mol_merge_dict(this.dict_cut(Object.keys(next)), next));
+            return this.make_link(Object.assign(Object.assign({}, this.dict_cut(Object.keys(next))), next));
         }
         static make_link(next) {
             const chunks = [];
@@ -5736,9 +5581,10 @@ var $;
         $.$mol_mem_key
     ], $mol_state_arg, "value", null);
     $.$mol_state_arg = $mol_state_arg;
-    self.addEventListener('hashchange', $.$mol_fiber_root($.$mol_log_group('$mol_state_arg hashchange', (event) => {
+    const $mol_state_arg_change = (event) => {
         $mol_state_arg.href($.$mol_dom_context.location.href);
-    })));
+    };
+    self.addEventListener('hashchange', $.$mol_fiber_root($mol_state_arg_change));
 })($ || ($ = {}));
 //arg.web.js.map
 ;
