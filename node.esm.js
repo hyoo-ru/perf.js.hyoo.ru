@@ -3427,13 +3427,16 @@ var $;
             return (val !== void 0) ? val : null;
         }
         field() {
-            return (Object.assign(Object.assign({}, super.field()), { "scrollTop": this.scroll_top(), "scrollLeft": this.scroll_left() }));
+            return (Object.assign(Object.assign({}, super.field()), { "scrollTop": this.scroll_top(), "scrollLeft": this.scroll_left(), "tabIndex": this.tabindex() }));
         }
         scroll_top(val, force) {
             return (val !== void 0) ? val : 0;
         }
         scroll_left(val, force) {
             return (val !== void 0) ? val : 0;
+        }
+        tabindex() {
+            return -1;
         }
         event() {
             return (Object.assign(Object.assign({}, super.event()), { "scroll": (event) => this.event_scroll(event) }));
@@ -4783,7 +4786,20 @@ var $;
                 return next;
             }
             minimal_height() {
-                return this.sub().reduce((sum, view) => sum + view.minimal_height(), 0);
+                return this.sub().reduce((sum, view) => {
+                    try {
+                        return sum + view.minimal_height();
+                    }
+                    catch (error) {
+                        if (error instanceof Promise) {
+                            $.$mol_atom2.current.subscribe(error);
+                        }
+                        else if ($.$mol_fail_catch(error)) {
+                            console.error(error);
+                        }
+                        return sum;
+                    }
+                }, 0);
             }
         }
         __decorate([
