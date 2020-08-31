@@ -2312,6 +2312,16 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $mol_after_work extends $mol_object2 {
+        delay: number;
+        task: () => void;
+        id: any;
+        constructor(delay: number, task: () => void);
+        destructor(): void;
+    }
+}
+
+declare namespace $ {
     function $mol_range2<Item = number>(item?: (index: number) => Item, size?: () => number): Item[];
     class $mol_range2_array<Item> extends Array<Item> {
         concat(...tail: this[]): Item[];
@@ -2344,12 +2354,17 @@ declare namespace $.$$ {
         permalink(): string;
         cases(): $hyoo_js_perf_case[];
         source(index: number, next?: string): string;
-        measures(next?: $hyoo_js_perf_stats[][]): $hyoo_js_perf_stats[][];
-        level_count(): number;
-        frequencies(): number[];
-        labels(): string[];
+        measures_for(index: number, next?: $hyoo_js_perf_stats[]): $hyoo_js_perf_stats[];
+        measures(): $hyoo_js_perf_stats[][];
         max_frequency(): number;
         results(index: number): $hyoo_js_perf_stats[];
+        token(): string;
+        measure_step(count: number, prefix: string, inner: string, postfix: string): {
+            total: number;
+            time: any;
+        };
+        measure_precise(prefix: string, inner: string, postfix: string): $hyoo_js_perf_stats;
+        measure_safe(prefix: string, inner: string, postfix: string): $hyoo_js_perf_stats;
         run(): void;
     }
     class $hyoo_js_perf_case extends $.$hyoo_js_perf_case {
