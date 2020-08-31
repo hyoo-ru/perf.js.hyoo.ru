@@ -1,5 +1,7 @@
 namespace $.$$ {
 
+	const wait_rest = $mol_fiber_sync( ()=> new Promise( done => new $mol_after_work( 16 , done ) ) )
+
 	export class $hyoo_js_perf_stats extends $mol_object2 {
 		
 		elapsed! : number
@@ -56,26 +58,15 @@ namespace $.$$ {
 			return next
 		}
 
-		@ $mol_mem
-		measures( next? : $hyoo_js_perf_stats[][] ) {
+		@ $mol_mem_key
+		measures_for( index : number , next? : $hyoo_js_perf_stats[] ) {
 			this.sources()
 			return next || []
 		}
 
 		@ $mol_mem
-		level_count() {
-			return this.measures().reduce( ( max , measure )=> Math.max( max , measure.length )  , 0 )
-		}
-
-		@ $mol_mem
-		frequencies() {
-			const frequencies = this.measures().map( measure => measure[0].frequency )
-			return [ ... frequencies , 0 ]
-		}
-		
-		@ $mol_mem
-		labels() {
-			return this.measures().map( (measure, i) => String(i) )
+		measures() {
+			return this.sources().map( ( _ , index )=> this.measures_for( index ) )
 		}
 
 		@ $mol_mem
@@ -90,89 +81,142 @@ namespace $.$$ {
 		@ $mol_mem_key 
 		results( index : number ) {
 			
-			const measure = this.measures()[ index ]
+			const measure = this.measures_for( index )
 			if( !measure ) return []
 			
-			for( const [ level , stats ] of measure.entries() ) {
-				stats.portion = stats.frequency / this.max_frequency()
-			}
+			return measure.map( ( stats )=> $hyoo_js_perf_stats.create( stats2 => {
+				stats2.portion = stats.frequency / this.max_frequency()
+				stats2.elapsed = stats.elapsed
+				stats2.iterations = stats.iterations
+				stats2.error = stats.error
+			} ) )
 
-			return measure
+		}
+
+		@ $mol_memo.method
+		token() {
+			return Math.random().toString(16).substring(2)
+		}
+
+		@ $mol_fiber.method
+		measure_step( count : number , prefix : string , inner : string , postfix : string ) {
+
+			wait_rest()
+
+			const token = this.token()
+
+			let total = - performance.now()
+
+			prefix = prefix.replace( /\{#\}/g , `${ count }` )
+			postfix = postfix.replace( /\{#\}/g , `${ count }` )
+
+			inner = Array.from( { length : count }, (_,i)=> inner.replace( /\{#\}/g , `${i}` ) ).join(';\n')
+
+			const source = [
+				prefix,
+				`let time_${token} = -performance.now()`,
+				inner,
+				`time_${token} += performance.now()`,
+				postfix,
+				`return time_${token}`,
+			].join( ';\n' )
+
+			let func = new Function( '' , source )
+			let time = func()
+
+			total += performance.now()
+
+			return { total , time }
+
+		}
+
+		@ $mol_fiber.method
+		measure_precise( prefix : string , inner : string , postfix : string ) {
+
+			const one = this.measure_step( 1 , prefix , inner , postfix )
+			const iterations_raw = Math.ceil( 1 + ( 1000 - one.total ) / one.time )
+			const iterations = Math.min( Math.max( 1 , iterations_raw ) , 100_000 )
+
+			let avg_last = 0
+			const results = [] as number[]
+
+			const avg = ( numbs : number[] )=> Math.pow( numbs.reduce( ( a, b )=> a * b ) , 1 / numbs.length )
+			
+			while( results.length < 100 ) {
+				results.push( this.measure_step( iterations , prefix , inner , postfix ).time )
+				const avg_next = avg( results )
+				if( results.length > 4 && Math.abs( avg_next - avg_last ) / avg_next < 0.001 ) break
+				avg_last = avg_next
+			}
+			
+			return $hyoo_js_perf_stats.create( stats => {
+				stats.elapsed = Math.min( ... results )
+				stats.iterations = iterations
+			} )
+
+		}
+
+		@ $mol_fiber.method
+		measure_safe( prefix : string , inner : string , postfix : string ) {
+
+			try {
+
+				return this.measure_precise( prefix , inner , postfix )
+
+			} catch( error ) {
+
+				if( 'then' in error ) $mol_fail_hidden( error )
+
+				console.error( error )
+
+				return $hyoo_js_perf_stats.create( stats => {
+					stats.error = error.message
+					stats.elapsed = 0
+					stats.iterations = Number.NEGATIVE_INFINITY
+				} )
+				
+			}
+			
 		}
 
 		@ $mol_fiber.method
 		run() {
 
-			const measure = $mol_fiber.func(( inner : string , outer = [ '' , '' ] )=> {
+			for( const [ index , inner ] of this.sources().entries() ) {
+				this.measures_for( index , [] )
+			}
 
-				try {
-				
-					let current = ''				
-					let time_run = 0
-					let iteration = 0
+			const prefix = this.prefix()
+			const postfix = this.postfix()
+			const token = this.token()
 
-					while( true ) {
-						
-						let measure_time = - performance.now()
+			for( const [ index , inner ] of this.sources().entries() ) {
 
-						const next_count = Math.ceil( iteration * 1.5 || 1 )
-						while( iteration < next_count ) {
-							current += inner.replace( /\{#\}/g , `${ iteration }` ) + ';'
-							iteration ++
-						}
-						
-						const prefix = outer[0].replace( /\{#\}/g , `${ iteration }` )
-						const wrapped = `; let $hyoo_js_perf = -performance.now();\n${ current }\n $hyoo_js_perf += performance.now() ;\n`
-						const postfix = outer[1].replace( /\{#\}/g , `${ iteration }` ) + ';return $hyoo_js_perf'
-						const source = prefix + wrapped + postfix
-						
-						let func = new Function( '' , source )
-						
-						time_run = func()
-						func = null as any
+				const cold = this.measure_safe(
+					[
+						'/*cold*/',
+						prefix,
+						`let accum_${token}`,
+						`const case_${token} = iter_${token} => {\n accum_${token} = iter_${token} \n};`,
+					].join(';\n'),
+					`case_${token}({#});\n` + inner,
+					postfix,
+				)
 
-						measure_time += performance.now()
-		
-						if( measure_time > 1000 ) break
+				const hot = this.measure_safe(
+					[
+						'/*hot*/',
+						prefix,
+						`let accum_${token}`,
+						`const case_${token} = iter_${token} => {\n ${ inner.replace( /\{#\}/g , `iter_${token}` ) } \n};`,
+					].join(';\n'),
+					`case_${token}({#})`,
+					postfix,
+				)
 
-					}
+				this.measures_for( index , [ cold , hot ] )
 
-					return $hyoo_js_perf_stats.create( stats => {
-						stats.elapsed = time_run
-						stats.iterations = iteration
-					} )
-				
-				} catch( error ) {
-
-					if( 'then' in error ) $mol_fail_hidden( error )
-
-					console.error( error )
-
-					return $hyoo_js_perf_stats.create( stats => {
-						stats.error = error.message
-						stats.elapsed = 0
-						stats.iterations = Number.NEGATIVE_INFINITY
-					} )
-					
-				}
-
-			} )
-			
-			const measures = this.sources().map( inner => {
-
-				const outer = [ this.prefix() , this.postfix() ]
-
-				return [
-					measure( inner , outer ) , 
-					measure( '$hyoo_js_perf_case({#});' , [
-						outer[0] + ';const $hyoo_js_perf_case = $hyoo_js_perf_iteration => {\n' + inner.replace( /\{#\}/g , '$hyoo_js_perf_iteration' ) + '\n};',
-						outer[1],
-					] ) ,
-				]
-
-			} )
-
-			this.measures( measures )
+			}
 
 		}
 
