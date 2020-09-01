@@ -2,6 +2,9 @@ $hyoo_js_perf $mol_page
 	title @ \JS Performance
 	plugins /
 		<= Theme $mol_theme_auto
+		<= Hotkey $mol_hotkey
+			mod_ctrl true
+			key * enter?event <=> run?event null
 	Body $mol_book2 pages /
 		<= Common $mol_scroll sub /
 			<= Prefix $mol_textarea
