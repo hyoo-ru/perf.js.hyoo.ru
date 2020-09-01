@@ -1317,25 +1317,6 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
-    class $mol_book2 extends $mol_scroll {
-        sub(): readonly $mol_view[];
-        pages(): readonly $mol_view[];
-        minimal_width(): number;
-        Placeholder(): $mol_view;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $.$$ {
-    class $mol_book2 extends $.$mol_book2 {
-        title(): string;
-        sub(): $mol_view[];
-    }
-}
-
-declare namespace $ {
     class $mol_hotkey extends $mol_plugin {
         event(): {
             keydown: (event?: any) => any;
@@ -1454,6 +1435,25 @@ declare namespace $.$$ {
             readonly quoteSingle?: ((event: KeyboardEvent) => void) | undefined;
         };
         keydown(event?: KeyboardEvent): void;
+    }
+}
+
+declare namespace $ {
+    class $mol_book2 extends $mol_scroll {
+        sub(): readonly $mol_view[];
+        pages(): readonly $mol_view[];
+        minimal_width(): number;
+        Placeholder(): $mol_view;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $.$$ {
+    class $mol_book2 extends $.$mol_book2 {
+        title(): string;
+        sub(): $mol_view[];
     }
 }
 
@@ -2252,6 +2252,8 @@ declare namespace $ {
         title(): string;
         plugins(): readonly any[];
         Theme(): $$.$mol_theme_auto;
+        Hotkey(): $$.$mol_hotkey;
+        run(event?: any): any;
         Body(): $$.$mol_book2;
         Common(): $$.$mol_scroll;
         Prefix(): $$.$mol_textarea;
@@ -2278,7 +2280,6 @@ declare namespace $ {
         New_icon(): $mol_icon_plus;
         Run(): $mol_button_major;
         run_title(): string;
-        run(event?: any): any;
     }
     class $hyoo_js_perf_case extends $mol_view {
         results(): readonly any[];

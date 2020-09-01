@@ -4358,6 +4358,69 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_hotkey extends $.$mol_plugin {
+        event() {
+            return Object.assign(Object.assign({}, super.event()), { keydown: (event) => this.keydown(event) });
+        }
+        keydown(event) {
+            if (event !== undefined)
+                return event;
+            return null;
+        }
+        key() {
+            return {};
+        }
+        mod_ctrl() {
+            return false;
+        }
+        mod_alt() {
+            return false;
+        }
+        mod_shift() {
+            return false;
+        }
+    }
+    __decorate([
+        $.$mol_mem
+    ], $mol_hotkey.prototype, "keydown", null);
+    $.$mol_hotkey = $mol_hotkey;
+})($ || ($ = {}));
+//hotkey.view.tree.js.map
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_hotkey extends $.$mol_hotkey {
+            key() {
+                return super.key();
+            }
+            keydown(event) {
+                if (!event)
+                    return;
+                if (event.defaultPrevented)
+                    return;
+                let name = $.$mol_keyboard_code[event.keyCode];
+                if (this.mod_ctrl() && !event.ctrlKey)
+                    return;
+                if (this.mod_alt() && !event.altKey)
+                    return;
+                if (this.mod_shift() && !event.shiftKey)
+                    return;
+                const handle = this.key()[name];
+                if (handle)
+                    handle(event);
+            }
+        }
+        $$.$mol_hotkey = $mol_hotkey;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//hotkey.view.js.map
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_book2 extends $.$mol_scroll {
         sub() {
             return this.pages();
@@ -4420,69 +4483,6 @@ var $;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
 //book2.view.js.map
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_hotkey extends $.$mol_plugin {
-        event() {
-            return Object.assign(Object.assign({}, super.event()), { keydown: (event) => this.keydown(event) });
-        }
-        keydown(event) {
-            if (event !== undefined)
-                return event;
-            return null;
-        }
-        key() {
-            return {};
-        }
-        mod_ctrl() {
-            return false;
-        }
-        mod_alt() {
-            return false;
-        }
-        mod_shift() {
-            return false;
-        }
-    }
-    __decorate([
-        $.$mol_mem
-    ], $mol_hotkey.prototype, "keydown", null);
-    $.$mol_hotkey = $mol_hotkey;
-})($ || ($ = {}));
-//hotkey.view.tree.js.map
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $mol_hotkey extends $.$mol_hotkey {
-            key() {
-                return super.key();
-            }
-            keydown(event) {
-                if (!event)
-                    return;
-                if (event.defaultPrevented)
-                    return;
-                let name = $.$mol_keyboard_code[event.keyCode];
-                if (this.mod_ctrl() && !event.ctrlKey)
-                    return;
-                if (this.mod_alt() && !event.altKey)
-                    return;
-                if (this.mod_shift() && !event.shiftKey)
-                    return;
-                const handle = this.key()[name];
-                if (handle)
-                    handle(event);
-            }
-        }
-        $$.$mol_hotkey = $mol_hotkey;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-//hotkey.view.js.map
 ;
 "use strict";
 var $;
@@ -6925,12 +6925,26 @@ var $;
         }
         plugins() {
             return [
-                this.Theme()
+                this.Theme(),
+                this.Hotkey()
             ];
         }
         Theme() {
             const obj = new this.$.$mol_theme_auto();
             return obj;
+        }
+        Hotkey() {
+            const obj = new this.$.$mol_hotkey();
+            obj.mod_ctrl = () => true;
+            obj.key = () => ({
+                enter: (event) => this.run(event)
+            });
+            return obj;
+        }
+        run(event) {
+            if (event !== undefined)
+                return event;
+            return null;
         }
         Body() {
             const obj = new this.$.$mol_book2();
@@ -7070,15 +7084,16 @@ var $;
         run_title() {
             return this.$.$mol_locale.text('$hyoo_js_perf_run_title');
         }
-        run(event) {
-            if (event !== undefined)
-                return event;
-            return null;
-        }
     }
     __decorate([
         $.$mol_mem
     ], $hyoo_js_perf.prototype, "Theme", null);
+    __decorate([
+        $.$mol_mem
+    ], $hyoo_js_perf.prototype, "Hotkey", null);
+    __decorate([
+        $.$mol_mem
+    ], $hyoo_js_perf.prototype, "run", null);
     __decorate([
         $.$mol_mem
     ], $hyoo_js_perf.prototype, "Body", null);
@@ -7133,9 +7148,6 @@ var $;
     __decorate([
         $.$mol_mem
     ], $hyoo_js_perf.prototype, "Run", null);
-    __decorate([
-        $.$mol_mem
-    ], $hyoo_js_perf.prototype, "run", null);
     $.$hyoo_js_perf = $hyoo_js_perf;
     class $hyoo_js_perf_case extends $.$mol_view {
         results() {

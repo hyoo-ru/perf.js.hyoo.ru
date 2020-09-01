@@ -58,11 +58,6 @@ $mol_page $mol_view
 $mol_theme_auto $mol_plugin
 	attr * mol_theme <= theme \
 
-$mol_book2 $mol_scroll
-	sub <= pages /$mol_view
-	minimal_width 0
-	Placeholder $mol_view
-
 $mol_hotkey $mol_plugin
 	event *
 		^
@@ -71,6 +66,11 @@ $mol_hotkey $mol_plugin
 	mod_ctrl false
 	mod_alt false
 	mod_shift false
+
+$mol_book2 $mol_scroll
+	sub <= pages /$mol_view
+	minimal_width 0
+	Placeholder $mol_view
 
 $mol_string $mol_view
 	dom_name \input
@@ -381,6 +381,9 @@ $hyoo_js_perf $mol_page
 	title @ \JS Performance
 	plugins /
 		<= Theme $mol_theme_auto
+		<= Hotkey $mol_hotkey
+			mod_ctrl true
+			key * enter?event <=> run?event null
 	Body $mol_book2 pages /
 		<= Common $mol_scroll sub /
 			<= Prefix $mol_textarea
