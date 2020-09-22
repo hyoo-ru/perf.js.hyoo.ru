@@ -1713,10 +1713,26 @@ var $;
                 });
             })();
         }
+        static style(uri) {
+            return $.$mol_fiber_sync(() => {
+                const doc = $.$mol_dom_context.document;
+                const style = doc.createElement('link');
+                style.rel = 'stylesheet';
+                style.href = uri;
+                doc.head.appendChild(style);
+                return new Promise((done, fail) => {
+                    style.onload = () => done(style.sheet);
+                    style.onerror = () => fail(new Error(`Can not import ${uri}`));
+                });
+            })();
+        }
     }
     __decorate([
         $.$mol_mem_key
     ], $mol_import, "script", null);
+    __decorate([
+        $.$mol_mem_key
+    ], $mol_import, "style", null);
     $.$mol_import = $mol_import;
 })($ || ($ = {}));
 //import.js.map
@@ -4516,7 +4532,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $.$mol_style_attach("mol/list/list.view.css", "[mol_list] {\n\twill-change: contents;\n\tdisplay: block;\n\t/* display: flex;\n\tflex-direction: column;\n\talign-items: stretch;\n\talign-content: stretch; */\n\ttransition: none;\n\tmin-height: .5rem;\n}\n\n[mol_list_gap_before] ,\n[mol_list_gap_after] {\n\tdisplay: block !important;\n\tflex: none;\n\ttransition: none;\n\toverflow-anchor: none;\n}\n \n[mol_list] > * {\n\tdisplay: flex;\n}\n");
+    $.$mol_style_attach("mol/list/list.view.css", "[mol_list] {\n\twill-change: contents;\n\tdisplay: block;\n\tflex-direction: column;\n\t/* display: flex;\n\talign-items: stretch;\n\talign-content: stretch; */\n\ttransition: none;\n\tmin-height: .5rem;\n}\n\n[mol_list_gap_before] ,\n[mol_list_gap_after] {\n\tdisplay: block !important;\n\tflex: none;\n\ttransition: none;\n\toverflow-anchor: none;\n}\n \n[mol_list] > * {\n\tdisplay: flex;\n}\n");
 })($ || ($ = {}));
 //list.view.css.js.map
 ;
