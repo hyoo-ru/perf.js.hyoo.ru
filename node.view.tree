@@ -329,6 +329,22 @@ $mol_text_image $mol_view
 	sub /
 		<= title?val \
 
+$mol_text_code $mol_list
+	text \
+	text_lines /string
+	Row!id $mol_view
+		sub <= row_content!id /
+		minimal_height 24
+	Token!id $mol_text_code_token
+		type <= token_type!id \
+		content <= token_content!id /
+
+$mol_text_code_token $mol_view
+	attr *
+		^
+		mol_text_code_token_type <= type \
+	sub <= content /
+
 $mol_textarea $mol_view
 	event *
 		keydown?event <=> press?event null
@@ -338,8 +354,8 @@ $mol_textarea $mol_view
 			value?val <=> value?val \
 			hint <= hint \
 			enabled <= enabled true
-		<= View $mol_text
-			text <= text \
+		<= View $mol_text_code
+			text <= value
 
 $mol_check_icon $mol_check
 
