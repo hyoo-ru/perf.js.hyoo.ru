@@ -16,7 +16,7 @@ $mol_button $mol_view
 	event *
 		^
 		click?event <=> event_activate?event null
-		keypress?event <=> event_key_press?event null 
+		keydown?event <=> event_key_press?event null 
 	attr *
 		^
 		disabled <= disabled false
@@ -329,21 +329,24 @@ $mol_text_image $mol_view
 	sub /
 		<= title?val \
 
-$mol_text_code $mol_list
-	text \
-	text_lines /string
-	Row!id $mol_view
-		sub <= row_content!id /
-		minimal_height 24
-	Token!id $mol_text_code_token
-		type <= token_type!id \
-		content <= token_content!id /
-
-$mol_text_code_token $mol_view
+$mol_text_code_token $mol_dimmer
 	attr *
 		^
 		mol_text_code_token_type <= type \
-	sub <= content /
+
+$mol_text_code_row $mol_paragraph
+	text \
+	Token!id $mol_text_code_token
+		type <= token_type!id \
+		haystack <= token_text!id \
+		needle <= highlight \
+
+$mol_text_code $mol_list
+	text \
+	text_lines /string
+	Row!id $mol_text_code_row
+		text <= row_text!id \
+		highlight <= highlight \
 
 $mol_textarea $mol_view
 	event *
