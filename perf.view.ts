@@ -1,6 +1,6 @@
 namespace $.$$ {
 
-	const wait_rest = $mol_fiber_sync( ()=> new Promise( done => new $mol_after_work( 16 , done ) ) )
+	const wait_rest = $mol_fiber_sync( ()=> new Promise( done => new $mol_after_work( 16 , ()=> done( null ) ) ) )
 
 	export class $hyoo_js_perf_stats extends $mol_object2 {
 		
