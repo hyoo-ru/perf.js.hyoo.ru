@@ -3449,6 +3449,7 @@ var $;
         }
         Title() {
             const obj = new this.$.$mol_view();
+            obj.dom_name = () => "h1";
             obj.sub = () => [
                 this.title()
             ];
@@ -3562,15 +3563,18 @@ var $;
                 zIndex: 1,
             },
             Title: {
+                minHeight: rem(2),
+                padding: $.$mol_gap.text,
+                wordBreak: 'normal',
+                textShadow: '0 0',
+                font: {
+                    size: 'inherit',
+                },
                 flex: {
                     grow: 1000,
                     shrink: 1,
                     basis: 'auto',
                 },
-                minHeight: rem(2),
-                padding: $.$mol_gap.text,
-                wordBreak: 'normal',
-                textShadow: '0 0',
             },
             Tools: {
                 flex: {
