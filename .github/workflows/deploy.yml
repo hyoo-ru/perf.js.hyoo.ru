@@ -15,6 +15,7 @@ jobs:
     - name: Build app
       uses: hyoo-ru/mam_build@master2
       with:
+        token: ${{ secrets.GH_PAT }}
         package: 'hyoo/js/perf'
     
     - name: Deploy on GitHub Pages
