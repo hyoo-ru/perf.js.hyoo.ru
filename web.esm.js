@@ -6685,6 +6685,21 @@ var $;
         }
     }
     $.$mol_text_code_token = $mol_text_code_token;
+    class $mol_text_code_token_link extends $mol_text_code_token {
+        dom_name() {
+            return "a";
+        }
+        type() {
+            return "code-link";
+        }
+        attr() {
+            return Object.assign(Object.assign({}, super.attr()), { href: this.haystack(), target: "_blank" });
+        }
+        haystack() {
+            return "";
+        }
+    }
+    $.$mol_text_code_token_link = $mol_text_code_token_link;
 })($ || ($ = {}));
 //token.view.tree.js.map
 ;
@@ -6696,6 +6711,7 @@ var $;
         const { hsla } = $.$mol_style_func;
         $.$mol_style_define($.$mol_text_code_token, {
             display: 'inline',
+            textDecoration: 'none',
             '@': {
                 mol_text_code_token_type: {
                     'code-keyword': {
@@ -6761,6 +6777,12 @@ var $;
             obj.needle = () => this.highlight();
             return obj;
         }
+        Token_link(id) {
+            const obj = new this.$.$mol_text_code_token_link();
+            obj.haystack = () => this.token_text(id);
+            obj.needle = () => this.highlight();
+            return obj;
+        }
         token_type(id) {
             return "";
         }
@@ -6774,6 +6796,9 @@ var $;
     __decorate([
         $.$mol_mem_key
     ], $mol_text_code_row.prototype, "Token", null);
+    __decorate([
+        $.$mol_mem_key
+    ], $mol_text_code_row.prototype, "Token_link", null);
     $.$mol_text_code_row = $mol_text_code_row;
 })($ || ($ = {}));
 //row.view.tree.js.map
@@ -6800,6 +6825,9 @@ var $;
             }
             row_content(path) {
                 return this.tokens(path).map((t, i) => this.Token([...path, i]));
+            }
+            Token(path) {
+                return this.token_type(path) === 'code-link' ? this.Token_link(path) : super.Token(path);
             }
             token_type(path) {
                 return this.tokens([...path.slice(0, path.length - 1)])[path[path.length - 1]].name;
