@@ -39,6 +39,7 @@
 [hyoo_js_perf_case_source] {
 	display: table-cell;
 	height: 8.5rem;
+	min-width: 14rem;
 }
 
 [hyoo_js_perf_case_result_rows] {
