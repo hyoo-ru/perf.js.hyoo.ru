@@ -12,10 +12,11 @@ $hyoo_js_perf $mol_page
 				hint <= prefix_hint @ \Setup code for all cases. Use {#} to insert iterations count. Use  $mol_import.script( uri ) to load external.
 			<= Postfix $mol_textarea
 				value?val <=> postfix?val \
-				hint <= postfix_hint @ \Teardown code for all cases. Use {#} to insert iterations count.
+				hint <= postfix_hint @ \Teardown code for all cases. Use {#} to insert iterations count. Use $mol_assert_like( actual, expected ) to check behaviour.
 		<= Cases_pane $mol_scroll sub /
 			<= Cases $mol_view sub <= cases /
 	Case!index $hyoo_js_perf_case
+		prefix?val <=> case_prefix!index?val \
 		source?val <=> source!index?val \
 		results?val <=> results!index?val \
 	tools /
@@ -40,9 +41,12 @@ $hyoo_js_perf $mol_page
 $hyoo_js_perf_case $mol_view
 	results /
 	sub <= columns /
+		<= Prefix $mol_textarea
+			value?val <=> prefix?val \
+			hint <= prefix_hint @ \Case setup code. Use {#} to insert iteration number.
 		<= Source $mol_textarea
 			value?val <=> source?val \
-			hint <= source_hint @ \Case source code. Use {#} to insert iteration number.
+			hint <= source_hint @ \Case measured code. Use {#} to insert iteration number.
 		<= Result_rows $mol_list rows <= result_rows /
 	Result!level $hyoo_js_perf_case_result
 		title <= result_title!level \

@@ -17,6 +17,11 @@ namespace $.$$ {
 	export class $hyoo_js_perf extends $.$hyoo_js_perf {
 
 		@ $mol_mem
+		prefixes( next? : string[] ) : string[] {
+			return JSON.parse( this.$.$mol_state_arg.value( 'prefixes' , next === undefined ? undefined : JSON.stringify( next ) ) || '[]' )
+		}
+
+		@ $mol_mem
 		sources( next? : string[] ) : string[] {
 			return JSON.parse( this.$.$mol_state_arg.value( 'sources' , next === undefined ? undefined : JSON.stringify( next ) ) || '[]' )
 		}
@@ -42,8 +47,30 @@ namespace $.$$ {
 			return 'https://tinyurl.com/create.php?url=' + encodeURIComponent( win.location.href )
 		}
 
+		cases_count() {
+			return Math.max(
+				this.prefixes().filter( Boolean ).length,
+				this.sources().filter( Boolean ).length,
+			)
+		}
+		
 		cases() {
-			return $mol_range2( index => this.Case( index ) , ()=> this.sources().length + 1 )
+			return $mol_range2(
+				index => this.Case( index ),
+				()=> this.cases_count() + 1,
+			)
+		}
+
+		case_prefix( index : number , next? : string ) {
+
+			let prefixes = this.prefixes()
+			if( next === undefined ) return prefixes[ index ] || ''
+
+			prefixes = prefixes.slice()
+			prefixes[ index ] = next
+			this.prefixes( prefixes )
+
+			return next
 		}
 
 		source( index : number , next? : string ) {
@@ -53,14 +80,17 @@ namespace $.$$ {
 
 			sources = sources.slice()
 			sources[ index ] = next
-			this.sources( sources.filter( source => source.length > 0 ) )
+			this.sources( sources )
 
 			return next
 		}
 
 		@ $mol_mem_key
 		measures_for( index : number , next? : $hyoo_js_perf_stats[] ) {
+			this.prefix()
+			this.postfix()
 			this.sources()
+			this.prefixes()
 			return next || []
 		}
 
@@ -187,6 +217,7 @@ namespace $.$$ {
 			}
 
 			const prefix = this.prefix()
+			const prefixes = this.prefixes()
 			const postfix = this.postfix()
 			const token = this.token()
 
@@ -196,6 +227,7 @@ namespace $.$$ {
 					[
 						'/*cold*/',
 						prefix,
+						prefixes[index] || '',
 						`let accum_${token}`,
 						`const case_${token} = iter_${token} => {\n accum_${token} = iter_${token} \n};`,
 					].join(';\n'),
@@ -207,6 +239,7 @@ namespace $.$$ {
 					[
 						'/*hot*/',
 						prefix,
+						prefixes[index] || '',
 						`let accum_${token}`,
 						`const case_${token} = iter_${token} => {\n ${ inner.replace( /\{#\}/g , `iter_${token}` ) } \n};`,
 					].join(';\n'),

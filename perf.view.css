@@ -35,9 +35,9 @@
 	flex: 0 1 auto;
 }
 
+[hyoo_js_perf_case_prefix] ,
 [hyoo_js_perf_case_source] {
 	display: table-cell;
-	font-family: var(--mol_skin_font_monospace);
 	height: 8.5rem;
 }
 
