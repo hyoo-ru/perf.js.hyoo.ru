@@ -1,8 +1,9 @@
 {
-	"$hyoo_js_perf_case_source_hint": "Case source code. Use {#} to insert iteration number.",
+	"$hyoo_js_perf_case_prefix_hint": "Case setup code. Use {#} to insert iteration number.",
+	"$hyoo_js_perf_case_source_hint": "Case measured code. Use {#} to insert iteration number.",
 	"$hyoo_js_perf_new_hint": "New benchmark",
 	"$hyoo_js_perf_parmalink_hint": "Permamemnt short link",
-	"$hyoo_js_perf_postfix_hint": "Teardown code for all cases. Use {#} to insert iterations count.",
+	"$hyoo_js_perf_postfix_hint": "Teardown code for all cases. Use {#} to insert iterations count. Use $mol_assert_like( actual, expected ) to check behaviour.",
 	"$hyoo_js_perf_prefix_hint": "Setup code for all cases. Use {#} to insert iterations count. Use  $mol_import.script( uri ) to load external.",
 	"$hyoo_js_perf_run_title": "Run",
 	"$hyoo_js_perf_title": "JS Performance",

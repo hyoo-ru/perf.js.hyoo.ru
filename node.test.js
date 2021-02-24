@@ -7528,6 +7528,7 @@ var $;
         }
         Case(index) {
             const obj = new this.$.$hyoo_js_perf_case();
+            obj.prefix = (val) => this.case_prefix(index, val);
             obj.source = (val) => this.source(index, val);
             obj.results = (val) => this.results(index, val);
             return obj;
@@ -7608,6 +7609,11 @@ var $;
                 this.Cases()
             ];
             return obj;
+        }
+        case_prefix(index, val) {
+            if (val !== undefined)
+                return val;
+            return "";
         }
         source(index, val) {
             if (val !== undefined)
@@ -7712,6 +7718,9 @@ var $;
     ], $hyoo_js_perf.prototype, "Cases_pane", null);
     __decorate([
         $.$mol_mem_key
+    ], $hyoo_js_perf.prototype, "case_prefix", null);
+    __decorate([
+        $.$mol_mem_key
     ], $hyoo_js_perf.prototype, "source", null);
     __decorate([
         $.$mol_mem_key
@@ -7751,6 +7760,20 @@ var $;
             obj.result = () => this.result(level);
             return obj;
         }
+        prefix(val) {
+            if (val !== undefined)
+                return val;
+            return "";
+        }
+        prefix_hint() {
+            return this.$.$mol_locale.text('$hyoo_js_perf_case_prefix_hint');
+        }
+        Prefix() {
+            const obj = new this.$.$mol_textarea();
+            obj.value = (val) => this.prefix(val);
+            obj.hint = () => this.prefix_hint();
+            return obj;
+        }
         source(val) {
             if (val !== undefined)
                 return val;
@@ -7775,6 +7798,7 @@ var $;
         }
         columns() {
             return [
+                this.Prefix(),
                 this.Source(),
                 this.Result_rows()
             ];
@@ -7790,6 +7814,12 @@ var $;
     __decorate([
         $.$mol_mem_key
     ], $hyoo_js_perf_case.prototype, "Result", null);
+    __decorate([
+        $.$mol_mem
+    ], $hyoo_js_perf_case.prototype, "prefix", null);
+    __decorate([
+        $.$mol_mem
+    ], $hyoo_js_perf_case.prototype, "Prefix", null);
     __decorate([
         $.$mol_mem
     ], $hyoo_js_perf_case.prototype, "source", null);
@@ -8008,7 +8038,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $.$mol_style_attach("hyoo/js/perf/perf.view.css", "[hyoo_js_perf_body] {\n\tdisplay: flex;\n\tflex-direction: row;\n\tjustify-content: space-between;\n\tpadding: .75rem;\n}\n\n[hyoo_js_perf_common] {\n\tflex-direction: column;\n\tflex: 1000 0 auto;\n\tmin-width: 20rem;\n}\n\n[hyoo_js_perf_prefix] {\n\tflex: 1 0 auto;\n\tmin-height: 8.5rem;\n}\n\n[hyoo_js_perf_postfix] {\n\tflex: 1 0 auto;\n\tmin-height: 8.5rem;\n}\n\n[hyoo_js_perf_cases_pane] {\n\tflex: 1000 0 auto;\n\tmin-width: 46rem;\n}\n\n[hyoo_js_perf_cases] {\n\tdisplay: table;\n}\n\n[hyoo_js_perf_case] {\n\tdisplay: table-row;\n\tflex: 0 1 auto;\n}\n\n[hyoo_js_perf_case_source] {\n\tdisplay: table-cell;\n\tfont-family: var(--mol_skin_font_monospace);\n\theight: 8.5rem;\n}\n\n[hyoo_js_perf_case_result_rows] {\n\tdisplay: table-cell;\n\tpadding: .75rem;\n\twidth: 25rem;\n}\n\n[hyoo_js_perf_case_result] {\n\twidth: 24rem;\n\tpadding: .5rem .75rem;\n\tflex-direction: column;\n}\n\n[hyoo_js_perf_case_result] > * {\n\tdisplay: flex;\n}\n\n[hyoo_js_perf_case_result_stats] {\n\tdisplay: flex;\n\twhite-space: nowrap;\n}\n\n[hyoo_js_perf_case_result_stats] > * {\n\tword-break: keep-all;\n\twhite-space: nowrap;\n\tmargin: 0 .5rem;\n}\n[hyoo_js_perf_case_result_frequency] {\n\tfont-weight: bolder;\n}\n\n[hyoo_js_perf_case_result_portion] {\n\tflex: none;\n\twidth: auto;\n}\n\n[hyoo_js_perf_case_result_error] {\n\tpadding: .5rem 1rem;;\n\tbackground: var(--mol_skin_bad);\n\tcolor: var(--mol_skin_bad_text);\n}\n\n[hyoo_js_perf_case_result]:nth-child(1) [hyoo_js_perf_case_result_portion_indicator] {\n\tbackground-color: royalblue;\n}\n\n[hyoo_js_perf_case_result]:nth-child(2) [hyoo_js_perf_case_result_portion_indicator] {\n\tbackground-color: orange;\n}\n");
+    $.$mol_style_attach("hyoo/js/perf/perf.view.css", "[hyoo_js_perf_body] {\n\tdisplay: flex;\n\tflex-direction: row;\n\tjustify-content: space-between;\n\tpadding: .75rem;\n}\n\n[hyoo_js_perf_common] {\n\tflex-direction: column;\n\tflex: 1000 0 auto;\n\tmin-width: 20rem;\n}\n\n[hyoo_js_perf_prefix] {\n\tflex: 1 0 auto;\n\tmin-height: 8.5rem;\n}\n\n[hyoo_js_perf_postfix] {\n\tflex: 1 0 auto;\n\tmin-height: 8.5rem;\n}\n\n[hyoo_js_perf_cases_pane] {\n\tflex: 1000 0 auto;\n\tmin-width: 46rem;\n}\n\n[hyoo_js_perf_cases] {\n\tdisplay: table;\n}\n\n[hyoo_js_perf_case] {\n\tdisplay: table-row;\n\tflex: 0 1 auto;\n}\n\n[hyoo_js_perf_case_prefix] ,\n[hyoo_js_perf_case_source] {\n\tdisplay: table-cell;\n\theight: 8.5rem;\n}\n\n[hyoo_js_perf_case_result_rows] {\n\tdisplay: table-cell;\n\tpadding: .75rem;\n\twidth: 25rem;\n}\n\n[hyoo_js_perf_case_result] {\n\twidth: 24rem;\n\tpadding: .5rem .75rem;\n\tflex-direction: column;\n}\n\n[hyoo_js_perf_case_result] > * {\n\tdisplay: flex;\n}\n\n[hyoo_js_perf_case_result_stats] {\n\tdisplay: flex;\n\twhite-space: nowrap;\n}\n\n[hyoo_js_perf_case_result_stats] > * {\n\tword-break: keep-all;\n\twhite-space: nowrap;\n\tmargin: 0 .5rem;\n}\n[hyoo_js_perf_case_result_frequency] {\n\tfont-weight: bolder;\n}\n\n[hyoo_js_perf_case_result_portion] {\n\tflex: none;\n\twidth: auto;\n}\n\n[hyoo_js_perf_case_result_error] {\n\tpadding: .5rem 1rem;;\n\tbackground: var(--mol_skin_bad);\n\tcolor: var(--mol_skin_bad_text);\n}\n\n[hyoo_js_perf_case_result]:nth-child(1) [hyoo_js_perf_case_result_portion_indicator] {\n\tbackground-color: royalblue;\n}\n\n[hyoo_js_perf_case_result]:nth-child(2) [hyoo_js_perf_case_result_portion_indicator] {\n\tbackground-color: orange;\n}\n");
 })($ || ($ = {}));
 //perf.view.css.js.map
 ;
@@ -8024,6 +8054,9 @@ var $;
         }
         $$.$hyoo_js_perf_stats = $hyoo_js_perf_stats;
         class $hyoo_js_perf extends $.$hyoo_js_perf {
+            prefixes(next) {
+                return JSON.parse(this.$.$mol_state_arg.value('prefixes', next === undefined ? undefined : JSON.stringify(next)) || '[]');
+            }
             sources(next) {
                 return JSON.parse(this.$.$mol_state_arg.value('sources', next === undefined ? undefined : JSON.stringify(next)) || '[]');
             }
@@ -8044,8 +8077,20 @@ var $;
                 const win = this.$.$mol_dom_context;
                 return 'https://tinyurl.com/create.php?url=' + encodeURIComponent(win.location.href);
             }
+            cases_count() {
+                return Math.max(this.prefixes().filter(Boolean).length, this.sources().filter(Boolean).length);
+            }
             cases() {
-                return $.$mol_range2(index => this.Case(index), () => this.sources().length + 1);
+                return $.$mol_range2(index => this.Case(index), () => this.cases_count() + 1);
+            }
+            case_prefix(index, next) {
+                let prefixes = this.prefixes();
+                if (next === undefined)
+                    return prefixes[index] || '';
+                prefixes = prefixes.slice();
+                prefixes[index] = next;
+                this.prefixes(prefixes);
+                return next;
             }
             source(index, next) {
                 let sources = this.sources();
@@ -8053,11 +8098,14 @@ var $;
                     return sources[index] || '';
                 sources = sources.slice();
                 sources[index] = next;
-                this.sources(sources.filter(source => source.length > 0));
+                this.sources(sources);
                 return next;
             }
             measures_for(index, next) {
+                this.prefix();
+                this.postfix();
                 this.sources();
+                this.prefixes();
                 return next || [];
             }
             measures() {
@@ -8143,18 +8191,21 @@ var $;
                     this.measures_for(index, []);
                 }
                 const prefix = this.prefix();
+                const prefixes = this.prefixes();
                 const postfix = this.postfix();
                 const token = this.token();
                 for (const [index, inner] of this.sources().entries()) {
                     const cold = this.measure_safe([
                         '/*cold*/',
                         prefix,
+                        prefixes[index] || '',
                         `let accum_${token}`,
                         `const case_${token} = iter_${token} => {\n accum_${token} = iter_${token} \n};`,
                     ].join(';\n'), `case_${token}({#});\n` + inner, postfix);
                     const hot = this.measure_safe([
                         '/*hot*/',
                         prefix,
+                        prefixes[index] || '',
                         `let accum_${token}`,
                         `const case_${token} = iter_${token} => {\n ${inner.replace(/\{#\}/g, `iter_${token}`)} \n};`,
                     ].join(';\n'), `case_${token}({#})`, postfix);
@@ -8162,6 +8213,9 @@ var $;
                 }
             }
         }
+        __decorate([
+            $.$mol_mem
+        ], $hyoo_js_perf.prototype, "prefixes", null);
         __decorate([
             $.$mol_mem
         ], $hyoo_js_perf.prototype, "sources", null);
