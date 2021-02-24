@@ -43,7 +43,7 @@ $hyoo_js_perf_case $mol_view
 	sub <= columns /
 		<= Prefix $mol_textarea
 			value?val <=> prefix?val \
-			hint <= prefix_hint @ \Case setup code. Use {#} to insert iteration number.
+			hint <= prefix_hint @ \Case setup code. Use {#} to insert iterations count.
 		<= Source $mol_textarea
 			value?val <=> source?val \
 			hint <= source_hint @ \Case measured code. Use {#} to insert iteration number.
