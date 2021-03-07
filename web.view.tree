@@ -346,11 +346,12 @@ $mol_text_code_token_link $mol_text_code_token
 		target \_blank
 
 $mol_text_code_row $mol_paragraph
-	attr *
-		^
-		mol_text_code_row_numb <= numb 0
 	text \
 	minimal_height 24
+	numb_showed true
+	Numb $mol_view
+		sub /
+			<= numb 0
 	Token!id $mol_text_code_token
 		type <= token_type!id \
 		haystack <= token_text!id \
@@ -363,6 +364,7 @@ $mol_text_code $mol_list
 	text \
 	text_lines /string
 	Row!id $mol_text_code_row
+		numb_showed <= sidebar_showed true
 		numb <= row_numb!id 0
 		text <= row_text!id \
 		highlight <= highlight \
@@ -370,6 +372,7 @@ $mol_text_code $mol_list
 $mol_textarea $mol_view
 	attr *
 		mol_textarea_clickable <= clickable?val false
+		mol_textarea_sidebar_showed <= sidebar_showed false
 	event *
 		keydown?event <=> press?event null
 		pointermove?event <=> hover?event null
@@ -383,6 +386,8 @@ $mol_textarea $mol_view
 		<= View $mol_text_code
 			text <= value
 			render_visible_only false
+			row_numb!index <= row_numb!index 0
+			sidebar_showed <= sidebar_showed
 
 $mol_check_icon $mol_check
 
