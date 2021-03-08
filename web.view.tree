@@ -361,16 +361,20 @@ $mol_text_code_row $mol_paragraph
 		needle <= highlight \
 
 $mol_text_code $mol_list
+	attr *
+		^
+		mol_text_code_sidebar_showed <= sidebar_showed false
 	text \
 	text_lines /string
 	Row!id $mol_text_code_row
-		numb_showed <= sidebar_showed true
+		numb_showed <= sidebar_showed
 		numb <= row_numb!id 0
 		text <= row_text!id \
 		highlight <= highlight \
 
 $mol_textarea $mol_view
 	attr *
+		^
 		mol_textarea_clickable <= clickable?val false
 		mol_textarea_sidebar_showed <= sidebar_showed false
 	event *

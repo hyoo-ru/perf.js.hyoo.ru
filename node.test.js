@@ -7034,6 +7034,9 @@ var $;
                 padding: {
                     right: rem(1.5),
                 },
+                margin: {
+                    left: rem(-3),
+                },
                 display: 'inline-block',
                 whiteSpace: 'nowrap',
                 userSelect: 'none',
@@ -7122,6 +7125,9 @@ var $;
 var $;
 (function ($) {
     class $mol_text_code extends $.$mol_list {
+        attr() {
+            return Object.assign(Object.assign({}, super.attr()), { mol_text_code_sidebar_showed: this.sidebar_showed() });
+        }
         text() {
             return "";
         }
@@ -7137,7 +7143,7 @@ var $;
             return obj;
         }
         sidebar_showed() {
-            return true;
+            return false;
         }
         row_numb(id) {
             return 0;
@@ -7161,11 +7167,21 @@ var $;
 (function ($) {
     var $$;
     (function ($$) {
+        const { rem } = $.$mol_style_unit;
         $.$mol_style_define($$.$mol_text_code, {
             padding: $.$mol_gap.text,
             whiteSpace: 'pre-wrap',
             font: {
                 family: 'monospace',
+            },
+            '@': {
+                'mol_text_code_sidebar_showed': {
+                    true: {
+                        margin: {
+                            left: rem(3),
+                        },
+                    },
+                },
             },
         });
     })($$ = $.$$ || ($.$$ = {}));
@@ -7210,10 +7226,7 @@ var $;
 (function ($) {
     class $mol_textarea extends $.$mol_view {
         attr() {
-            return {
-                mol_textarea_clickable: this.clickable(),
-                mol_textarea_sidebar_showed: this.sidebar_showed()
-            };
+            return Object.assign(Object.assign({}, super.attr()), { mol_textarea_clickable: this.clickable(), mol_textarea_sidebar_showed: this.sidebar_showed() });
         }
         event() {
             return {
