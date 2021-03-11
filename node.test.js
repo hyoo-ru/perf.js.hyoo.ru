@@ -2070,6 +2070,9 @@ var $;
 var $;
 (function ($) {
     class $mol_import extends $.$mol_object2 {
+        static module(uri) {
+            return $.$mol_fiber_sync(() => import(uri))();
+        }
         static script(uri) {
             return $.$mol_fiber_sync(() => {
                 const doc = $.$mol_dom_context.document;
@@ -2096,6 +2099,9 @@ var $;
             })();
         }
     }
+    __decorate([
+        $.$mol_mem_key
+    ], $mol_import, "module", null);
     __decorate([
         $.$mol_mem_key
     ], $mol_import, "script", null);
