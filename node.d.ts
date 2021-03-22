@@ -2497,6 +2497,8 @@ declare namespace $ {
         Time(): $mol_view;
         iterations(): string;
         Iterations(): $mol_view;
+        memory(): string;
+        Memory(): $mol_view;
         Stats(): $mol_view;
         portion(): number;
         Portion(): $$.$mol_portion;
@@ -2520,14 +2522,42 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    enum $mol_si_prefix {
+        y = -8,
+        z = -7,
+        a = -6,
+        f = -5,
+        p = -4,
+        n = -3,
+        µ = -2,
+        m = -1,
+        '' = 0,
+        k = 1,
+        M = 2,
+        G = 3,
+        T = 4,
+        P = 5,
+        E = 6,
+        Z = 7,
+        Y = 8
+    }
+}
+
+declare namespace $ {
+    function $mol_si_short(numb: number, unit?: string): string;
+}
+
+declare namespace $ {
 }
 
 declare namespace $.$$ {
     class $hyoo_js_perf_stats extends $mol_object2 {
         elapsed: number;
         iterations: number;
-        portion: number;
+        frequency_portion: number;
         error: string;
+        memory: number;
+        memory_portion: number;
         get time(): number;
         get frequency(): number;
     }
@@ -2544,11 +2574,13 @@ declare namespace $.$$ {
         measures_for(index: number, next?: $hyoo_js_perf_stats[]): $hyoo_js_perf_stats[];
         measures(): $hyoo_js_perf_stats[][];
         max_frequency(): number;
+        max_memory(): number;
         results(index: number): $hyoo_js_perf_stats[];
         token(): string;
         measure_step(count: number, prefix: string, inner: string, postfix: string): {
             total: number;
             time: any;
+            mem: any;
         };
         measure_precise(prefix: string, inner: string, postfix: string): $hyoo_js_perf_stats;
         measure_safe(prefix: string, inner: string, postfix: string): $hyoo_js_perf_stats;
@@ -2565,6 +2597,7 @@ declare namespace $.$$ {
         iterations(): string;
         frequency(): string;
         time(): string;
+        memory(): string;
         portion(): number;
     }
 }

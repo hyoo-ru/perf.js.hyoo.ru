@@ -2489,6 +2489,58 @@ var $;
 var $;
 (function ($) {
     $.$mol_test({
+        'Special'() {
+            $.$mol_assert_equal($.$mol_si_short(0), '0');
+            $.$mol_assert_equal($.$mol_si_short(1 / 0), '∞');
+            $.$mol_assert_equal($.$mol_si_short(-1 / 0), '-∞');
+            $.$mol_assert_equal($.$mol_si_short(0 / 0), '∅');
+        },
+        'M'() {
+            $.$mol_assert_equal($.$mol_si_short(0), '0');
+            $.$mol_assert_equal($.$mol_si_short(0.999500), '1.00');
+            $.$mol_assert_equal($.$mol_si_short(-0.999600), '-1.00');
+            $.$mol_assert_equal($.$mol_si_short(999.4), '999');
+            $.$mol_assert_equal($.$mol_si_short(-999.4), '-999');
+        },
+        'L'() {
+            $.$mol_assert_equal($.$mol_si_short(999.5), '1.00k');
+            $.$mol_assert_equal($.$mol_si_short(-999.5), '-1.00k');
+            $.$mol_assert_equal($.$mol_si_short(999400), '999k');
+            $.$mol_assert_equal($.$mol_si_short(-999400), '-999k');
+        },
+        'XL'() {
+            $.$mol_assert_equal($.$mol_si_short(999500), '1.00M');
+            $.$mol_assert_equal($.$mol_si_short(-999600), '-1.00M');
+            $.$mol_assert_equal($.$mol_si_short(999400000), '999M');
+            $.$mol_assert_equal($.$mol_si_short(-999400000), '-999M');
+        },
+        'S'() {
+            $.$mol_assert_equal($.$mol_si_short(0.999400), '999m');
+            $.$mol_assert_equal($.$mol_si_short(-0.999400), '-999m');
+            $.$mol_assert_equal($.$mol_si_short(0.0009995), '1.00m');
+            $.$mol_assert_equal($.$mol_si_short(-0.0009995), '-1.00m');
+        },
+        'XS'() {
+            $.$mol_assert_equal($.$mol_si_short(0.0009994), '999µ');
+            $.$mol_assert_equal($.$mol_si_short(-0.0009994), '-999µ');
+            $.$mol_assert_equal($.$mol_si_short(9.996e-7), '1.00µ');
+            $.$mol_assert_equal($.$mol_si_short(-9.996e-7), '-1.00µ');
+        },
+        'With unit'() {
+            $.$mol_assert_equal($.$mol_si_short(0, 's'), '0 s');
+            $.$mol_assert_equal($.$mol_si_short(1 / 0, 's'), '∞ s');
+            $.$mol_assert_equal($.$mol_si_short(0 / 0, 's'), '∅ s');
+            $.$mol_assert_equal($.$mol_si_short(123, 'Hz'), '123 Hz');
+            $.$mol_assert_equal($.$mol_si_short(1234, 'g'), '1.23 kg');
+        },
+    });
+})($ || ($ = {}));
+//short.test.js.map
+;
+"use strict";
+var $;
+(function ($) {
+    $.$mol_test({
         'Attach to document'() {
             const doc = $.$mol_dom_parse('<html><body id="/foo"></body></html>');
             $.$mol_jsx_attach(doc, () => $.$mol_jsx("body", { id: "/foo" }, "bar"));
