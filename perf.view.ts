@@ -6,8 +6,10 @@ namespace $.$$ {
 		
 		elapsed! : number
 		iterations! : number
-		portion! : number
+		frequency_portion! : number
 		error! : string
+		memory! : number
+		memory_portion! : number
 
 		get time() { return this.elapsed / this.iterations }
 		get frequency() { return this.iterations * 1000 / this.elapsed }
@@ -108,6 +110,15 @@ namespace $.$$ {
 			} , 0 )
 		}
 		
+		@ $mol_mem
+		max_memory() {
+			return this.measures().reduce( ( max , measure )=> {
+				return Math.max( max , measure.reduce( ( max , level )=> {
+					return Math.max( max , level.memory )
+				} , 0 ) )
+			} , 0 )
+		}
+		
 		@ $mol_mem_key 
 		results( index : number ) {
 			
@@ -115,7 +126,9 @@ namespace $.$$ {
 			if( !measure ) return []
 			
 			return measure.map( ( stats )=> $hyoo_js_perf_stats.create( stats2 => {
-				stats2.portion = stats.frequency / this.max_frequency()
+				stats2.frequency_portion = stats.frequency / this.max_frequency()
+				stats2.memory = stats.memory
+				stats2.memory_portion = stats.memory / this.max_memory()
 				stats2.elapsed = stats.elapsed
 				stats2.iterations = stats.iterations
 				stats2.error = stats.error
@@ -143,20 +156,24 @@ namespace $.$$ {
 			inner = Array.from( { length : count }, (_,i)=> inner.replace( /\{#\}/g , `${i}` ) ).join(';\n')
 
 			const source = [
+				`if( window.gc ) gc()`,
+				`let mem_${token} = -performance.memory?.usedJSHeapSize ?? 0`,
 				prefix,
 				`let time_${token} = -performance.now()`,
 				inner,
 				`time_${token} += performance.now()`,
 				postfix,
-				`return time_${token}`,
+				`if( window.gc ) gc()`,
+				`mem_${token} += performance.memory?.usedJSHeapSize ?? 0`,
+				`return { time: time_${token}, mem: window.gc ? mem_${token} : 0 }`,
 			].join( ';\n' )
 
 			let func = new Function( '' , source )
-			let time = func()
-
+			let { time, mem } = func()
+			
 			total += performance.now()
 
-			return { total , time }
+			return { total , time, mem }
 
 		}
 
@@ -168,19 +185,23 @@ namespace $.$$ {
 			const iterations = Math.min( Math.max( 1 , iterations_raw ) , 100_000 )
 
 			let avg_last = 0
-			const results = [] as number[]
+			const times = [] as number[]
+			const mems = [] as number[]
 
 			const avg = ( numbs : number[] )=> Math.pow( numbs.reduce( ( a, b )=> a * b ) , 1 / numbs.length )
 			
-			while( results.length < 100 ) {
-				results.push( this.measure_step( iterations , prefix , inner , postfix ).time )
-				const avg_next = avg( results )
-				if( results.length > 4 && Math.abs( avg_next - avg_last ) / avg_next < 0.001 ) break
+			while( times.length < 100 ) {
+				const { time, mem } = this.measure_step( iterations , prefix , inner , postfix )
+				times.push( time )
+				mems.push( mem )
+				const avg_next = avg( times )
+				if( times.length > 4 && Math.abs( avg_next - avg_last ) / avg_next < 0.001 ) break
 				avg_last = avg_next
 			}
 			
 			return $hyoo_js_perf_stats.create( stats => {
-				stats.elapsed = Math.min( ... results )
+				stats.elapsed = Math.min( ... times )
+				stats.memory = Math.max( ... mems )
 				stats.iterations = iterations
 			} )
 
@@ -285,19 +306,23 @@ namespace $.$$ {
 		}
 
 		iterations() {
-			return `${ ( this.result().iterations.toLocaleString() ) } ops`
+			return $mol_si_short( this.result().iterations, 'It' )
 		}
 
 		frequency() {
-			return `${ ( Math.trunc( this.result().frequency ).toLocaleString() ) } Hz`
+			return $mol_si_short( this.result().frequency, 'Hz' )
 		}
 
 		time() {
-			return `${ ( this.result().time * 1000 ).toFixed( 3 ) } µs`
+			return $mol_si_short( this.result().time / 1000, 's' )
+		}
+
+		memory() {
+			return $mol_si_short( this.result().memory, 'B' )
 		}
 
 		portion() {
-			return this.result().portion
+			return this.result().frequency_portion
 		}
 
 	}
