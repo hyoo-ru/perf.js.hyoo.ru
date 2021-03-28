@@ -71,6 +71,9 @@
 [hyoo_js_perf_case_result_frequency] {
 	font-weight: bolder;
 }
+[hyoo_js_perf_case_result_memory_per_iteration] {
+	font-weight: bolder;
+}
 
 [hyoo_js_perf_case_result_portion] {
 	flex: none;
