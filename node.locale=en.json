@@ -1,4 +1,5 @@
 {
+	"$hyoo_js_perf_About_hint": "About",
 	"$hyoo_js_perf_case_prefix_hint": "Case setup code. Use {#} to insert iterations count.",
 	"$hyoo_js_perf_case_source_hint": "Case measured code. Use {#} to insert iteration number.",
 	"$hyoo_js_perf_new_hint": "New benchmark",

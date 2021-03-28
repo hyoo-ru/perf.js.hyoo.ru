@@ -2352,6 +2352,24 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
+    class $mol_icon_help extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_help_circle extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_help_circle_outline extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
     class $mol_check_icon extends $mol_check {
     }
 }
@@ -2472,6 +2490,8 @@ declare namespace $ {
         case_prefix(index: any, val?: any): any;
         source(index: any, val?: any): any;
         results(index: any, val?: any): any;
+        About_icon(): $mol_icon_help_circle_outline;
+        About(): $$.$mol_link;
         Lights(): $$.$mol_lights_toggle;
         Source(): $mol_link_source;
         permalink(): string;
