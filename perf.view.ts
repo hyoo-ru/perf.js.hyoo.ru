@@ -13,6 +13,7 @@ namespace $.$$ {
 
 		get time() { return this.elapsed / this.iterations }
 		get frequency() { return this.iterations * 1000 / this.elapsed }
+		get memory_per_iteration() { return this.memory / this.iterations }
 
 	}
 
@@ -114,7 +115,7 @@ namespace $.$$ {
 		max_memory() {
 			return this.measures().reduce( ( max , measure )=> {
 				return Math.max( max , measure.reduce( ( max , level )=> {
-					return Math.max( max , level.memory )
+					return Math.max( max , level.memory_per_iteration )
 				} , 0 ) )
 			} , 0 )
 		}
@@ -128,7 +129,7 @@ namespace $.$$ {
 			return measure.map( ( stats )=> $hyoo_js_perf_stats.create( stats2 => {
 				stats2.frequency_portion = stats.frequency / this.max_frequency()
 				stats2.memory = stats.memory
-				stats2.memory_portion = stats.memory / this.max_memory()
+				stats2.memory_portion = stats.memory_per_iteration / this.max_memory()
 				stats2.elapsed = stats.elapsed
 				stats2.iterations = stats.iterations
 				stats2.error = stats.error
@@ -156,9 +157,9 @@ namespace $.$$ {
 			inner = Array.from( { length : count }, (_,i)=> inner.replace( /\{#\}/g , `${i}` ) ).join(';\n')
 
 			const source = [
+				prefix,
 				`if( window.gc ) gc()`,
 				`let mem_${token} = -performance.memory?.usedJSHeapSize ?? 0`,
-				prefix,
 				`let time_${token} = -performance.now()`,
 				inner,
 				`time_${token} += performance.now()`,
@@ -319,6 +320,10 @@ namespace $.$$ {
 
 		memory() {
 			return $mol_si_short( this.result().memory, 'B' )
+		}
+
+		memory_per_iteration() {
+			return $mol_si_short( this.result().memory_per_iteration, 'B' )
 		}
 
 		portion() {

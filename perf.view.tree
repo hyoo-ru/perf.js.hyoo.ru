@@ -62,7 +62,11 @@ $hyoo_js_perf_case_result $mol_view
 			<= Time $mol_view sub / <= time \
 			\ ⋅ 
 			<= Iterations $mol_view sub / <= iterations \
-			\ | 
+			\ ⋅
+			<= Memory_per_iteration $mol_view
+				attr * title \Required: --expose-gc --enable-precise-memory-info
+				sub / <= memory_per_iteration \
+			\ = 
 			<= Memory $mol_view
 				attr * title \Required: --expose-gc --enable-precise-memory-info
 				sub / <= memory \

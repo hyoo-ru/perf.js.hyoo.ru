@@ -45,11 +45,11 @@
 [hyoo_js_perf_case_result_rows] {
 	display: table-cell;
 	padding: .75rem;
-	width: 24rem;
+	width: 27rem;
 }
 
 [hyoo_js_perf_case_result] {
-	width: 23rem;
+	width: 26rem;
 	padding: .5rem .75rem;
 	flex-direction: column;
 }
