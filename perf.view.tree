@@ -20,6 +20,11 @@ $hyoo_js_perf $mol_page
 		source?val <=> source!index?val \
 		results?val <=> results!index?val \
 	tools /
+		<= About $mol_link
+			uri \https://habhub.hyoo.ru/#author=nin-jin/repo=HabHub/article=42
+			hint @ \About
+			sub /
+				<= About_icon $mol_icon_help_circle_outline
 		<= Lights $mol_lights_toggle
 		<= Source $mol_link_source
 			uri \https://github.com/hyoo-ru/perf.js.hyoo.ru
