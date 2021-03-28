@@ -7972,6 +7972,19 @@ var $;
             ];
             return obj;
         }
+        memory_per_iteration() {
+            return "";
+        }
+        Memory_per_iteration() {
+            const obj = new this.$.$mol_view();
+            obj.attr = () => ({
+                title: "Required: --expose-gc --enable-precise-memory-info"
+            });
+            obj.sub = () => [
+                this.memory_per_iteration()
+            ];
+            return obj;
+        }
         memory() {
             return "";
         }
@@ -7994,7 +8007,9 @@ var $;
                 this.Time(),
                 " ⋅ ",
                 this.Iterations(),
-                " | ",
+                " ⋅",
+                this.Memory_per_iteration(),
+                " = ",
                 this.Memory()
             ];
             return obj;
@@ -8030,6 +8045,9 @@ var $;
     __decorate([
         $.$mol_mem
     ], $hyoo_js_perf_case_result.prototype, "Iterations", null);
+    __decorate([
+        $.$mol_mem
+    ], $hyoo_js_perf_case_result.prototype, "Memory_per_iteration", null);
     __decorate([
         $.$mol_mem
     ], $hyoo_js_perf_case_result.prototype, "Memory", null);
@@ -8203,7 +8221,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $.$mol_style_attach("hyoo/js/perf/perf.view.css", "[hyoo_js_perf_body] {\n\tdisplay: flex;\n\tflex-direction: row;\n\tjustify-content: space-between;\n\tpadding: .75rem;\n}\n\n[hyoo_js_perf_common] {\n\tflex-direction: column;\n\tflex: 1000 0 auto;\n\tmin-width: 20rem;\n}\n\n[hyoo_js_perf_prefix] {\n\tflex: 1 0 auto;\n\tmin-height: 8.5rem;\n}\n\n[hyoo_js_perf_postfix] {\n\tflex: 1 0 auto;\n\tmin-height: 8.5rem;\n}\n\n[hyoo_js_perf_cases_pane] {\n\tflex: 1000 0 auto;\n\tmin-width: 46rem;\n}\n\n[hyoo_js_perf_cases] {\n\tdisplay: table;\n}\n\n[hyoo_js_perf_case] {\n\tdisplay: table-row;\n\tflex: 0 1 auto;\n}\n\n[hyoo_js_perf_case_prefix] ,\n[hyoo_js_perf_case_source] {\n\tdisplay: table-cell;\n\theight: 8.5rem;\n\tmin-width: 14rem;\n}\n\n[hyoo_js_perf_case_result_rows] {\n\tdisplay: table-cell;\n\tpadding: .75rem;\n\twidth: 24rem;\n}\n\n[hyoo_js_perf_case_result] {\n\twidth: 23rem;\n\tpadding: .5rem .75rem;\n\tflex-direction: column;\n}\n\n[hyoo_js_perf_case_result] > * {\n\tdisplay: flex;\n}\n\n[hyoo_js_perf_case_result_stats] {\n\tdisplay: flex;\n\twhite-space: nowrap;\n}\n\n[hyoo_js_perf_case_result_stats] > * {\n\tword-break: keep-all;\n\twhite-space: nowrap;\n\tmargin: 0 .5rem;\n}\n[hyoo_js_perf_case_result_frequency] {\n\tfont-weight: bolder;\n}\n\n[hyoo_js_perf_case_result_portion] {\n\tflex: none;\n\twidth: auto;\n}\n\n[hyoo_js_perf_case_result_error] {\n\tpadding: .5rem 1rem;;\n\tbackground: var(--mol_skin_bad);\n\tcolor: var(--mol_skin_bad_text);\n}\n\n[hyoo_js_perf_case_result]:nth-child(1) [hyoo_js_perf_case_result_portion_indicator] {\n\tbackground-color: royalblue;\n}\n\n[hyoo_js_perf_case_result]:nth-child(2) [hyoo_js_perf_case_result_portion_indicator] {\n\tbackground-color: orange;\n}\n");
+    $.$mol_style_attach("hyoo/js/perf/perf.view.css", "[hyoo_js_perf_body] {\n\tdisplay: flex;\n\tflex-direction: row;\n\tjustify-content: space-between;\n\tpadding: .75rem;\n}\n\n[hyoo_js_perf_common] {\n\tflex-direction: column;\n\tflex: 1000 0 auto;\n\tmin-width: 20rem;\n}\n\n[hyoo_js_perf_prefix] {\n\tflex: 1 0 auto;\n\tmin-height: 8.5rem;\n}\n\n[hyoo_js_perf_postfix] {\n\tflex: 1 0 auto;\n\tmin-height: 8.5rem;\n}\n\n[hyoo_js_perf_cases_pane] {\n\tflex: 1000 0 auto;\n\tmin-width: 46rem;\n}\n\n[hyoo_js_perf_cases] {\n\tdisplay: table;\n}\n\n[hyoo_js_perf_case] {\n\tdisplay: table-row;\n\tflex: 0 1 auto;\n}\n\n[hyoo_js_perf_case_prefix] ,\n[hyoo_js_perf_case_source] {\n\tdisplay: table-cell;\n\theight: 8.5rem;\n\tmin-width: 14rem;\n}\n\n[hyoo_js_perf_case_result_rows] {\n\tdisplay: table-cell;\n\tpadding: .75rem;\n\twidth: 27rem;\n}\n\n[hyoo_js_perf_case_result] {\n\twidth: 26rem;\n\tpadding: .5rem .75rem;\n\tflex-direction: column;\n}\n\n[hyoo_js_perf_case_result] > * {\n\tdisplay: flex;\n}\n\n[hyoo_js_perf_case_result_stats] {\n\tdisplay: flex;\n\twhite-space: nowrap;\n}\n\n[hyoo_js_perf_case_result_stats] > * {\n\tword-break: keep-all;\n\twhite-space: nowrap;\n\tmargin: 0 .5rem;\n}\n[hyoo_js_perf_case_result_frequency] {\n\tfont-weight: bolder;\n}\n\n[hyoo_js_perf_case_result_portion] {\n\tflex: none;\n\twidth: auto;\n}\n\n[hyoo_js_perf_case_result_error] {\n\tpadding: .5rem 1rem;;\n\tbackground: var(--mol_skin_bad);\n\tcolor: var(--mol_skin_bad_text);\n}\n\n[hyoo_js_perf_case_result]:nth-child(1) [hyoo_js_perf_case_result_portion_indicator] {\n\tbackground-color: royalblue;\n}\n\n[hyoo_js_perf_case_result]:nth-child(2) [hyoo_js_perf_case_result_portion_indicator] {\n\tbackground-color: orange;\n}\n");
 })($ || ($ = {}));
 //perf.view.css.js.map
 ;
@@ -8216,6 +8234,7 @@ var $;
         class $hyoo_js_perf_stats extends $.$mol_object2 {
             get time() { return this.elapsed / this.iterations; }
             get frequency() { return this.iterations * 1000 / this.elapsed; }
+            get memory_per_iteration() { return this.memory / this.iterations; }
         }
         $$.$hyoo_js_perf_stats = $hyoo_js_perf_stats;
         class $hyoo_js_perf extends $.$hyoo_js_perf {
@@ -8286,7 +8305,7 @@ var $;
             max_memory() {
                 return this.measures().reduce((max, measure) => {
                     return Math.max(max, measure.reduce((max, level) => {
-                        return Math.max(max, level.memory);
+                        return Math.max(max, level.memory_per_iteration);
                     }, 0));
                 }, 0);
             }
@@ -8297,7 +8316,7 @@ var $;
                 return measure.map((stats) => $hyoo_js_perf_stats.create(stats2 => {
                     stats2.frequency_portion = stats.frequency / this.max_frequency();
                     stats2.memory = stats.memory;
-                    stats2.memory_portion = stats.memory / this.max_memory();
+                    stats2.memory_portion = stats.memory_per_iteration / this.max_memory();
                     stats2.elapsed = stats.elapsed;
                     stats2.iterations = stats.iterations;
                     stats2.error = stats.error;
@@ -8314,9 +8333,9 @@ var $;
                 postfix = postfix.replace(/\{#\}/g, `${count}`);
                 inner = Array.from({ length: count }, (_, i) => inner.replace(/\{#\}/g, `${i}`)).join(';\n');
                 const source = [
+                    prefix,
                     `if( window.gc ) gc()`,
                     `let mem_${token} = -performance.memory?.usedJSHeapSize ?? 0`,
-                    prefix,
                     `let time_${token} = -performance.now()`,
                     inner,
                     `time_${token} += performance.now()`,
@@ -8474,6 +8493,9 @@ var $;
             }
             memory() {
                 return $.$mol_si_short(this.result().memory, 'B');
+            }
+            memory_per_iteration() {
+                return $.$mol_si_short(this.result().memory_per_iteration, 'B');
             }
             portion() {
                 return this.result().frequency_portion;

@@ -2510,6 +2510,8 @@ declare namespace $ {
         Time(): $mol_view;
         iterations(): string;
         Iterations(): $mol_view;
+        memory_per_iteration(): string;
+        Memory_per_iteration(): $mol_view;
         memory(): string;
         Memory(): $mol_view;
         Stats(): $mol_view;
@@ -2573,6 +2575,7 @@ declare namespace $.$$ {
         memory_portion: number;
         get time(): number;
         get frequency(): number;
+        get memory_per_iteration(): number;
     }
     class $hyoo_js_perf extends $.$hyoo_js_perf {
         prefixes(next?: string[]): string[];
@@ -2611,6 +2614,7 @@ declare namespace $.$$ {
         frequency(): string;
         time(): string;
         memory(): string;
+        memory_per_iteration(): string;
         portion(): number;
     }
 }
