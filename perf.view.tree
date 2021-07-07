@@ -69,11 +69,11 @@ $hyoo_js_perf_case_result $mol_view
 			<= Iterations $mol_view sub / <= iterations \
 			\ ⋅
 			<= Memory_per_iteration $mol_view
-				attr * title \Required: --expose-gc --enable-precise-memory-info
+				attr * title \Required: --js-flags="--expose-gc" --enable-precise-memory-info
 				sub / <= memory_per_iteration \
 			\ = 
 			<= Memory $mol_view
-				attr * title \Required: --expose-gc --enable-precise-memory-info
+				attr * title \Required: --js-flags="--expose-gc" --enable-precise-memory-info
 				sub / <= memory \
 		<= Portion $mol_portion portion <= portion 0
 		<= Error $mol_view sub / <= error \
