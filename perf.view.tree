@@ -18,7 +18,7 @@ $hyoo_js_perf $mol_page
 	Case!index $hyoo_js_perf_case
 		prefix?val <=> case_prefix!index?val \
 		source?val <=> source!index?val \
-		results?val <=> results!index?val \
+		results?val <=> results!index?val /
 	tools /
 		<= Lights $mol_lights_toggle
 		<= Source $mol_link_source
