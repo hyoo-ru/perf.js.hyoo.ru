@@ -2,23 +2,27 @@
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
-	padding: .75rem;
+	padding: 0;
 }
 
 [hyoo_js_perf_common] {
 	flex-direction: column;
 	flex: 1000 0 auto;
 	min-width: 20rem;
+	display: block;
+	box-shadow: 0 0 0 1px var(--mol_theme_line);
 }
 
 [hyoo_js_perf_prefix] {
 	flex: 1 0 auto;
-	min-height: 8.5rem;
+	height: 10rem;
+	margin: .75rem;
 }
 
 [hyoo_js_perf_postfix] {
 	flex: 1 0 auto;
-	min-height: 8.5rem;
+	height: 10rem;
+	margin: .75rem;
 }
 
 [hyoo_js_perf_cases_pane] {
@@ -28,6 +32,7 @@
 
 [hyoo_js_perf_cases] {
 	display: table;
+	border-spacing: .75rem;
 }
 
 [hyoo_js_perf_case] {
@@ -38,13 +43,12 @@
 [hyoo_js_perf_case_prefix] ,
 [hyoo_js_perf_case_source] {
 	display: table-cell;
-	height: 8.5rem;
+	height: 7rem;
 	min-width: 14rem;
 }
 
 [hyoo_js_perf_case_result_rows] {
 	display: table-cell;
-	padding: .75rem;
 	width: 27rem;
 }
 
