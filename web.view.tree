@@ -56,7 +56,7 @@ $mol_string $mol_view
 		^
 		disabled <= disabled false
 		value <= value_changed?val <=> value?val \
-		placeholder <= hint \
+		placeholder <= hint \ 
 		spellcheck <= spellcheck false
 		autocomplete <= autocomplete_native \
 		selectionEnd <= selection_end 0
@@ -177,7 +177,7 @@ $mol_check_expand $mol_check
 
 $mol_paragraph $mol_view
 	line_height 24
-	letter_width 8
+	letter_width 7
 	width_limit Infinity
 	sub / <= title
 
@@ -462,7 +462,7 @@ $hyoo_js_perf $mol_page
 	Case!index $hyoo_js_perf_case
 		prefix?val <=> case_prefix!index?val \
 		source?val <=> source!index?val \
-		results?val <=> results!index?val \
+		results?val <=> results!index?val /
 	tools /
 		<= About $mol_link
 			uri \https://habhub.hyoo.ru/#author=nin-jin/repo=HabHub/article=42
@@ -513,11 +513,11 @@ $hyoo_js_perf_case_result $mol_view
 			<= Iterations $mol_view sub / <= iterations \
 			\ ⋅
 			<= Memory_per_iteration $mol_view
-				attr * title \Required: --expose-gc --enable-precise-memory-info
+				attr * title \Required: --js-flags="--expose-gc" --enable-precise-memory-info
 				sub / <= memory_per_iteration \
 			\ = 
 			<= Memory $mol_view
-				attr * title \Required: --expose-gc --enable-precise-memory-info
+				attr * title \Required: --js-flags="--expose-gc" --enable-precise-memory-info
 				sub / <= memory \
 		<= Portion $mol_portion portion <= portion 0
 		<= Error $mol_view sub / <= error \
