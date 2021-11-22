@@ -215,7 +215,7 @@ namespace $.$$ {
 
 				return this.measure_precise( prefix , inner , postfix )
 
-			} catch( error ) {
+			} catch( error: any ) {
 
 				if( 'then' in error ) $mol_fail_hidden( error )
 
