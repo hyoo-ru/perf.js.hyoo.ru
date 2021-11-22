@@ -22,21 +22,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    function $mol_diff_path<Item>(...paths: Item[][]): {
-        prefix: Item[];
-        suffix: Item[][];
-    };
-}
-
-declare namespace $ {
-    class $mol_error_mix extends Error {
-        errors: Error[];
-        constructor(message: string, ...errors: Error[]);
-        toJSON(): string;
-    }
-}
-
-declare namespace $ {
     function $mol_compare_deep<Value>(left: Value, right: Value): boolean;
 }
 

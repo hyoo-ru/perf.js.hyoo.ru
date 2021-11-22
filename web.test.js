@@ -268,7 +268,8 @@ var $;
             $.$mol_assert_ok($.$mol_compare_deep(1, 1));
             $.$mol_assert_ok($.$mol_compare_deep(Number.NaN, Number.NaN));
             $.$mol_assert_not($.$mol_compare_deep(1, 2));
-            $.$mol_assert_not($.$mol_compare_deep(Object(1), Object(1)));
+            $.$mol_assert_ok($.$mol_compare_deep(Object(1), Object(1)));
+            $.$mol_assert_not($.$mol_compare_deep(Object(1), Object(2)));
         },
         'POJO'() {
             $.$mol_assert_ok($.$mol_compare_deep({}, {}));
@@ -309,8 +310,9 @@ var $;
         },
         'Map'() {
             $.$mol_assert_ok($.$mol_compare_deep(new Map, new Map));
-            $.$mol_assert_ok($.$mol_compare_deep(new Map([[[1], [2]]]), new Map([[[1], [2]]])));
+            $.$mol_assert_ok($.$mol_compare_deep(new Map([[1, [2]]]), new Map([[1, [2]]])));
             $.$mol_assert_not($.$mol_compare_deep(new Map([[1, 2]]), new Map([[1, 3]])));
+            $.$mol_assert_not($.$mol_compare_deep(new Map([[[1], 2]]), new Map([[[1], 2]])));
         },
         'Set'() {
             $.$mol_assert_ok($.$mol_compare_deep(new Set, new Set));
@@ -2227,42 +2229,6 @@ var $;
     });
 })($ || ($ = {}));
 //short.test.js.map
-;
-"use strict";
-var $;
-(function ($) {
-    $.$mol_test({
-        'equal paths'() {
-            const diff = $.$mol_diff_path([1, 2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4]);
-            $.$mol_assert_like(diff, {
-                prefix: [1, 2, 3, 4],
-                suffix: [[], [], []],
-            });
-        },
-        'different suffix'() {
-            const diff = $.$mol_diff_path([1, 2, 3, 4], [1, 2, 3, 5], [1, 2, 5, 4]);
-            $.$mol_assert_like(diff, {
-                prefix: [1, 2],
-                suffix: [[3, 4], [3, 5], [5, 4]],
-            });
-        },
-        'one contains other'() {
-            const diff = $.$mol_diff_path([1, 2, 3, 4], [1, 2], [1, 2, 3]);
-            $.$mol_assert_like(diff, {
-                prefix: [1, 2],
-                suffix: [[3, 4], [], [3]],
-            });
-        },
-        'fully different'() {
-            const diff = $.$mol_diff_path([1, 2], [3, 4], [5, 6]);
-            $.$mol_assert_like(diff, {
-                prefix: [],
-                suffix: [[1, 2], [3, 4], [5, 6]],
-            });
-        },
-    });
-})($ || ($ = {}));
-//path.test.js.map
 ;
 "use strict";
 var $;
