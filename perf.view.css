@@ -15,13 +15,11 @@
 
 [hyoo_js_perf_prefix] {
 	flex: 1 0 auto;
-	height: 10rem;
 	margin: .75rem;
 }
 
 [hyoo_js_perf_postfix] {
 	flex: 1 0 auto;
-	height: 10rem;
 	margin: .75rem;
 }
 
@@ -43,7 +41,6 @@
 [hyoo_js_perf_case_prefix] ,
 [hyoo_js_perf_case_source] {
 	display: table-cell;
-	height: 7rem;
 	min-width: 14rem;
 }
 
