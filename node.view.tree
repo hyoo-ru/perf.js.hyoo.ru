@@ -153,7 +153,7 @@ $mol_textarea $mol_view
 		<= Edit $mol_string
 			dom_name \textarea
 			value?val <=> value?val \
-			hint <= hint \
+			hint <= hint \ 
 			enabled <= enabled true
 			length_max <= length_max Infinity
 			selection?val <=> selection?val /number
@@ -227,6 +227,7 @@ $mol_speck $mol_view
 $mol_button $mol_view
 	enabled true
 	minimal_height 40
+	minimal_width 40
 	click?event null
 	event_click?event null
 	event *
@@ -450,6 +451,7 @@ $mol_image $mol_view
 		^
 		src <= uri \
 		alt <= title
+		loading <= loading \lazy
 
 $mol_link_iconed $mol_link
 	sub /
@@ -529,4 +531,6 @@ $mol_text_image $mol_view
 		mol_text_type <= type?val \
 		data <= link?val \
 	sub /
-		<= title?val \
+		<= Image $mol_image
+			uri <= link
+			title <= title?val \

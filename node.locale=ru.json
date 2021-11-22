@@ -7,6 +7,6 @@
 	"$hyoo_js_perf_prefix_hint": "Начальный код для всех вариантов. Используйте {#} для вставки числа итераций. Используйте $mol_import.script( uri ) для подключения внешних библиотек.",
 	"$hyoo_js_perf_run_title": "Запустить",
 	"$hyoo_js_perf_title": "Производительность JS",
-	"$mol_lights_toggle_hint": "Переключатель света",
+	"$mol_lights_toggle_hint": "Переключить освещение",
 	"$mol_link_source_hint": "Исходные коды"
 }
