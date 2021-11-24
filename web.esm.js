@@ -100,6 +100,8 @@ var $;
                 result = compare_map(left, right);
             else if (ArrayBuffer.isView(left))
                 result = compare_buffer(left, right);
+            else if (Symbol.toPrimitive in left)
+                result = compare_primitive(left, right);
             else
                 result = false;
         }
@@ -163,6 +165,9 @@ var $;
                 return false;
         }
         return true;
+    }
+    function compare_primitive(left, right) {
+        return Object.is(left[Symbol.toPrimitive]('default'), right[Symbol.toPrimitive]('default'));
     }
 })($ || ($ = {}));
 //deep.js.map
@@ -591,95 +596,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    const cache = new WeakMap();
-    $.$mol_conform_stack = [];
-    function $mol_conform(target, source) {
-        if (Object.is(target, source))
-            return source;
-        if (!target || typeof target !== 'object')
-            return target;
-        if (!source || typeof source !== 'object')
-            return target;
-        if (target instanceof Error)
-            return target;
-        if (source instanceof Error)
-            return target;
-        if (target['constructor'] !== source['constructor'])
-            return target;
-        if (cache.get(target))
-            return target;
-        cache.set(target, true);
-        const conform = $.$mol_conform_handlers.get(target['constructor']);
-        if (!conform)
-            return target;
-        if ($.$mol_conform_stack.indexOf(target) !== -1)
-            return target;
-        $.$mol_conform_stack.push(target);
-        try {
-            return conform(target, source);
-        }
-        finally {
-            $.$mol_conform_stack.pop();
-        }
-    }
-    $.$mol_conform = $mol_conform;
-    $.$mol_conform_handlers = new WeakMap();
-    function $mol_conform_handler(cl, handler) {
-        $.$mol_conform_handlers.set(cl, handler);
-    }
-    $.$mol_conform_handler = $mol_conform_handler;
-    function $mol_conform_array(target, source) {
-        if (source.length !== target.length)
-            return target;
-        for (let i = 0; i < target.length; ++i) {
-            if (!Object.is(source[i], target[i]))
-                return target;
-        }
-        return source;
-    }
-    $.$mol_conform_array = $mol_conform_array;
-    $mol_conform_handler(Array, $mol_conform_array);
-    $mol_conform_handler(Uint8Array, $mol_conform_array);
-    $mol_conform_handler(Uint16Array, $mol_conform_array);
-    $mol_conform_handler(Uint32Array, $mol_conform_array);
-    $mol_conform_handler(({})['constructor'], (target, source) => {
-        let count = 0;
-        let equal = true;
-        for (let key in target) {
-            const conformed = $mol_conform(target[key], source[key]);
-            if (conformed !== target[key]) {
-                try {
-                    target[key] = conformed;
-                }
-                catch (error) { }
-                if (!Object.is(conformed, target[key]))
-                    equal = false;
-            }
-            if (!Object.is(conformed, source[key]))
-                equal = false;
-            ++count;
-        }
-        for (let key in source)
-            if (--count < 0)
-                break;
-        return (equal && count === 0) ? source : target;
-    });
-    $mol_conform_handler(Date, (target, source) => {
-        if (target.getTime() === source.getTime())
-            return source;
-        return target;
-    });
-    $mol_conform_handler(RegExp, (target, source) => {
-        if (target.toString() === source.toString())
-            return source;
-        return target;
-    });
-})($ || ($ = {}));
-//conform.js.map
-;
-"use strict";
-var $;
-(function ($) {
     function $mol_array_trim(array) {
         let last = array.length;
         while (last > 0) {
@@ -1002,8 +918,7 @@ var $;
             }
         }
         push(value) {
-            value = this.$.$mol_conform(value, this.value);
-            if (this.error !== null || !Object.is(this.value, value)) {
+            if (this.error !== null || !$.$mol_compare_deep(this.value, value)) {
                 if ($mol_fiber.logs)
                     this.$.$mol_log3_done({
                         place: this,

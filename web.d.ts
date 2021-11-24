@@ -142,19 +142,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    const $mol_conform_stack: any[];
-    function $mol_conform<Target, Source>(target: Target, source: Source): Target;
-    const $mol_conform_handlers: WeakMap<Object, (target: any, source: any) => any>;
-    function $mol_conform_handler<Class>(cl: {
-        new (...args: any[]): Class;
-    }, handler: (target: Class, source: Class) => Class): void;
-    function $mol_conform_array<Value, List extends {
-        [index: number]: Value;
-        length: number;
-    }>(target: List, source: List): List;
-}
-
-declare namespace $ {
     function $mol_array_trim<Item>(array: Item[]): Item[];
 }
 
