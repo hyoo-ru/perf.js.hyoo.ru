@@ -7850,6 +7850,18 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_icon_play extends $.$mol_icon {
+        path() {
+            return "M8,5.14V19.14L19,12.14L8,5.14Z";
+        }
+    }
+    $.$mol_icon_play = $mol_icon_play;
+})($ || ($ = {}));
+//play.view.tree.js.map
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_button_major extends $.$mol_button_typed {
         attr() {
             return {
@@ -8119,13 +8131,17 @@ var $;
             ];
             return obj;
         }
-        run_title() {
-            return this.$.$mol_locale.text('$hyoo_js_perf_run_title');
+        Run_icon() {
+            const obj = new this.$.$mol_icon_play();
+            return obj;
         }
         Run() {
             const obj = new this.$.$mol_button_major();
-            obj.title = () => this.run_title();
+            obj.hint = () => this.$.$mol_locale.text('$hyoo_js_perf_Run_hint');
             obj.click = (event) => this.run(event);
+            obj.sub = () => [
+                this.Run_icon()
+            ];
             return obj;
         }
     }
@@ -8207,6 +8223,9 @@ var $;
     __decorate([
         $.$mol_mem
     ], $hyoo_js_perf.prototype, "New", null);
+    __decorate([
+        $.$mol_mem
+    ], $hyoo_js_perf.prototype, "Run_icon", null);
     __decorate([
         $.$mol_mem
     ], $hyoo_js_perf.prototype, "Run", null);

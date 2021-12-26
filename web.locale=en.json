@@ -1,11 +1,11 @@
 {
 	"$hyoo_js_perf_Postfix_title": "Common Teardown",
 	"$hyoo_js_perf_Prefix_title": "Common Setup",
+	"$hyoo_js_perf_Run_hint": "Run",
 	"$hyoo_js_perf_case_Prefix_title": "Setup",
 	"$hyoo_js_perf_case_Source_title": "Measure",
 	"$hyoo_js_perf_new_hint": "New benchmark",
 	"$hyoo_js_perf_parmalink_hint": "Permamemnt short link",
-	"$hyoo_js_perf_run_title": "Run",
 	"$hyoo_js_perf_title": "JS Performance",
 	"$mol_lights_toggle_hint": "Toggle lights",
 	"$mol_link_source_hint": "Source code"

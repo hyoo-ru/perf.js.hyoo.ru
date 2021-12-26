@@ -2360,6 +2360,12 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $mol_icon_play extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
     class $mol_button_major extends $mol_button_typed {
         attr(): {
             mol_theme: string;
@@ -2433,7 +2439,7 @@ declare namespace $ {
         new_hint(): string;
         New_icon(): $mol_icon_plus;
         New(): $$.$mol_link;
-        run_title(): string;
+        Run_icon(): $mol_icon_play;
         Run(): $mol_button_major;
     }
     class $hyoo_js_perf_case extends $mol_view {

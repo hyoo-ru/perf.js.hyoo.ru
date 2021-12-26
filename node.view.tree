@@ -454,6 +454,8 @@ $mol_icon_external $mol_icon path \M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V1
 
 $mol_icon_plus $mol_icon path \M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z
 
+$mol_icon_play $mol_icon path \M8,5.14V19.14L19,12.14L8,5.14Z
+
 $mol_button_major $mol_button_typed
 	attr *
 		^
@@ -530,8 +532,9 @@ $hyoo_js_perf $mol_page
 			sub /
 				<= New_icon $mol_icon_plus
 		<= Run $mol_button_major
-			title <= run_title @ \Run
+			hint @ \Run
 			click?event <=> run?event null
+			sub / <= Run_icon $mol_icon_play
 
 $hyoo_js_perf_case $mol_view
 	results /

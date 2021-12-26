@@ -1,11 +1,11 @@
 {
 	"$hyoo_js_perf_Postfix_title": "Общее завершение",
 	"$hyoo_js_perf_Prefix_title": "Общее вступление",
+	"$hyoo_js_perf_Run_hint": "Запустить",
 	"$hyoo_js_perf_case_Prefix_title": "Подготовка",
 	"$hyoo_js_perf_case_Source_title": "Измерение",
 	"$hyoo_js_perf_new_hint": "Новый бенчмарк",
 	"$hyoo_js_perf_parmalink_hint": "Постоянная коротка ссылка",
-	"$hyoo_js_perf_run_title": "Запустить",
 	"$hyoo_js_perf_title": "Производительность JS",
 	"$mol_lights_toggle_hint": "Переключить освещение",
 	"$mol_link_source_hint": "Исходные коды"
