@@ -7,12 +7,16 @@ $hyoo_js_perf $mol_page
 			key * enter?event <=> run?event null
 	Body $mol_book2 pages /
 		<= Common $mol_scroll sub /
-			<= Prefix $mol_textarea
-				value?val <=> prefix?val \
-				hint <= prefix_hint @ \Setup code for all cases. Use {#} to insert iterations count. Use  $mol_import.script( uri ) to load external.
-			<= Postfix $mol_textarea
-				value?val <=> postfix?val \
-				hint <= postfix_hint @ \Teardown code for all cases. Use {#} to insert iterations count. Use $mol_assert_like( actual, expected ) to check behaviour.
+			<= Prefix $mol_labeler
+				title @ \Common Setup
+				Content <= Prefix_code $mol_textarea
+					value?val <=> prefix?val \
+					hint <= prefix_hint @ \{#} - iterations count. $mol_import.script( uri ) loads script.
+			<= Postfix $mol_labeler
+				title @ \Common Teardown
+				Content <= Postfix_code $mol_textarea
+					value?val <=> postfix?val \
+					hint <= postfix_hint @ \{#} - iterations count. $mol_assert_like( actual, expected ) checks contracts.
 		<= Cases_pane $mol_scroll sub /
 			<= Cases $mol_view sub <= cases /
 	Case!index $hyoo_js_perf_case

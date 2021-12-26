@@ -1,7 +1,9 @@
 {
 	"$hyoo_js_perf_title": "Производительность JS",
-	"$hyoo_js_perf_prefix_hint": "Начальный код для всех вариантов. Используйте {#} для вставки числа итераций. Используйте $mol_import.script( uri ) для подключения внешних библиотек.",
-	"$hyoo_js_perf_postfix_hint": "Завершающий код для всех вариантов. Используйте {#} для вставки числа итераций. Используйте $mol_assert_like( actual, expected ) для проверки корректности.",
+	"$hyoo_js_perf_Prefix_title": "Общее вступление",
+	"$hyoo_js_perf_Postfix_title": "Общее завершение",
+	"$hyoo_js_perf_prefix_hint": "{#} - число итераций. $mol_import.script( uri ) - загрузка скрипта.",
+	"$hyoo_js_perf_postfix_hint": "{#} - число итераций. $mol_assert_like( actual, expected ) - проверка контрактов.",
 	"$hyoo_js_perf_parmalink_hint": "Постоянная коротка ссылка",
 	"$hyoo_js_perf_new_hint": "Новый бенчмарк",
 	"$hyoo_js_perf_run_title": "Запустить",
