@@ -179,10 +179,55 @@ $mol_labeler $mol_list
 			minimal_height 24
 			sub <= content /
 
-$mol_float $mol_view
-	style *
+$mol_svg $mol_view
+	dom_name \svg
+	dom_name_space \http://www.w3.org/2000/svg
+	font_size 16
+	font_family \
+
+$mol_svg_root $mol_svg
+	dom_name \svg
+	attr *
 		^
-		minHeight \auto
+		viewBox <= view_box \0 0 100 100
+		preserveAspectRatio <= aspect \xMidYMid
+
+$mol_svg_path $mol_svg
+	dom_name \path
+	attr *
+		^
+		d <= geometry \
+
+
+$mol_icon $mol_svg_root
+	view_box \0 0 24 24
+	minimal_width 16
+	minimal_height 16
+	sub /
+		<= Path $mol_svg_path
+			geometry <= path \
+
+$mol_icon_help $mol_icon path \M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5C10.34,5 9,6.34 9,8H6C6,4.69 8.69,2 12,2Z
+
+$mol_icon_help_circle $mol_icon path \M15.07,11.25L14.17,12.17C13.45,12.89 13,13.5 13,15H11V14.5C11,13.39 11.45,12.39 12.17,11.67L13.41,10.41C13.78,10.05 14,9.55 14,9C14,7.89 13.1,7 12,7C10.9,7 10,7.9 10,9H8C8,6.79 9.79,5 12,5C14.21,5 16,6.79 16,9C16,9.88 15.64,10.67 15.07,11.25M13,19H11V17H13M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.47 17.5,2 12,2Z
+
+$mol_icon_help_circle_outline $mol_icon path \M11,18H13V16H11V18M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.48 17.52,2 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,6C9.79,6 8,7.79 8,10H10C10,8.9 10.9,8 12,8C13.1,8 14,8.9 14,10C14,12 11,11.75 11,15H13C13,12.75 16,12.5 16,10C16,7.79 14.21,6 12,6Z
+
+$mol_link $mol_view
+	dom_name \a
+	attr *
+		^
+		href <= uri \
+		title <= hint \
+		target <= target \_self
+		download <= file_name \
+		mol_link_current <= current false
+	sub /$mol_view_content
+		<= title
+	arg *
+	event *
+		^
+		click?event <=> click?event <=> event_click?event null
 
 $mol_speck $mol_view
 	attr *
@@ -231,33 +276,149 @@ $mol_check $mol_button_minor
 				sub /
 					<= title \
 
-$mol_svg $mol_view
-	dom_name \svg
-	dom_name_space \http://www.w3.org/2000/svg
-	font_size 16
-	font_family \
+$mol_check_icon $mol_check
 
-$mol_svg_root $mol_svg
-	dom_name \svg
-	attr *
-		^
-		viewBox <= view_box \0 0 100 100
-		preserveAspectRatio <= aspect \xMidYMid
+$mol_icon_brightness_6 $mol_icon path \M12,18V6C15.31,6 18,8.69 18,12C18,15.31 15.31,18 12,18M20,15.31L23.31,12L20,8.69V4H15.31L12,0.69L8.69,4H4V8.69L0.69,12L4,15.31V20H8.69L12,23.31L15.31,20H20V15.31Z
 
-$mol_svg_path $mol_svg
-	dom_name \path
-	attr *
-		^
-		d <= geometry \
+$mol_lights_toggle $mol_check_icon
+	Icon <= Lights_icon $mol_icon_brightness_6
+	hint @ \Toggle lights
+	checked?val <=> lights?val false
 
+$mol_icon_github_circle $mol_icon path \M12,2C6.48,2 2,6.48 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21C9.5,20.77 9.5,20.14 9.5,19.31C6.73,19.91 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.81,16.41C14.17,16.72 14.5,17.33 14.5,18.26C14.5,19.6 14.5,20.68 14.5,21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12C22,6.48 17.52,2 12,2Z
 
-$mol_icon $mol_svg_root
-	view_box \0 0 24 24
-	minimal_width 16
-	minimal_height 16
+$mol_link_source $mol_link
+	hint @ \Source code
 	sub /
-		<= Path $mol_svg_path
-			geometry <= path \
+		<= Icon $mol_icon_github_circle
+
+$mol_icon_external $mol_icon path \M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z
+
+$mol_icon_plus $mol_icon path \M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z
+
+$mol_icon_play $mol_icon path \M8,5.14V19.14L19,12.14L8,5.14Z
+
+$mol_button_major $mol_button_typed
+	attr *
+		^
+		mol_theme \$mol_theme_accent
+
+$mol_portion_indicator $mol_view
+	style *
+		^
+		width <= width_style \0
+
+$mol_portion $mol_view
+	portion 0
+	sub /
+		<= indicator $mol_portion_indicator
+			width_style <= indicator_width_style \0
+
+$hyoo_js_perf $mol_page
+	title @ \JS Performance
+	plugins /
+		<= Theme $mol_theme_auto
+		<= Hotkey $mol_hotkey
+			mod_ctrl true
+			key * enter?event <=> run?event null
+	Body $mol_book2 pages /
+		<= Common $mol_scroll sub /
+			<= Prefix $mol_labeler
+				title @ \Common Setup
+				Content <= Prefix_code $mol_textarea
+					value?val <=> prefix?val \
+			<= Postfix $mol_labeler
+				title @ \Common Teardown
+				Content <= Postfix_code $mol_textarea
+					value?val <=> postfix?val \
+			<= Hint $mol_text_code text \
+				\{#} // iterations count/number
+				\
+				\// loads JS script
+				\$mol_import.script( uri )
+				\
+				\// loads ESM module
+				\$mol_import.module( uri )
+				\
+				\// checks for truth
+				\$mol_assert_ok( actual )
+				\
+				\// checks for identity
+				\$mol_assert_equal( actual, expected )
+				\
+				\// checks for equivalence
+				\$mol_assert_like( actual, expected )
+		<= Cases_pane $mol_scroll sub /
+			<= Cases $mol_view sub <= cases /
+	Case!index $hyoo_js_perf_case
+		prefix?val <=> case_prefix!index?val \
+		source?val <=> source!index?val \
+		results?val <=> results!index?val /
+	tools /
+		<= About $mol_link
+			uri \https://habhub.hyoo.ru/#author=nin-jin/repo=HabHub/article=42
+			sub /
+				<= About_icon $mol_icon_help_circle_outline
+		<= Lights $mol_lights_toggle
+		<= Source $mol_link_source
+			uri \https://github.com/hyoo-ru/perf.js.hyoo.ru
+		<= Permalink $mol_link
+			uri <= permalink \
+			hint <= parmalink_hint @ \Permamemnt short link
+			target \_blank
+			sub /
+				<= Permalink_icon $mol_icon_external
+		<= New $mol_link
+			uri \#
+			hint <= new_hint @ \New benchmark
+			sub /
+				<= New_icon $mol_icon_plus
+		<= Run $mol_button_major
+			hint @ \Run
+			click?event <=> run?event null
+			sub / <= Run_icon $mol_icon_play
+
+$hyoo_js_perf_case $mol_view
+	results /
+	sub <= columns /
+		<= Prefix $mol_labeler
+			title @ \Setup
+			Content <= Prefix_code $mol_textarea
+				value?val <=> prefix?val \
+		<= Source $mol_labeler
+			title @ \Measure
+			Content <= Source_code $mol_textarea
+				value?val <=> source?val \
+		<= Result_rows $mol_list rows <= result_rows /
+	Result!level $hyoo_js_perf_case_result
+		title <= result_title!level \
+		result <= result!level $hyoo_js_perf_stats
+
+$hyoo_js_perf_case_result $mol_view
+	result $hyoo_js_perf_stats
+	sub /
+		<= Stats $mol_view sub /
+			<= title \
+			<= Frequency $mol_view sub / <= frequency \
+			\ ≈ 
+			<= Time $mol_view sub / <= time \
+			\ ⋅ 
+			<= Iterations $mol_view sub / <= iterations \
+			\ ⋅
+			<= Memory_per_iteration $mol_view
+				attr * title \Required: --js-flags="--expose-gc" --enable-precise-memory-info
+				sub / <= memory_per_iteration \
+			\ = 
+			<= Memory $mol_view
+				attr * title \Required: --js-flags="--expose-gc" --enable-precise-memory-info
+				sub / <= memory \
+		<= Portion $mol_portion portion <= portion 0
+		<= Error $mol_view sub / <= error \
+
+$mol_float $mol_view
+	style *
+		^
+		minHeight \auto
 
 $mol_icon_chevron $mol_icon path \M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z
 
@@ -321,22 +482,6 @@ $mol_grid_cell $mol_view
 	minimal_height 40
 
 $mol_grid_number $mol_grid_cell
-
-$mol_link $mol_view
-	dom_name \a
-	attr *
-		^
-		href <= uri \
-		title <= hint \
-		target <= target \_self
-		download <= file_name \
-		mol_link_current <= current false
-	sub /$mol_view_content
-		<= title
-	arg *
-	event *
-		^
-		click?event <=> click?event <=> event_click?event null
 
 $mol_image $mol_view
 	dom_name \img
@@ -427,148 +572,3 @@ $mol_text_image $mol_view
 		<= Image $mol_image
 			uri <= link
 			title <= title?val \
-
-$mol_icon_help $mol_icon path \M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5C10.34,5 9,6.34 9,8H6C6,4.69 8.69,2 12,2Z
-
-$mol_icon_help_circle $mol_icon path \M15.07,11.25L14.17,12.17C13.45,12.89 13,13.5 13,15H11V14.5C11,13.39 11.45,12.39 12.17,11.67L13.41,10.41C13.78,10.05 14,9.55 14,9C14,7.89 13.1,7 12,7C10.9,7 10,7.9 10,9H8C8,6.79 9.79,5 12,5C14.21,5 16,6.79 16,9C16,9.88 15.64,10.67 15.07,11.25M13,19H11V17H13M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.47 17.5,2 12,2Z
-
-$mol_icon_help_circle_outline $mol_icon path \M11,18H13V16H11V18M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.48 17.52,2 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,6C9.79,6 8,7.79 8,10H10C10,8.9 10.9,8 12,8C13.1,8 14,8.9 14,10C14,12 11,11.75 11,15H13C13,12.75 16,12.5 16,10C16,7.79 14.21,6 12,6Z
-
-$mol_check_icon $mol_check
-
-$mol_icon_brightness_6 $mol_icon path \M12,18V6C15.31,6 18,8.69 18,12C18,15.31 15.31,18 12,18M20,15.31L23.31,12L20,8.69V4H15.31L12,0.69L8.69,4H4V8.69L0.69,12L4,15.31V20H8.69L12,23.31L15.31,20H20V15.31Z
-
-$mol_lights_toggle $mol_check_icon
-	Icon <= Lights_icon $mol_icon_brightness_6
-	hint @ \Toggle lights
-	checked?val <=> lights?val false
-
-$mol_icon_github_circle $mol_icon path \M12,2C6.48,2 2,6.48 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21C9.5,20.77 9.5,20.14 9.5,19.31C6.73,19.91 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.81,16.41C14.17,16.72 14.5,17.33 14.5,18.26C14.5,19.6 14.5,20.68 14.5,21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12C22,6.48 17.52,2 12,2Z
-
-$mol_link_source $mol_link
-	hint @ \Source code
-	sub /
-		<= Icon $mol_icon_github_circle
-
-$mol_icon_external $mol_icon path \M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z
-
-$mol_icon_plus $mol_icon path \M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z
-
-$mol_icon_play $mol_icon path \M8,5.14V19.14L19,12.14L8,5.14Z
-
-$mol_button_major $mol_button_typed
-	attr *
-		^
-		mol_theme \$mol_theme_accent
-
-$mol_portion_indicator $mol_view
-	style *
-		^
-		width <= width_style \0
-
-$mol_portion $mol_view
-	portion 0
-	sub /
-		<= indicator $mol_portion_indicator
-			width_style <= indicator_width_style \0
-
-$hyoo_js_perf $mol_page
-	title @ \JS Performance
-	plugins /
-		<= Theme $mol_theme_auto
-		<= Hotkey $mol_hotkey
-			mod_ctrl true
-			key * enter?event <=> run?event null
-	Body $mol_book2 pages /
-		<= Common $mol_scroll sub /
-			<= Prefix $mol_labeler
-				title @ \Common Setup
-				Content <= Prefix_code $mol_textarea
-					value?val <=> prefix?val \
-			<= Postfix $mol_labeler
-				title @ \Common Teardown
-				Content <= Postfix_code $mol_textarea
-					value?val <=> postfix?val \
-			<= Hint $mol_text text \
-				\	{#} // iterations count/number
-				\	
-				\	// loads JS script
-				\	$mol_import.script( uri )
-				\	
-				\	// loads ESM modue
-				\	$mol_import.module( uri )
-				\	
-				\	// checks for truth
-				\	$mol_assert_ok( actual )
-				\	
-				\	// checks for identity
-				\	$mol_assert_equal( actual, expected )
-				\	
-				\	// checks for equivalence
-				\	$mol_assert_like( actual, expected )
-		<= Cases_pane $mol_scroll sub /
-			<= Cases $mol_view sub <= cases /
-	Case!index $hyoo_js_perf_case
-		prefix?val <=> case_prefix!index?val \
-		source?val <=> source!index?val \
-		results?val <=> results!index?val /
-	tools /
-		<= About $mol_link
-			uri \https://habhub.hyoo.ru/#author=nin-jin/repo=HabHub/article=42
-			sub /
-				<= About_icon $mol_icon_help_circle_outline
-		<= Lights $mol_lights_toggle
-		<= Source $mol_link_source
-			uri \https://github.com/hyoo-ru/perf.js.hyoo.ru
-		<= Permalink $mol_link
-			uri <= permalink \
-			hint <= parmalink_hint @ \Permamemnt short link
-			target \_blank
-			sub /
-				<= Permalink_icon $mol_icon_external
-		<= New $mol_link
-			uri \#
-			hint <= new_hint @ \New benchmark
-			sub /
-				<= New_icon $mol_icon_plus
-		<= Run $mol_button_major
-			hint @ \Run
-			click?event <=> run?event null
-			sub / <= Run_icon $mol_icon_play
-
-$hyoo_js_perf_case $mol_view
-	results /
-	sub <= columns /
-		<= Prefix $mol_labeler
-			title @ \Setup
-			Content <= Prefix_code $mol_textarea
-				value?val <=> prefix?val \
-		<= Source $mol_labeler
-			title @ \Measure
-			Content <= Source_code $mol_textarea
-				value?val <=> source?val \
-		<= Result_rows $mol_list rows <= result_rows /
-	Result!level $hyoo_js_perf_case_result
-		title <= result_title!level \
-		result <= result!level $hyoo_js_perf_stats
-
-$hyoo_js_perf_case_result $mol_view
-	result $hyoo_js_perf_stats
-	sub /
-		<= Stats $mol_view sub /
-			<= title \
-			<= Frequency $mol_view sub / <= frequency \
-			\ ≈ 
-			<= Time $mol_view sub / <= time \
-			\ ⋅ 
-			<= Iterations $mol_view sub / <= iterations \
-			\ ⋅
-			<= Memory_per_iteration $mol_view
-				attr * title \Required: --js-flags="--expose-gc" --enable-precise-memory-info
-				sub / <= memory_per_iteration \
-			\ = 
-			<= Memory $mol_view
-				attr * title \Required: --js-flags="--expose-gc" --enable-precise-memory-info
-				sub / <= memory \
-		<= Portion $mol_portion portion <= portion 0
-		<= Error $mol_view sub / <= error \

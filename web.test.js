@@ -1919,6 +1919,15 @@ var $;
 "use strict";
 var $;
 (function ($_1) {
+    $_1.$mol_test_mocks.push($ => {
+        $.$mol_after_work = $_1.$mol_after_mock_timeout;
+    });
+})($ || ($ = {}));
+//work.test.js.map
+;
+"use strict";
+var $;
+(function ($_1) {
     var $$;
     (function ($$) {
         $_1.$mol_test({
@@ -1967,15 +1976,6 @@ var $;
     });
 })($ || ($ = {}));
 //maybe.test.js.map
-;
-"use strict";
-var $;
-(function ($_1) {
-    $_1.$mol_test_mocks.push($ => {
-        $.$mol_after_work = $_1.$mol_after_mock_timeout;
-    });
-})($ || ($ = {}));
-//work.test.js.map
 ;
 "use strict";
 var $;
