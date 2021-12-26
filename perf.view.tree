@@ -58,8 +58,9 @@ $hyoo_js_perf $mol_page
 			sub /
 				<= New_icon $mol_icon_plus
 		<= Run $mol_button_major
-			title <= run_title @ \Run
+			hint @ \Run
 			click?event <=> run?event null
+			sub / <= Run_icon $mol_icon_play
 
 $hyoo_js_perf_case $mol_view
 	results /
