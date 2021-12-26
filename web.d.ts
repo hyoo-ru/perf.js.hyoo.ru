@@ -1321,65 +1321,6 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
-    class $mol_string extends $mol_view {
-        dom_name(): string;
-        enabled(): boolean;
-        minimal_height(): number;
-        autocomplete(): boolean;
-        selection(val?: any): readonly number[];
-        auto(): readonly any[];
-        field(): {
-            disabled: boolean;
-            value: string;
-            placeholder: string;
-            spellcheck: boolean;
-            autocomplete: string;
-            selectionEnd: number;
-            selectionStart: number;
-        };
-        attr(): {
-            maxlength: number;
-            type: string;
-        };
-        event(): {
-            input: (event?: any) => any;
-            keydown: (event?: any) => any;
-        };
-        plugins(): readonly any[];
-        selection_watcher(): any;
-        disabled(): boolean;
-        value(val?: any): string;
-        value_changed(val?: any): string;
-        hint(): string;
-        spellcheck(): boolean;
-        autocomplete_native(): string;
-        selection_end(): number;
-        selection_start(): number;
-        length_max(): number;
-        type(val?: any): string;
-        event_change(event?: any): any;
-        event_key_press(event?: any): any;
-        submit(event?: any): any;
-        Submit(): $$.$mol_hotkey;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $.$$ {
-    class $mol_string extends $.$mol_string {
-        event_change(next?: Event): void;
-        disabled(): boolean;
-        autocomplete_native(): "on" | "off";
-        selection_watcher(): $mol_dom_listener;
-        selection_change(event: Event): void;
-        selection_start(): number;
-        selection_end(): number;
-    }
-}
-
-declare namespace $ {
     class $mol_list extends $mol_view {
         render_visible_only(): boolean;
         render_over(): number;
@@ -1695,6 +1636,65 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
+    class $mol_string extends $mol_view {
+        dom_name(): string;
+        enabled(): boolean;
+        minimal_height(): number;
+        autocomplete(): boolean;
+        selection(val?: any): readonly number[];
+        auto(): readonly any[];
+        field(): {
+            disabled: boolean;
+            value: string;
+            placeholder: string;
+            spellcheck: boolean;
+            autocomplete: string;
+            selectionEnd: number;
+            selectionStart: number;
+        };
+        attr(): {
+            maxlength: number;
+            type: string;
+        };
+        event(): {
+            input: (event?: any) => any;
+            keydown: (event?: any) => any;
+        };
+        plugins(): readonly any[];
+        selection_watcher(): any;
+        disabled(): boolean;
+        value(val?: any): string;
+        value_changed(val?: any): string;
+        hint(): string;
+        spellcheck(): boolean;
+        autocomplete_native(): string;
+        selection_end(): number;
+        selection_start(): number;
+        length_max(): number;
+        type(val?: any): string;
+        event_change(event?: any): any;
+        event_key_press(event?: any): any;
+        submit(event?: any): any;
+        Submit(): $$.$mol_hotkey;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $.$$ {
+    class $mol_string extends $.$mol_string {
+        event_change(next?: Event): void;
+        disabled(): boolean;
+        autocomplete_native(): "on" | "off";
+        selection_watcher(): $mol_dom_listener;
+        selection_change(event: Event): void;
+        selection_start(): number;
+        selection_end(): number;
+    }
+}
+
+declare namespace $ {
     class $mol_textarea extends $mol_view {
         attr(): {
             mol_textarea_clickable: boolean;
@@ -1714,10 +1714,23 @@ declare namespace $ {
         enabled(): boolean;
         length_max(): number;
         selection(val?: any): readonly number[];
-        Edit(): $$.$mol_string;
+        Edit(): $mol_textarea_edit;
         row_numb(index: any): number;
         highlight(): string;
         View(): $$.$mol_text_code;
+    }
+    class $mol_textarea_edit extends $mol_string {
+        dom_name(): string;
+        field(): {
+            scrollTop: number;
+            disabled: boolean;
+            value: string;
+            placeholder: string;
+            spellcheck: boolean;
+            autocomplete: string;
+            selectionEnd: number;
+            selectionStart: number;
+        };
     }
 }
 
@@ -1732,6 +1745,19 @@ declare namespace $.$$ {
         press(event: KeyboardEvent): void;
         row_numb(index: number): number;
     }
+}
+
+declare namespace $ {
+    class $mol_labeler extends $mol_list {
+        rows(): readonly any[];
+        label(): readonly $mol_view_content[];
+        Label(): $mol_view;
+        content(): readonly any[];
+        Content(): $mol_view;
+    }
+}
+
+declare namespace $ {
 }
 
 declare namespace $ {
@@ -2081,10 +2107,12 @@ declare namespace $ {
         Hotkey(): $$.$mol_hotkey;
         prefix(val?: any): string;
         prefix_hint(): string;
-        Prefix(): $$.$mol_textarea;
+        Prefix_code(): $$.$mol_textarea;
+        Prefix(): $mol_labeler;
         postfix(val?: any): string;
         postfix_hint(): string;
-        Postfix(): $$.$mol_textarea;
+        Postfix_code(): $$.$mol_textarea;
+        Postfix(): $mol_labeler;
         Common(): $$.$mol_scroll;
         cases(): readonly any[];
         Cases(): $mol_view;

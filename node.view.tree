@@ -44,35 +44,6 @@ $mol_hotkey $mol_plugin
 	mod_alt false
 	mod_shift false
 
-$mol_string $mol_view
-	dom_name \input
-	enabled true
-	minimal_height 40
-	autocomplete false
-	selection?val /number
-	auto /
-		<= selection_watcher null
-	field *
-		^
-		disabled <= disabled false
-		value <= value_changed?val <=> value?val \
-		placeholder <= hint \ 
-		spellcheck <= spellcheck false
-		autocomplete <= autocomplete_native \
-		selectionEnd <= selection_end 0
-		selectionStart <= selection_start 0
-	attr *
-		^
-		maxlength <= length_max Infinity
-		type <= type?val \text
-	event *
-		^
-		input?event <=> event_change?event null
-		keydown?event <=> event_key_press?event null
-	plugins /
-		<= Submit $mol_hotkey
-			key * enter?event <=> submit?event null
-
 $mol_list $mol_view
 	render_visible_only true
 	render_over 0
@@ -141,6 +112,35 @@ $mol_text_code $mol_list
 		text <= row_text!id \
 		highlight <= highlight \
 
+$mol_string $mol_view
+	dom_name \input
+	enabled true
+	minimal_height 40
+	autocomplete false
+	selection?val /number
+	auto /
+		<= selection_watcher null
+	field *
+		^
+		disabled <= disabled false
+		value <= value_changed?val <=> value?val \
+		placeholder <= hint \ 
+		spellcheck <= spellcheck false
+		autocomplete <= autocomplete_native \
+		selectionEnd <= selection_end 0
+		selectionStart <= selection_start 0
+	attr *
+		^
+		maxlength <= length_max Infinity
+		type <= type?val \text
+	event *
+		^
+		input?event <=> event_change?event null
+		keydown?event <=> event_key_press?event null
+	plugins /
+		<= Submit $mol_hotkey
+			key * enter?event <=> submit?event null
+
 $mol_textarea $mol_view
 	attr *
 		^
@@ -150,8 +150,7 @@ $mol_textarea $mol_view
 		keydown?event <=> press?event null
 		pointermove?event <=> hover?event null
 	sub /
-		<= Edit $mol_string
-			dom_name \textarea
+		<= Edit $mol_textarea_edit
 			value?val <=> value?val \
 			hint <= hint \ 
 			enabled <= enabled true
@@ -163,6 +162,22 @@ $mol_textarea $mol_view
 			row_numb!index <= row_numb!index 0
 			sidebar_showed <= sidebar_showed
 			highlight <= highlight \
+
+$mol_textarea_edit $mol_string
+	dom_name \textarea
+	field *
+		^
+		scrollTop 0
+
+$mol_labeler $mol_list
+	rows /
+		<= Label $mol_view
+			minimal_height 16
+			sub <= label /$mol_view_content
+				<= title
+		<= Content $mol_view
+			minimal_height 24
+			sub <= content /
 
 $mol_svg $mol_view
 	dom_name \svg
@@ -306,12 +321,16 @@ $hyoo_js_perf $mol_page
 			key * enter?event <=> run?event null
 	Body $mol_book2 pages /
 		<= Common $mol_scroll sub /
-			<= Prefix $mol_textarea
-				value?val <=> prefix?val \
-				hint <= prefix_hint @ \Setup code for all cases. Use {#} to insert iterations count. Use  $mol_import.script( uri ) to load external.
-			<= Postfix $mol_textarea
-				value?val <=> postfix?val \
-				hint <= postfix_hint @ \Teardown code for all cases. Use {#} to insert iterations count. Use $mol_assert_like( actual, expected ) to check behaviour.
+			<= Prefix $mol_labeler
+				title @ \Common Setup
+				Content <= Prefix_code $mol_textarea
+					value?val <=> prefix?val \
+					hint <= prefix_hint @ \{#} - iterations count. $mol_import.script( uri ) loads script.
+			<= Postfix $mol_labeler
+				title @ \Common Teardown
+				Content <= Postfix_code $mol_textarea
+					value?val <=> postfix?val \
+					hint <= postfix_hint @ \{#} - iterations count. $mol_assert_like( actual, expected ) checks contracts.
 		<= Cases_pane $mol_scroll sub /
 			<= Cases $mol_view sub <= cases /
 	Case!index $hyoo_js_perf_case

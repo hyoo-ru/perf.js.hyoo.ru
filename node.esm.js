@@ -4430,198 +4430,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $mol_string extends $.$mol_view {
-        dom_name() {
-            return "input";
-        }
-        enabled() {
-            return true;
-        }
-        minimal_height() {
-            return 40;
-        }
-        autocomplete() {
-            return false;
-        }
-        selection(val) {
-            if (val !== undefined)
-                return val;
-            return [];
-        }
-        auto() {
-            return [
-                this.selection_watcher()
-            ];
-        }
-        field() {
-            return {
-                ...super.field(),
-                disabled: this.disabled(),
-                value: this.value_changed(),
-                placeholder: this.hint(),
-                spellcheck: this.spellcheck(),
-                autocomplete: this.autocomplete_native(),
-                selectionEnd: this.selection_end(),
-                selectionStart: this.selection_start()
-            };
-        }
-        attr() {
-            return {
-                ...super.attr(),
-                maxlength: this.length_max(),
-                type: this.type()
-            };
-        }
-        event() {
-            return {
-                ...super.event(),
-                input: (event) => this.event_change(event),
-                keydown: (event) => this.event_key_press(event)
-            };
-        }
-        plugins() {
-            return [
-                this.Submit()
-            ];
-        }
-        selection_watcher() {
-            return null;
-        }
-        disabled() {
-            return false;
-        }
-        value(val) {
-            if (val !== undefined)
-                return val;
-            return "";
-        }
-        value_changed(val) {
-            return this.value(val);
-        }
-        hint() {
-            return " ";
-        }
-        spellcheck() {
-            return false;
-        }
-        autocomplete_native() {
-            return "";
-        }
-        selection_end() {
-            return 0;
-        }
-        selection_start() {
-            return 0;
-        }
-        length_max() {
-            return Infinity;
-        }
-        type(val) {
-            if (val !== undefined)
-                return val;
-            return "text";
-        }
-        event_change(event) {
-            if (event !== undefined)
-                return event;
-            return null;
-        }
-        event_key_press(event) {
-            if (event !== undefined)
-                return event;
-            return null;
-        }
-        submit(event) {
-            if (event !== undefined)
-                return event;
-            return null;
-        }
-        Submit() {
-            const obj = new this.$.$mol_hotkey();
-            obj.key = () => ({
-                enter: (event) => this.submit(event)
-            });
-            return obj;
-        }
-    }
-    __decorate([
-        $.$mol_mem
-    ], $mol_string.prototype, "selection", null);
-    __decorate([
-        $.$mol_mem
-    ], $mol_string.prototype, "value", null);
-    __decorate([
-        $.$mol_mem
-    ], $mol_string.prototype, "type", null);
-    __decorate([
-        $.$mol_mem
-    ], $mol_string.prototype, "event_change", null);
-    __decorate([
-        $.$mol_mem
-    ], $mol_string.prototype, "event_key_press", null);
-    __decorate([
-        $.$mol_mem
-    ], $mol_string.prototype, "submit", null);
-    __decorate([
-        $.$mol_mem
-    ], $mol_string.prototype, "Submit", null);
-    $.$mol_string = $mol_string;
-})($ || ($ = {}));
-//string.view.tree.js.map
-;
-"use strict";
-var $;
-(function ($) {
-    $.$mol_style_attach("mol/string/string.view.css", "[mol_string] {\n\tbox-sizing: border-box;\n\toutline-offset: 0;\n\tborder: none;\n\tborder-radius: var(--mol_gap_round);\n\twhite-space: nowrap;\n\toverflow: hidden;\n\ttext-overflow: ellipsis;\n\tpadding: var(--mol_gap_text);\n\ttext-align: left;\n\tposition: relative;\n\tz-index: 0;\n\tfont: inherit;\n\tflex: 1 1 auto;\n\tbackground: var(--mol_theme_hover);\n\tmin-width: 0;\n\tcolor: var(--mol_theme_control);\n}\n\n[mol_string]:disabled {\n\tbackground-color: transparent;\n\tcolor: var(--mol_theme_text);\n}\n\n[mol_string]:placeholder-shown {\n\tbackground: var(--mol_theme_field);\n\tbox-shadow: inset 0 0 0 1px var(--mol_theme_line);\n}\n\n[mol_string]:focus {\n\toutline: none;\n\tz-index: 1;\n\tcolor: var(--mol_theme_text);\n\tbackground: var(--mol_theme_field);\n\tbox-shadow: inset 0 0 0 1px var(--mol_theme_focus);\n}\n\n[mol_string]:not(:placeholder-shown):not(:focus):enabled:hover {\n\tbackground: var(--mol_theme_hover);\n}\n\n[mol_string]::-ms-clear {\n\tdisplay: none;\n}\n");
-})($ || ($ = {}));
-//string.view.css.js.map
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $mol_string extends $.$mol_string {
-            event_change(next) {
-                if (!next)
-                    return;
-                this.value(next.target.value);
-                this.selection_change(next);
-            }
-            disabled() {
-                return !this.enabled();
-            }
-            autocomplete_native() {
-                return this.autocomplete() ? 'on' : 'off';
-            }
-            selection_watcher() {
-                return new $.$mol_dom_listener(this.$.$mol_dom_context.document, 'selectionchange', event => this.selection_change(event));
-            }
-            selection_change(event) {
-                const el = this.dom_node();
-                this.selection([
-                    el.selectionStart,
-                    el.selectionEnd,
-                ]);
-            }
-            selection_start() {
-                return this.selection()[0];
-            }
-            selection_end() {
-                return this.selection()[1];
-            }
-        }
-        __decorate([
-            $.$mol_mem
-        ], $mol_string.prototype, "selection_watcher", null);
-        $$.$mol_string = $mol_string;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-//string.view.js.map
-;
-"use strict";
-var $;
-(function ($) {
     class $mol_list extends $.$mol_view {
         render_visible_only() {
             return true;
@@ -5725,6 +5533,198 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_string extends $.$mol_view {
+        dom_name() {
+            return "input";
+        }
+        enabled() {
+            return true;
+        }
+        minimal_height() {
+            return 40;
+        }
+        autocomplete() {
+            return false;
+        }
+        selection(val) {
+            if (val !== undefined)
+                return val;
+            return [];
+        }
+        auto() {
+            return [
+                this.selection_watcher()
+            ];
+        }
+        field() {
+            return {
+                ...super.field(),
+                disabled: this.disabled(),
+                value: this.value_changed(),
+                placeholder: this.hint(),
+                spellcheck: this.spellcheck(),
+                autocomplete: this.autocomplete_native(),
+                selectionEnd: this.selection_end(),
+                selectionStart: this.selection_start()
+            };
+        }
+        attr() {
+            return {
+                ...super.attr(),
+                maxlength: this.length_max(),
+                type: this.type()
+            };
+        }
+        event() {
+            return {
+                ...super.event(),
+                input: (event) => this.event_change(event),
+                keydown: (event) => this.event_key_press(event)
+            };
+        }
+        plugins() {
+            return [
+                this.Submit()
+            ];
+        }
+        selection_watcher() {
+            return null;
+        }
+        disabled() {
+            return false;
+        }
+        value(val) {
+            if (val !== undefined)
+                return val;
+            return "";
+        }
+        value_changed(val) {
+            return this.value(val);
+        }
+        hint() {
+            return " ";
+        }
+        spellcheck() {
+            return false;
+        }
+        autocomplete_native() {
+            return "";
+        }
+        selection_end() {
+            return 0;
+        }
+        selection_start() {
+            return 0;
+        }
+        length_max() {
+            return Infinity;
+        }
+        type(val) {
+            if (val !== undefined)
+                return val;
+            return "text";
+        }
+        event_change(event) {
+            if (event !== undefined)
+                return event;
+            return null;
+        }
+        event_key_press(event) {
+            if (event !== undefined)
+                return event;
+            return null;
+        }
+        submit(event) {
+            if (event !== undefined)
+                return event;
+            return null;
+        }
+        Submit() {
+            const obj = new this.$.$mol_hotkey();
+            obj.key = () => ({
+                enter: (event) => this.submit(event)
+            });
+            return obj;
+        }
+    }
+    __decorate([
+        $.$mol_mem
+    ], $mol_string.prototype, "selection", null);
+    __decorate([
+        $.$mol_mem
+    ], $mol_string.prototype, "value", null);
+    __decorate([
+        $.$mol_mem
+    ], $mol_string.prototype, "type", null);
+    __decorate([
+        $.$mol_mem
+    ], $mol_string.prototype, "event_change", null);
+    __decorate([
+        $.$mol_mem
+    ], $mol_string.prototype, "event_key_press", null);
+    __decorate([
+        $.$mol_mem
+    ], $mol_string.prototype, "submit", null);
+    __decorate([
+        $.$mol_mem
+    ], $mol_string.prototype, "Submit", null);
+    $.$mol_string = $mol_string;
+})($ || ($ = {}));
+//string.view.tree.js.map
+;
+"use strict";
+var $;
+(function ($) {
+    $.$mol_style_attach("mol/string/string.view.css", "[mol_string] {\n\tbox-sizing: border-box;\n\toutline-offset: 0;\n\tborder: none;\n\tborder-radius: var(--mol_gap_round);\n\twhite-space: nowrap;\n\toverflow: hidden;\n\ttext-overflow: ellipsis;\n\tpadding: var(--mol_gap_text);\n\ttext-align: left;\n\tposition: relative;\n\tz-index: 0;\n\tfont: inherit;\n\tflex: 1 1 auto;\n\tbackground: var(--mol_theme_hover);\n\tmin-width: 0;\n\tcolor: var(--mol_theme_control);\n}\n\n[mol_string]:disabled {\n\tbackground-color: transparent;\n\tcolor: var(--mol_theme_text);\n}\n\n[mol_string]:placeholder-shown {\n\tbackground: var(--mol_theme_field);\n\tbox-shadow: inset 0 0 0 1px var(--mol_theme_line);\n}\n\n[mol_string]:focus {\n\toutline: none;\n\tz-index: 1;\n\tcolor: var(--mol_theme_text);\n\tbackground: var(--mol_theme_field);\n\tbox-shadow: inset 0 0 0 1px var(--mol_theme_focus);\n}\n\n[mol_string]:not(:placeholder-shown):not(:focus):enabled:hover {\n\tbackground: var(--mol_theme_hover);\n}\n\n[mol_string]::-ms-clear {\n\tdisplay: none;\n}\n");
+})($ || ($ = {}));
+//string.view.css.js.map
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_string extends $.$mol_string {
+            event_change(next) {
+                if (!next)
+                    return;
+                this.value(next.target.value);
+                this.selection_change(next);
+            }
+            disabled() {
+                return !this.enabled();
+            }
+            autocomplete_native() {
+                return this.autocomplete() ? 'on' : 'off';
+            }
+            selection_watcher() {
+                return new $.$mol_dom_listener(this.$.$mol_dom_context.document, 'selectionchange', event => this.selection_change(event));
+            }
+            selection_change(event) {
+                const el = this.dom_node();
+                this.selection([
+                    el.selectionStart,
+                    el.selectionEnd,
+                ]);
+            }
+            selection_start() {
+                return this.selection()[0];
+            }
+            selection_end() {
+                return this.selection()[1];
+            }
+        }
+        __decorate([
+            $.$mol_mem
+        ], $mol_string.prototype, "selection_watcher", null);
+        $$.$mol_string = $mol_string;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//string.view.js.map
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_textarea extends $.$mol_view {
         attr() {
             return {
@@ -5783,8 +5783,7 @@ var $;
             return [];
         }
         Edit() {
-            const obj = new this.$.$mol_string();
-            obj.dom_name = () => "textarea";
+            const obj = new this.$.$mol_textarea_edit();
             obj.value = (val) => this.value(val);
             obj.hint = () => this.hint();
             obj.enabled = () => this.enabled();
@@ -5830,6 +5829,18 @@ var $;
         $.$mol_mem
     ], $mol_textarea.prototype, "View", null);
     $.$mol_textarea = $mol_textarea;
+    class $mol_textarea_edit extends $.$mol_string {
+        dom_name() {
+            return "textarea";
+        }
+        field() {
+            return {
+                ...super.field(),
+                scrollTop: 0
+            };
+        }
+    }
+    $.$mol_textarea_edit = $mol_textarea_edit;
 })($ || ($ = {}));
 //textarea.view.tree.js.map
 ;
@@ -5874,6 +5885,54 @@ var $;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
 //textarea.view.js.map
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_labeler extends $.$mol_list {
+        rows() {
+            return [
+                this.Label(),
+                this.Content()
+            ];
+        }
+        label() {
+            return [
+                this.title()
+            ];
+        }
+        Label() {
+            const obj = new this.$.$mol_view();
+            obj.minimal_height = () => 16;
+            obj.sub = () => this.label();
+            return obj;
+        }
+        content() {
+            return [];
+        }
+        Content() {
+            const obj = new this.$.$mol_view();
+            obj.minimal_height = () => 24;
+            obj.sub = () => this.content();
+            return obj;
+        }
+    }
+    __decorate([
+        $.$mol_mem
+    ], $mol_labeler.prototype, "Label", null);
+    __decorate([
+        $.$mol_mem
+    ], $mol_labeler.prototype, "Content", null);
+    $.$mol_labeler = $mol_labeler;
+})($ || ($ = {}));
+//labeler.view.tree.js.map
+;
+"use strict";
+var $;
+(function ($) {
+    $.$mol_style_attach("mol/labeler/labeler.view.css", "[mol_labeler] {\n\tdisplay: flex;\n\tflex-direction: column;\n\talign-items: stretch;\n\tcursor: inherit;\n}\n\n[mol_labeler_label] {\n\tcolor: var(--mol_theme_shade);\n\tline-height: 1rem;\n\tz-index: 1;\n}\n\n[mol_labeler_content] {\n\tdisplay: flex;\n}\n");
+})($ || ($ = {}));
+//labeler.view.css.js.map
 ;
 "use strict";
 var $;
@@ -6867,10 +6926,16 @@ var $;
         prefix_hint() {
             return this.$.$mol_locale.text('$hyoo_js_perf_prefix_hint');
         }
-        Prefix() {
+        Prefix_code() {
             const obj = new this.$.$mol_textarea();
             obj.value = (val) => this.prefix(val);
             obj.hint = () => this.prefix_hint();
+            return obj;
+        }
+        Prefix() {
+            const obj = new this.$.$mol_labeler();
+            obj.title = () => this.$.$mol_locale.text('$hyoo_js_perf_Prefix_title');
+            obj.Content = () => this.Prefix_code();
             return obj;
         }
         postfix(val) {
@@ -6881,10 +6946,16 @@ var $;
         postfix_hint() {
             return this.$.$mol_locale.text('$hyoo_js_perf_postfix_hint');
         }
-        Postfix() {
+        Postfix_code() {
             const obj = new this.$.$mol_textarea();
             obj.value = (val) => this.postfix(val);
             obj.hint = () => this.postfix_hint();
+            return obj;
+        }
+        Postfix() {
+            const obj = new this.$.$mol_labeler();
+            obj.title = () => this.$.$mol_locale.text('$hyoo_js_perf_Postfix_title');
+            obj.Content = () => this.Postfix_code();
             return obj;
         }
         Common() {
@@ -7013,10 +7084,16 @@ var $;
     ], $hyoo_js_perf.prototype, "prefix", null);
     __decorate([
         $.$mol_mem
+    ], $hyoo_js_perf.prototype, "Prefix_code", null);
+    __decorate([
+        $.$mol_mem
     ], $hyoo_js_perf.prototype, "Prefix", null);
     __decorate([
         $.$mol_mem
     ], $hyoo_js_perf.prototype, "postfix", null);
+    __decorate([
+        $.$mol_mem
+    ], $hyoo_js_perf.prototype, "Postfix_code", null);
     __decorate([
         $.$mol_mem
     ], $hyoo_js_perf.prototype, "Postfix", null);
@@ -7446,7 +7523,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $.$mol_style_attach("hyoo/js/perf/perf.view.css", "[hyoo_js_perf_body] {\n\tdisplay: flex;\n\tflex-direction: row;\n\tjustify-content: space-between;\n\tpadding: 0;\n}\n\n[hyoo_js_perf_common] {\n\tflex-direction: column;\n\tflex: 1000 0 auto;\n\tmin-width: 20rem;\n\tdisplay: block;\n\tbox-shadow: 0 0 0 1px var(--mol_theme_line);\n}\n\n[hyoo_js_perf_prefix] {\n\tflex: 1 0 auto;\n\tmargin: .75rem;\n}\n\n[hyoo_js_perf_postfix] {\n\tflex: 1 0 auto;\n\tmargin: .75rem;\n}\n\n[hyoo_js_perf_cases_pane] {\n\tflex: 1000 0 auto;\n\tmin-width: 46rem;\n}\n\n[hyoo_js_perf_cases] {\n\tdisplay: table;\n\tborder-spacing: .75rem;\n}\n\n[hyoo_js_perf_case] {\n\tdisplay: table-row;\n\tflex: 0 1 auto;\n}\n\n[hyoo_js_perf_case_prefix] ,\n[hyoo_js_perf_case_source] {\n\tdisplay: table-cell;\n\tmin-width: 14rem;\n}\n\n[hyoo_js_perf_case_result_rows] {\n\tdisplay: table-cell;\n\twidth: 27rem;\n}\n\n[hyoo_js_perf_case_result] {\n\twidth: 26rem;\n\tpadding: .5rem .75rem;\n\tflex-direction: column;\n}\n\n[hyoo_js_perf_case_result] > * {\n\tdisplay: flex;\n}\n\n[hyoo_js_perf_case_result_stats] {\n\tdisplay: flex;\n\twhite-space: nowrap;\n}\n\n[hyoo_js_perf_case_result_stats] > * {\n\tword-break: keep-all;\n\twhite-space: nowrap;\n\tmargin: 0 .5rem;\n}\n[hyoo_js_perf_case_result_frequency] {\n\tfont-weight: bolder;\n}\n[hyoo_js_perf_case_result_memory_per_iteration] {\n\tfont-weight: bolder;\n}\n\n[hyoo_js_perf_case_result_portion] {\n\tflex: none;\n\twidth: auto;\n}\n\n[hyoo_js_perf_case_result_error] {\n\tpadding: .5rem 1rem;;\n\tbackground: var(--mol_skin_bad);\n\tcolor: var(--mol_skin_bad_text);\n}\n\n[hyoo_js_perf_case_result]:nth-child(1) [hyoo_js_perf_case_result_portion_indicator] {\n\tbackground-color: royalblue;\n}\n\n[hyoo_js_perf_case_result]:nth-child(2) [hyoo_js_perf_case_result_portion_indicator] {\n\tbackground-color: orange;\n}\n");
+    $.$mol_style_attach("hyoo/js/perf/perf.view.css", "[hyoo_js_perf_body] {\n\tdisplay: flex;\n\tflex-direction: row;\n\tjustify-content: space-between;\n\tpadding: 0;\n}\n\n[hyoo_js_perf_common] {\n\tflex-direction: column;\n\tflex: 1000 0 auto;\n\tmin-width: 20rem;\n\tbox-shadow: 0 0 0 1px var(--mol_theme_line);\n\tpadding: var(--mol_gap_block);\n}\n\n[hyoo_js_perf_prefix] {\n\tflex: 1 0 auto;\n\tmargin: .75rem;\n}\n\n[hyoo_js_perf_postfix] {\n\tflex: 1 0 auto;\n\tmargin: .75rem;\n}\n\n[hyoo_js_perf_cases_pane] {\n\tflex: 1000 0 auto;\n\tmin-width: 46rem;\n}\n\n[hyoo_js_perf_cases] {\n\tdisplay: table;\n\tborder-spacing: .75rem;\n}\n\n[hyoo_js_perf_case] {\n\tdisplay: table-row;\n\tflex: 0 1 auto;\n}\n\n[hyoo_js_perf_case_prefix] ,\n[hyoo_js_perf_case_source] {\n\tdisplay: table-cell;\n\tmin-width: 14rem;\n}\n\n[hyoo_js_perf_case_result_rows] {\n\tdisplay: table-cell;\n\twidth: 27rem;\n}\n\n[hyoo_js_perf_case_result] {\n\twidth: 26rem;\n\tpadding: .5rem .75rem;\n\tflex-direction: column;\n}\n\n[hyoo_js_perf_case_result] > * {\n\tdisplay: flex;\n}\n\n[hyoo_js_perf_case_result_stats] {\n\tdisplay: flex;\n\twhite-space: nowrap;\n}\n\n[hyoo_js_perf_case_result_stats] > * {\n\tword-break: keep-all;\n\twhite-space: nowrap;\n\tmargin: 0 .5rem;\n}\n[hyoo_js_perf_case_result_frequency] {\n\tfont-weight: bolder;\n}\n[hyoo_js_perf_case_result_memory_per_iteration] {\n\tfont-weight: bolder;\n}\n\n[hyoo_js_perf_case_result_portion] {\n\tflex: none;\n\twidth: auto;\n}\n\n[hyoo_js_perf_case_result_error] {\n\tpadding: .5rem 1rem;;\n\tbackground: var(--mol_skin_bad);\n\tcolor: var(--mol_skin_bad_text);\n}\n\n[hyoo_js_perf_case_result]:nth-child(1) [hyoo_js_perf_case_result_portion_indicator] {\n\tbackground-color: royalblue;\n}\n\n[hyoo_js_perf_case_result]:nth-child(2) [hyoo_js_perf_case_result_portion_indicator] {\n\tbackground-color: orange;\n}\n");
 })($ || ($ = {}));
 //perf.view.css.js.map
 ;
