@@ -7,12 +7,31 @@ $hyoo_js_perf $mol_page
 			key * enter?event <=> run?event null
 	Body $mol_book2 pages /
 		<= Common $mol_scroll sub /
-			<= Prefix $mol_textarea
-				value?val <=> prefix?val \
-				hint <= prefix_hint @ \Setup code for all cases. Use {#} to insert iterations count. Use  $mol_import.script( uri ) to load external.
-			<= Postfix $mol_textarea
-				value?val <=> postfix?val \
-				hint <= postfix_hint @ \Teardown code for all cases. Use {#} to insert iterations count. Use $mol_assert_like( actual, expected ) to check behaviour.
+			<= Prefix $mol_labeler
+				title @ \Common Setup
+				Content <= Prefix_code $mol_textarea
+					value?val <=> prefix?val \
+			<= Postfix $mol_labeler
+				title @ \Common Teardown
+				Content <= Postfix_code $mol_textarea
+					value?val <=> postfix?val \
+			<= Hint $mol_text_code text \
+				\{#} // iterations count/number
+				\
+				\// loads JS script
+				\$mol_import.script( uri )
+				\
+				\// loads ESM module
+				\$mol_import.module( uri )
+				\
+				\// checks for truth
+				\$mol_assert_ok( actual )
+				\
+				\// checks for identity
+				\$mol_assert_equal( actual, expected )
+				\
+				\// checks for equivalence
+				\$mol_assert_like( actual, expected )
 		<= Cases_pane $mol_scroll sub /
 			<= Cases $mol_view sub <= cases /
 	Case!index $hyoo_js_perf_case
@@ -22,7 +41,6 @@ $hyoo_js_perf $mol_page
 	tools /
 		<= About $mol_link
 			uri \https://habhub.hyoo.ru/#author=nin-jin/repo=HabHub/article=42
-			hint @ \About
 			sub /
 				<= About_icon $mol_icon_help_circle_outline
 		<= Lights $mol_lights_toggle
@@ -40,18 +58,21 @@ $hyoo_js_perf $mol_page
 			sub /
 				<= New_icon $mol_icon_plus
 		<= Run $mol_button_major
-			title <= run_title @ \Run
+			hint @ \Run
 			click?event <=> run?event null
+			sub / <= Run_icon $mol_icon_play
 
 $hyoo_js_perf_case $mol_view
 	results /
 	sub <= columns /
-		<= Prefix $mol_textarea
-			value?val <=> prefix?val \
-			hint <= prefix_hint @ \Case setup code. Use {#} to insert iterations count.
-		<= Source $mol_textarea
-			value?val <=> source?val \
-			hint <= source_hint @ \Case measured code. Use {#} to insert iteration number.
+		<= Prefix $mol_labeler
+			title @ \Setup
+			Content <= Prefix_code $mol_textarea
+				value?val <=> prefix?val \
+		<= Source $mol_labeler
+			title @ \Measure
+			Content <= Source_code $mol_textarea
+				value?val <=> source?val \
 		<= Result_rows $mol_list rows <= result_rows /
 	Result!level $hyoo_js_perf_case_result
 		title <= result_title!level \
