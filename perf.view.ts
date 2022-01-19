@@ -1,7 +1,5 @@
 namespace $.$$ {
 
-	const wait_rest = $mol_fiber_sync( ()=> new Promise( done => new $mol_after_work( 16 , ()=> done( null ) ) ) )
-
 	export class $hyoo_js_perf_stats extends $mol_object2 {
 		
 		elapsed! : number
@@ -142,10 +140,10 @@ namespace $.$$ {
 			return Math.random().toString(16).substring(2)
 		}
 
-		@ $mol_fiber.method
+		@ $mol_action
 		measure_step( count : number , prefix : string , inner : string , postfix : string ) {
 
-			wait_rest()
+			this.$.$mol_wait_rest()
 
 			const token = this.token()
 
@@ -178,7 +176,7 @@ namespace $.$$ {
 
 		}
 
-		@ $mol_fiber.method
+		@ $mol_action
 		measure_precise( prefix : string , inner : string , postfix : string ) {
 
 			const one = this.measure_step( 1 , prefix , inner , postfix )
@@ -208,7 +206,7 @@ namespace $.$$ {
 
 		}
 
-		@ $mol_fiber.method
+		@ $mol_action
 		measure_safe( prefix : string , inner : string , postfix : string ) {
 
 			try {
@@ -217,7 +215,7 @@ namespace $.$$ {
 
 			} catch( error: any ) {
 
-				if( 'then' in error ) $mol_fail_hidden( error )
+				if( error instanceof Promise ) $mol_fail_hidden( error )
 
 				console.error( error )
 
@@ -231,7 +229,7 @@ namespace $.$$ {
 			
 		}
 
-		@ $mol_fiber.method
+		@ $mol_action
 		run() {
 
 			for( const [ index , inner ] of this.sources().entries() ) {
