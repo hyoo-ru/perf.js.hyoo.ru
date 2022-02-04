@@ -122,7 +122,6 @@
     "$mol_book2",
     "$mol_book2_book2.view.tree",
     "$mol_book2_-view.tree_book2.view.tree.ts",
-    "$mol_after_work",
     "$mol_theme_auto",
     "$mol_theme_auto_-view.tree_auto.view.tree.ts",
     "$mol_theme_auto_auto.view.tree",
@@ -255,6 +254,7 @@
     "$mol_action",
     "$mol_wait_rest",
     "$mol_wait",
+    "$mol_after_work",
     "$mol_si_short",
     "$mol_si"
   ],
