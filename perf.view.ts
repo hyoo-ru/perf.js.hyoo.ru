@@ -217,7 +217,7 @@ namespace $.$$ {
 
 				if( error instanceof Promise ) $mol_fail_hidden( error )
 
-				console.error( error )
+				$mol_fail_log( error )
 
 				return $hyoo_js_perf_stats.create( stats => {
 					stats.error = error.message

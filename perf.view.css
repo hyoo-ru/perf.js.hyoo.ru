@@ -77,18 +77,14 @@
 	flex-direction: column;
 }
 
-[hyoo_js_perf_case_result_frequency] {
-	font-weight: bolder;
-}
+[hyoo_js_perf_case_result_frequency],
 [hyoo_js_perf_case_result_memory_per_iteration] {
-	font-weight: bolder;
+	text-shadow: 0 0;
 }
 
 [hyoo_js_perf_case_result_error] {
-	padding: .25rem .75rem;
-	background: var(--mol_skin_bad);
-	color: var(--mol_skin_bad_text);
-	border-radius: var(--mol_gap_round);
+	color: crimson;
+	text-shadow: 0 0;
 }
 
 [hyoo_js_perf_case_result_portion] {
