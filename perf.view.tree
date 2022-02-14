@@ -15,23 +15,27 @@ $hyoo_js_perf $mol_page
 				title @ \Common Teardown
 				Content <= Postfix_code $mol_textarea
 					value?val <=> postfix?val \
-			<= Hint $mol_text_code text \
-				\{#} // iterations count/number
+			<= Hint $mol_text text \
+				\# Placeholders
 				\
-				\// loads JS script
-				\$mol_import.script( uri )
+				\`{#}` // iterations count/number
 				\
-				\// loads ESM module
-				\$mol_import.module( uri )
+				\# Load JS or ESM
 				\
-				\// checks for truth
-				\$mol_assert_ok( actual )
+				\	const { some } = $mol_import.script( uri )
+				\	const { some } = $mol_import.module( uri ).default
 				\
-				\// checks for identity
-				\$mol_assert_equal( actual, expected )
+				\# Asserts
 				\
-				\// checks for equivalence
-				\$mol_assert_like( actual, expected )
+				\	$mol_assert_ok( 'foo' )
+				\	$mol_assert_equal( 777, 777 )
+				\	$mol_assert_like( [777], [777] )
+				\
+				\# Measure memory
+				\
+				\Call Chrome with:
+				\`--js-flags="--expose-gc"`
+				\`--enable-precise-memory-info`
 		<= Cases_pane $mol_scroll sub /
 			<= Cases $mol_view sub <= cases /
 	Case!index $hyoo_js_perf_case
@@ -85,16 +89,16 @@ $hyoo_js_perf_case_result $mol_view
 			<= title \
 			<= Frequency $mol_view sub / <= frequency \
 			\ ≈ 
-			<= Time $mol_view sub / <= time \
+			<= Time $mol_view sub / <= time_total \
 			\ ⋅ 
 			<= Iterations $mol_view sub / <= iterations \
 			\ ⋅
 			<= Memory_per_iteration $mol_view
-				attr * title \Required: --js-flags="--expose-gc" --enable-precise-memory-info
 				sub / <= memory_per_iteration \
 			\ = 
 			<= Memory $mol_view
-				attr * title \Required: --js-flags="--expose-gc" --enable-precise-memory-info
-				sub / <= memory \
-		<= Portion $mol_portion portion <= portion 0
+				sub / <= memory_total \
+		<= Portion $mol_view sub /
+			<= Frequency_portion $mol_portion portion <= frequency_portion 0
+			<= Mmory_ortion $mol_portion portion <= memory_portion 0
 		<= Error $mol_view sub / <= error \

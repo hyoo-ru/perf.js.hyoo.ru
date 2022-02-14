@@ -126,8 +126,8 @@ namespace $.$$ {
 			
 			return measure.map( ( stats )=> $hyoo_js_perf_stats.create( stats2 => {
 				stats2.frequency_portion = stats.frequency / this.max_frequency()
-				stats2.memory = stats.memory
 				stats2.memory_portion = stats.memory_per_iteration / this.max_memory()
+				stats2.memory = stats.memory
 				stats2.elapsed = stats.elapsed
 				stats2.iterations = stats.iterations
 				stats2.error = stats.error
@@ -297,7 +297,7 @@ namespace $.$$ {
 
 		sub() {
 			if( !this.result() ) return []
-			return this.result().error ? [ this.Error() ] : [ this.Stats() , this.Portion() ]
+			return this.result().error ? [ this.Error() ] : [ this.Stats(), this.Portion() ]
 		}
 
 		error() {
@@ -312,11 +312,11 @@ namespace $.$$ {
 			return $mol_si_short( this.result().frequency, 'Hz' )
 		}
 
-		time() {
+		time_total() {
 			return $mol_si_short( this.result().time / 1000, 's' )
 		}
 
-		memory() {
+		memory_total() {
 			return $mol_si_short( this.result().memory, 'B' )
 		}
 
@@ -324,8 +324,12 @@ namespace $.$$ {
 			return $mol_si_short( this.result().memory_per_iteration, 'B' )
 		}
 
-		portion() {
+		frequency_portion() {
 			return this.result().frequency_portion
+		}
+
+		memory_portion() {
+			return this.result().memory_portion
 		}
 
 	}
