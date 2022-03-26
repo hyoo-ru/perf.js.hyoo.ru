@@ -8270,9 +8270,7 @@ var $;
                     return this.$.$mol_state_arg.value('prefix') || this.$.$mol_state_arg.value('common') || '';
                 }
                 else {
-                    this.$.$mol_state_arg.value('prefix', next);
-                    this.$.$mol_state_arg.value('common', null);
-                    return next;
+                    return this.$.$mol_state_arg.value('prefix', next) ?? '';
                 }
             }
             postfix(next) {
