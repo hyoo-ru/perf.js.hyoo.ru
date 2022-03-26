@@ -614,8 +614,8 @@ var $;
         promote() {
             $mol_wire_auto()?.track_next(this);
         }
-        up() { }
-        down() { }
+        refresh() { }
+        commit() { }
         emit(quant = $mol_wire_cursor.stale) {
             for (let i = this.sub_from; i < this.length; i += 2) {
                 ;
@@ -817,7 +817,7 @@ var $;
             }
             for (let cursor = this.pub_from; cursor < this.cursor; cursor += 2) {
                 const pub = this[cursor];
-                pub.up();
+                pub.refresh();
             }
             this.cursor = $mol_wire_cursor.fresh;
         }
@@ -859,6 +859,16 @@ var $;
                 this.pop();
             }
             this.sub_from = this.cursor;
+        }
+        commit() {
+            this.commit_pubs();
+        }
+        commit_pubs() {
+            const limit = this.cursor < 0 ? this.sub_from : this.cursor;
+            for (let cursor = this.pub_from; cursor < limit; cursor += 2) {
+                const pub = this[cursor];
+                pub?.commit();
+            }
         }
         absorb(quant = $mol_wire_cursor.stale) {
             if (this.cursor === $mol_wire_cursor.final)
@@ -1069,7 +1079,7 @@ var $;
             while (this.planning.length) {
                 const fibers = this.planning.splice(0, this.planning.length);
                 for (const fiber of fibers) {
-                    fiber.up();
+                    fiber.refresh();
                 }
             }
             while (this.reaping.length) {
@@ -1085,14 +1095,14 @@ var $;
         get args() {
             return this.slice(0, this.pub_from);
         }
-        get result() {
+        result() {
             if (this.cache instanceof Promise)
                 return;
             if (this.cache instanceof Error)
                 return;
             return this.cache;
         }
-        get persist() {
+        persistent() {
             const id = this[Symbol.toStringTag];
             return id[id.length - 2] !== '#';
         }
@@ -1114,7 +1124,7 @@ var $;
             if ($mol_owning_check(this, prev)) {
                 prev.destructor();
             }
-            if (this.persist) {
+            if (this.persistent()) {
                 if (this.pub_from === 0) {
                     ;
                     (this.host ?? this.task)[this.field()] = null;
@@ -1157,12 +1167,16 @@ var $;
             else
                 super.emit(quant);
         }
-        down() {
-            if (this.persist)
+        commit() {
+            if (this.persistent())
                 return;
+            super.commit();
+            if (this.host instanceof $mol_wire_fiber) {
+                this.host.put(this.cache);
+            }
             this.destructor();
         }
-        up() {
+        refresh() {
             if (this.cursor === $mol_wire_cursor.fresh)
                 return;
             if (this.cursor === $mol_wire_cursor.final)
@@ -1170,7 +1184,7 @@ var $;
             check: if (this.cursor === $mol_wire_cursor.doubt) {
                 for (let i = this.pub_from; i < this.sub_from; i += 2) {
                     ;
-                    this[i]?.up();
+                    this[i]?.refresh();
                     if (this.cursor !== $mol_wire_cursor.doubt)
                         break check;
                 }
@@ -1218,7 +1232,7 @@ var $;
                     prev.destructor();
                 }
                 this.cache = next;
-                if (this.persist && $mol_owning_catch(this, next)) {
+                if (this.persistent() && $mol_owning_catch(this, next)) {
                     try {
                         next[Symbol.toStringTag] = this[Symbol.toStringTag];
                     }
@@ -1233,28 +1247,25 @@ var $;
             this.cursor = $mol_wire_cursor.fresh;
             if (next instanceof Promise)
                 return next;
-            if (this.persist) {
-                for (let cursor = this.pub_from; cursor < this.sub_from; cursor += 2) {
-                    const pub = this[cursor];
-                    pub?.down();
-                }
+            if (this.persistent()) {
+                this.commit_pubs();
             }
             else {
-                this.cursor = this.pub_from;
-                this.track_cut();
-                this.cursor = $mol_wire_cursor.fresh;
+                if (this.sub_empty) {
+                    this.commit();
+                }
             }
             return next;
         }
         recall(...args) {
-            return this.put(this.task.call(this.host, ...args));
+            return this.task.call(this.host, ...args);
         }
         sync() {
             if (!$mol_wire_fiber.warm) {
-                return this.result;
+                return this.result();
             }
             this.promote();
-            this.up();
+            this.refresh();
             if (this.cache instanceof Error) {
                 return $mol_fail_hidden(this.cache);
             }
@@ -1265,7 +1276,7 @@ var $;
         }
         async async() {
             while (true) {
-                this.up();
+                this.refresh();
                 if (this.cache instanceof Error) {
                     $mol_fail_hidden(this.cache);
                 }
@@ -3031,7 +3042,7 @@ var $;
                 return exists;
             if (next)
                 this.parent().exists(true);
-            this.ensure(next);
+            this.ensure();
             this.reset();
             return next;
         }
@@ -3311,7 +3322,7 @@ var $;
             }
             return this.constructor.absolute(res);
         }
-        ensure(next) {
+        ensure() {
             throw new Error('$mol_file_web.ensure() not implemented');
         }
         sub() {
@@ -5162,7 +5173,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("mol/string/string.view.css", "[mol_string] {\n\tbox-sizing: border-box;\n\toutline-offset: 0;\n\tborder: none;\n\tborder-radius: var(--mol_gap_round);\n\twhite-space: nowrap;\n\toverflow: hidden;\n\ttext-overflow: ellipsis;\n\tpadding: var(--mol_gap_text);\n\ttext-align: left;\n\tposition: relative;\n\tz-index: 0;\n\tfont: inherit;\n\tflex: 1 1 auto;\n\tbackground: var(--mol_theme_hover);\n\tmin-width: 0;\n\tcolor: var(--mol_theme_control);\n\tbox-shadow: inset 0 0 0 1px var(--mol_theme_line);\n}\n\n[mol_string]:disabled {\n\tbackground-color: transparent;\n\tcolor: var(--mol_theme_text);\n}\n\n[mol_string]:placeholder-shown {\n\tbackground: var(--mol_theme_field);\n}\n\n[mol_string]:focus {\n\toutline: none;\n\tz-index: 1;\n\tcolor: var(--mol_theme_text);\n\tbackground: var(--mol_theme_field);\n\tbox-shadow: inset 0 0 0 1px var(--mol_theme_focus);\n}\n\n[mol_string]:not(:placeholder-shown):not(:focus):enabled:hover {\n\tbackground: var(--mol_theme_hover);\n}\n\n[mol_string]::-ms-clear {\n\tdisplay: none;\n}\n");
+    $mol_style_attach("mol/string/string.view.css", "[mol_string] {\n\tbox-sizing: border-box;\n\toutline-offset: 0;\n\tborder: none;\n\tborder-radius: var(--mol_gap_round);\n\twhite-space: nowrap;\n\toverflow: hidden;\n\ttext-overflow: ellipsis;\n\tpadding: var(--mol_gap_text);\n\ttext-align: left;\n\tposition: relative;\n\tz-index: 0;\n\tfont: inherit;\n\tflex: 1 1 auto;\n\tbackground: var(--mol_theme_field);\n\tmin-width: 0;\n\tcolor: var(--mol_theme_control);\n\tbox-shadow: inset 0 0 0 1px var(--mol_theme_line);\n}\n\n[mol_string]:disabled {\n\tbackground-color: transparent;\n\tcolor: var(--mol_theme_text);\n}\n\n[mol_string]:focus {\n\toutline: none;\n\tz-index: 1;\n\tcolor: var(--mol_theme_text);\n\tbox-shadow: inset 0 0 0 1px var(--mol_theme_focus);\n}\n\n[mol_string]::-ms-clear {\n\tdisplay: none;\n}\n");
 })($ || ($ = {}));
 //mol/string/-css/string.view.css.ts
 ;
