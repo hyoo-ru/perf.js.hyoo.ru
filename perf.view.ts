@@ -32,7 +32,9 @@ namespace $.$$ {
 			if( next === undefined ) {
 				return this.$.$mol_state_arg.value( 'prefix' ) || this.$.$mol_state_arg.value( 'common' ) || ''
 			} else {
-				return this.$.$mol_state_arg.value( 'prefix' , next ) ?? ''
+				this.$.$mol_state_arg.value( 'prefix' , next )
+				this.$.$mol_state_arg.value( 'common' , null )
+				return next
 			}
 		}
 
@@ -220,6 +222,7 @@ namespace $.$$ {
 				return $hyoo_js_perf_stats.create( stats => {
 					stats.error = error.message
 					stats.elapsed = 0
+					stats.memory = 0
 					stats.iterations = Number.NEGATIVE_INFINITY
 				} )
 				
