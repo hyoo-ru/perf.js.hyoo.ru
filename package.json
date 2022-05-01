@@ -66,7 +66,6 @@
     "$mol_view_view",
     "$mol_view",
     "$mol_theme",
-    "$mol_skin",
     "$mol_window",
     "$mol_object",
     "$mol_fail_log",
