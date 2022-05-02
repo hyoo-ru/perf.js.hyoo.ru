@@ -38,6 +38,10 @@ $hyoo_js_perf $mol_page
 				\`--enable-precise-memory-info`
 		<= Cases_pane $mol_scroll sub /
 			<= Cases $mol_view sub <= cases /
+			<= Examples $mol_row sub /
+				<= Example1 $mol_link
+					uri \#!sources=%5B%22res%20%3D%20window.location.href%22%2C%22res%20%3D%20document.location.href%22%2C%22res%20%3D%20location.href%22%5D/prefix=let%20res/postfix=%24mol_assert_like%28%20res%2C%20location.href%20%29/optimized=true
+					title @ \Example benchmark
 	Case!index $hyoo_js_perf_case
 		prefix?val <=> case_prefix!index?val \
 		source?val <=> source!index?val \
