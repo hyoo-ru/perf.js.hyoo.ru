@@ -153,6 +153,7 @@
     "$mol_text_code_token",
     "$mol_string",
     "$mol_labeler",
+    "$mol_row",
     "$mol_icon_help_circle_outline",
     "$mol_icon_help_circle",
     "$mol_icon_help",

@@ -1916,7 +1916,7 @@ declare namespace $ {
     class $mol_grid extends $mol_view {
         row_height(): number;
         row_ids(): readonly string[][];
-        row_id(index: any): any;
+        row_id(id: any): any;
         col_ids(): readonly any[];
         records(): {};
         record(id: any): any;
@@ -2248,7 +2248,7 @@ declare namespace $ {
         length_max(): number;
         selection(val?: any): readonly number[];
         Edit(): $mol_textarea_edit;
-        row_numb(index: any): number;
+        row_numb(id: any): number;
         highlight(): string;
         View(): $$.$mol_text_code;
     }
@@ -2287,6 +2287,14 @@ declare namespace $ {
         Label(): $mol_view;
         content(): readonly any[];
         Content(): $mol_view;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_row extends $mol_view {
     }
 }
 
@@ -2417,7 +2425,7 @@ declare namespace $ {
         title(): string;
         plugins(): readonly any[];
         Body(): $$.$mol_book2;
-        Case(index: any): $$.$hyoo_js_perf_case;
+        Case(id: any): $$.$hyoo_js_perf_case;
         tools(): readonly any[];
         Theme(): $$.$mol_theme_auto;
         run(event?: any): any;
@@ -2432,10 +2440,12 @@ declare namespace $ {
         Common(): $$.$mol_scroll;
         cases(): readonly any[];
         Cases(): $mol_view;
+        Example1(): $$.$mol_link;
+        Examples(): $mol_row;
         Cases_pane(): $$.$mol_scroll;
-        case_prefix(index: any, val?: any): string;
-        source(index: any, val?: any): string;
-        results(index: any, val?: any): readonly any[];
+        case_prefix(id: any, val?: any): string;
+        source(id: any, val?: any): string;
+        results(id: any, val?: any): readonly any[];
         About_icon(): $mol_icon_help_circle_outline;
         About(): $$.$mol_link;
         Lights(): $$.$mol_lights_toggle;
@@ -2453,7 +2463,7 @@ declare namespace $ {
     class $hyoo_js_perf_case extends $mol_view {
         results(): readonly any[];
         sub(): readonly any[];
-        Result(level: any): $$.$hyoo_js_perf_case_result;
+        Result(id: any): $$.$hyoo_js_perf_case_result;
         prefix(val?: any): string;
         Prefix_code(): $$.$mol_textarea;
         Prefix(): $mol_labeler;
@@ -2463,8 +2473,8 @@ declare namespace $ {
         result_rows(): readonly any[];
         Result_rows(): $$.$mol_list;
         columns(): readonly any[];
-        result_title(level: any): string;
-        result(level: any): $$.$hyoo_js_perf_stats;
+        result_title(id: any): string;
+        result(id: any): $$.$hyoo_js_perf_stats;
     }
     class $hyoo_js_perf_case_result extends $mol_view {
         result(): $$.$hyoo_js_perf_stats;
