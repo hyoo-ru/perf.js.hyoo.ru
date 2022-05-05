@@ -9,7 +9,6 @@
 	flex-direction: column;
 	flex: 1000 0 auto;
 	min-width: 20rem;
-	box-shadow: 0 0 0 1px var(--mol_theme_line);
 }
 
 [hyoo_js_perf_hint] {
