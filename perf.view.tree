@@ -10,12 +10,14 @@ $hyoo_js_perf $mol_page
 			<= Prefix $mol_labeler
 				title @ \Common Setup
 				Content <= Prefix_code $mol_textarea
+					enabled <= changable true
 					value?val <=> prefix?val \
 			<= Postfix $mol_labeler
 				title @ \Common Teardown
 				Content <= Postfix_code $mol_textarea
+					enabled <= changable true
 					value?val <=> postfix?val \
-			<= Hint $mol_text text \
+			<= Hint $mol_text text <= hint \
 				\# Placeholders
 				\
 				\`{#}` // iterations count/number
@@ -36,7 +38,7 @@ $hyoo_js_perf $mol_page
 				\Call Chrome with:
 				\`--js-flags="--expose-gc"`
 				\`--enable-precise-memory-info`
-		<= Cases_pane $mol_scroll sub /
+		<= Cases_pane $mol_scroll sub <= cases_pane_content /
 			<= Cases $mol_view sub <= cases /
 			<= Examples $mol_row sub /
 				<= Example1 $mol_link
@@ -46,6 +48,7 @@ $hyoo_js_perf $mol_page
 		prefix?val <=> case_prefix!index?val \
 		source?val <=> source!index?val \
 		results?val <=> results!index?val /
+		changable <= changable true
 	tools /
 		<= About $mol_link
 			uri \https://habhub.hyoo.ru/#author=nin-jin/repo=HabHub/article=42
@@ -76,10 +79,12 @@ $hyoo_js_perf_case $mol_view
 		<= Prefix $mol_labeler
 			title @ \Setup
 			Content <= Prefix_code $mol_textarea
+				enabled <= changable true
 				value?val <=> prefix?val \
 		<= Source $mol_labeler
 			title @ \Measure
 			Content <= Source_code $mol_textarea
+				enabled <= changable true
 				value?val <=> source?val \
 		<= Result_rows $mol_list rows <= result_rows /
 	Result!level $hyoo_js_perf_case_result
