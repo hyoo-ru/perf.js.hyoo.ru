@@ -2137,6 +2137,7 @@ declare namespace $ {
         uri(val?: any): string;
         mime(): string;
         title(val?: any): string;
+        Fallback(): $$.$mol_link;
     }
 }
 
@@ -2469,18 +2470,21 @@ declare namespace $ {
         Theme(): $$.$mol_theme_auto;
         run(event?: any): any;
         Hotkey(): $$.$mol_hotkey;
+        changable(): boolean;
         prefix(val?: any): string;
         Prefix_code(): $$.$mol_textarea;
         Prefix(): $mol_labeler;
         postfix(val?: any): string;
         Postfix_code(): $$.$mol_textarea;
         Postfix(): $mol_labeler;
+        hint(): string;
         Hint(): $$.$mol_text;
         Common(): $$.$mol_scroll;
         cases(): readonly any[];
         Cases(): $mol_view;
         Example1(): $$.$mol_link;
         Examples(): $mol_row;
+        cases_pane_content(): readonly any[];
         Cases_pane(): $$.$mol_scroll;
         case_prefix(id: any, val?: any): string;
         source(id: any, val?: any): string;
@@ -2503,6 +2507,7 @@ declare namespace $ {
         results(): readonly any[];
         sub(): readonly any[];
         Result(id: any): $$.$hyoo_js_perf_case_result;
+        changable(): boolean;
         prefix(val?: any): string;
         Prefix_code(): $$.$mol_textarea;
         Prefix(): $mol_labeler;
@@ -2622,6 +2627,7 @@ declare namespace $.$$ {
         permalink(): string;
         cases_count(): number;
         cases(): $hyoo_js_perf_case[];
+        cases_pane_content(): readonly any[];
         case_prefix(index: number, next?: string): string;
         source(index: number, next?: string): string;
         measures_for(index: number, next?: $hyoo_js_perf_stats[]): $hyoo_js_perf_stats[];
