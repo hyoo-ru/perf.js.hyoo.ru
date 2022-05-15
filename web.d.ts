@@ -2443,6 +2443,8 @@ declare namespace $.$$ {
 declare namespace $ {
     class $hyoo_js_perf extends $mol_page {
         title(): string;
+        prefixes(): readonly string[];
+        sources(): readonly string[];
         plugins(): readonly any[];
         Body(): $$.$mol_book2;
         Case(id: any): $$.$hyoo_js_perf_case;

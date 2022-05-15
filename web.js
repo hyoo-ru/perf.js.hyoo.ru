@@ -7662,6 +7662,12 @@ var $;
         title() {
             return this.$.$mol_locale.text('$hyoo_js_perf_title');
         }
+        prefixes() {
+            return [];
+        }
+        sources() {
+            return [];
+        }
         plugins() {
             return [
                 this.Theme(),

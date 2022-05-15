@@ -476,6 +476,8 @@ $mol_portion $mol_view
 
 $hyoo_js_perf $mol_page
 	title @ \JS Performance
+	prefixes /string
+	sources /string
 	plugins /
 		<= Theme $mol_theme_auto
 		<= Hotkey $mol_hotkey
