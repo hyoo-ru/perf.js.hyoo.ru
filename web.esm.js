@@ -8618,6 +8618,8 @@ var $;
                 const postfix = this.postfix();
                 const token = this.token();
                 for (const [index, inner] of this.sources().entries()) {
+                    if (!inner.trim())
+                        continue;
                     const cold = this.measure_safe([
                         '/*cold*/',
                         prefix,
