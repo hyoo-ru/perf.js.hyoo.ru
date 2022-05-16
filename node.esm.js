@@ -7688,22 +7688,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $mol_row extends $mol_view {
-    }
-    $.$mol_row = $mol_row;
-})($ || ($ = {}));
-//mol/row/-view.tree/row.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("mol/row/row.view.css", "[mol_row] {\n\tdisplay: flex;\n\tflex-wrap: wrap;\n\talign-items: flex-start;\n\talign-content: flex-start;\n\tjustify-content: flex-start;\n\tpadding: .375rem;\n\tflex: 0 0 auto;\n\tbox-sizing: border-box;\n\tmax-width: 100%;\n}\n\n[mol_row] > * {\n\tmargin: .375rem;\n\tmax-width: 100%;\n}\n");
-})($ || ($ = {}));
-//mol/row/-css/row.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
     class $mol_icon_help extends $mol_icon {
         path() {
             return "M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5C10.34,5 9,6.34 9,8H6C6,4.69 8.69,2 12,2Z";
@@ -8069,7 +8053,7 @@ var $;
             return obj;
         }
         hint() {
-            return "# Placeholders\n\n`{#}` // iterations count/number\n\n# Load JS or ESM\n\n\tconst { some } = $mol_import.script( uri )\n\tconst { some } = $mol_import.module( uri ).default\n\n# Asserts\n\n\t$mol_assert_ok( 'foo' )\n\t$mol_assert_equal( 777, 777 )\n\t$mol_assert_like( [777], [777] )\n\n# Measure memory\n\nCall Chrome with:\n`--js-flags=\"--expose-gc\"`\n`--enable-precise-memory-info`";
+            return "# Placeholders\n\n\t`{#}` // iterations count/number\n\n# Load JS or ESM\n\n\tconst { some } = $mol_import.script( uri )\n\tconst { some } = $mol_import.module( uri ).default\n\n# Asserts\n\n\t$mol_assert_ok( 'foo' )\n\t$mol_assert_equal( 777, 777 )\n\t$mol_assert_like( [777], [777] )\n\n# Measure memory\n\nCall Chrome with:\n\t--js-flags=\"--expose-gc\"\n\t--enable-precise-memory-info";
         }
         Hint() {
             const obj = new this.$.$mol_text();
@@ -8093,23 +8077,9 @@ var $;
             obj.sub = () => this.cases();
             return obj;
         }
-        Example1() {
-            const obj = new this.$.$mol_link();
-            obj.uri = () => "#!sources=%5B%22res%20%3D%20window.location.href%22%2C%22res%20%3D%20document.location.href%22%2C%22res%20%3D%20location.href%22%5D/prefix=let%20res/postfix=%24mol_assert_like%28%20res%2C%20location.href%20%29/optimized=true";
-            obj.title = () => this.$.$mol_locale.text('$hyoo_js_perf_Example1_title');
-            return obj;
-        }
-        Examples() {
-            const obj = new this.$.$mol_row();
-            obj.sub = () => [
-                this.Example1()
-            ];
-            return obj;
-        }
         cases_pane_content() {
             return [
-                this.Cases(),
-                this.Examples()
+                this.Cases()
             ];
         }
         Cases_pane() {
@@ -8245,12 +8215,6 @@ var $;
     __decorate([
         $mol_mem
     ], $hyoo_js_perf.prototype, "Cases", null);
-    __decorate([
-        $mol_mem
-    ], $hyoo_js_perf.prototype, "Example1", null);
-    __decorate([
-        $mol_mem
-    ], $hyoo_js_perf.prototype, "Examples", null);
     __decorate([
         $mol_mem
     ], $hyoo_js_perf.prototype, "Cases_pane", null);
@@ -8812,11 +8776,6 @@ var $;
             cases() {
                 return $mol_range2(index => this.Case(index), () => this.cases_count() + (this.changable() ? 1 : 0));
             }
-            cases_pane_content() {
-                return this.changable()
-                    ? super.cases_pane_content()
-                    : super.cases_pane_content().filter(item => item !== this.Examples());
-            }
             case_prefix(index, next) {
                 let prefixes = this.prefixes();
                 if (next === undefined)
@@ -8979,9 +8938,6 @@ var $;
         __decorate([
             $mol_mem
         ], $hyoo_js_perf.prototype, "postfix", null);
-        __decorate([
-            $mol_mem
-        ], $hyoo_js_perf.prototype, "cases_pane_content", null);
         __decorate([
             $mol_mem_key
         ], $hyoo_js_perf.prototype, "measures_for", null);

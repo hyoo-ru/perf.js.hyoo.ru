@@ -2315,14 +2315,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_row extends $mol_view {
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
     class $mol_icon_help extends $mol_icon {
         path(): string;
     }
@@ -2465,8 +2457,6 @@ declare namespace $ {
         Common(): $$.$mol_scroll;
         cases(): readonly any[];
         Cases(): $mol_view;
-        Example1(): $$.$mol_link;
-        Examples(): $mol_row;
         cases_pane_content(): readonly any[];
         Cases_pane(): $$.$mol_scroll;
         case_prefix(id: any, val?: any): string;
@@ -2607,7 +2597,6 @@ declare namespace $.$$ {
         permalink(): string;
         cases_count(): number;
         cases(): $hyoo_js_perf_case[];
-        cases_pane_content(): readonly any[];
         case_prefix(index: number, next?: string): string;
         source(index: number, next?: string): string;
         measures_for(index: number, next?: $hyoo_js_perf_stats[]): $hyoo_js_perf_stats[];

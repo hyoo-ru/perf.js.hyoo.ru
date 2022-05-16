@@ -1,5 +1,4 @@
 {
-	"$hyoo_js_perf_Example1_title": "Example benchmark",
 	"$hyoo_js_perf_Postfix_title": "Common Teardown",
 	"$hyoo_js_perf_Prefix_title": "Common Setup",
 	"$hyoo_js_perf_Run_hint": "Run",

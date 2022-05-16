@@ -428,8 +428,6 @@ $mol_labeler $mol_list
 			minimal_height 24
 			sub <= content /
 
-$mol_row $mol_view
-
 $mol_icon_help $mol_icon path \M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5C10.34,5 9,6.34 9,8H6C6,4.69 8.69,2 12,2Z
 
 $mol_icon_help_circle $mol_icon path \M15.07,11.25L14.17,12.17C13.45,12.89 13,13.5 13,15H11V14.5C11,13.39 11.45,12.39 12.17,11.67L13.41,10.41C13.78,10.05 14,9.55 14,9C14,7.89 13.1,7 12,7C10.9,7 10,7.9 10,9H8C8,6.79 9.79,5 12,5C14.21,5 16,6.79 16,9C16,9.88 15.64,10.67 15.07,11.25M13,19H11V17H13M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.47 17.5,2 12,2Z
@@ -498,7 +496,7 @@ $hyoo_js_perf $mol_page
 			<= Hint $mol_text text <= hint \
 				\# Placeholders
 				\
-				\`{#}` // iterations count/number
+				\	`{#}` // iterations count/number
 				\
 				\# Load JS or ESM
 				\
@@ -514,14 +512,10 @@ $hyoo_js_perf $mol_page
 				\# Measure memory
 				\
 				\Call Chrome with:
-				\`--js-flags="--expose-gc"`
-				\`--enable-precise-memory-info`
+				\	--js-flags="--expose-gc"
+				\	--enable-precise-memory-info
 		<= Cases_pane $mol_scroll sub <= cases_pane_content /
 			<= Cases $mol_view sub <= cases /
-			<= Examples $mol_row sub /
-				<= Example1 $mol_link
-					uri \#!sources=%5B%22res%20%3D%20window.location.href%22%2C%22res%20%3D%20document.location.href%22%2C%22res%20%3D%20location.href%22%5D/prefix=let%20res/postfix=%24mol_assert_like%28%20res%2C%20location.href%20%29/optimized=true
-					title @ \Example benchmark
 	Case!index $hyoo_js_perf_case
 		prefix?val <=> case_prefix!index?val \
 		source?val <=> source!index?val \
