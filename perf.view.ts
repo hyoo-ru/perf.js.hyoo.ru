@@ -307,7 +307,7 @@ namespace $.$$ {
 
 		sub() {
 			if( !this.result() ) return []
-			return this.result().error ? [ this.Error() ] : [ this.Stats(), this.Portion() ]
+			return this.result().error ? [ this.Error() ] : [ this.Portion(), this.Stats(), ]
 		}
 
 		error() {

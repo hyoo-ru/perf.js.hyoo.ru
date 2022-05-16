@@ -7,6 +7,7 @@
 	"$hyoo_js_perf_Run_hint": "Запустить",
 	"$hyoo_js_perf_case_Prefix_title": "Подготовка",
 	"$hyoo_js_perf_case_Source_title": "Измерение",
+	"$hyoo_js_perf_case_Results_title": "Результаты",
 	"$hyoo_js_perf_case_prefix_hint": "{#} - число итераций.",
 	"$hyoo_js_perf_case_source_hint": "{#} - номер итерации."
 }

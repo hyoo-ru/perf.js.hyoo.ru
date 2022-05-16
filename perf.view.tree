@@ -88,7 +88,10 @@ $hyoo_js_perf_case $mol_view
 			Content <= Source_code $mol_textarea
 				enabled <= changable true
 				value?val <=> source?val \
-		<= Result_rows $mol_list rows <= result_rows /
+		<= Results $mol_labeler
+			title @ \Results
+			Content <= Result_rows $mol_list
+				rows <= result_rows /
 	Result!level $hyoo_js_perf_case_result
 		title <= result_title!level \
 		result <= result!level $hyoo_js_perf_stats
@@ -96,20 +99,20 @@ $hyoo_js_perf_case $mol_view
 $hyoo_js_perf_case_result $mol_view
 	result $hyoo_js_perf_stats
 	sub /
-		<= Stats $mol_view sub /
-			<= title \
-			<= Frequency $mol_view sub / <= frequency \
-			\ ≈ 
-			<= Time $mol_view sub / <= time_total \
-			\ ⋅ 
-			<= Iterations $mol_view sub / <= iterations \
-			\ ⋅
-			<= Memory_per_iteration $mol_view
-				sub / <= memory_per_iteration \
-			\ = 
-			<= Memory $mol_view
-				sub / <= memory_total \
 		<= Portion $mol_view sub /
 			<= Frequency_portion $mol_portion portion <= frequency_portion 0
 			<= Mmory_ortion $mol_portion portion <= memory_portion 0
+		<= Stats $mol_view sub /
+			<= title \
+			<= Frequency $mol_view sub / <= frequency \
+			\≈
+			<= Time $mol_view sub / <= time_total \
+			\×
+			<= Iterations $mol_view sub / <= iterations \
+			\×
+			<= Memory_per_iteration $mol_view
+				sub / <= memory_per_iteration \
+			\=
+			<= Memory $mol_view
+				sub / <= memory_total \
 		<= Error $mol_view sub / <= error \
