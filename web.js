@@ -7637,7 +7637,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("mol/portion/portion.view.css", "[mol_portion] {\n\tdisplay: inline-flex;\n\tflex: 0 1 8rem;\n\twidth: 8rem;\n\tmax-height: calc( 1rem + 1.5em );\n\talign-self: stretch;\n\tvertical-align: inherit;\n\tborder-radius: var(--mol_gap_round);\n\tbox-shadow: inset 0 0 0 1px var(--mol_theme_line);\n\tbackground: var(--mol_theme_field);\n}\n\n[mol_portion_indicator] {\n\tpadding: .25rem 0;\n\tbackground-color: var(--mol_theme_control);\n\tcolor: var(--mol_theme_control);\n\tborder-radius: var(--mol_gap_round);\n}\n");
+    $mol_style_attach("mol/portion/portion.view.css", "[mol_portion] {\n\tdisplay: inline-flex;\n\tflex: 0 1 8rem;\n\twidth: 8rem;\n\tmax-height: calc( 1rem + 1.5em );\n\talign-self: stretch;\n\tvertical-align: inherit;\n\tborder-radius: var(--mol_gap_round);\n\tbackground: var(--mol_theme_line);\n}\n\n[mol_portion_indicator] {\n\tpadding: .25rem 0 0;\n\tbackground-color: var(--mol_theme_control);\n\tcolor: var(--mol_theme_control);\n\tborder-radius: var(--mol_gap_round);\n}\n");
 })($ || ($ = {}));
 //mol/portion/-css/portion.view.css.ts
 ;
@@ -8039,11 +8039,17 @@ var $;
             obj.rows = () => this.result_rows();
             return obj;
         }
+        Results() {
+            const obj = new this.$.$mol_labeler();
+            obj.title = () => this.$.$mol_locale.text('$hyoo_js_perf_case_Results_title');
+            obj.Content = () => this.Result_rows();
+            return obj;
+        }
         columns() {
             return [
                 this.Prefix(),
                 this.Source(),
-                this.Result_rows()
+                this.Results()
             ];
         }
         result_title(id) {
@@ -8079,6 +8085,9 @@ var $;
         $mol_mem
     ], $hyoo_js_perf_case.prototype, "Result_rows", null);
     __decorate([
+        $mol_mem
+    ], $hyoo_js_perf_case.prototype, "Results", null);
+    __decorate([
         $mol_mem_key
     ], $hyoo_js_perf_case.prototype, "result", null);
     $.$hyoo_js_perf_case = $hyoo_js_perf_case;
@@ -8089,10 +8098,34 @@ var $;
         }
         sub() {
             return [
-                this.Stats(),
                 this.Portion(),
+                this.Stats(),
                 this.Error()
             ];
+        }
+        frequency_portion() {
+            return 0;
+        }
+        Frequency_portion() {
+            const obj = new this.$.$mol_portion();
+            obj.portion = () => this.frequency_portion();
+            return obj;
+        }
+        memory_portion() {
+            return 0;
+        }
+        Mmory_ortion() {
+            const obj = new this.$.$mol_portion();
+            obj.portion = () => this.memory_portion();
+            return obj;
+        }
+        Portion() {
+            const obj = new this.$.$mol_view();
+            obj.sub = () => [
+                this.Frequency_portion(),
+                this.Mmory_ortion()
+            ];
+            return obj;
         }
         title() {
             return "";
@@ -8152,38 +8185,14 @@ var $;
             obj.sub = () => [
                 this.title(),
                 this.Frequency(),
-                " ≈ ",
+                "≈",
                 this.Time(),
-                " ⋅ ",
+                "×",
                 this.Iterations(),
-                " ⋅",
+                "×",
                 this.Memory_per_iteration(),
-                " = ",
+                "=",
                 this.Memory()
-            ];
-            return obj;
-        }
-        frequency_portion() {
-            return 0;
-        }
-        Frequency_portion() {
-            const obj = new this.$.$mol_portion();
-            obj.portion = () => this.frequency_portion();
-            return obj;
-        }
-        memory_portion() {
-            return 0;
-        }
-        Mmory_ortion() {
-            const obj = new this.$.$mol_portion();
-            obj.portion = () => this.memory_portion();
-            return obj;
-        }
-        Portion() {
-            const obj = new this.$.$mol_view();
-            obj.sub = () => [
-                this.Frequency_portion(),
-                this.Mmory_ortion()
             ];
             return obj;
         }
@@ -8203,6 +8212,15 @@ var $;
     ], $hyoo_js_perf_case_result.prototype, "result", null);
     __decorate([
         $mol_mem
+    ], $hyoo_js_perf_case_result.prototype, "Frequency_portion", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_js_perf_case_result.prototype, "Mmory_ortion", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_js_perf_case_result.prototype, "Portion", null);
+    __decorate([
+        $mol_mem
     ], $hyoo_js_perf_case_result.prototype, "Frequency", null);
     __decorate([
         $mol_mem
@@ -8219,15 +8237,6 @@ var $;
     __decorate([
         $mol_mem
     ], $hyoo_js_perf_case_result.prototype, "Stats", null);
-    __decorate([
-        $mol_mem
-    ], $hyoo_js_perf_case_result.prototype, "Frequency_portion", null);
-    __decorate([
-        $mol_mem
-    ], $hyoo_js_perf_case_result.prototype, "Mmory_ortion", null);
-    __decorate([
-        $mol_mem
-    ], $hyoo_js_perf_case_result.prototype, "Portion", null);
     __decorate([
         $mol_mem
     ], $hyoo_js_perf_case_result.prototype, "Error", null);
@@ -8432,7 +8441,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("hyoo/js/perf/perf.view.css", "[hyoo_js_perf_body] {\n\tdisplay: flex;\n\tflex-direction: row;\n\tjustify-content: space-between;\n\tpadding: 0;\n}\n\n[hyoo_js_perf_common] {\n\tflex-direction: column;\n\tflex: 1000 0 auto;\n\tmin-width: 20rem;\n}\n\n[hyoo_js_perf_hint] {\n\tpadding: var(--mol_gap_block);\n}\n\n[hyoo_js_perf_prefix] {\n\tmargin: .75rem;\n}\n\n[hyoo_js_perf_postfix] {\n\tmargin: .75rem;\n}\n\n[hyoo_js_perf_cases_pane] {\n\tflex: 1000 0 auto;\n\tmin-width: 46rem;\n}\n\n[hyoo_js_perf_cases] {\n\tdisplay: table;\n\tborder-spacing: .75rem;\n}\n\n[hyoo_js_perf_case] {\n\tdisplay: table-row;\n\tflex: 0 1 auto;\n}\n\n[hyoo_js_perf_case_prefix] ,\n[hyoo_js_perf_case_source] {\n\tdisplay: table-cell;\n\tmin-width: 14rem;\n\tvertical-align: top;\n}\n\n[hyoo_js_perf_case_result_rows] {\n\tdisplay: table-cell;\n\twidth: 28rem;\n\theight: 5rem;\n}\n\n[hyoo_js_perf_case_result] {\n\tpadding: .5rem 0 0;\n\tflex-direction: column;\n}\n\n[hyoo_js_perf_case_result] > * {\n\tdisplay: flex;\n}\n\n[hyoo_js_perf_case_result_stats] {\n\tdisplay: flex;\n\twhite-space: pre;\n}\n\n[hyoo_js_perf_case_result_stats] > * {\n\tword-break: keep-all;\n\twhite-space: nowrap;\n\tmargin: 0 .5rem;\n}\n\n[hyoo_js_perf_case_result_perf],\n[hyoo_js_perf_case_result_memory] {\n\tflex-direction: column;\n}\n\n[hyoo_js_perf_case_result_frequency],\n[hyoo_js_perf_case_result_memory_per_iteration] {\n\ttext-shadow: 0 0;\n}\n\n[hyoo_js_perf_case_result_error] {\n\tcolor: crimson;\n\ttext-shadow: 0 0;\n}\n\n[hyoo_js_perf_case_result_portion] {\n\tgap: .75rem;\n}\n\n[hyoo_js_perf_case_result] [mol_portion] {\n\tflex: 1 1 50%;\n\twidth: auto;\n}\n\n[hyoo_js_perf_case_result]:nth-child(1) [mol_portion_indicator] {\n\tbackground-color: royalblue;\n}\n\n[hyoo_js_perf_case_result]:nth-child(2) [mol_portion_indicator] {\n\tbackground-color: orange;\n}\n\n[hyoo_js_perf_case_result]:nth-child(1) [hyoo_js_perf_case_result_frequency],\n[hyoo_js_perf_case_result]:nth-child(1) [hyoo_js_perf_case_result_memory_per_iteration] {\n\tcolor: royalblue;\n}\n\n[hyoo_js_perf_case_result]:nth-child(2) [hyoo_js_perf_case_result_frequency],\n[hyoo_js_perf_case_result]:nth-child(2) [hyoo_js_perf_case_result_memory_per_iteration] {\n\tcolor: orange;\n}\n");
+    $mol_style_attach("hyoo/js/perf/perf.view.css", "[hyoo_js_perf_body] {\n\tdisplay: flex;\n\tflex-direction: row;\n\tjustify-content: space-between;\n\tpadding: 0;\n}\n\n[hyoo_js_perf_common] {\n\tflex-direction: column;\n\tflex: 1000 0 auto;\n\tmin-width: 20rem;\n}\n\n[hyoo_js_perf_hint] {\n\tpadding: var(--mol_gap_block);\n}\n\n[hyoo_js_perf_prefix] {\n\tmargin: .75rem;\n}\n\n[hyoo_js_perf_postfix] {\n\tmargin: .75rem;\n}\n\n[hyoo_js_perf_cases_pane] {\n\tflex: 1000 0 auto;\n\tmin-width: 46rem;\n}\n\n[hyoo_js_perf_cases] {\n\tdisplay: table;\n\tborder-spacing: .75rem;\n}\n\n[hyoo_js_perf_case] {\n\tdisplay: table-row;\n\tflex: 0 1 auto;\n}\n\n[hyoo_js_perf_case_prefix] ,\n[hyoo_js_perf_case_source] {\n\tdisplay: table-cell;\n\tmin-width: 14rem;\n\tvertical-align: top;\n}\n\n[hyoo_js_perf_case_result_rows] {\n\tdisplay: table-cell;\n\twidth: 28rem;\n\theight: 5rem;\n}\n\n[hyoo_js_perf_case_result] {\n\tpadding: .25rem .75rem;\n\tflex-direction: column;\n}\n\n[hyoo_js_perf_case_result] > * {\n\tdisplay: flex;\n}\n\n[hyoo_js_perf_case_result_stats] {\n\tdisplay: flex;\n\twhite-space: pre;\n}\n\n[hyoo_js_perf_case_result_stats] > * {\n\tword-break: keep-all;\n\twhite-space: nowrap;\n\tmargin: 0 .5rem;\n}\n\n[hyoo_js_perf_case_result_perf],\n[hyoo_js_perf_case_result_memory] {\n\tflex-direction: column;\n}\n\n[hyoo_js_perf_case_result_frequency],\n[hyoo_js_perf_case_result_memory_per_iteration] {\n\ttext-shadow: 0 0;\n}\n\n[hyoo_js_perf_case_result_error] {\n\tcolor: crimson;\n\ttext-shadow: 0 0;\n}\n\n[hyoo_js_perf_case_result_portion] {\n\tgap: .75rem;\n}\n\n[hyoo_js_perf_case_result] [mol_portion] {\n\tflex: 1 1 50%;\n\twidth: auto;\n}\n\n[hyoo_js_perf_case_result]:nth-child(1) [mol_portion_indicator] {\n\tbackground-color: royalblue;\n}\n\n[hyoo_js_perf_case_result]:nth-child(2) [mol_portion_indicator] {\n\tbackground-color: orange;\n}\n\n[hyoo_js_perf_case_result]:nth-child(1) [hyoo_js_perf_case_result_frequency],\n[hyoo_js_perf_case_result]:nth-child(1) [hyoo_js_perf_case_result_memory_per_iteration] {\n\tcolor: royalblue;\n}\n\n[hyoo_js_perf_case_result]:nth-child(2) [hyoo_js_perf_case_result_frequency],\n[hyoo_js_perf_case_result]:nth-child(2) [hyoo_js_perf_case_result_memory_per_iteration] {\n\tcolor: orange;\n}\n");
 })($ || ($ = {}));
 //hyoo/js/perf/-css/perf.view.css.ts
 ;
@@ -8703,7 +8712,7 @@ var $;
             sub() {
                 if (!this.result())
                     return [];
-                return this.result().error ? [this.Error()] : [this.Stats(), this.Portion()];
+                return this.result().error ? [this.Error()] : [this.Portion(), this.Stats(),];
             }
             error() {
                 return `${this.result().error}`;
