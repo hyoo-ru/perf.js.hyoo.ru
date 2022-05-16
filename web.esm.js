@@ -7978,6 +7978,7 @@ var $;
         Prefix() {
             const obj = new this.$.$mol_labeler();
             obj.title = () => this.$.$mol_locale.text('$hyoo_js_perf_case_Prefix_title');
+            obj.minimal_width = () => 150;
             obj.Content = () => this.Prefix_code();
             return obj;
         }
@@ -7996,6 +7997,7 @@ var $;
         Source() {
             const obj = new this.$.$mol_labeler();
             obj.title = () => this.$.$mol_locale.text('$hyoo_js_perf_case_Source_title');
+            obj.minimal_width = () => 150;
             obj.Content = () => this.Source_code();
             return obj;
         }

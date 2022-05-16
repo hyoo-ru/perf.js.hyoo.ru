@@ -552,12 +552,14 @@ $hyoo_js_perf_case $mol_view
 	sub <= columns /
 		<= Prefix $mol_labeler
 			title @ \Setup
+			minimal_width 150
 			Content <= Prefix_code $mol_textarea
 				enabled <= changable true
 				value?val <=> prefix?val \
 				hint \let val{#} = 1
 		<= Source $mol_labeler
 			title @ \Measure
+			minimal_width 150
 			Content <= Source_code $mol_textarea
 				enabled <= changable true
 				value?val <=> source?val \
