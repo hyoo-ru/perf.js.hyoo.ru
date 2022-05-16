@@ -8027,6 +8027,7 @@ var $;
             const obj = new this.$.$mol_textarea();
             obj.enabled = () => this.changable();
             obj.value = (val) => this.prefix(val);
+            obj.hint = () => "let res";
             return obj;
         }
         Prefix() {
@@ -8044,6 +8045,7 @@ var $;
             const obj = new this.$.$mol_textarea();
             obj.enabled = () => this.changable();
             obj.value = (val) => this.postfix(val);
+            obj.hint = () => "$mol_assert_like( res, 1 )";
             return obj;
         }
         Postfix() {
@@ -8283,6 +8285,7 @@ var $;
             const obj = new this.$.$mol_textarea();
             obj.enabled = () => this.changable();
             obj.value = (val) => this.prefix(val);
+            obj.hint = () => "let val{#} = 1";
             return obj;
         }
         Prefix() {
@@ -8300,6 +8303,7 @@ var $;
             const obj = new this.$.$mol_textarea();
             obj.enabled = () => this.changable();
             obj.value = (val) => this.source(val);
+            obj.hint = () => "res = val{#}";
             return obj;
         }
         Source() {
