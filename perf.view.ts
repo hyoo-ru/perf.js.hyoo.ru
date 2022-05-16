@@ -62,13 +62,6 @@ namespace $.$$ {
 			)
 		}
 		
-		@ $mol_mem
-		cases_pane_content() {
-			return this.changable()
-				? super.cases_pane_content()
-				: super.cases_pane_content().filter( item => item !== this.Examples() )
-		}
-
 		case_prefix( index : number , next? : string ) {
 
 			let prefixes = this.prefixes()
