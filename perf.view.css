@@ -63,6 +63,7 @@
 [hyoo_js_perf_case_result_stats] {
 	display: flex;
 	white-space: pre;
+	justify-content: space-between;
 }
 
 [hyoo_js_perf_case_result_stats] > * {
