@@ -47,9 +47,15 @@ $hyoo_js_perf $mol_page
 	Case!index $hyoo_js_perf_case
 		prefix?val <=> case_prefix!index?val \
 		source?val <=> source!index?val \
+		sample <= case_sample!index \
 		results?val <=> results!index?val /
 		changable <= changable true
 	tools /
+		<= New $mol_link
+			uri \#
+			hint <= new_hint @ \New benchmark
+			sub /
+				<= New_icon $mol_icon_plus
 		<= About $mol_link
 			uri \https://habhub.hyoo.ru/#author=nin-jin/repo=HabHub/article=42
 			sub /
@@ -57,24 +63,25 @@ $hyoo_js_perf $mol_page
 		<= Lights $mol_lights_toggle
 		<= Source $mol_link_source
 			uri \https://github.com/hyoo-ru/perf.js.hyoo.ru
+	head /
+		<= Title
+		<= Run $mol_button_major
+			hint @ \Run
+			click?event <=> run?event null
+			sub / <= Run_icon $mol_icon_play
 		<= Permalink $mol_link
 			uri <= permalink \
 			hint <= parmalink_hint @ \Permamemnt short link
 			target \_blank
 			sub /
 				<= Permalink_icon $mol_icon_external
-		<= New $mol_link
-			uri \#
-			hint <= new_hint @ \New benchmark
-			sub /
-				<= New_icon $mol_icon_plus
-		<= Run $mol_button_major
-			hint @ \Run
-			click?event <=> run?event null
-			sub / <= Run_icon $mol_icon_play
+		<= Tools
 
 $hyoo_js_perf_case $mol_view
 	results /
+	Eval $hyoo_js_eval
+		code <= sample \
+		Result => Eval_result
 	sub <= columns /
 		<= Prefix $mol_labeler
 			title @ \Setup
@@ -90,6 +97,9 @@ $hyoo_js_perf_case $mol_view
 				enabled <= changable true
 				value?val <=> source?val \
 				hint \res = val{#}
+		<= Eval_labeler $mol_labeler
+			title @ \Debug
+			Content <= Eval_result
 		<= Results $mol_labeler
 			title @ \Results
 			Content <= Result_rows $mol_list

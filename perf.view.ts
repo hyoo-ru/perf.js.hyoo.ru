@@ -87,6 +87,15 @@ namespace $.$$ {
 		}
 
 		@ $mol_mem_key
+		case_sample( index: number ) {
+			const code = this.prefix()
+				+ '\n' + this.case_prefix( index ) 
+				+ '\n' + this.source( index )
+				+ '\n' + this.postfix()
+			return code.replace( /\{#\}/g , '1' )
+		}
+		
+		@ $mol_mem_key
 		measures_for( index : number , next? : $hyoo_js_perf_stats[] ) {
 			this.prefix()
 			this.postfix()
@@ -283,7 +292,19 @@ namespace $.$$ {
 		@ $mol_mem
 		result_rows() {
 			return [ this.Result( 0 ) , this.Result( 1 ) ]
-			// return $mol_range2( level => this.Result( level ) , ()=> this.results().length )
+		}
+
+		@ $mol_mem
+		columns() {
+			return [
+				this.Prefix(),
+				this.Source(),
+				... this.results().length
+					? [ this.Results() ]
+					: this.source()
+						? [ this.Eval_labeler() ]
+						: []
+			]
 		}
 
 		result( level : number ) {
