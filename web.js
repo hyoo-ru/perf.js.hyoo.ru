@@ -9378,6 +9378,8 @@ var $;
                 inner = Array.from({ length: count }, (_, i) => inner.replace(/\{#\}/g, `${i}`)).join(';\n');
                 const source = [
                     prefix,
+                    `const backup_${token} = $mol_wire_auto()`,
+                    `$mol_wire_auto( null )`,
                     `if( window.gc ) gc()`,
                     `let mem_${token} = -performance.memory?.usedJSHeapSize ?? 0`,
                     `let time_${token} = -performance.now()`,
@@ -9386,6 +9388,7 @@ var $;
                     postfix,
                     `if( window.gc ) gc()`,
                     `mem_${token} += performance.memory?.usedJSHeapSize ?? 0`,
+                    `$mol_wire_auto( backup_${token} )`,
                     `return { time: time_${token}, mem: window.gc ? mem_${token} : 0 }`,
                 ].join(';\n');
                 let func = new Function('', source);
