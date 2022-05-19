@@ -9817,7 +9817,9 @@ var $;
                     this.Source(),
                     ...this.results().length
                         ? [this.Results()]
-                        : [this.Eval_labeler()]
+                        : this.source()
+                            ? [this.Eval_labeler()]
+                            : [this.Results()]
                 ];
             }
             result(level) {
