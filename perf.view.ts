@@ -301,9 +301,7 @@ namespace $.$$ {
 				this.Source(),
 				... this.results().length
 					? [ this.Results() ]
-					: this.source()
-						? [ this.Eval_labeler() ]
-						: []
+					: [ this.Eval_labeler() ]
 			]
 		}
 
