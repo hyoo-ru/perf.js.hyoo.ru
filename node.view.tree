@@ -374,11 +374,9 @@ $mol_text $mol_list
 		text <= line_text* \
 	Link* $mol_link_iconed
 		uri <= link_uri* \
-		target <= link_target* \_blank
 		content <= line_content* /
 	Link_http* $mol_link_iconed
 		uri <= link_uri* \
-		target <= link_target* \_blank
 		content / <= String*
 	Image* $mol_embed_native
 		uri <= link_uri* \
@@ -428,6 +426,8 @@ $mol_labeler $mol_list
 			minimal_height 24
 			sub <= content /
 
+$mol_icon_plus $mol_icon path \M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z
+
 $mol_icon_help $mol_icon path \M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5C10.34,5 9,6.34 9,8H6C6,4.69 8.69,2 12,2Z
 
 $mol_icon_help_circle $mol_icon path \M15.07,11.25L14.17,12.17C13.45,12.89 13,13.5 13,15H11V14.5C11,13.39 11.45,12.39 12.17,11.67L13.41,10.41C13.78,10.05 14,9.55 14,9C14,7.89 13.1,7 12,7C10.9,7 10,7.9 10,9H8C8,6.79 9.79,5 12,5C14.21,5 16,6.79 16,9C16,9.88 15.64,10.67 15.07,11.25M13,19H11V17H13M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.47 17.5,2 12,2Z
@@ -450,16 +450,129 @@ $mol_link_source $mol_link
 	sub /
 		<= Icon $mol_icon_github_circle
 
-$mol_icon_external $mol_icon path \M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z
-
-$mol_icon_plus $mol_icon path \M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z
-
 $mol_icon_play $mol_icon path \M8,5.14V19.14L19,12.14L8,5.14Z
 
 $mol_button_major $mol_button_typed
 	attr *
 		^
 		mol_theme \$mol_theme_accent
+
+$mol_icon_external $mol_icon path \M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z
+
+$mol_icon_bookmark $mol_icon path \M17,3H7C5.9,3 5,3.9 5,5V21L12,18L19,21V5C19,3.89 18.1,3 17,3Z
+
+$mol_icon_bookmark_outline $mol_icon path \M17,18L12,15.82L7,18V5H17M17,3H7C5.9,3 5,3.9 5,5V21L12,18L19,21V5C19,3.89 18.1,3 17,3Z
+
+$mol_icon_cross $mol_icon path \M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z
+
+$mol_expander $mol_list
+	rows /
+		<= Label $mol_view
+			sub /
+				<= Trigger $mol_check_expand
+					checked?val <=> expanded?val false
+					label <= label /
+						<= title
+				<= Tools null
+		<= Content $mol_list
+			rows <= content /
+
+$mol_dump_value $mol_view
+	value null
+	sub /
+		<= Simple $mol_text_code
+			text <= simple \
+		<= Expand $mol_expander
+			expanded?val <=> expanded?val false
+			Trigger <= Expand_head $mol_check_expand
+				minimal_height 24
+				minimal_width 24
+				checked?val <=> expanded?val false
+				label /
+					<= Expand_title $mol_text_code
+						text <= expand_title \
+			content <= expand_content /
+				<= Row*0 $mol_dump_list
+					values <= row_values* /
+
+$mol_dump_list $mol_view
+	values /
+	sub /
+		<= Dump*0 $mol_dump_value
+			value <= dump_value* null
+			expanded? <=> dump_expanded*? false
+
+$hyoo_js_eval $mol_book2
+	Placeholder null
+	plugins /
+		<= Theme $mol_theme_auto
+	bookmark_list? /string
+		\
+			\// Example Notebook
+			\
+			\// load external script
+			\const {
+			\	$mol_compare_deep: compare
+			\} = $mol_import.module(
+			\	'https://esm.sh/mol_compare_deep'
+			\).default
+			\
+			\// local vars
+			\const one = [1]
+			\one.push( one )
+			\const left =  { a: [1,one], b:    one  }
+			\const right = { a:    one,  b: [1,one] }
+			\
+			\// result
+			\compare( left, right )
+	pages /
+		<= Menu_page $mol_page
+			title @ \Bookmarks
+			tools /
+				<= Clear $mol_link
+					arg * code null
+					sub /
+						<= Clear_icon $mol_icon_plus
+				<= Source $mol_link_source
+					uri \https://github.com/hyoo-ru/eval.js.hyoo.ru
+				<= Lights $mol_lights_toggle
+			body /
+				<= Menu $mol_list
+					rows <= menu /
+						<= Menu_link*default $mol_link
+							title <= menu_link_title* \
+							arg * code <= menu_link_code* \
+		<= Code_page $mol_page
+			title @ \Code
+			tools /
+				<= Perf $mol_link_iconed
+					title \
+					hint @ \Measure Performance
+					uri <= perf \
+				<= Bookmark $mol_check_icon
+					Icon <= Bookmark_icon $mol_icon_bookmark_outline
+					checked?val <=> bookmark?val false
+					hint @ \Bookmark
+				<= Run $mol_check_icon
+					Icon <= Run_icon $mol_icon_play
+					checked?val <=> run?val true
+					hint <= result_label
+			body /
+				<= Code $mol_textarea
+					hint \javascript..
+					value?val <=> code?val \
+		<= Result_page $mol_page
+			title <= result_label @ \Result
+			tools /
+				<= Results_close $mol_link
+					arg * run \false
+					sub /
+						<= Results_close_icon $mol_icon_cross
+			body /
+				<= Result $mol_list
+					rows <= logs /
+						<= Log*0 $mol_dump_list
+							values <= log* /
 
 $mol_portion_indicator $mol_view
 	style *
@@ -521,9 +634,15 @@ $hyoo_js_perf $mol_page
 	Case!index $hyoo_js_perf_case
 		prefix?val <=> case_prefix!index?val \
 		source?val <=> source!index?val \
+		sample <= case_sample!index \
 		results?val <=> results!index?val /
 		changable <= changable true
 	tools /
+		<= New $mol_link
+			uri \#
+			hint <= new_hint @ \New benchmark
+			sub /
+				<= New_icon $mol_icon_plus
 		<= About $mol_link
 			uri \https://habhub.hyoo.ru/#author=nin-jin/repo=HabHub/article=42
 			sub /
@@ -531,24 +650,25 @@ $hyoo_js_perf $mol_page
 		<= Lights $mol_lights_toggle
 		<= Source $mol_link_source
 			uri \https://github.com/hyoo-ru/perf.js.hyoo.ru
+	head /
+		<= Title
+		<= Run $mol_button_major
+			hint @ \Run
+			click?event <=> run?event null
+			sub / <= Run_icon $mol_icon_play
 		<= Permalink $mol_link
 			uri <= permalink \
 			hint <= parmalink_hint @ \Permamemnt short link
 			target \_blank
 			sub /
 				<= Permalink_icon $mol_icon_external
-		<= New $mol_link
-			uri \#
-			hint <= new_hint @ \New benchmark
-			sub /
-				<= New_icon $mol_icon_plus
-		<= Run $mol_button_major
-			hint @ \Run
-			click?event <=> run?event null
-			sub / <= Run_icon $mol_icon_play
+		<= Tools
 
 $hyoo_js_perf_case $mol_view
 	results /
+	Eval $hyoo_js_eval
+		code <= sample \
+		Result => Eval_result
 	sub <= columns /
 		<= Prefix $mol_labeler
 			title @ \Setup
@@ -564,6 +684,9 @@ $hyoo_js_perf_case $mol_view
 				enabled <= changable true
 				value?val <=> source?val \
 				hint \res = val{#}
+		<= Eval_labeler $mol_labeler
+			title @ \Debug
+			Content <= Eval_result
 		<= Results $mol_labeler
 			title @ \Results
 			Content <= Result_rows $mol_list

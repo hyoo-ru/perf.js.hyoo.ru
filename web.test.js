@@ -3413,6 +3413,17 @@ var $;
 var $;
 (function ($) {
     $mol_test({
+        'return result without errors'() {
+            $mol_assert_equal($mol_try(() => false), false);
+        },
+    });
+})($ || ($ = {}));
+//mol/try/try.test.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_test({
         'lazy calls'() {
             let calls = 0;
             const list = $mol_range2(index => (++calls, index), () => 10);

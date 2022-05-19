@@ -1,4 +1,9 @@
 {
+	"$hyoo_js_eval_Bookmark_hint": "Закладка",
+	"$hyoo_js_eval_Code_page_title": "Код",
+	"$hyoo_js_eval_Menu_page_title": "Закладки",
+	"$hyoo_js_eval_Perf_hint": "Измерить скорость",
+	"$hyoo_js_eval_result_label": "Результат",
 	"$hyoo_js_perf_Postfix_title": "Общее завершение",
 	"$hyoo_js_perf_Prefix_title": "Общее вступление",
 	"$hyoo_js_perf_Run_hint": "Запустить",
