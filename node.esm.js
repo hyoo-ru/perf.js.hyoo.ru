@@ -9632,9 +9632,14 @@ var $;
                 return next;
             }
             case_sample(index) {
+                const token = this.token();
                 const code = this.prefix()
                     + '\n' + this.case_prefix(index)
+                    + `\n/**/const backup_${token} = $mol_wire_auto()`
+                    + `\n$mol_wire_auto( null )`
                     + '\n' + this.source(index)
+                    + `\n$mol_wire_auto( backup_${token} )`
+                    + `\nvoid 0`
                     + '\n' + this.postfix();
                 return code.replace(/\{#\}/g, '1');
             }
