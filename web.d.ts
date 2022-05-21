@@ -14,20 +14,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    var $mol_dom_context: typeof globalThis;
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    let $mol_report_bugsnag: string;
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
     function $mol_fail(error: any): never;
 }
 
@@ -38,6 +24,13 @@ declare namespace $ {
 declare namespace $ {
     let $mol_compare_deep_cache: WeakMap<any, WeakMap<any, boolean>>;
     function $mol_compare_deep<Value>(left: Value, right: Value): boolean;
+}
+
+declare namespace $ {
+    var $mol_dom_context: typeof globalThis;
+}
+
+declare namespace $ {
 }
 
 declare namespace $ {

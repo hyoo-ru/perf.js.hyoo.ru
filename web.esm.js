@@ -30,84 +30,6 @@ module.exports = $;
 $node[ "../mam.ts" ] = $node[ "../mam.ts" ] = module.exports }.call( {} , {} )
 ;
 "use strict";
-var $;
-(function ($) {
-})($ || ($ = {}));
-//mol/dom/context/context.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $.$mol_dom_context = self;
-})($ || ($ = {}));
-//mol/dom/context/context.web.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $.$mol_report_bugsnag = '';
-    globalThis.onerror = function (msg, url, line, col, err) {
-        const doc = $mol_dom_context.document;
-        const report = {
-            apiKey: $.$mol_report_bugsnag,
-            payloadVersion: 5,
-            notifier: {
-                name: '$mol_report_bugsnag',
-                version: '1',
-                url: '$mol_report_bugsnag',
-            },
-            events: [{
-                    device: {
-                        locale: $mol_dom_context.navigator.language,
-                        userAgent: $mol_dom_context.navigator.userAgent,
-                        time: new Date().toISOString(),
-                    },
-                    context: doc?.activeElement?.id,
-                    exceptions: [{
-                            message: err?.message || err || msg,
-                            errorClass: err?.constructor.name,
-                            stacktrace: [{
-                                    columnNumber: col,
-                                    file: url,
-                                    lineNumber: line,
-                                    method: '',
-                                }],
-                        }],
-                    metaData: {
-                        stack: err && err.stack,
-                    },
-                    request: {
-                        url: doc?.location.href,
-                        referer: doc?.referrer,
-                    },
-                }],
-        };
-        if ($mol_dom_context.location.hostname === 'localhost') {
-            console.debug('Error report', report);
-        }
-        else {
-            fetch('https://notify.bugsnag.com/', {
-                method: 'post',
-                body: JSON.stringify(report),
-            }).catch(() => null);
-        }
-    };
-    globalThis.onunhandledrejection = function (event) {
-        globalThis.onerror('Unhandled Rejection', '', 0, 0, event.reason);
-    };
-    const error = console.error;
-    console.error = function (...args) {
-        globalThis.onerror('Logged Error', '', 0, 0, arguments[0]);
-        error.apply(console, args);
-    };
-})($ || ($ = {}));
-//mol/report/bugsnag/bugsnag.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_report_bugsnag = '18acf016ed2a2a4cc4445daa9dd2dd3c';
-})($ || ($ = {}));
 //hyoo/hyoo.ts
 ;
 "use strict";
@@ -254,6 +176,19 @@ var $;
     }
 })($ || ($ = {}));
 //mol/compare/deep/deep.ts
+;
+"use strict";
+var $;
+(function ($) {
+})($ || ($ = {}));
+//mol/dom/context/context.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $.$mol_dom_context = self;
+})($ || ($ = {}));
+//mol/dom/context/context.web.ts
 ;
 "use strict";
 var $;
@@ -7796,7 +7731,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("mol/dump/value/value.view.css", "[mol_dump_value] {\n\tmin-height: 2.5rem;\n\tmin-width: 2.5rem;\n\t/* padding-left: .75rem; */\n}\n\n[mol_dump_value_simple] {\n\tpadding: 0;\n}\n\n[mol_dump_value_expand_content] {\n\tpadding-left: .75rem;\n}\n\n[mol_dump_value_expand_title],\n[mol_dump_value_expand_head] {\n\tpadding: 0;\n}\n");
+    $mol_style_attach("mol/dump/value/value.view.css", "[mol_dump_value] {\n\tmin-height: 2.5rem;\n\tmin-width: 2.5rem;\n}\n\n[mol_dump_value_simple] {\n\tpadding: 0;\n}\n\n[mol_dump_value_expand_content] {\n\tpadding-left: .75rem;\n}\n\n[mol_dump_value_expand_title],\n[mol_dump_value_expand_head] {\n\tpadding: 0;\n}\n");
 })($ || ($ = {}));
 //mol/dump/value/-css/value.view.css.ts
 ;
@@ -7929,7 +7864,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("mol/dump/list/list.view.css", "[mol_dump_list] {\n\talign-items: flex-start;\n\tgap: var(--mol_gap_space);\n}\n\n[mol_dump_list_dump]:first-child {\n\tposition: sticky;\n\ttop: .75rem;\n}\n");
+    $mol_style_attach("mol/dump/list/list.view.css", "[mol_dump_list] {\n\talign-items: flex-start;\n\tgap: var(--mol_gap_space);\n}\n\n[mol_dump_list_dump]:first-child {\n\tposition: sticky;\n\ttop: 0;\n}\n");
 })($ || ($ = {}));
 //mol/dump/list/-css/list.view.css.ts
 ;
