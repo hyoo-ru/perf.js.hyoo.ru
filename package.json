@@ -29,7 +29,6 @@
     "$mol_delegate",
     "$mol_type_writable",
     "$mol_type",
-    "$mol_deprecated",
     "$mol_env",
     "$mol_offline_install",
     "$mol_offline",
