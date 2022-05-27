@@ -113,6 +113,7 @@
     "$mol_hotkey",
     "$mol_keyboard",
     "$mol_textarea",
+    "$mol_stack",
     "$mol_text_code",
     "$mol_text",
     "$mol_list",

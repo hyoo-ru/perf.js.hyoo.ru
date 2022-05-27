@@ -45,6 +45,8 @@ $mol_hotkey $mol_plugin
 	mod_alt false
 	mod_shift false
 
+$mol_stack $mol_view
+
 $mol_list $mol_view
 	render_visible_only true
 	render_over 0
@@ -100,6 +102,7 @@ $mol_text_code_row $mol_paragraph
 	Token_link* $mol_text_code_token_link
 		haystack <= token_text* \
 		needle <= highlight \
+	find_pos* null
 
 $mol_text_code $mol_list
 	attr *
@@ -107,6 +110,7 @@ $mol_text_code $mol_list
 		mol_text_code_sidebar_showed <= sidebar_showed false
 	text \
 	text_lines /string
+	find_pos* null
 	Row* $mol_text_code_row
 		numb_showed <= sidebar_showed
 		numb <= row_numb* 0
@@ -159,8 +163,6 @@ $mol_speck $mol_view
 
 $mol_button $mol_view
 	enabled true
-	minimal_height 40
-	minimal_width 40
 	click?event null
 	event_click?event null
 	event *
@@ -179,6 +181,8 @@ $mol_button $mol_view
 		value <= error \
 
 $mol_button_typed $mol_button
+	minimal_height 40
+	minimal_width 40
 
 $mol_svg $mol_view
 	dom_name \svg
@@ -391,7 +395,7 @@ $mol_text_span $mol_paragraph
 		^
 		mol_text_type <= type \
 
-$mol_textarea $mol_view
+$mol_textarea $mol_stack
 	attr *
 		^
 		mol_textarea_clickable <= clickable?val false
@@ -604,13 +608,13 @@ $hyoo_js_perf $mol_page
 				Content <= Prefix_code $mol_textarea
 					enabled <= changable true
 					value?val <=> prefix?val \
-					hint \let res
+					hint \let res = 0
 			<= Postfix $mol_labeler
 				title @ \Common Teardown
 				Content <= Postfix_code $mol_textarea
 					enabled <= changable true
 					value?val <=> postfix?val \
-					hint \$mol_assert_like( res, 1 )
+					hint \$mol_assert_like( res, {#} - 1 )
 			<= Hint $mol_text text <= hint \
 				\# Placeholders
 				\
@@ -679,14 +683,14 @@ $hyoo_js_perf_case $mol_view
 			Content <= Prefix_code $mol_textarea
 				enabled <= changable true
 				value?val <=> prefix?val \
-				hint \let val{#} = 1
+				hint \let count = {#}
 		<= Source $mol_labeler
 			title @ \Measure
 			minimal_width 150
 			Content <= Source_code $mol_textarea
 				enabled <= changable true
 				value?val <=> source?val \
-				hint \res = val{#}
+				hint \res = {#} % count
 		<= Eval_labeler $mol_labeler
 			title @ \Debug
 			Content <= Eval_result
