@@ -564,8 +564,8 @@ declare namespace $ {
         maximal_width(): number;
         minimal_height(): number;
         static watchers: Set<$mol_view>;
-        view_rect(): ClientRect | null;
-        view_rect_cache(next?: ClientRect | null): ClientRect | null;
+        view_rect(): DOMRectReadOnly | null;
+        view_rect_cache(next?: DOMRectReadOnly | null): DOMRectReadOnly | null;
         view_rect_watcher(): {
             destructor: () => boolean;
         };
@@ -2188,6 +2188,7 @@ declare namespace $ {
         Link_http(id: any): $$.$mol_link_iconed;
         Image(id: any): $$.$mol_embed_native;
         block_content(id: any): readonly any[];
+        uri_resolve(id: any): any;
         quote_text(id: any): string;
         list_text(id: any): string;
         header_level(id: any): string;
