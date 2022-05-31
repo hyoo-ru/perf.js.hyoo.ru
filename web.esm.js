@@ -4633,6 +4633,7 @@ var $;
         'text-link-http': /\b(https?:\/\/[^\s,.;:!?")]+(?:[,.;:!?")][^\s,.;:!?")]+)+)/,
     });
     $.$mol_syntax2_md_code = new $mol_syntax2({
+        'code-indent': /\t+/,
         'code-docs': /\/\/\/.*?$/,
         'code-comment-block': /(?:\/\*[^]*?\*\/|\/\+[^]*?\+\/|<![^]*?>)/,
         'code-link': /(?:\w+:\/\/|#)\S+?(?=\s|\\\\|""|$)/,
@@ -7636,6 +7637,184 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_icon_flash extends $mol_icon {
+        path() {
+            return "M7,2V13H10V22L17,10H13L17,2H7Z";
+        }
+    }
+    $.$mol_icon_flash = $mol_icon_flash;
+})($ || ($ = {}));
+//mol/icon/flash/-view.tree/flash.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_ghost extends $mol_view {
+        Sub() {
+            const obj = new this.$.$mol_view();
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_ghost.prototype, "Sub", null);
+    $.$mol_ghost = $mol_ghost;
+})($ || ($ = {}));
+//mol/ghost/-view.tree/ghost.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    function $mol_dom_render_events(el, events) {
+        for (let name in events) {
+            el.addEventListener(name, events[name], { passive: false });
+        }
+    }
+    $.$mol_dom_render_events = $mol_dom_render_events;
+    function $mol_dom_render_events_async(el, events) {
+        for (let name in events) {
+            el.addEventListener(name, events[name], { passive: true });
+        }
+    }
+    $.$mol_dom_render_events_async = $mol_dom_render_events_async;
+})($ || ($ = {}));
+//mol/dom/render/events/events.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_ghost extends $.$mol_ghost {
+            dom_node(next) {
+                const node = this.Sub().dom_node(next);
+                $mol_dom_render_attributes(node, this.attr_static());
+                $mol_dom_render_events(node, this.event());
+                return node;
+            }
+            dom_node_actual() {
+                this.dom_node();
+                const node = this.Sub().dom_node_actual();
+                const attr = this.attr();
+                const style = this.style();
+                const fields = this.field();
+                $mol_dom_render_attributes(node, attr);
+                $mol_dom_render_styles(node, style);
+                $mol_dom_render_fields(node, fields);
+                return node;
+            }
+            dom_tree() {
+                const Sub = this.Sub();
+                const node = Sub.dom_tree();
+                this.dom_node_actual();
+                this.auto();
+                return node;
+            }
+            title() {
+                return this.Sub().title();
+            }
+            minimal_width() {
+                return this.Sub().minimal_width();
+            }
+            minimal_height() {
+                return this.Sub().minimal_height();
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_ghost.prototype, "dom_node", null);
+        __decorate([
+            $mol_mem
+        ], $mol_ghost.prototype, "dom_node_actual", null);
+        $$.$mol_ghost = $mol_ghost;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/ghost/ghost.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_follower extends $mol_ghost {
+        Anchor() {
+            const obj = new this.$.$mol_view();
+            return obj;
+        }
+        offset() {
+            return [
+                0,
+                0
+            ];
+        }
+        style() {
+            return {
+                ...super.style(),
+                transform: this.transform()
+            };
+        }
+        transform() {
+            return "";
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_follower.prototype, "Anchor", null);
+    $.$mol_follower = $mol_follower;
+})($ || ($ = {}));
+//mol/follower/-view.tree/follower.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/follower/follower.view.css", "[mol_follower] {\n\tposition: absolute;\n\ttop: 0;\n\tleft: 0;\n\ttransition: none;\n}\n");
+})($ || ($ = {}));
+//mol/follower/-css/follower.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_follower extends $.$mol_follower {
+            pos() {
+                const self_rect = this.view_rect();
+                const prev = $mol_wire_probe(() => this.pos());
+                const anchor_rect = this.Anchor()?.view_rect();
+                if (!anchor_rect)
+                    return null;
+                const left = Math.floor((prev?.left ?? 0)
+                    - (self_rect?.left ?? 0)
+                    - (self_rect?.width ?? 0) / 2
+                    + (anchor_rect?.left ?? 0)
+                    + this.offset()[0] * (anchor_rect?.width ?? 0));
+                const top = Math.floor((prev?.top ?? 0)
+                    - (self_rect?.top ?? 0)
+                    - (self_rect?.height ?? 0) / 2
+                    + (anchor_rect?.top ?? 0)
+                    + this.offset()[1] * (anchor_rect?.height ?? 0));
+                return { left, top };
+            }
+            transform() {
+                const pos = this.pos();
+                if (!pos)
+                    return 'scale(0)';
+                const { left, top } = pos;
+                return `translate( ${left}px, ${top}px )`;
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_follower.prototype, "pos", null);
+        __decorate([
+            $mol_mem
+        ], $mol_follower.prototype, "transform", null);
+        $$.$mol_follower = $mol_follower;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/follower/follower.view.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_icon_cross extends $mol_icon {
         path() {
             return "M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z";
@@ -8150,7 +8329,28 @@ var $;
         Code() {
             const obj = new this.$.$mol_textarea();
             obj.hint = () => "javascript..";
+            obj.sidebar_showed = () => true;
             obj.value = (val) => this.code(val);
+            return obj;
+        }
+        error_anchor() {
+            return null;
+        }
+        error_offset() {
+            return [
+                0,
+                0
+            ];
+        }
+        Error_icon() {
+            const obj = new this.$.$mol_icon_flash();
+            return obj;
+        }
+        Error_mark() {
+            const obj = new this.$.$mol_follower();
+            obj.Anchor = () => this.error_anchor();
+            obj.offset = () => this.error_offset();
+            obj.Sub = () => this.Error_icon();
             return obj;
         }
         Code_page() {
@@ -8162,7 +8362,8 @@ var $;
                 this.Run()
             ];
             obj.body = () => [
-                this.Code()
+                this.Code(),
+                this.Error_mark()
             ];
             return obj;
         }
@@ -8269,6 +8470,12 @@ var $;
     ], $hyoo_js_eval.prototype, "Code", null);
     __decorate([
         $mol_mem
+    ], $hyoo_js_eval.prototype, "Error_icon", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_js_eval.prototype, "Error_mark", null);
+    __decorate([
+        $mol_mem
     ], $hyoo_js_eval.prototype, "Code_page", null);
     __decorate([
         $mol_mem
@@ -8319,7 +8526,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("hyoo/js/eval/eval.view.css", "[hyoo_js_eval_menu_page] {\n\tflex: 0 0 auto;\n}\n\n[hyoo_js_eval_menu] {\n\tpadding: var(--mol_gap_block);\n}\n\n[hyoo_js_eval_code_page] {\n\tflex: 1 0 auto;\n}\n\n[hyoo_js_eval_code_page_body] {\n\tpadding: var(--mol_gap_block);\n}\n\n[hyoo_js_eval_code] {\n\tflex: 0 0 auto;\n}\n\n[hyoo_js_eval_result] {\n\tpadding: var(--mol_gap_text);\n}\n\n[hyoo_js_eval_result_page] {\n\tflex: 0 0 50%;\n}\n\n[hyoo_js_eval_result_page_body] {\n\tpadding: var(--mol_gap_block);\n}\n");
+    $mol_style_attach("hyoo/js/eval/eval.view.css", "[hyoo_js_eval_menu_page] {\n\tflex: 0 0 auto;\n}\n\n[hyoo_js_eval_menu] {\n\tpadding: var(--mol_gap_block);\n}\n\n[hyoo_js_eval_code_page] {\n\tflex: 1 0 auto;\n}\n\n[hyoo_js_eval_code_page_body] {\n\tpadding: var(--mol_gap_block);\n}\n\n[hyoo_js_eval_code] {\n\tflex: 0 0 auto;\n}\n\n[hyoo_js_eval_result] {\n\tpadding: var(--mol_gap_text);\n}\n\n[hyoo_js_eval_result_page] {\n\tflex: 0 0 50%;\n}\n\n[hyoo_js_eval_result_page_body] {\n\tpadding: var(--mol_gap_block);\n}\n\n[hyoo_js_eval_error_icon] {\n\tpointer-events: none;\n\tcolor: var(--mol_theme_focus);\n}\n");
 })($ || ($ = {}));
 //hyoo/js/eval/-css/eval.view.css.ts
 ;
@@ -8376,7 +8583,7 @@ var $;
             }
             code_enhanced() {
                 let code = this.code();
-                code = code.replaceAll(/^([ \t]*)(?:const|var|let) +(\w+)/mig, (found, indent, name) => `${indent}this.spy( ()=>[ "${indent}${name} =", ${name} ] )\n${found}`);
+                code = code.replaceAll(/^([ \t]*)(?:const|var|let) +(\w+)/mig, (found, indent, name) => `spy( ()=>[ "${indent}${name} =", ${name} ] );${found}`);
                 return code;
             }
             execute() {
@@ -8390,7 +8597,31 @@ var $;
                         };
                     }
                 });
+                const spy = this.spy.bind(this);
                 return ['=', $mol_try(() => eval(this.code_enhanced()))];
+            }
+            error_pos() {
+                const [eq, val] = this.execute();
+                if (!(val instanceof Error))
+                    return null;
+                const pos = val.stack.match(/(?:<anonymous>| eval).*:(\d+:\d+)/);
+                if (!pos)
+                    return null;
+                const [line, col] = pos[1].split(':').map(Number);
+                const row = this.Code().View().Row(line);
+                const shift = this.code_enhanced().split('\n')[line - 1]
+                    ?.match(/^\w*spy\( \(\).*?\);/)?.[0]?.length ?? 0;
+                return row.find_pos(col - 1 - shift);
+            }
+            error_anchor() {
+                return this.error_pos()?.token;
+            }
+            error_offset() {
+                const pos = this.error_pos();
+                return [pos.offset / pos.token.haystack().length, 0];
+            }
+            Error_mark() {
+                return this.run() ? super.Error_mark() : null;
             }
             spy(args) {
                 Promise.resolve().then(() => {
@@ -8440,6 +8671,12 @@ var $;
         __decorate([
             $mol_mem
         ], $hyoo_js_eval.prototype, "execute", null);
+        __decorate([
+            $mol_mem
+        ], $hyoo_js_eval.prototype, "error_pos", null);
+        __decorate([
+            $mol_mem
+        ], $hyoo_js_eval.prototype, "error_offset", null);
         __decorate([
             $mol_mem
         ], $hyoo_js_eval.prototype, "result", null);
