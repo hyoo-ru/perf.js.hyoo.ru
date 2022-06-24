@@ -121,7 +121,7 @@ namespace $.$$ {
 		max_frequency() {
 			return this.measures().reduce( ( max , measure )=> {
 				return Math.max( max , measure.reduce( ( max , level )=> {
-					return Math.max( max , level.frequency )
+					return Math.max( max , level.frequency || 0 )
 				} , 0 ) )
 			} , 0 )
 		}
@@ -227,7 +227,7 @@ namespace $.$$ {
 		}
 
 		@ $mol_action
-		measure_safe( prefix : string , inner : string , postfix : string ) {
+		measure_safe( index: number, prefix : string , inner : string , postfix : string ) {
 
 			try {
 
@@ -235,7 +235,16 @@ namespace $.$$ {
 
 			} catch( error: any ) {
 
-				if( error instanceof Promise ) $mol_fail_hidden( error )
+				if( error instanceof Promise ) {
+					
+					const stats = $hyoo_js_perf_stats.create( stats => {
+						stats.error = `Iteration ${++this._run_iteration}`
+					} )
+					
+					this.measures_for( index , [ stats ] )
+					
+					$mol_fail_hidden( error )
+				}
 
 				$mol_fail_log( error )
 
@@ -249,6 +258,8 @@ namespace $.$$ {
 			}
 			
 		}
+		
+		_run_iteration = 0
 
 		@ $mol_action
 		run() {
@@ -265,8 +276,9 @@ namespace $.$$ {
 			for( const [ index , inner ] of this.sources().entries() ) {
 				
 				if( !inner.trim() ) continue
-
+				
 				const cold = this.measure_safe(
+					index,
 					[
 						'/*cold*/',
 						prefix,
@@ -279,6 +291,7 @@ namespace $.$$ {
 				)
 
 				const hot = this.measure_safe(
+					index,
 					[
 						'/*hot*/',
 						prefix,
@@ -289,11 +302,12 @@ namespace $.$$ {
 					`case_${token}({#})`,
 					postfix,
 				)
-
+				
 				this.measures_for( index , [ cold , hot ] )
-
+				this._run_iteration = 0
+				
 			}
-
+			
 		}
 
 	}
