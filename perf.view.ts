@@ -260,6 +260,10 @@ namespace $.$$ {
 		}
 		
 		_run_iteration = 0
+		@ $mol_action
+		iterations_reset() {
+			this._run_iteration = 0
+		}
 
 		@ $mol_action
 		run() {
@@ -304,7 +308,7 @@ namespace $.$$ {
 				)
 				
 				this.measures_for( index , [ cold , hot ] )
-				this._run_iteration = 0
+				this.iterations_reset()
 				
 			}
 			
