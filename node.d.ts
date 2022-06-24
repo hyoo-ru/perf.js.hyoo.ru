@@ -2953,7 +2953,8 @@ declare namespace $.$$ {
             mem: any;
         };
         measure_precise(prefix: string, inner: string, postfix: string): $hyoo_js_perf_stats;
-        measure_safe(prefix: string, inner: string, postfix: string): $hyoo_js_perf_stats;
+        measure_safe(index: number, prefix: string, inner: string, postfix: string): $hyoo_js_perf_stats;
+        _run_iteration: number;
         run(): void;
     }
     class $hyoo_js_perf_case extends $.$hyoo_js_perf_case {
