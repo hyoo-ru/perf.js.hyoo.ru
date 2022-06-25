@@ -680,28 +680,24 @@ $hyoo_js_perf $mol_page
 					value?val <=> postfix?val \
 					hint \$mol_assert_like( res, {#} - 1 )
 			<= Hint $mol_text text <= hint \
-				\# Placeholders
-				\
+				\### Placeholders
 				\	`{#}` // iterations count/number
 				\
-				\# Load JS or ESM
-				\
+				\### Load JS or ESM
 				\	const { some } = $mol_import.script( uri )
 				\	const { some } = $mol_import.module( uri ).default
 				\
-				\# Asserts
-				\
+				\### Asserts
 				\	$mol_assert_ok( 'foo' )
 				\	$mol_assert_equal( 777, 777 )
 				\	$mol_assert_like( [777], [777] )
 				\
-				\# Measure memory
-				\
+				\### Measure memory
 				\Call Chrome with:
 				\	--js-flags="--expose-gc"
 				\	--enable-precise-memory-info
 				\
-				\# Other JS Tools
+				\### Other JS Tools
 				\[V8 Optimizations](https://opt.js.hyoo.ru/) [Sandbox](https://eval.js.hyoo.ru)
 		<= Cases_pane $mol_scroll sub <= cases_pane_content /
 			<= Cases $mol_view sub <= cases /
