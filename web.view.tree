@@ -773,15 +773,23 @@ $hyoo_js_perf_case_result $mol_view
 			<= Mmory_ortion $mol_portion portion <= memory_portion 0
 		<= Stats $mol_view sub /
 			<= title \
-			<= Frequency $mol_view sub / <= frequency \
+			<= Frequency $mol_view
+				attr * title <= frequency_hint @ \Iterations per Second
+				sub / <= frequency \
 			\≈
-			<= Time $mol_view sub / <= time_total \
+			<= Time $mol_view
+				attr * title <= time_hint @ \Seconds per Iteration
+				sub / <= time_total \
 			\×
-			<= Iterations $mol_view sub / <= iterations \
+			<= Iterations $mol_view
+				attr * title <= iterations_hint @ \Iterations Count
+				sub / <= iterations \
 			\×
 			<= Memory_per_iteration $mol_view
+				attr * title <= memory_per_iteration_hint @ \Bytes per Itaration
 				sub / <= memory_per_iteration \
 			\=
 			<= Memory $mol_view
+				attr * title <= memory_hint @ \Bytes for All Iterations
 				sub / <= memory_total \
 		<= Error $mol_view sub / <= error \

@@ -9215,7 +9215,10 @@ var $;
             }
             spy(args) {
                 Promise.resolve().then(() => {
-                    this.result([...this.result(), args()]);
+                    try {
+                        this.result([...this.result(), args()]);
+                    }
+                    catch { }
                 });
             }
             result(next) {
@@ -9837,51 +9840,81 @@ var $;
         title() {
             return "";
         }
+        frequency_hint() {
+            return this.$.$mol_locale.text('$hyoo_js_perf_case_result_frequency_hint');
+        }
         frequency() {
             return "";
         }
         Frequency() {
             const obj = new this.$.$mol_view();
+            obj.attr = () => ({
+                title: this.frequency_hint()
+            });
             obj.sub = () => [
                 this.frequency()
             ];
             return obj;
+        }
+        time_hint() {
+            return this.$.$mol_locale.text('$hyoo_js_perf_case_result_time_hint');
         }
         time_total() {
             return "";
         }
         Time() {
             const obj = new this.$.$mol_view();
+            obj.attr = () => ({
+                title: this.time_hint()
+            });
             obj.sub = () => [
                 this.time_total()
             ];
             return obj;
+        }
+        iterations_hint() {
+            return this.$.$mol_locale.text('$hyoo_js_perf_case_result_iterations_hint');
         }
         iterations() {
             return "";
         }
         Iterations() {
             const obj = new this.$.$mol_view();
+            obj.attr = () => ({
+                title: this.iterations_hint()
+            });
             obj.sub = () => [
                 this.iterations()
             ];
             return obj;
+        }
+        memory_per_iteration_hint() {
+            return this.$.$mol_locale.text('$hyoo_js_perf_case_result_memory_per_iteration_hint');
         }
         memory_per_iteration() {
             return "";
         }
         Memory_per_iteration() {
             const obj = new this.$.$mol_view();
+            obj.attr = () => ({
+                title: this.memory_per_iteration_hint()
+            });
             obj.sub = () => [
                 this.memory_per_iteration()
             ];
             return obj;
+        }
+        memory_hint() {
+            return this.$.$mol_locale.text('$hyoo_js_perf_case_result_memory_hint');
         }
         memory_total() {
             return "";
         }
         Memory() {
             const obj = new this.$.$mol_view();
+            obj.attr = () => ({
+                title: this.memory_hint()
+            });
             obj.sub = () => [
                 this.memory_total()
             ];
