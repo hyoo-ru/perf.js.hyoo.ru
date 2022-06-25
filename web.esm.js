@@ -9129,7 +9129,7 @@ var $;
             return obj;
         }
         hint() {
-            return "# Placeholders\n\n\t`{#}` // iterations count/number\n\n# Load JS or ESM\n\n\tconst { some } = $mol_import.script( uri )\n\tconst { some } = $mol_import.module( uri ).default\n\n# Asserts\n\n\t$mol_assert_ok( 'foo' )\n\t$mol_assert_equal( 777, 777 )\n\t$mol_assert_like( [777], [777] )\n\n# Measure memory\n\nCall Chrome with:\n\t--js-flags=\"--expose-gc\"\n\t--enable-precise-memory-info";
+            return "# Placeholders\n\n\t`{#}` // iterations count/number\n\n# Load JS or ESM\n\n\tconst { some } = $mol_import.script( uri )\n\tconst { some } = $mol_import.module( uri ).default\n\n# Asserts\n\n\t$mol_assert_ok( 'foo' )\n\t$mol_assert_equal( 777, 777 )\n\t$mol_assert_like( [777], [777] )\n\n# Measure memory\n\nCall Chrome with:\n\t--js-flags=\"--expose-gc\"\n\t--enable-precise-memory-info\n\n# Other JS Tools\n[V8 Optimizations](https://opt.js.hyoo.ru/) [Sandbox](https://eval.js.hyoo.ru)";
         }
         Hint() {
             const obj = new this.$.$mol_text();

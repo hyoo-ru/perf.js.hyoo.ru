@@ -700,6 +700,9 @@ $hyoo_js_perf $mol_page
 				\Call Chrome with:
 				\	--js-flags="--expose-gc"
 				\	--enable-precise-memory-info
+				\
+				\# Other JS Tools
+				\[V8 Optimizations](https://opt.js.hyoo.ru/) [Sandbox](https://eval.js.hyoo.ru)
 		<= Cases_pane $mol_scroll sub <= cases_pane_content /
 			<= Cases $mol_view sub <= cases /
 	Case!index $hyoo_js_perf_case
