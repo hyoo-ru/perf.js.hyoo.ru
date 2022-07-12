@@ -1735,13 +1735,15 @@ var $;
 var $;
 (function ($) {
     class $mol_view_selection extends $mol_object {
-        static focused(next) {
+        static focused(next, notify) {
             const parents = [];
             let element = next?.[0] ?? $mol_dom_context.document.activeElement;
             while (element) {
                 parents.push(element);
                 element = element.parentNode;
             }
+            if (!next || notify)
+                return parents;
             new $mol_after_tick(() => {
                 const element = this.focused()[0];
                 if (element)
@@ -1774,7 +1776,7 @@ var $;
 (function ($) {
     if ($mol_dom_context.document) {
         $mol_dom_context.document.documentElement.addEventListener('focus', (event) => {
-            $mol_view_selection.focused($mol_maybe($mol_dom_context.document.activeElement));
+            $mol_view_selection.focused($mol_maybe($mol_dom_context.document.activeElement), 'notify');
         }, true);
     }
 })($ || ($ = {}));
@@ -2062,6 +2064,51 @@ var $;
     $.$mol_func_name_from = $mol_func_name_from;
 })($ || ($ = {}));
 //mol/func/name/name.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_after_timeout extends $mol_object2 {
+        delay;
+        task;
+        id;
+        constructor(delay, task) {
+            super();
+            this.delay = delay;
+            this.task = task;
+            this.id = setTimeout(task, delay);
+        }
+        destructor() {
+            clearTimeout(this.id);
+        }
+    }
+    $.$mol_after_timeout = $mol_after_timeout;
+})($ || ($ = {}));
+//mol/after/timeout/timeout.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_after_work extends $mol_object2 {
+        delay;
+        task;
+        id;
+        constructor(delay, task) {
+            super();
+            this.delay = delay;
+            this.task = task;
+            this.id = requestIdleCallback(task, { timeout: delay });
+        }
+        destructor() {
+            cancelIdleCallback(this.id);
+        }
+    }
+    $.$mol_after_work = $mol_after_work;
+    if (typeof requestIdleCallback !== 'function') {
+        $.$mol_after_work = $mol_after_timeout;
+    }
+})($ || ($ = {}));
+//mol/after/work/work.ts
 ;
 "use strict";
 //mol/type/keys/extract/extract.ts
@@ -2382,6 +2429,12 @@ var $;
             this.force_render(new Set(path));
             $mol_wire_fiber.sync();
             view.dom_node().scrollIntoView({ block: align });
+        }
+        bring() {
+            new $mol_after_work(16, () => {
+                this.dom_node().scrollIntoView({ behavior: 'smooth' });
+                new $mol_after_timeout(400, () => this.focused(true));
+            });
         }
     }
     __decorate([
@@ -3566,13 +3619,17 @@ var $;
                         break;
                     if (p === n)
                         continue;
-                    new $mol_after_frame(() => {
-                        n.dom_node()['focus']();
-                        n.dom_node().scrollIntoView({ behavior: 'smooth' });
-                    });
+                    n.bring();
                     break;
                 }
                 return next;
+            }
+            bring() {
+                const pages = this.pages();
+                if (pages.length)
+                    pages[pages.length - 1].bring();
+                else
+                    super.bring();
             }
         }
         __decorate([
@@ -5255,27 +5312,6 @@ var $;
     $.$mol_svg = $mol_svg;
 })($ || ($ = {}));
 //mol/svg/-view.tree/svg.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_after_timeout extends $mol_object2 {
-        delay;
-        task;
-        id;
-        constructor(delay, task) {
-            super();
-            this.delay = delay;
-            this.task = task;
-            this.id = setTimeout(task, delay);
-        }
-        destructor() {
-            clearTimeout(this.id);
-        }
-    }
-    $.$mol_after_timeout = $mol_after_timeout;
-})($ || ($ = {}));
-//mol/after/timeout/timeout.ts
 ;
 "use strict";
 var $;
@@ -10130,30 +10166,6 @@ var $;
     $.$mol_range2_array = $mol_range2_array;
 })($ || ($ = {}));
 //mol/range2/range2.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_after_work extends $mol_object2 {
-        delay;
-        task;
-        id;
-        constructor(delay, task) {
-            super();
-            this.delay = delay;
-            this.task = task;
-            this.id = requestIdleCallback(task, { timeout: delay });
-        }
-        destructor() {
-            cancelIdleCallback(this.id);
-        }
-    }
-    $.$mol_after_work = $mol_after_work;
-    if (typeof requestIdleCallback !== 'function') {
-        $.$mol_after_work = $mol_after_timeout;
-    }
-})($ || ($ = {}));
-//mol/after/work/work.ts
 ;
 "use strict";
 var $;
