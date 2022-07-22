@@ -371,11 +371,13 @@ namespace $.$$ {
 		}
 
 		memory_total() {
-			return $mol_si_short( this.result().memory, 'B' )
+			const val = this.result().memory
+			return val ? $mol_si_short( val, 'B' ) : '?B'
 		}
 
 		memory_per_iteration() {
-			return $mol_si_short( this.result().memory_per_iteration, 'B' )
+			const val = this.result().memory_per_iteration
+			return val ? $mol_si_short( val, 'B' ) : '?B'
 		}
 
 		frequency_portion() {
