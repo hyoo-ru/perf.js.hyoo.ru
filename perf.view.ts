@@ -92,9 +92,9 @@ namespace $.$$ {
 			const token = this.token()
 			
 			const code = this.prefix()
-				+ '\n' + this.case_prefix( index ) 
-				+ '\n' + this.source( index )
-				+ '\n' + this.postfix()
+				+ '\n\n' + this.case_prefix( index ) 
+				+ '\n\n' + this.source( index )
+				+ '\n\n' + this.postfix()
 			
 			return code.trim().replace( /\{#\}/g , '1' )
 		}
