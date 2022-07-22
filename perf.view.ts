@@ -343,6 +343,11 @@ namespace $.$$ {
 		result_title( level : number ) {
 			return [ '❄' , '🔥' ][ level ] ?? ''
 		}
+		
+		eval_standalone() {
+			const code = this.sample()
+			return `https://eval.js.hyoo.ru/#!code=${ encodeURIComponent( code ) }`
+		}
 
 	}
 

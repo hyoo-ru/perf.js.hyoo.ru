@@ -7,7 +7,7 @@
 
 [hyoo_js_perf_common] {
 	flex-direction: column;
-	flex: 1000 0 auto;
+	flex: 0 0 auto;
 	min-width: 20rem;
 }
 
@@ -52,6 +52,10 @@
 	width: 28rem;
 	display: table-cell;
 	height: 5rem;
+}
+
+[hyoo_js_perf_case_eval_sandalone] {
+	margin: -.5rem;
 }
 
 [hyoo_js_perf_case_result] {
