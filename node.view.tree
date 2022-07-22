@@ -721,12 +721,14 @@ $hyoo_js_perf $mol_page
 				\	`{#}` // iterations count/number
 				\
 				\### Load JS or ESM
-				\	const { some } = $mol_import.script( uri )
-				\	const { some } = $mol_import.module( uri ).default
+				\	const { some } = $mol_import.script(
+				\		'https://unpkg.org/...'
+				\	)
+				\	const { some } = $mol_import.module(
+				\		'https://esm.sh/...'
+				\	).default
 				\
-				\### Asserts
-				\	$mol_assert_ok( 'foo' )
-				\	$mol_assert_equal( 777, 777 )
+				\### Assert equality
 				\	$mol_assert_like( [777], [777] )
 				\
 				\### Measure memory
@@ -792,7 +794,12 @@ $hyoo_js_perf_case $mol_view
 				value?val <=> source?val \
 				hint \res = {#} % count
 		<= Eval_labeler $mol_labeler
-			title @ \Debug
+			label /
+				<= Eval_labeler_title @ \Debug
+				<= Eval_sandalone $mol_link_iconed
+					title \
+					hint @ \Generated script
+					uri <= eval_standalone \
 			Content <= Eval_result
 		<= Results $mol_labeler
 			title @ \Results

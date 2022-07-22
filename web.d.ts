@@ -2906,6 +2906,9 @@ declare namespace $ {
         source(val?: any): string;
         Source_code(): $$.$mol_textarea;
         Source(): $mol_labeler;
+        Eval_labeler_title(): string;
+        eval_standalone(): string;
+        Eval_sandalone(): $$.$mol_link_iconed;
         Eval_labeler(): $mol_labeler;
         result_rows(): readonly any[];
         Result_rows(): $$.$mol_list;
@@ -3037,6 +3040,7 @@ declare namespace $.$$ {
         columns(): $mol_labeler[];
         result(level: number): any;
         result_title(level: number): string;
+        eval_standalone(): string;
     }
     class $hyoo_js_perf_case_result extends $.$hyoo_js_perf_case_result {
         sub(): $mol_view[];

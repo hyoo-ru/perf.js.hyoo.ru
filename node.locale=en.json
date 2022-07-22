@@ -8,6 +8,7 @@
 	"$hyoo_js_perf_Prefix_title": "Common Setup",
 	"$hyoo_js_perf_Run_hint": "Run",
 	"$hyoo_js_perf_case_Eval_labeler_title": "Debug",
+	"$hyoo_js_perf_case_Eval_sandalone_hint": "Generated script",
 	"$hyoo_js_perf_case_Prefix_title": "Setup",
 	"$hyoo_js_perf_case_Results_title": "Results",
 	"$hyoo_js_perf_case_Source_title": "Measure",
