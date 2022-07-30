@@ -5464,6 +5464,7 @@ var $;
             return {
                 ...super.event(),
                 click: (event) => this.event_activate(event),
+                dblclick: (event) => this.clicks(event),
                 keydown: (event) => this.event_key_press(event)
             };
         }
@@ -5487,6 +5488,11 @@ var $;
             return obj;
         }
         event_activate(event) {
+            if (event !== undefined)
+                return event;
+            return null;
+        }
+        clicks(event) {
             if (event !== undefined)
                 return event;
             return null;
@@ -5521,6 +5527,9 @@ var $;
     __decorate([
         $mol_mem
     ], $mol_button.prototype, "event_activate", null);
+    __decorate([
+        $mol_mem
+    ], $mol_button.prototype, "clicks", null);
     __decorate([
         $mol_mem
     ], $mol_button.prototype, "event_key_press", null);
@@ -9227,10 +9236,15 @@ var $;
             obj.text = () => this.simple();
             return obj;
         }
-        expanded(val) {
-            if (val !== undefined)
-                return val;
+        expanded(next) {
+            if (next !== undefined)
+                return next;
             return false;
+        }
+        expand_all(next) {
+            if (next !== undefined)
+                return next;
+            return null;
         }
         expand_title() {
             return "";
@@ -9244,7 +9258,8 @@ var $;
             const obj = new this.$.$mol_check_expand();
             obj.minimal_height = () => 24;
             obj.minimal_width = () => 24;
-            obj.checked = (val) => this.expanded(val);
+            obj.checked = (next) => this.expanded(next);
+            obj.clicks = (next) => this.expand_all(next);
             obj.label = () => [
                 this.Expand_title()
             ];
@@ -9253,9 +9268,13 @@ var $;
         row_values(id) {
             return [];
         }
+        prototypes() {
+            return false;
+        }
         Row(id) {
             const obj = new this.$.$mol_dump_list();
             obj.values = () => this.row_values(id);
+            obj.prototypes = () => this.prototypes();
             return obj;
         }
         expand_content() {
@@ -9265,7 +9284,7 @@ var $;
         }
         Expand() {
             const obj = new this.$.$mol_expander();
-            obj.expanded = (val) => this.expanded(val);
+            obj.expanded = (next) => this.expanded(next);
             obj.Trigger = () => this.Expand_head();
             obj.content = () => this.expand_content();
             return obj;
@@ -9277,6 +9296,9 @@ var $;
     __decorate([
         $mol_mem
     ], $mol_dump_value.prototype, "expanded", null);
+    __decorate([
+        $mol_mem
+    ], $mol_dump_value.prototype, "expand_all", null);
     __decorate([
         $mol_mem
     ], $mol_dump_value.prototype, "Expand_title", null);
@@ -9334,13 +9356,13 @@ var $;
                 if (value instanceof Date)
                     return value.toISOString();
                 const kind = Reflect.getOwnPropertyDescriptor(value, Symbol.toStringTag)?.value
-                    ?? Reflect.getPrototypeOf(value)?.constructor.name
+                    ?? value.constructor.name
                     ?? 'Object';
                 if (value instanceof Node) {
                     try {
                         switch (value.nodeType) {
                             case value.TEXT_NODE: return kind + ' ' + value.nodeValue?.trim();
-                            case value.ELEMENT_NODE: return value.nodeName + ' ' + value.id;
+                            case value.ELEMENT_NODE: return `<${value.localName}> ${value.id}`;
                             case value.DOCUMENT_NODE: return kind + ' ' + value.baseURI;
                         }
                     }
@@ -9381,15 +9403,22 @@ var $;
                     }
                     catch { }
                 }
-                for (const key of Reflect.ownKeys(value)) {
-                    const prefix = String(key) + '∶';
-                    const descr = Reflect.getOwnPropertyDescriptor(value, key);
-                    if ('value' in descr)
-                        res.push([prefix, descr.value]);
-                    else
-                        res.push([prefix, descr.get, descr.set]);
+                if (value && (typeof value === 'object' || typeof value === 'function')) {
+                    for (const key of Reflect.ownKeys(value)) {
+                        const prefix = String(key) + '∶';
+                        const descr = Reflect.getOwnPropertyDescriptor(value, key);
+                        if ('value' in descr) {
+                            const line = [prefix, descr.value];
+                            res.push(line);
+                        }
+                        else {
+                            res.push([prefix, descr.get, descr.set]);
+                        }
+                    }
+                    if (this.prototypes()) {
+                        res.push(['__proto__:', Reflect.getPrototypeOf(value)]);
+                    }
                 }
-                res.push(['__proto__:', Reflect.getPrototypeOf(value)]);
                 return res;
             }
             expand_content() {
@@ -9397,6 +9426,17 @@ var $;
             }
             row_values(index) {
                 return this.rows_values()[index];
+            }
+            expand_all(event, blacklist = new Set) {
+                if (blacklist.has(this.value()))
+                    return;
+                blacklist.add(this.value());
+                this.expanded(true);
+                for (const row of this.expand_content()) {
+                    if (row.values()[0] === '__proto__:')
+                        continue;
+                    row.expand_all(event, blacklist);
+                }
             }
         }
         __decorate([
@@ -9439,10 +9479,14 @@ var $;
                 return next;
             return false;
         }
+        prototypes() {
+            return false;
+        }
         Dump(id) {
             const obj = new this.$.$mol_dump_value();
             obj.value = () => this.dump_value(id);
             obj.expanded = (next) => this.dump_expanded(id, next);
+            obj.prototypes = () => this.prototypes();
             return obj;
         }
     }
@@ -9474,6 +9518,9 @@ var $;
             }
             dump_value(index) {
                 return this.values()[index];
+            }
+            expand_all(event, blacklist = new Set) {
+                this.Dump(1).expand_all(event, blacklist);
             }
         }
         __decorate([
@@ -9685,6 +9732,7 @@ var $;
         Log(id) {
             const obj = new this.$.$mol_dump_list();
             obj.values = () => this.log(id);
+            obj.prototypes = () => true;
             return obj;
         }
         logs() {
