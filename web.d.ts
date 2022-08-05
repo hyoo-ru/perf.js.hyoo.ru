@@ -2642,6 +2642,10 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    function $mol_wire_trans(next: any): any;
+}
+
+declare namespace $ {
     function $mol_wire_patch(obj: object): void;
 }
 
