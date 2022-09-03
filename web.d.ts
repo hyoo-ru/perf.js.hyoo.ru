@@ -1680,6 +1680,7 @@ declare namespace $ {
         disabled(): boolean;
         tab_index(): number;
         hint(): string;
+        hint_safe(): string;
         error(): string;
     }
 }
@@ -1695,6 +1696,7 @@ declare namespace $.$$ {
         event_key_press(event: KeyboardEvent): void;
         tab_index(): number;
         error(): string;
+        hint_safe(): string;
         sub_visible(): ($mol_view_content | $mol_speck)[];
     }
 }
@@ -2171,6 +2173,7 @@ declare namespace $ {
         };
         uri_toggle(): string;
         hint(): string;
+        hint_safe(): string;
         target(): string;
         file_name(): string;
         current(): boolean;
@@ -2193,6 +2196,7 @@ declare namespace $.$$ {
         minimal_height(): number;
         external(): boolean;
         target(): '_self' | '_blank' | '_top' | '_parent' | string;
+        hint_safe(): string;
     }
 }
 
