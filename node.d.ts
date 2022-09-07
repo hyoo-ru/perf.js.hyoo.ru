@@ -2697,7 +2697,7 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    function $mol_wire_trans(next: any): any;
+    function $mol_wire_easing(next: any): any;
 }
 
 declare namespace $ {

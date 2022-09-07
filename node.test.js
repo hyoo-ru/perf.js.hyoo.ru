@@ -6494,7 +6494,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("mol/labeler/labeler.view.css", "[mol_labeler] {\n\tdisplay: flex;\n\tflex-direction: column;\n\talign-items: stretch;\n\tcursor: inherit;\n}\n\n[mol_labeler_label] {\n\tmin-height: 2.5rem;\n\tcolor: var(--mol_theme_shade);\n\tz-index: 1;\n\tpadding: var(--mol_gap_text);\n\tgap: 0 var(--mol_gap_block);\n\tflex-wrap: wrap;\n}\n\n[mol_labeler_content] {\n\tdisplay: flex;\n}\n");
+    $mol_style_attach("mol/labeler/labeler.view.css", "[mol_labeler] {\n\tdisplay: flex;\n\tflex-direction: column;\n\talign-items: stretch;\n\tcursor: inherit;\n}\n\n[mol_labeler_label] {\n\tmin-height: 2.5rem;\n\tcolor: var(--mol_theme_shade);\n\tz-index: 1;\n\tpadding: var(--mol_gap_text);\n\tgap: 0 var(--mol_gap_block);\n\tflex-wrap: wrap;\n}\n\n[mol_labeler_content] {\n\tdisplay: flex;\n\tpadding: var(--mol_gap_text);\n}\n");
 })($ || ($ = {}));
 //mol/labeler/-css/labeler.view.css.ts
 ;
@@ -8838,7 +8838,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    function $mol_wire_trans(next) {
+    function $mol_wire_easing(next) {
         const atom = $mol_wire_auto();
         if (!(atom instanceof $mol_wire_atom))
             $mol_fail(new Error('Allowed only inside atom'));
@@ -8852,9 +8852,9 @@ var $;
         $mol_state_time.now(0);
         return current;
     }
-    $.$mol_wire_trans = $mol_wire_trans;
+    $.$mol_wire_easing = $mol_wire_easing;
 })($ || ($ = {}));
-//mol/wire/trans/trans.ts
+//mol/wire/easing/easing.ts
 ;
 "use strict";
 var $;
