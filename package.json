@@ -88,7 +88,6 @@
     "$mol_dom_render_fields",
     "$mol_func_name",
     "$mol_func",
-    "$mol_after_work",
     "$mol_type_pick",
     "$mol_type_keys_extract",
     "$mol_type_keys",
@@ -213,6 +212,7 @@
     "$mol_range2",
     "$mol_action",
     "$mol_wait_rest",
+    "$mol_after_work",
     "$mol_si_short",
     "$mol_si"
   ],
