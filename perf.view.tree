@@ -13,12 +13,14 @@ $hyoo_js_perf $mol_page
 				title @ \Common Setup
 				Content <= Prefix_code $mol_textarea
 					enabled <= changable true
+					spellcheck false
 					value?val <=> prefix?val \
 					hint \let res = 0
 			<= Postfix $mol_labeler
 				title @ \Common Teardown
 				Content <= Postfix_code $mol_textarea
 					enabled <= changable true
+					spellcheck false
 					value?val <=> postfix?val \
 					hint \$mol_assert_like( res, {#} - 1 )
 			<= Hint $mol_text text <= hint \
@@ -96,6 +98,7 @@ $hyoo_js_perf_case $mol_view
 			minimal_width 150
 			Content <= Prefix_code $mol_textarea
 				enabled <= changable true
+				spellcheck false
 				value?val <=> prefix?val \
 				hint \let count = {#}
 		<= Source $mol_labeler
@@ -103,6 +106,7 @@ $hyoo_js_perf_case $mol_view
 			minimal_width 150
 			Content <= Source_code $mol_textarea
 				enabled <= changable true
+				spellcheck false
 				value?val <=> source?val \
 				hint \res = {#} % count
 		<= Eval_labeler $mol_labeler
