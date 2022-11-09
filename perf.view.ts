@@ -197,7 +197,7 @@ namespace $.$$ {
 
 			const one = this.measure_step( 1 , prefix , inner , postfix )
 			const iterations_raw = Math.ceil( 1 + ( 1000 - one.total ) / one.time )
-			const iterations = Math.min( Math.max( 1 , iterations_raw ) , 100_000 )
+			const iterations = Math.min( Math.max( 1 , iterations_raw ) , 10_000 )
 
 			let avg_last = 0
 			const times = [] as number[]
