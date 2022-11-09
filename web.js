@@ -1965,6 +1965,18 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    function $mol_dom_render_events(el, events, passive = false) {
+        for (let name in events) {
+            el.addEventListener(name, events[name], { passive });
+        }
+    }
+    $.$mol_dom_render_events = $mol_dom_render_events;
+})($ || ($ = {}));
+//mol/dom/render/events/events.ts
+;
+"use strict";
+var $;
+(function ($) {
     function $mol_dom_render_styles(el, styles) {
         for (let name in styles) {
             let val = styles[name];
@@ -2206,9 +2218,7 @@ var $;
             node.toString = $mol_const('<#' + id + '>');
             $mol_dom_render_attributes(node, this.attr_static());
             const events = $mol_wire_async(this.event());
-            for (let event_name in events) {
-                node.addEventListener(event_name, events[event_name], { passive: false });
-            }
+            $mol_dom_render_events(node, events);
             return node;
         }
         dom_final() {
@@ -7112,24 +7122,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    function $mol_dom_render_events(el, events) {
-        for (let name in events) {
-            el.addEventListener(name, events[name], { passive: false });
-        }
-    }
-    $.$mol_dom_render_events = $mol_dom_render_events;
-    function $mol_dom_render_events_async(el, events) {
-        for (let name in events) {
-            el.addEventListener(name, events[name], { passive: true });
-        }
-    }
-    $.$mol_dom_render_events_async = $mol_dom_render_events_async;
-})($ || ($ = {}));
-//mol/dom/render/events/events.ts
-;
-"use strict";
-var $;
-(function ($) {
     var $$;
     (function ($$) {
         class $mol_ghost extends $.$mol_ghost {
@@ -10965,7 +10957,7 @@ var $;
             measure_precise(prefix, inner, postfix) {
                 const one = this.measure_step(1, prefix, inner, postfix);
                 const iterations_raw = Math.ceil(1 + (1000 - one.total) / one.time);
-                const iterations = Math.min(Math.max(1, iterations_raw), 100_000);
+                const iterations = Math.min(Math.max(1, iterations_raw), 10_000);
                 let avg_last = 0;
                 const times = [];
                 const mems = [];
