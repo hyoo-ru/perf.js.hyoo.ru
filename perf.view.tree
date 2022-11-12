@@ -108,7 +108,7 @@ $hyoo_js_perf_case $mol_view
 			expanded? <=> source_showed? true
 			minimal_width 150
 			Tools <= Title $mol_string
-				hint \Case Name
+				hint @ \Case Name
 				value? <=> title? \
 			Content <= Source_code $mol_textarea
 				enabled <= changable true
