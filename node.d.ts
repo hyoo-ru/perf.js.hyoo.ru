@@ -1698,6 +1698,19 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    let $mol_layer: {
+        readonly hover: $mol_style_func<"var", "--mol_layer_hover">;
+        readonly focus: $mol_style_func<"var", "--mol_layer_focus">;
+        readonly speck: $mol_style_func<"var", "--mol_layer_speck">;
+        readonly float: $mol_style_func<"var", "--mol_layer_float">;
+        readonly popup: $mol_style_func<"var", "--mol_layer_popup">;
+    };
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
     class $mol_button extends $mol_view {
         enabled(): boolean;
         click(event?: any): any;
@@ -3004,6 +3017,7 @@ declare namespace $ {
         Cases(): $mol_view;
         cases_pane_content(): readonly any[];
         Cases_pane(): $$.$mol_scroll;
+        case_title(id: any, val?: any): string;
         case_prefix(id: any, val?: any): string;
         source(id: any, val?: any): string;
         case_sample(id: any): string;
@@ -3029,17 +3043,21 @@ declare namespace $ {
         sub(): readonly any[];
         Result(id: any): $$.$hyoo_js_perf_case_result;
         sample(): string;
+        prefix_showed(next?: any): boolean;
         changable(): boolean;
         prefix(val?: any): string;
         Prefix_code(): $$.$mol_textarea;
-        Prefix(): $mol_labeler;
+        Prefix(): $$.$mol_expander;
+        source_showed(next?: any): boolean;
+        title(next?: any): string;
+        Title(): $$.$mol_string;
         source(val?: any): string;
         Source_code(): $$.$mol_textarea;
-        Source(): $mol_labeler;
-        Eval_labeler_title(): string;
+        Source(): $$.$mol_expander;
+        eval_showed(next?: any): boolean;
         eval_standalone(): string;
         Eval_sandalone(): $$.$mol_link_iconed;
-        Eval_labeler(): $mol_labeler;
+        Eval_labeler(): $$.$mol_expander;
         result_rows(): readonly any[];
         Result_rows(): $$.$mol_list;
         Results(): $mol_labeler;
@@ -3152,6 +3170,7 @@ declare namespace $.$$ {
         get memory_per_iteration(): number;
     }
     class $hyoo_js_perf extends $.$hyoo_js_perf {
+        titles(next?: string[]): string[];
         prefixes(next?: string[]): string[];
         sources(next?: string[]): string[];
         prefix(next?: string): string;
@@ -3159,6 +3178,7 @@ declare namespace $.$$ {
         permalink(): string;
         cases_count(): number;
         cases(): $hyoo_js_perf_case[];
+        case_title(index: number, next?: string): string;
         case_prefix(index: number, next?: string): string;
         source(index: number, next?: string): string;
         case_sample(index: number): string;
@@ -3181,7 +3201,7 @@ declare namespace $.$$ {
     }
     class $hyoo_js_perf_case extends $.$hyoo_js_perf_case {
         result_rows(): $hyoo_js_perf_case_result[];
-        columns(): $mol_labeler[];
+        columns(): ($mol_expander | $mol_labeler)[];
         result(level: number): any;
         result_title(level: number): string;
         eval_standalone(): string;
