@@ -10629,7 +10629,7 @@ var $;
         }
         Title() {
             const obj = new this.$.$mol_string();
-            obj.hint = () => "Case Name";
+            obj.hint = () => this.$.$mol_locale.text('$hyoo_js_perf_case_Title_hint');
             obj.value = (next) => this.title(next);
             return obj;
         }
