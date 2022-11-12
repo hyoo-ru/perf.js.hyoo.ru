@@ -55,6 +55,7 @@ $hyoo_js_perf $mol_page
 		<= Cases_pane $mol_scroll sub <= cases_pane_content /
 			<= Cases $mol_view sub <= cases /
 	Case!index $hyoo_js_perf_case
+		title?val <=> case_title!index?val \
 		prefix?val <=> case_prefix!index?val \
 		source?val <=> source!index?val \
 		sample <= case_sample!index \
@@ -93,29 +94,34 @@ $hyoo_js_perf_case $mol_view
 		code <= sample \
 		Result => Eval_result
 	sub <= columns /
-		<= Prefix $mol_labeler
+		<= Prefix $mol_expander
 			title @ \Setup
+			expanded? <=> prefix_showed? false
 			minimal_width 150
 			Content <= Prefix_code $mol_textarea
 				enabled <= changable true
 				spellcheck false
 				value?val <=> prefix?val \
 				hint \let count = {#}
-		<= Source $mol_labeler
+		<= Source $mol_expander
 			title @ \Measure
+			expanded? <=> source_showed? true
 			minimal_width 150
+			Tools <= Title $mol_string
+				hint \Case Name
+				value? <=> title? \
 			Content <= Source_code $mol_textarea
 				enabled <= changable true
 				spellcheck false
 				value?val <=> source?val \
 				hint \res = {#} % count
-		<= Eval_labeler $mol_labeler
-			label /
-				<= Eval_labeler_title @ \Debug
-				<= Eval_sandalone $mol_link_iconed
-					title \
-					hint @ \Generated script
-					uri <= eval_standalone \
+		<= Eval_labeler $mol_expander
+			expanded? <=> eval_showed? false
+			title @ \Debug
+			Tools <= Eval_sandalone $mol_link_iconed
+				title \
+				hint @ \Generated script
+				uri <= eval_standalone \
 			Content <= Eval_result
 		<= Results $mol_labeler
 			title @ \Results

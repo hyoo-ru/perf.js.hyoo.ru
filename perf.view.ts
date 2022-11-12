@@ -18,6 +18,11 @@ namespace $.$$ {
 	export class $hyoo_js_perf extends $.$hyoo_js_perf {
 
 		@ $mol_mem
+		titles( next? : string[] ) : string[] {
+			return JSON.parse( this.$.$mol_state_arg.value( 'titles' , next === undefined ? undefined : JSON.stringify( next ) ) || '[]' )
+		}
+
+		@ $mol_mem
 		prefixes( next? : string[] ) : string[] {
 			return JSON.parse( this.$.$mol_state_arg.value( 'prefixes' , next === undefined ? undefined : JSON.stringify( next ) ) || '[]' )
 		}
@@ -62,6 +67,18 @@ namespace $.$$ {
 			)
 		}
 		
+		case_title( index : number , next? : string ) {
+
+			let titles = this.titles()
+			if( next === undefined ) return titles[ index ] || ''
+
+			titles = titles.slice()
+			titles[ index ] = next
+			this.titles( titles )
+
+			return next
+		}
+
 		case_prefix( index : number , next? : string ) {
 
 			let prefixes = this.prefixes()
@@ -342,7 +359,7 @@ namespace $.$$ {
 		
 		eval_standalone() {
 			const code = this.sample()
-			return `https://eval.js.hyoo.ru/#!code=${ encodeURIComponent( code ) }`
+			return `https://eval.js.hyoo.ru/#!code=${ encodeURIComponent( code ) }/run=true`
 		}
 
 	}

@@ -54,8 +54,8 @@
 	height: 5rem;
 }
 
-[hyoo_js_perf_case_eval_sandalone] {
-	margin: -.5rem;
+[hyoo_js_perf_case_eval_labeler_trigger] {
+	flex-grow: 0;
 }
 
 [hyoo_js_perf_case_result] {
