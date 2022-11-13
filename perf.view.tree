@@ -61,6 +61,21 @@ $hyoo_js_perf $mol_page
 		sample <= case_sample!index \
 		results?val <=> results!index?val /
 		changable <= changable true
+	head /
+		<= Title
+		<= Run $mol_button_major
+			hint @ \Run
+			click?event <=> run?event null
+			sub / <= Run_icon $mol_icon_play
+		<= Permalink $mol_link
+			uri <= permalink \
+			hint <= parmalink_hint @ \Permamemnt short link
+			target \_blank
+			sub /
+				<= Permalink_icon $mol_icon_link_variant
+		<= Share $mol_button_share
+			capture <= Cases_pane
+		<= Tools
 	tools /
 		<= New $mol_link
 			uri \#
@@ -74,19 +89,6 @@ $hyoo_js_perf $mol_page
 		<= Lights $mol_lights_toggle
 		<= Source $mol_link_source
 			uri \https://github.com/hyoo-ru/perf.js.hyoo.ru
-	head /
-		<= Title
-		<= Run $mol_button_major
-			hint @ \Run
-			click?event <=> run?event null
-			sub / <= Run_icon $mol_icon_play
-		<= Permalink $mol_link
-			uri <= permalink \
-			hint <= parmalink_hint @ \Permamemnt short link
-			target \_blank
-			sub /
-				<= Permalink_icon $mol_icon_external
-		<= Tools
 
 $hyoo_js_perf_case $mol_view
 	results /
@@ -107,7 +109,7 @@ $hyoo_js_perf_case $mol_view
 			title @ \Measure
 			expanded? <=> source_showed? true
 			minimal_width 150
-			Tools <= Title $mol_string
+			Tools <= Title $mol_string_button
 				hint @ \Case Name
 				value? <=> title? \
 			Content <= Source_code $mol_textarea

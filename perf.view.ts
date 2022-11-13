@@ -53,6 +53,7 @@ namespace $.$$ {
 			return 'https://tinyurl.com/create.php?url=' + encodeURIComponent( win.location.href )
 		}
 
+		@ $mol_mem
 		cases_count() {
 			return Math.max(
 				this.prefixes().filter( Boolean ).length,
@@ -60,6 +61,7 @@ namespace $.$$ {
 			)
 		}
 		
+		@ $mol_mem
 		cases() {
 			return $mol_range2(
 				index => this.Case( index ),
