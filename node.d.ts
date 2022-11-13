@@ -2604,6 +2604,74 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
+    class $mol_icon_play extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_button_major extends $mol_button_typed {
+        attr(): {
+            mol_theme: string;
+            disabled: boolean;
+            role: string;
+            tabindex: number;
+            title: string;
+        };
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_icon_link extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_link_variant extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_share extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_share_variant extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_button_share extends $mol_button_minor {
+        uri(): string;
+        capture(): any;
+        hint(): string;
+        sub(): readonly any[];
+        Icon(): $mol_icon_share_variant;
+    }
+}
+
+declare namespace $ {
+    function $mol_dom_capture_image(el: Element): Promise<HTMLImageElement>;
+    function $mol_dom_capture_canvas(el: Element): Promise<HTMLCanvasElement>;
+}
+
+declare namespace $.$$ {
+    class $mol_button_share extends $.$mol_button_share {
+        capture(): any;
+        uri(): string;
+        click(): Promise<void>;
+    }
+}
+
+declare namespace $ {
     class $mol_icon_plus extends $mol_icon {
         path(): string;
     }
@@ -2668,33 +2736,6 @@ declare namespace $ {
         hint(): string;
         sub(): readonly any[];
         Icon(): $mol_icon_github_circle;
-    }
-}
-
-declare namespace $ {
-    class $mol_icon_play extends $mol_icon {
-        path(): string;
-    }
-}
-
-declare namespace $ {
-    class $mol_button_major extends $mol_button_typed {
-        attr(): {
-            mol_theme: string;
-            disabled: boolean;
-            role: string;
-            tabindex: number;
-            title: string;
-        };
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    class $mol_icon_external extends $mol_icon {
-        path(): string;
     }
 }
 
@@ -2967,6 +3008,14 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
+    class $mol_string_button extends $mol_string {
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
     class $mol_portion_indicator extends $mol_view {
         style(): {
             width: string;
@@ -2998,8 +3047,8 @@ declare namespace $ {
         plugins(): readonly any[];
         Body(): $$.$mol_book2;
         Case(id: any): $$.$hyoo_js_perf_case;
-        tools(): readonly any[];
         head(): readonly any[];
+        tools(): readonly any[];
         Theme(): $$.$mol_theme_auto;
         run(event?: any): any;
         Hotkey(): $$.$mol_hotkey;
@@ -3022,6 +3071,13 @@ declare namespace $ {
         source(id: any, val?: any): string;
         case_sample(id: any): string;
         results(id: any, val?: any): readonly any[];
+        Run_icon(): $mol_icon_play;
+        Run(): $mol_button_major;
+        permalink(): string;
+        parmalink_hint(): string;
+        Permalink_icon(): $mol_icon_link_variant;
+        Permalink(): $$.$mol_link;
+        Share(): $$.$mol_button_share;
         new_hint(): string;
         New_icon(): $mol_icon_plus;
         New(): $$.$mol_link;
@@ -3029,12 +3085,6 @@ declare namespace $ {
         About(): $$.$mol_link;
         Lights(): $$.$mol_lights_toggle;
         Source(): $mol_link_source;
-        Run_icon(): $mol_icon_play;
-        Run(): $mol_button_major;
-        permalink(): string;
-        parmalink_hint(): string;
-        Permalink_icon(): $mol_icon_external;
-        Permalink(): $$.$mol_link;
     }
     class $hyoo_js_perf_case extends $mol_view {
         results(): readonly any[];
@@ -3050,7 +3100,7 @@ declare namespace $ {
         Prefix(): $$.$mol_expander;
         source_showed(next?: any): boolean;
         title(next?: any): string;
-        Title(): $$.$mol_string;
+        Title(): $mol_string_button;
         source(val?: any): string;
         Source_code(): $$.$mol_textarea;
         Source(): $$.$mol_expander;
