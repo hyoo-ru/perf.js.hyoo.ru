@@ -45,6 +45,10 @@
 	vertical-align: top;
 }
 
+[hyoo_js_perf_case_title] {
+	flex-grow: 0;
+}
+
 [hyoo_js_perf_case_eval_labeler] {
 	width: 28rem;
 }
