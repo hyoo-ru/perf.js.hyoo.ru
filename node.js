@@ -7977,7 +7977,8 @@ var $;
             if (key === 'id')
                 continue;
             if (typeof props[key] === 'string') {
-                ;
+                if (key in node)
+                    node[key] = props[key];
                 node.setAttribute(key, props[key]);
             }
             else if (props[key] &&
