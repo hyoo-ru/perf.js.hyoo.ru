@@ -10350,6 +10350,46 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_icon_chevron_double_down extends $mol_icon {
+        path() {
+            return "M16.59,5.59L18,7L12,13L6,7L7.41,5.59L12,10.17L16.59,5.59M16.59,11.59L18,13L12,19L6,13L7.41,11.59L12,16.17L16.59,11.59Z";
+        }
+    }
+    $.$mol_icon_chevron_double_down = $mol_icon_chevron_double_down;
+})($ || ($ = {}));
+//mol/icon/chevron/double/down/-view.tree/down.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_icon_unfold_more_horizontal extends $mol_icon {
+        path() {
+            return "M12,18.17L8.83,15L7.42,16.41L12,21L16.59,16.41L15.17,15M12,5.83L15.17,9L16.58,7.59L12,3L7.41,7.59L8.83,9L12,5.83Z";
+        }
+    }
+    $.$mol_icon_unfold_more_horizontal = $mol_icon_unfold_more_horizontal;
+})($ || ($ = {}));
+//mol/icon/unfold/more/horizontal/-view.tree/horizontal.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_bar extends $mol_view {
+    }
+    $.$mol_bar = $mol_bar;
+})($ || ($ = {}));
+//mol/bar/-view.tree/bar.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/bar/bar.view.css", "[mol_bar] {\n\tdisplay: flex;\n\t/* box-shadow: inset 0 0 0 1px var(--mol_theme_line); */\n\tborder-radius: var(--mol_gap_round);\n}\n");
+})($ || ($ = {}));
+//mol/bar/-css/bar.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_string_button extends $mol_string {
     }
     $.$mol_string_button = $mol_string_button;
@@ -10460,6 +10500,9 @@ var $;
             obj.sample = () => this.case_sample(id);
             obj.results = (val) => this.results(id, val);
             obj.changable = () => this.changable();
+            obj.drop = (next) => this.case_drop(id, next);
+            obj.dupe = (next) => this.case_dupe(id, next);
+            obj.swap = (next) => this.case_swap(id, next);
             return obj;
         }
         head() {
@@ -10595,6 +10638,21 @@ var $;
                 return val;
             return [];
         }
+        case_drop(id, next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        case_dupe(id, next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        case_swap(id, next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
         Run_icon() {
             const obj = new this.$.$mol_icon_play();
             return obj;
@@ -10729,6 +10787,15 @@ var $;
         $mol_mem_key
     ], $hyoo_js_perf.prototype, "results", null);
     __decorate([
+        $mol_mem_key
+    ], $hyoo_js_perf.prototype, "case_drop", null);
+    __decorate([
+        $mol_mem_key
+    ], $hyoo_js_perf.prototype, "case_dupe", null);
+    __decorate([
+        $mol_mem_key
+    ], $hyoo_js_perf.prototype, "case_swap", null);
+    __decorate([
         $mol_mem
     ], $hyoo_js_perf.prototype, "Run_icon", null);
     __decorate([
@@ -10791,6 +10858,69 @@ var $;
                 return next;
             return false;
         }
+        drop(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        Drop_icon() {
+            const obj = new this.$.$mol_icon_cross();
+            return obj;
+        }
+        Drop() {
+            const obj = new this.$.$mol_button_minor();
+            obj.click = (next) => this.drop(next);
+            obj.hint = () => this.$.$mol_locale.text('$hyoo_js_perf_case_Drop_hint');
+            obj.sub = () => [
+                this.Drop_icon()
+            ];
+            return obj;
+        }
+        dupe(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        Dupe_icon() {
+            const obj = new this.$.$mol_icon_chevron_double_down();
+            return obj;
+        }
+        Dupe() {
+            const obj = new this.$.$mol_button_minor();
+            obj.click = (next) => this.dupe(next);
+            obj.hint = () => this.$.$mol_locale.text('$hyoo_js_perf_case_Dupe_hint');
+            obj.sub = () => [
+                this.Dupe_icon()
+            ];
+            return obj;
+        }
+        swap(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        Swap_icon() {
+            const obj = new this.$.$mol_icon_unfold_more_horizontal();
+            return obj;
+        }
+        Swap() {
+            const obj = new this.$.$mol_button_minor();
+            obj.click = (next) => this.swap(next);
+            obj.hint = () => this.$.$mol_locale.text('$hyoo_js_perf_case_Swap_hint');
+            obj.sub = () => [
+                this.Swap_icon()
+            ];
+            return obj;
+        }
+        Prefix_tools() {
+            const obj = new this.$.$mol_bar();
+            obj.sub = () => [
+                this.Drop(),
+                this.Dupe(),
+                this.Swap()
+            ];
+            return obj;
+        }
         changable() {
             return true;
         }
@@ -10812,7 +10942,10 @@ var $;
             obj.title = () => this.$.$mol_locale.text('$hyoo_js_perf_case_Prefix_title');
             obj.expanded = (next) => this.prefix_showed(next);
             obj.minimal_width = () => 150;
-            obj.Content = () => this.Prefix_code();
+            obj.Tools = () => this.Prefix_tools();
+            obj.content = () => [
+                this.Prefix_code()
+            ];
             return obj;
         }
         source_showed(next) {
@@ -10850,7 +10983,9 @@ var $;
             obj.expanded = (next) => this.source_showed(next);
             obj.minimal_width = () => 150;
             obj.Tools = () => this.Title();
-            obj.Content = () => this.Source_code();
+            obj.content = () => [
+                this.Source_code()
+            ];
             return obj;
         }
         eval_showed(next) {
@@ -10915,6 +11050,36 @@ var $;
     __decorate([
         $mol_mem
     ], $hyoo_js_perf_case.prototype, "prefix_showed", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_js_perf_case.prototype, "drop", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_js_perf_case.prototype, "Drop_icon", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_js_perf_case.prototype, "Drop", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_js_perf_case.prototype, "dupe", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_js_perf_case.prototype, "Dupe_icon", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_js_perf_case.prototype, "Dupe", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_js_perf_case.prototype, "swap", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_js_perf_case.prototype, "Swap_icon", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_js_perf_case.prototype, "Swap", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_js_perf_case.prototype, "Prefix_tools", null);
     __decorate([
         $mol_mem
     ], $hyoo_js_perf_case.prototype, "prefix", null);
@@ -11396,11 +11561,48 @@ var $;
                 const win = this.$.$mol_dom_context;
                 return 'https://tinyurl.com/create.php?url=' + encodeURIComponent(win.location.href);
             }
+            transform(task) {
+                const titles = task(this.titles());
+                const prefixes = task(this.prefixes());
+                const sources = task(this.sources());
+                this.titles(titles);
+                this.prefixes(prefixes);
+                this.sources(sources);
+            }
+            case_drop(index) {
+                this.transform(list => [
+                    ...list.slice(0, index),
+                    ...list.slice(index + 1),
+                ]);
+            }
+            case_dupe(index) {
+                this.transform(list => [
+                    ...list.slice(0, index),
+                    list[index],
+                    ...list.slice(index),
+                ]);
+            }
+            case_swap(index) {
+                if (index === 0) {
+                    this.transform(list => [
+                        ...list.slice(1),
+                        list[0],
+                    ]);
+                }
+                else {
+                    this.transform(list => [
+                        ...list.slice(0, index - 1),
+                        list[index],
+                        list[index - 1],
+                        ...list.slice(index + 1),
+                    ]);
+                }
+            }
             cases_count() {
-                return Math.max(this.prefixes().filter(Boolean).length, this.sources().filter(Boolean).length);
+                return Math.max(this.prefixes().length, this.sources().length, this.titles().length);
             }
             cases() {
-                return $mol_range2(index => this.Case(index), () => this.cases_count() + (this.changable() ? 1 : 0));
+                return $mol_range2(index => this.Case(index), () => Math.max(2, this.cases_count()));
             }
             case_title(index, next) {
                 let titles = this.titles();

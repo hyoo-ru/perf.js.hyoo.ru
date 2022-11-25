@@ -3010,6 +3010,26 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
+    class $mol_icon_chevron_double_down extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_unfold_more_horizontal extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_bar extends $mol_view {
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
     class $mol_string_button extends $mol_string {
     }
 }
@@ -3073,6 +3093,9 @@ declare namespace $ {
         source(id: any, val?: any): string;
         case_sample(id: any): string;
         results(id: any, val?: any): readonly any[];
+        case_drop(id: any, next?: any): any;
+        case_dupe(id: any, next?: any): any;
+        case_swap(id: any, next?: any): any;
         Run_icon(): $mol_icon_play;
         Run(): $mol_button_major;
         permalink(): string;
@@ -3096,6 +3119,16 @@ declare namespace $ {
         Result(id: any): $$.$hyoo_js_perf_case_result;
         sample(): string;
         prefix_showed(next?: any): boolean;
+        drop(next?: any): any;
+        Drop_icon(): $mol_icon_cross;
+        Drop(): $mol_button_minor;
+        dupe(next?: any): any;
+        Dupe_icon(): $mol_icon_chevron_double_down;
+        Dupe(): $mol_button_minor;
+        swap(next?: any): any;
+        Swap_icon(): $mol_icon_unfold_more_horizontal;
+        Swap(): $mol_button_minor;
+        Prefix_tools(): $mol_bar;
         changable(): boolean;
         prefix(val?: any): string;
         Prefix_code(): $$.$mol_textarea;
@@ -3228,6 +3261,10 @@ declare namespace $.$$ {
         prefix(next?: string): string;
         postfix(next?: string): string;
         permalink(): string;
+        transform(task: (list: string[]) => string[]): void;
+        case_drop(index: number): void;
+        case_dupe(index: number): void;
+        case_swap(index: number): void;
         cases_count(): number;
         cases(): $hyoo_js_perf_case[];
         case_title(index: number, next?: string): string;
