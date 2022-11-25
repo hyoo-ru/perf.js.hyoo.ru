@@ -52,12 +52,62 @@ namespace $.$$ {
 			const win = this.$.$mol_dom_context
 			return 'https://tinyurl.com/create.php?url=' + encodeURIComponent( win.location.href )
 		}
+		
+		transform( task: ( list: string[] )=> string[] ) {
+			
+			const titles = task( this.titles() )
+			const prefixes = task( this.prefixes() )
+			const sources = task( this.sources() )
+			
+			this.titles( titles )
+			this.prefixes( prefixes )
+			this.sources( sources )
+			
+		}
+		
+		case_drop( index: number ) {
+			this.transform( list => [
+				... list.slice( 0, index ),
+				... list.slice( index + 1 ),
+			] )
+		}
+
+		case_dupe( index: number ) {
+			this.transform( list => [
+				... list.slice( 0, index ),
+				list[ index ],
+				... list.slice( index ),
+			] )
+		}
+
+		case_swap( index: number ) {
+			
+			if( index === 0 ) {
+				
+				this.transform( list => [
+					... list.slice( 1 ),
+					list[ 0 ],
+				] )
+				
+			} else {
+				
+				this.transform( list => [
+					... list.slice( 0, index - 1 ),
+					list[ index ],
+					list[ index - 1 ],
+					... list.slice( index + 1 ),
+				] )
+				
+			}
+			
+		}
 
 		@ $mol_mem
 		cases_count() {
 			return Math.max(
-				this.prefixes().filter( Boolean ).length,
-				this.sources().filter( Boolean ).length,
+				this.prefixes().length,
+				this.sources().length,
+				this.titles().length,
 			)
 		}
 		
@@ -65,7 +115,7 @@ namespace $.$$ {
 		cases() {
 			return $mol_range2(
 				index => this.Case( index ),
-				()=> this.cases_count() + ( this.changable() ? 1 : 0 ),
+				()=> Math.max( 2, this.cases_count() ),
 			)
 		}
 		

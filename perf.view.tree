@@ -54,13 +54,16 @@ $hyoo_js_perf $mol_page
 				\[V8 Optimizations](https://opt.js.hyoo.ru/) [Sandbox](https://eval.js.hyoo.ru)
 		<= Cases_pane $mol_scroll sub <= cases_pane_content /
 			<= Cases $mol_view sub <= cases /
-	Case!index $hyoo_js_perf_case
-		title?val <=> case_title!index?val \
-		prefix?val <=> case_prefix!index?val \
-		source?val <=> source!index?val \
-		sample <= case_sample!index \
-		results?val <=> results!index?val /
+	Case* $hyoo_js_perf_case
+		title?val <=> case_title*?val \
+		prefix?val <=> case_prefix*?val \
+		source?val <=> source*?val \
+		sample <= case_sample* \
+		results?val <=> results*?val /
 		changable <= changable true
+		drop? <=> case_drop*? null
+		dupe? <=> case_dupe*? null
+		swap? <=> case_swap*? null
 	head /
 		<= Title
 		<= Run $mol_button_major
@@ -100,7 +103,23 @@ $hyoo_js_perf_case $mol_view
 			title @ \Setup
 			expanded? <=> prefix_showed? false
 			minimal_width 150
-			Content <= Prefix_code $mol_textarea
+			Tools <= Prefix_tools $mol_bar sub /
+				<= Drop $mol_button_minor
+					click? <=> drop? null
+					hint @ \Drop case
+					sub /
+						<= Drop_icon $mol_icon_cross
+				<= Dupe $mol_button_minor
+					click? <=> dupe? null
+					hint @ \Duplicate case
+					sub /
+						<= Dupe_icon $mol_icon_chevron_double_down
+				<= Swap $mol_button_minor
+					click? <=> swap? null
+					hint @ \Swap cases
+					sub /
+						<= Swap_icon $mol_icon_unfold_more_horizontal
+			content / <= Prefix_code $mol_textarea
 				enabled <= changable true
 				spellcheck false
 				value?val <=> prefix?val \
@@ -112,7 +131,7 @@ $hyoo_js_perf_case $mol_view
 			Tools <= Title $mol_string_button
 				hint @ \Case Name
 				value? <=> title? \
-			Content <= Source_code $mol_textarea
+			content / <= Source_code $mol_textarea
 				enabled <= changable true
 				spellcheck false
 				value?val <=> source?val \
