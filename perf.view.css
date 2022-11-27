@@ -30,12 +30,12 @@
 [hyoo_js_perf_cases_pane] {
 	flex: 1000 0 auto;
 	min-width: 46rem;
-	background: var(--mol_theme_back);
 }
 
 [hyoo_js_perf_cases] {
 	display: table;
 	border-spacing: .75rem;
+	background: var(--mol_theme_back);
 }
 
 [hyoo_js_perf_case] {
