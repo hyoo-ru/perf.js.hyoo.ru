@@ -12978,7 +12978,7 @@ var $;
         }
         Share() {
             const obj = new this.$.$mol_button_share();
-            obj.capture = () => this.Cases_pane();
+            obj.capture = () => this.Cases();
             return obj;
         }
         bench_fork(next) {
