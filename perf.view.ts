@@ -16,6 +16,11 @@ namespace $.$$ {
 	}
 
 	export class $hyoo_js_perf extends $.$hyoo_js_perf {
+
+		@ $mol_mem
+		title() {
+			return ( this.bench_title() ? this.bench_title() + ' | ' : '' ) + super.title()
+		}
 		
 		@ $mol_mem
 		bench_fund() {
@@ -109,6 +114,23 @@ namespace $.$$ {
 			if( bench ) return bench.cases().map( case_ => case_.measure() )
 			
 			return JSON.parse( this.$.$mol_state_arg.value( 'sources' , next === undefined ? undefined : JSON.stringify( next ) ) || '[]' )
+		}
+
+		@ $mol_mem
+		bench_title( next? : string ) : string {
+			
+			if( next === undefined ) {
+				
+				return this.bench()?.title()
+					?? this.$.$mol_state_arg.value( 'title' )
+					?? ''
+				
+			} else {
+				
+				return this.bench_changable().title( next )
+					
+			}
+			
 		}
 
 		@ $mol_mem

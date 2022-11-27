@@ -1,5 +1,5 @@
 $hyoo_js_perf $mol_page
-	title @ \JS Performance
+	title @ \JS Benchmark
 	yard $hyoo_sync_client
 	prefixes /string
 	sources /string
@@ -65,14 +65,14 @@ $hyoo_js_perf $mol_page
 		drop? <=> case_drop*? null
 		dupe? <=> case_dupe*? null
 		swap? <=> case_swap*? null
-	head /
-		<= Title
+	Title $mol_string_button
+		value? <=> bench_title? \
+		hint <= title
+	tools /
 		<= Run $mol_button_major
 			hint @ \Run
 			click?event <=> run?event null
 			sub / <= Run_icon $mol_icon_play
-		<= Tools
-	tools /
 		<= Share $mol_button_share
 			capture <= Cases_pane
 		<= Fork $mol_button_minor

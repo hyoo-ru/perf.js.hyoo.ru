@@ -1,3 +1,7 @@
+[hyoo_js_perf_tools] {
+	flex-grow: 0;
+}
+
 [hyoo_js_perf_body] {
 	display: flex;
 	flex-direction: row;
