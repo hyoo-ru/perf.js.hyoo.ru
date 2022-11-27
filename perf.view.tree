@@ -74,7 +74,7 @@ $hyoo_js_perf $mol_page
 			click?event <=> run?event null
 			sub / <= Run_icon $mol_icon_play
 		<= Share $mol_button_share
-			capture <= Cases_pane
+			capture <= Cases
 		<= Fork $mol_button_minor
 			hint @ \Fork benchmark
 			click? <=> bench_fork? null
