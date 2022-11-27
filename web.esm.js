@@ -10570,6 +10570,13 @@ var $;
                     $mol_fail_log(error);
                 }
             }
+            if (re instanceof HTMLInputElement) {
+                re.value = el['value'];
+                re.checked = el['checked'];
+            }
+            if (re instanceof HTMLTextAreaElement) {
+                re.value = el['value'];
+            }
             const styles = $mol_dom_context.getComputedStyle(el);
             restyle(re, styles);
             const before = $mol_dom_context.getComputedStyle(el, ':before');
