@@ -16,90 +16,149 @@ namespace $.$$ {
 	}
 
 	export class $hyoo_js_perf extends $.$hyoo_js_perf {
+		
+		@ $mol_mem
+		bench_fund() {
+			return this.yard().world().Fund( $hyoo_js_perf_bench )
+		}
+		
+		@ $mol_mem
+		bench() {
+			
+			const id = $mol_int62_string_ensure( this.$.$mol_state_arg.value( 'bench' ) )
+			if( !id ) return null
+			
+			return this.bench_fund().Item( id )
+			
+		}
+		
+		@ $mol_action
+		bench_new() {
+			const bench = this.bench_fund().make()
+			this.$.$mol_state_arg.go({ bench: bench.land.id() })
+			return bench
+		}
+		
+		@ $mol_action
+		bench_fork() {
+			
+			const prev = this.bench()
+			
+			const prefix = this.prefix()
+			const postfix = this.postfix()
+			const titles = this.titles()
+			const prefixes = this.prefixes()
+			const sources = this.sources()
+			
+			const next = this.bench_new()
+			
+			if( prev ) {
+				
+				next.steal( prev )
+				
+			} else {
+				
+				next.prefix( prefix )
+				next.postfix( postfix )
+				
+				const count = this.cases_count()
+				for( let i = 0; i < count; ++i ) {
+					
+					const case_ = next.case_add()
+					
+					case_.title( titles[i] ?? '' )
+					case_.setup( prefixes[i] ?? '' )
+					case_.measure( sources[i] ?? '' )
+					
+				}
+				
+			}
+			
+			return next
+		}
 
+		@ $mol_action
+		bench_changable() {
+			const bench = this.bench()
+			if( bench?.changable() ) return bench
+			return this.bench_fork()
+		}
+		
 		@ $mol_mem
 		titles( next? : string[] ) : string[] {
+			
+			const bench = this.bench()
+			if( bench ) return bench.cases().map( case_ => case_.title() )
+			
 			return JSON.parse( this.$.$mol_state_arg.value( 'titles' , next === undefined ? undefined : JSON.stringify( next ) ) || '[]' )
 		}
 
 		@ $mol_mem
 		prefixes( next? : string[] ) : string[] {
+			
+			const bench = this.bench()
+			if( bench ) return bench.cases().map( case_ => case_.setup() )
+			
 			return JSON.parse( this.$.$mol_state_arg.value( 'prefixes' , next === undefined ? undefined : JSON.stringify( next ) ) || '[]' )
 		}
 
 		@ $mol_mem
 		sources( next? : string[] ) : string[] {
+			
+			const bench = this.bench()
+			if( bench ) return bench.cases().map( case_ => case_.measure() )
+			
 			return JSON.parse( this.$.$mol_state_arg.value( 'sources' , next === undefined ? undefined : JSON.stringify( next ) ) || '[]' )
 		}
 
 		@ $mol_mem
 		prefix( next? : string ) : string {
+			
 			if( next === undefined ) {
-				return this.$.$mol_state_arg.value( 'prefix' ) || this.$.$mol_state_arg.value( 'common' ) || ''
+				
+				return this.bench()?.prefix()
+					?? this.$.$mol_state_arg.value( 'prefix' )
+					?? this.$.$mol_state_arg.value( 'common' )
+					?? ''
+				
 			} else {
-				this.$.$mol_state_arg.value( 'prefix' , next )
-				this.$.$mol_state_arg.value( 'common' , null )
-				return next
+				
+				return this.bench_changable().prefix( next )
+					
 			}
+			
 		}
 
 		@ $mol_mem
 		postfix( next? : string ) : string {
-			return this.$.$mol_state_arg.value( 'postfix' , next ) || ''
-		}
-
-		permalink() {
-			const win = this.$.$mol_dom_context
-			return 'https://tinyurl.com/create.php?url=' + encodeURIComponent( win.location.href )
-		}
-		
-		transform( task: ( list: string[] )=> string[] ) {
 			
-			const titles = task( this.titles() )
-			const prefixes = task( this.prefixes() )
-			const sources = task( this.sources() )
-			
-			this.titles( titles )
-			this.prefixes( prefixes )
-			this.sources( sources )
-			
-		}
-		
-		case_drop( index: number ) {
-			this.transform( list => [
-				... list.slice( 0, index ),
-				... list.slice( index + 1 ),
-			] )
-		}
-
-		case_dupe( index: number ) {
-			this.transform( list => [
-				... list.slice( 0, index ),
-				list[ index ],
-				... list.slice( index ),
-			] )
-		}
-
-		case_swap( index: number ) {
-			
-			if( index === 0 ) {
+			if( next === undefined ) {
 				
-				this.transform( list => [
-					... list.slice( 1 ),
-					list[ 0 ],
-				] )
+				return this.bench()?.postfix()
+					?? this.$.$mol_state_arg.value( 'postfix' )
+					?? ''
 				
 			} else {
 				
-				this.transform( list => [
-					... list.slice( 0, index - 1 ),
-					list[ index ],
-					list[ index - 1 ],
-					... list.slice( index + 1 ),
-				] )
-				
+				return this.bench_changable().postfix( next )
+					
 			}
-			
+
+		}
+
+		case_drop( index: number ) {
+			if( ( this.bench()?.cases().length ?? 0 ) <= index ) return
+			this.bench_changable().case_drop( index )
+		}
+
+		case_dupe( index: number ) {
+			if( ( this.bench()?.cases().length ?? 0 ) <= index ) return
+			this.bench_changable().case_dupe( index )
+		}
+
+		case_swap( index: number ) {
+			if( ( this.bench()?.cases().length ?? 0 ) <= index ) return
+			this.bench_changable().case_swap( index )
 		}
 
 		@ $mol_mem
@@ -115,44 +174,59 @@ namespace $.$$ {
 		cases() {
 			return $mol_range2(
 				index => this.Case( index ),
-				()=> Math.max( 2, this.cases_count() ),
+				()=> Math.max( 1, this.cases_count() ),
 			)
 		}
 		
+		@ $mol_mem_key
 		case_title( index : number , next? : string ) {
+			
+			if( next === undefined ) {
+				
+				return this.bench()?.cases()[ index ]?.title()
+					?? this.titles()[ index ]
+					?? ''
+				
+			} else {
+				
+				return this.bench_changable().case_ensure( index ).title( next )
+					
+			}
 
-			let titles = this.titles()
-			if( next === undefined ) return titles[ index ] || ''
-
-			titles = titles.slice()
-			titles[ index ] = next
-			this.titles( titles )
-
-			return next
 		}
-
+		
+		@ $mol_mem_key
 		case_prefix( index : number , next? : string ) {
 
-			let prefixes = this.prefixes()
-			if( next === undefined ) return prefixes[ index ] || ''
-
-			prefixes = prefixes.slice()
-			prefixes[ index ] = next
-			this.prefixes( prefixes )
-
-			return next
+			if( next === undefined ) {
+				
+				return this.bench()?.cases()[ index ]?.setup()
+					?? this.prefixes()[ index ]
+					?? ''
+				
+			} else {
+				
+				return this.bench_changable().case_ensure( index ).setup( next )
+				
+			}
+			
 		}
-
+		
+		@ $mol_mem_key
 		source( index : number , next? : string ) {
-
-			let sources = this.sources()
-			if( next === undefined ) return sources[ index ] || ''
-
-			sources = sources.slice()
-			sources[ index ] = next
-			this.sources( sources )
-
-			return next
+			
+			if( next === undefined ) {
+				
+				return this.bench()?.cases()[ index ]?.measure()
+					?? this.sources()[ index ]
+					?? ''
+				
+			} else {
+				
+				return this.bench_changable().case_ensure( index ).measure( next )
+				
+			}
+			
 		}
 
 		@ $mol_mem_key
@@ -413,6 +487,17 @@ namespace $.$$ {
 			const code = this.sample()
 			return `https://eval.js.hyoo.ru/#!code=${ encodeURIComponent( code ) }/run=true`
 		}
+		
+		prefix_tools() {
+			return this.changable() ? super.prefix_tools() : []
+		}
+		
+		// @ $mol_mem
+		// prefix_showed( next?: boolean ): boolean {
+		// 	return next
+		// 		?? $mol_wire_probe( ()=> this.prefix_showed() )
+		// 		?? this.prefix().split( '\n' ).length <= 2
+		// }
 
 	}
 

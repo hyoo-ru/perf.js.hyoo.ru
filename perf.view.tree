@@ -1,5 +1,6 @@
 $hyoo_js_perf $mol_page
 	title @ \JS Performance
+	yard $hyoo_sync_client
 	prefixes /string
 	sources /string
 	plugins /
@@ -70,21 +71,20 @@ $hyoo_js_perf $mol_page
 			hint @ \Run
 			click?event <=> run?event null
 			sub / <= Run_icon $mol_icon_play
-		<= Permalink $mol_link
-			uri <= permalink \
-			hint <= parmalink_hint @ \Permamemnt short link
-			target \_blank
-			sub /
-				<= Permalink_icon $mol_icon_link_variant
-		<= Share $mol_button_share
-			capture <= Cases_pane
 		<= Tools
 	tools /
-		<= New $mol_link
-			uri \#
-			hint <= new_hint @ \New benchmark
+		<= Share $mol_button_share
+			capture <= Cases_pane
+		<= Fork $mol_button_minor
+			hint @ \Fork benchmark
+			click? <=> bench_fork? null
 			sub /
-				<= New_icon $mol_icon_plus
+				<= Fork_icon $mol_icon_directions_fork
+		<= New $mol_button_minor
+			hint @ \New benchmark
+			click? <=> bench_new? null
+			sub /
+				<= New_icon $mol_icon_plus_box
 		<= About $mol_link
 			uri \https://habhub.hyoo.ru/#author=nin-jin/repo=HabHub/article=42
 			sub /
@@ -92,6 +92,8 @@ $hyoo_js_perf $mol_page
 		<= Lights $mol_lights_toggle
 		<= Source $mol_link_source
 			uri \https://github.com/hyoo-ru/perf.js.hyoo.ru
+		<= Online $hyoo_sync_online
+			yard <= yard
 
 $hyoo_js_perf_case $mol_view
 	results /
@@ -103,7 +105,7 @@ $hyoo_js_perf_case $mol_view
 			title @ \Setup
 			expanded? <=> prefix_showed? false
 			minimal_width 150
-			Tools <= Prefix_tools $mol_bar sub /
+			Tools <= Prefix_tools $mol_bar sub <= prefix_tools /
 				<= Drop $mol_button_minor
 					click? <=> drop? null
 					hint @ \Drop case
@@ -130,6 +132,7 @@ $hyoo_js_perf_case $mol_view
 			minimal_width 150
 			Tools <= Title $mol_string_button
 				hint @ \Case Name
+				enabled <= changable true
 				value? <=> title? \
 			content / <= Source_code $mol_textarea
 				enabled <= changable true
