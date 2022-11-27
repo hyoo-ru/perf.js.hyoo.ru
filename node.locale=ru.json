@@ -23,7 +23,7 @@
 	"$hyoo_js_perf_case_result_memory_hint": "Байт на все итерации",
 	"$hyoo_js_perf_case_result_memory_per_iteration_hint": "Байт на итерацию",
 	"$hyoo_js_perf_case_result_time_hint": "Секунд на итерацию",
-	"$hyoo_js_perf_title": "Производительность JS",
+	"$hyoo_js_perf_title": "JS бенчмарк",
 	"$mol_button_share_hint": "Поделиться",
 	"$mol_lights_toggle_hint": "Переключить освещение",
 	"$mol_link_source_hint": "Исходные коды",

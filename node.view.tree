@@ -37,9 +37,6 @@ $mol_book2 $mol_scroll
 	minimal_width 0
 	Placeholder $mol_view
 
-$mol_theme_auto $mol_plugin
-	attr * mol_theme <= theme \
-
 $mol_hotkey $mol_plugin
 	event *
 		^
@@ -48,6 +45,43 @@ $mol_hotkey $mol_plugin
 	mod_ctrl false
 	mod_alt false
 	mod_shift false
+
+$mol_string $mol_view
+	dom_name \input
+	enabled true
+	minimal_height 40
+	autocomplete false
+	selection?val /number
+		0
+		0
+	auto /
+		<= selection_watcher null
+	field *
+		^
+		disabled <= disabled false
+		value <= value_changed?val <=> value?val \
+		placeholder <= hint_visible <= hint \
+		spellcheck <= spellcheck true
+		autocomplete <= autocomplete_native \
+		selectionEnd <= selection_end 0
+		selectionStart <= selection_start 0
+		inputMode <= keyboard \text
+	attr *
+		^
+		maxlength <= length_max +Infinity
+		type <= type?val \text
+	event *
+		^
+		input?event <=> event_change?event null
+		keydown?event <=> event_key_press?event null
+	plugins /
+		<= Submit $mol_hotkey
+			key * enter?event <=> submit?event null
+
+$mol_string_button $mol_string
+
+$mol_theme_auto $mol_plugin
+	attr * mol_theme <= theme \
 
 $mol_stack $mol_view
 
@@ -199,38 +233,6 @@ $mol_text_code $mol_stack
 		<= Copy $mol_button_copy
 			hint @ \Copy whole code
 			text <= text
-
-$mol_string $mol_view
-	dom_name \input
-	enabled true
-	minimal_height 40
-	autocomplete false
-	selection?val /number
-		0
-		0
-	auto /
-		<= selection_watcher null
-	field *
-		^
-		disabled <= disabled false
-		value <= value_changed?val <=> value?val \
-		placeholder <= hint_visible <= hint \
-		spellcheck <= spellcheck true
-		autocomplete <= autocomplete_native \
-		selectionEnd <= selection_end 0
-		selectionStart <= selection_start 0
-		inputMode <= keyboard \text
-	attr *
-		^
-		maxlength <= length_max +Infinity
-		type <= type?val \text
-	event *
-		^
-		input?event <=> event_change?event null
-		keydown?event <=> event_key_press?event null
-	plugins /
-		<= Submit $mol_hotkey
-			key * enter?event <=> submit?event null
 
 $mol_textarea $mol_stack
 	attr *
@@ -747,8 +749,6 @@ $mol_icon_unfold_more_horizontal $mol_icon path \M12,18.17L8.83,15L7.42,16.41L12
 
 $mol_bar $mol_view
 
-$mol_string_button $mol_string
-
 $mol_portion_indicator $mol_view
 	style *
 		^
@@ -761,7 +761,7 @@ $mol_portion $mol_view
 			width_style <= indicator_width_style \0
 
 $hyoo_js_perf $mol_page
-	title @ \JS Performance
+	title @ \JS Benchmark
 	yard $hyoo_sync_client
 	prefixes /string
 	sources /string
@@ -827,14 +827,14 @@ $hyoo_js_perf $mol_page
 		drop? <=> case_drop*? null
 		dupe? <=> case_dupe*? null
 		swap? <=> case_swap*? null
-	head /
-		<= Title
+	Title $mol_string_button
+		value? <=> bench_title? \
+		hint <= title
+	tools /
 		<= Run $mol_button_major
 			hint @ \Run
 			click?event <=> run?event null
 			sub / <= Run_icon $mol_icon_play
-		<= Tools
-	tools /
 		<= Share $mol_button_share
 			capture <= Cases_pane
 		<= Fork $mol_button_minor
