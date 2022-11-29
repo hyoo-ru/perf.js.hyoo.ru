@@ -55,10 +55,10 @@
 }
 
 [hyoo_js_perf_case_eval_labeler] {
-	width: 28rem;
+	width: 24rem;
 }
 [hyoo_js_perf_case_result_rows] {
-	width: 28rem;
+	width: 24rem;
 	display: table-cell;
 	height: 5rem;
 }
@@ -88,6 +88,11 @@
 	margin: 0 .5rem;
 }
 
+[hyoo_js_perf_case_result_stats_main],
+[hyoo_js_perf_case_result_stats_mem] {
+	display: contents;
+}
+
 [hyoo_js_perf_case_result_perf],
 [hyoo_js_perf_case_result_memory] {
 	flex-direction: column;
@@ -103,7 +108,7 @@
 	text-shadow: 0 0;
 }
 
-[hyoo_js_perf_case_result_portion] {
+[hyoo_js_perf_case_result_portions] {
 	gap: .75rem;
 }
 
