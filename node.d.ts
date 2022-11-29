@@ -3752,8 +3752,9 @@ declare namespace $ {
         frequency_portion(): number;
         Frequency_portion(): $$.$mol_portion;
         memory_portion(): number;
-        Mmory_ortion(): $$.$mol_portion;
-        Portion(): $mol_view;
+        Memory_portion(): $$.$mol_portion;
+        portions(): readonly any[];
+        Portions(): $mol_view;
         title(): string;
         frequency_hint(): string;
         frequency(): string;
@@ -3764,12 +3765,15 @@ declare namespace $ {
         iterations_hint(): string;
         iterations(): string;
         Iterations(): $mol_view;
+        Stats_main(): $mol_view;
         memory_per_iteration_hint(): string;
         memory_per_iteration(): string;
         Memory_per_iteration(): $mol_view;
         memory_hint(): string;
         memory_total(): string;
         Memory(): $mol_view;
+        Stats_mem(): $mol_view;
+        stats(): readonly any[];
         Stats(): $mol_view;
         error(): string;
         Error(): $mol_view;
@@ -3947,6 +3951,8 @@ declare namespace $.$$ {
     }
     class $hyoo_js_perf_case_result extends $.$hyoo_js_perf_case_result {
         sub(): $mol_view[];
+        portions(): $mol_portion[];
+        stats(): $mol_view[];
         error(): string;
         iterations(): string;
         frequency(): string;
