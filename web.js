@@ -14050,6 +14050,7 @@ var $;
                 return measure.map((stats) => $hyoo_js_perf_stats.create(stats2 => {
                     stats2.frequency_portion = stats.frequency / this.max_frequency();
                     stats2.memory_portion = stats.memory_per_iteration / this.max_memory();
+                    stats2.memory = stats.memory;
                     stats2.elapsed = stats.elapsed;
                     stats2.iterations = stats.iterations;
                     stats2.error = stats.error;
