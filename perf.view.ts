@@ -381,7 +381,7 @@ namespace $.$$ {
 			
 			return $hyoo_js_perf_stats.create( stats => {
 				stats.elapsed = Math.min( ... times )
-				stats.memory = Math.max( ... mems )
+				stats.memory = Math.min( ... mems )
 				stats.iterations = iterations
 			} )
 
