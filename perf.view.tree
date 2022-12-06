@@ -1,6 +1,7 @@
 $hyoo_js_perf $mol_page
 	title @ \JS Benchmark
 	yard $hyoo_sync_client
+	titles /string
 	prefixes /string
 	sources /string
 	plugins /
