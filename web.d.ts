@@ -3628,6 +3628,7 @@ declare namespace $ {
     class $hyoo_js_perf extends $mol_page {
         title(): string;
         yard(): $hyoo_sync_client;
+        titles(): readonly string[];
         prefixes(): readonly string[];
         sources(): readonly string[];
         plugins(): readonly any[];

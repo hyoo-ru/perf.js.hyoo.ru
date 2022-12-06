@@ -12776,6 +12776,9 @@ var $;
             const obj = new this.$.$hyoo_sync_client();
             return obj;
         }
+        titles() {
+            return [];
+        }
         prefixes() {
             return [];
         }
