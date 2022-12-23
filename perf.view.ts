@@ -586,8 +586,7 @@ namespace $.$$ {
 			return [
 				... result.frequency ? [ this.Frequency_portion() ] : [],
 				... result.memory ? [ this.Memory_portion() ] : [],
-				... result.size ? [ this.Size_portion() ] : [],
-				... result.deps ? [ this.Deps_portion() ] : [],
+				... result.size ? [ this.Size_portion(), this.Deps_portion() ] : [],
 			]
 		}
 
@@ -597,8 +596,7 @@ namespace $.$$ {
 			return [
 				... result.frequency ? [ this.Stats_main() ] : [],
 				... result.memory ? [ this.Stats_mem() ] : [],
-				... result.size ? [ this.Stats_size() ] : [],
-				... result.deps ? [ this.Stats_deps() ] : [],
+				... result.size ? [ this.Stats_size(), this.Stats_deps() ] : [],
 			]
 		}
 
