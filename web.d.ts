@@ -3534,7 +3534,9 @@ declare namespace $ {
         Code(): $$.$mol_textarea;
         error_anchor(): any;
         error_offset(): readonly any[];
+        error_message(): string;
         Error_icon(): $mol_icon_flash;
+        Error_view(): $mol_view;
         Error_mark(): $$.$mol_follower;
         Code_page(): $mol_page;
         result_label(): string;
@@ -3575,6 +3577,7 @@ declare namespace $.$$ {
         } | null;
         error_anchor(): $mol_text_code_token | undefined;
         error_offset(): number[];
+        error_message(): any;
         Error_mark(): any;
         spy(args: () => any[]): void;
         result(next?: any[]): any[];
@@ -3685,7 +3688,6 @@ declare namespace $ {
         Eval_result(): $$.$mol_list;
         Eval(): $$.$hyoo_js_eval;
         sub(): readonly any[];
-        Result(id: any): $$.$hyoo_js_perf_case_result;
         sample(): string;
         prefix_showed(next?: any): boolean;
         drop(next?: any): any;
@@ -3713,12 +3715,12 @@ declare namespace $ {
         eval_standalone(): string;
         Eval_sandalone(): $$.$mol_link_iconed;
         Eval_labeler(): $$.$mol_expander;
-        result_rows(): readonly any[];
-        Result_rows(): $$.$mol_list;
-        Results(): $mol_labeler;
-        columns(): readonly any[];
         result_title(id: any): string;
         result(id: any): $$.$hyoo_js_perf_stats;
+        Result(id: any): $$.$hyoo_js_perf_case_result;
+        result_rows(): readonly any[];
+        Results(): $$.$mol_list;
+        columns(): readonly any[];
     }
     class $hyoo_js_perf_case_result extends $mol_view {
         result(): $$.$hyoo_js_perf_stats;
@@ -3727,6 +3729,10 @@ declare namespace $ {
         Frequency_portion(): $$.$mol_portion;
         memory_portion(): number;
         Memory_portion(): $$.$mol_portion;
+        size_portion(): number;
+        Size_portion(): $$.$mol_portion;
+        deps_portion(): number;
+        Deps_portion(): $$.$mol_portion;
         portions(): readonly any[];
         Portions(): $mol_view;
         title(): string;
@@ -3747,6 +3753,14 @@ declare namespace $ {
         memory_total(): string;
         Memory(): $mol_view;
         Stats_mem(): $mol_view;
+        size_hint(): string;
+        size(): number;
+        Size(): $mol_view;
+        Stats_size(): $mol_view;
+        deps_hint(): string;
+        deps(): string;
+        Deps(): $mol_view;
+        Stats_deps(): $mol_view;
         stats(): readonly any[];
         Stats(): $mol_view;
         error(): string;
@@ -3872,6 +3886,10 @@ declare namespace $.$$ {
         error: string;
         memory: number;
         memory_portion: number;
+        size: number;
+        size_portion: number;
+        deps: number;
+        deps_portion: number;
         get time(): number;
         get frequency(): number;
         get memory_per_iteration(): number;
@@ -3898,10 +3916,16 @@ declare namespace $.$$ {
         case_prefix(index: number, next?: string): string;
         source(index: number, next?: string): string;
         case_sample(index: number): string;
+        case_size(index: number): number;
+        case_deps_names(index: number): string[];
+        case_deps(index: number): number;
+        module_size(name: string): number;
         measures_for(index: number, next?: $hyoo_js_perf_stats[]): $hyoo_js_perf_stats[];
         measures(): $hyoo_js_perf_stats[][];
         max_frequency(): number;
         max_memory(): number;
+        max_size(): number;
+        max_deps(): number;
         results(index: number): $hyoo_js_perf_stats[];
         token(): string;
         measure_step(count: number, prefix: string, inner: string, postfix: string): {
@@ -3916,8 +3940,7 @@ declare namespace $.$$ {
         run(): void;
     }
     class $hyoo_js_perf_case extends $.$hyoo_js_perf_case {
-        result_rows(): $hyoo_js_perf_case_result[];
-        columns(): ($mol_expander | $mol_labeler)[];
+        columns(): ($mol_list | $mol_expander)[];
         result(level: number): any;
         result_title(level: number): string;
         eval_standalone(): string;
@@ -3933,8 +3956,12 @@ declare namespace $.$$ {
         time_total(): string;
         memory_total(): string;
         memory_per_iteration(): string;
+        size(): number;
+        deps(): string;
         frequency_portion(): number;
         memory_portion(): number;
+        size_portion(): number;
+        deps_portion(): number;
     }
 }
 

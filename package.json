@@ -271,6 +271,8 @@
     "$mol_reconcile",
     "$hyoo_js_perf_bench_case",
     "$mol_range2",
+    "$mol_fetch",
+    "$mol_dom_parse",
     "$mol_wait_rest",
     "$mol_after_work",
     "$mol_si_short",
@@ -279,6 +281,7 @@
   "dependencies": {
     "jsdom": "*",
     "chokidar": "*",
-    "fake-indexeddb": "*"
+    "fake-indexeddb": "*",
+    "undici": "*"
   }
 }

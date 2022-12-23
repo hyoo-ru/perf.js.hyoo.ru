@@ -12068,15 +12068,28 @@ var $;
                 0
             ];
         }
+        error_message() {
+            return "";
+        }
         Error_icon() {
             const obj = new this.$.$mol_icon_flash();
+            return obj;
+        }
+        Error_view() {
+            const obj = new this.$.$mol_view();
+            obj.attr = () => ({
+                title: this.error_message()
+            });
+            obj.sub = () => [
+                this.Error_icon()
+            ];
             return obj;
         }
         Error_mark() {
             const obj = new this.$.$mol_follower();
             obj.Anchor = () => this.error_anchor();
             obj.offset = () => this.error_offset();
-            obj.Sub = () => this.Error_icon();
+            obj.Sub = () => this.Error_view();
             return obj;
         }
         Code_page() {
@@ -12207,6 +12220,9 @@ var $;
     ], $hyoo_js_eval.prototype, "Error_icon", null);
     __decorate([
         $mol_mem
+    ], $hyoo_js_eval.prototype, "Error_view", null);
+    __decorate([
+        $mol_mem
     ], $hyoo_js_eval.prototype, "Error_mark", null);
     __decorate([
         $mol_mem
@@ -12260,7 +12276,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("hyoo/js/eval/eval.view.css", "[hyoo_js_eval_menu_page] {\n\tflex: 0 0 auto;\n}\n\n[hyoo_js_eval_menu] {\n\tpadding: var(--mol_gap_block);\n}\n\n[hyoo_js_eval_code_page] {\n\tflex: 1 0 auto;\n}\n\n[hyoo_js_eval_code_page_body] {\n\tpadding: var(--mol_gap_block);\n}\n\n[hyoo_js_eval_code] {\n\tflex: 0 0 auto;\n}\n\n[hyoo_js_eval_result] {\n\tpadding: var(--mol_gap_text);\n}\n\n[hyoo_js_eval_result_page] {\n\tflex: 0 0 50%;\n}\n\n[hyoo_js_eval_result_page_body] {\n\tpadding: var(--mol_gap_block);\n}\n\n[hyoo_js_eval_error_icon] {\n\tpointer-events: none;\n\tcolor: var(--mol_theme_focus);\n}\n");
+    $mol_style_attach("hyoo/js/eval/eval.view.css", "[hyoo_js_eval_menu_page] {\n\tflex: 0 0 auto;\n}\n\n[hyoo_js_eval_menu] {\n\tpadding: var(--mol_gap_block);\n}\n\n[hyoo_js_eval_code_page] {\n\tflex: 1 0 auto;\n}\n\n[hyoo_js_eval_code_page_body] {\n\tpadding: var(--mol_gap_block);\n}\n\n[hyoo_js_eval_code] {\n\tflex: 0 0 auto;\n}\n\n[hyoo_js_eval_result] {\n\tpadding: var(--mol_gap_text);\n}\n\n[hyoo_js_eval_result_page] {\n\tflex: 0 0 50%;\n}\n\n[hyoo_js_eval_result_page_body] {\n\tpadding: var(--mol_gap_block);\n}\n\n[hyoo_js_eval_error_icon] {\n\tcolor: var(--mol_theme_focus);\n}\n");
 })($ || ($ = {}));
 //hyoo/js/eval/-css/eval.view.css.ts
 ;
@@ -12356,6 +12372,9 @@ var $;
             error_offset() {
                 const pos = this.error_pos();
                 return [pos.offset / pos.token.haystack().length, 0];
+            }
+            error_message() {
+                return this.execute()[1]?.message;
             }
             Error_mark() {
                 return this.run() ? super.Error_mark() : null;
@@ -12948,12 +12967,6 @@ var $;
         sub() {
             return this.columns();
         }
-        Result(id) {
-            const obj = new this.$.$hyoo_js_perf_case_result();
-            obj.title = () => this.result_title(id);
-            obj.result = () => this.result(id);
-            return obj;
-        }
         sample() {
             return "";
         }
@@ -13119,18 +13132,29 @@ var $;
             obj.Content = () => this.Eval_result();
             return obj;
         }
-        result_rows() {
-            return [];
+        result_title(id) {
+            return "";
         }
-        Result_rows() {
-            const obj = new this.$.$mol_list();
-            obj.rows = () => this.result_rows();
+        result(id) {
+            const obj = new this.$.$hyoo_js_perf_stats();
             return obj;
         }
+        Result(id) {
+            const obj = new this.$.$hyoo_js_perf_case_result();
+            obj.title = () => this.result_title(id);
+            obj.result = () => this.result(id);
+            return obj;
+        }
+        result_rows() {
+            return [
+                this.Result("0"),
+                this.Result("1"),
+                this.Result("2")
+            ];
+        }
         Results() {
-            const obj = new this.$.$mol_labeler();
-            obj.title = () => this.$.$mol_locale.text('$hyoo_js_perf_case_Results_title');
-            obj.Content = () => this.Result_rows();
+            const obj = new this.$.$mol_list();
+            obj.rows = () => this.result_rows();
             return obj;
         }
         columns() {
@@ -13141,20 +13165,10 @@ var $;
                 this.Results()
             ];
         }
-        result_title(id) {
-            return "";
-        }
-        result(id) {
-            const obj = new this.$.$hyoo_js_perf_stats();
-            return obj;
-        }
     }
     __decorate([
         $mol_mem
     ], $hyoo_js_perf_case.prototype, "Eval", null);
-    __decorate([
-        $mol_mem_key
-    ], $hyoo_js_perf_case.prototype, "Result", null);
     __decorate([
         $mol_mem
     ], $hyoo_js_perf_case.prototype, "prefix_showed", null);
@@ -13225,14 +13239,14 @@ var $;
         $mol_mem
     ], $hyoo_js_perf_case.prototype, "Eval_labeler", null);
     __decorate([
-        $mol_mem
-    ], $hyoo_js_perf_case.prototype, "Result_rows", null);
+        $mol_mem_key
+    ], $hyoo_js_perf_case.prototype, "result", null);
+    __decorate([
+        $mol_mem_key
+    ], $hyoo_js_perf_case.prototype, "Result", null);
     __decorate([
         $mol_mem
     ], $hyoo_js_perf_case.prototype, "Results", null);
-    __decorate([
-        $mol_mem_key
-    ], $hyoo_js_perf_case.prototype, "result", null);
     $.$hyoo_js_perf_case = $hyoo_js_perf_case;
     class $hyoo_js_perf_case_result extends $mol_view {
         result() {
@@ -13262,10 +13276,28 @@ var $;
             obj.portion = () => this.memory_portion();
             return obj;
         }
+        size_portion() {
+            return 0;
+        }
+        Size_portion() {
+            const obj = new this.$.$mol_portion();
+            obj.portion = () => this.size_portion();
+            return obj;
+        }
+        deps_portion() {
+            return 0;
+        }
+        Deps_portion() {
+            const obj = new this.$.$mol_portion();
+            obj.portion = () => this.deps_portion();
+            return obj;
+        }
         portions() {
             return [
                 this.Frequency_portion(),
-                this.Memory_portion()
+                this.Memory_portion(),
+                this.Size_portion(),
+                this.Deps_portion()
             ];
         }
         Portions() {
@@ -13378,10 +13410,60 @@ var $;
             ];
             return obj;
         }
+        size_hint() {
+            return this.$.$mol_locale.text('$hyoo_js_perf_case_result_size_hint');
+        }
+        size() {
+            return 0;
+        }
+        Size() {
+            const obj = new this.$.$mol_view();
+            obj.attr = () => ({
+                title: this.size_hint()
+            });
+            obj.sub = () => [
+                this.size()
+            ];
+            return obj;
+        }
+        Stats_size() {
+            const obj = new this.$.$mol_view();
+            obj.sub = () => [
+                this.title(),
+                this.Size()
+            ];
+            return obj;
+        }
+        deps_hint() {
+            return this.$.$mol_locale.text('$hyoo_js_perf_case_result_deps_hint');
+        }
+        deps() {
+            return "";
+        }
+        Deps() {
+            const obj = new this.$.$mol_view();
+            obj.attr = () => ({
+                title: this.deps_hint()
+            });
+            obj.sub = () => [
+                this.deps()
+            ];
+            return obj;
+        }
+        Stats_deps() {
+            const obj = new this.$.$mol_view();
+            obj.sub = () => [
+                "🚂",
+                this.Deps()
+            ];
+            return obj;
+        }
         stats() {
             return [
                 this.Stats_main(),
-                this.Stats_mem()
+                this.Stats_mem(),
+                this.Stats_size(),
+                this.Stats_deps()
             ];
         }
         Stats() {
@@ -13411,6 +13493,12 @@ var $;
     ], $hyoo_js_perf_case_result.prototype, "Memory_portion", null);
     __decorate([
         $mol_mem
+    ], $hyoo_js_perf_case_result.prototype, "Size_portion", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_js_perf_case_result.prototype, "Deps_portion", null);
+    __decorate([
+        $mol_mem
     ], $hyoo_js_perf_case_result.prototype, "Portions", null);
     __decorate([
         $mol_mem
@@ -13433,6 +13521,18 @@ var $;
     __decorate([
         $mol_mem
     ], $hyoo_js_perf_case_result.prototype, "Stats_mem", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_js_perf_case_result.prototype, "Size", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_js_perf_case_result.prototype, "Stats_size", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_js_perf_case_result.prototype, "Deps", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_js_perf_case_result.prototype, "Stats_deps", null);
     __decorate([
         $mol_mem
     ], $hyoo_js_perf_case_result.prototype, "Stats", null);
@@ -13863,7 +13963,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("hyoo/js/perf/perf.view.css", "[hyoo_js_perf_tools] {\n\tflex-grow: 0;\n}\n\n[hyoo_js_perf_body] {\n\tdisplay: flex;\n\tflex-direction: row;\n\tjustify-content: space-between;\n\tpadding: 0;\n}\n\n[hyoo_js_perf_common] {\n\tflex-direction: column;\n\tflex: 0 0 auto;\n\tmin-width: 20rem;\n}\n\n[hyoo_js_perf_hint] {\n\tpadding: var(--mol_gap_block);\n}\n\n[hyoo_js_perf_prefix] {\n\tmargin: .75rem;\n}\n\n[hyoo_js_perf_postfix] {\n\tmargin: .75rem;\n}\n\n[hyoo_js_perf_cases_pane] {\n\tflex: 1000 0 auto;\n\tmin-width: 46rem;\n}\n\n[hyoo_js_perf_cases] {\n\tdisplay: table;\n\tborder-spacing: .75rem;\n\tbackground: var(--mol_theme_back);\n}\n\n[hyoo_js_perf_case] {\n\tdisplay: table-row;\n\tflex: 0 1 auto;\n}\n\n[hyoo_js_perf_case_prefix] ,\n[hyoo_js_perf_case_source] {\n\tdisplay: table-cell;\n\tmin-width: 14rem;\n\tvertical-align: top;\n}\n\n[hyoo_js_perf_case_title] {\n\tflex-grow: 1000;\n}\n\n[hyoo_js_perf_case_eval_labeler] {\n\twidth: 24rem;\n}\n[hyoo_js_perf_case_result_rows] {\n\twidth: 24rem;\n\tdisplay: table-cell;\n}\n\n[hyoo_js_perf_case_eval_labeler_trigger] {\n\tflex-grow: 0;\n}\n\n[hyoo_js_perf_case_result] {\n\tpadding: .25rem .75rem .25rem;\n\tflex-direction: column;\n}\n\n[hyoo_js_perf_case_result] > * {\n\tdisplay: flex;\n}\n\n[hyoo_js_perf_case_result_stats] {\n\tdisplay: flex;\n\twhite-space: pre;\n\tjustify-content: space-between;\n}\n\n[hyoo_js_perf_case_result_stats] > * {\n\tword-break: keep-all;\n\twhite-space: nowrap;\n\tmargin: 0 .5rem;\n}\n\n[hyoo_js_perf_case_result_stats_main],\n[hyoo_js_perf_case_result_stats_mem] {\n\tdisplay: contents;\n}\n\n[hyoo_js_perf_case_result_perf],\n[hyoo_js_perf_case_result_memory] {\n\tflex-direction: column;\n}\n\n[hyoo_js_perf_case_result_frequency],\n[hyoo_js_perf_case_result_memory_per_iteration] {\n\ttext-shadow: 0 0;\n}\n\n[hyoo_js_perf_case_result_error] {\n\tcolor: crimson;\n\ttext-shadow: 0 0;\n}\n\n[hyoo_js_perf_case_result_portions] {\n\tgap: .75rem;\n}\n\n[hyoo_js_perf_case_result] [mol_portion] {\n\tflex: 1 1 50%;\n\twidth: auto;\n}\n\n[hyoo_js_perf_case_result]:nth-child(1) [mol_portion_indicator] {\n\tbackground-color: royalblue;\n}\n\n[hyoo_js_perf_case_result]:nth-child(2) [mol_portion_indicator] {\n\tbackground-color: orange;\n}\n\n[hyoo_js_perf_case_result]:nth-child(1) [hyoo_js_perf_case_result_frequency],\n[hyoo_js_perf_case_result]:nth-child(1) [hyoo_js_perf_case_result_memory_per_iteration] {\n\tcolor: royalblue;\n}\n\n[hyoo_js_perf_case_result]:nth-child(2) [hyoo_js_perf_case_result_frequency],\n[hyoo_js_perf_case_result]:nth-child(2) [hyoo_js_perf_case_result_memory_per_iteration] {\n\tcolor: orange;\n}\n");
+    $mol_style_attach("hyoo/js/perf/perf.view.css", "[hyoo_js_perf_tools] {\n\tflex-grow: 0;\n}\n\n[hyoo_js_perf_body] {\n\tdisplay: flex;\n\tflex-direction: row;\n\tjustify-content: space-between;\n\tpadding: 0;\n}\n\n[hyoo_js_perf_common] {\n\tflex-direction: column;\n\tflex: 0 0 auto;\n\tmin-width: 20rem;\n}\n\n[hyoo_js_perf_hint] {\n\tpadding: var(--mol_gap_block);\n}\n\n[hyoo_js_perf_prefix] {\n\tmargin: .75rem;\n}\n\n[hyoo_js_perf_postfix] {\n\tmargin: .75rem;\n}\n\n[hyoo_js_perf_cases_pane] {\n\tflex: 1000 0 auto;\n\tmin-width: 46rem;\n}\n\n[hyoo_js_perf_cases] {\n\tdisplay: table;\n\tbackground: var(--mol_theme_back);\n}\n\n[hyoo_js_perf_case] {\n\tdisplay: table-row;\n\tflex: 0 1 auto;\n}\n\n[hyoo_js_perf_case_prefix] ,\n[hyoo_js_perf_case_source] {\n\tdisplay: table-cell;\n\tmin-width: 14rem;\n\tvertical-align: top;\n\tpadding: 0.75rem;\n}\n\n[hyoo_js_perf_case_title] {\n\tflex-grow: 1000;\n}\n\n[hyoo_js_perf_case_eval_labeler] {\n\twidth: 26rem;\n\tpadding: 0.75rem;\n}\n[hyoo_js_perf_case_results] {\n\twidth: 26rem;\n\tdisplay: table-cell;\n\tpadding: 0.75rem;\n}\n\n[hyoo_js_perf_case_eval_labeler_trigger] {\n\tflex-grow: 0;\n}\n\n[hyoo_js_perf_case_result] {\n\tpadding: .5rem .75rem .25rem;\n\tflex-direction: column;\n}\n\n[hyoo_js_perf_case_result] > * {\n\tdisplay: flex;\n}\n\n[hyoo_js_perf_case_result_stats] {\n\tdisplay: flex;\n\twhite-space: pre;\n\tjustify-content: space-between;\n}\n\n[hyoo_js_perf_case_result_stats] > * {\n\tword-break: keep-all;\n\twhite-space: nowrap;\n\t/* margin: 0 .5rem; */\n}\n\n[hyoo_js_perf_case_result_stats_main],\n[hyoo_js_perf_case_result_stats_mem] {\n\tdisplay: contents;\n}\n\n[hyoo_js_perf_case_result_perf],\n[hyoo_js_perf_case_result_memory] {\n\tflex-direction: column;\n}\n\n[hyoo_js_perf_case_result_frequency],\n[hyoo_js_perf_case_result_memory_per_iteration] {\n\ttext-shadow: 0 0;\n}\n\n[hyoo_js_perf_case_result_error] {\n\tcolor: crimson;\n\ttext-shadow: 0 0;\n}\n\n[hyoo_js_perf_case_result_portions] {\n\tgap: .75rem;\n}\n\n[hyoo_js_perf_case_result] [mol_portion] {\n\tflex: 1 1 50%;\n\twidth: auto;\n}\n\n[hyoo_js_perf_case_result]:nth-child(1) [mol_portion_indicator] {\n\tbackground-color: dimgray;\n}\n\n[hyoo_js_perf_case_result]:nth-child(2) [mol_portion_indicator] {\n\tbackground-color: royalblue;\n}\n\n[hyoo_js_perf_case_result]:nth-child(3) [mol_portion_indicator] {\n\tbackground-color: orange;\n}\n\n[hyoo_js_perf_case_result]:nth-child(2) [hyoo_js_perf_case_result_frequency],\n[hyoo_js_perf_case_result]:nth-child(2) [hyoo_js_perf_case_result_memory_per_iteration] {\n\tcolor: royalblue;\n}\n\n[hyoo_js_perf_case_result]:nth-child(3) [hyoo_js_perf_case_result_frequency],\n[hyoo_js_perf_case_result]:nth-child(3) [hyoo_js_perf_case_result_memory_per_iteration] {\n\tcolor: orange;\n}\n");
 })($ || ($ = {}));
 //hyoo/js/perf/-css/perf.view.css.ts
 ;
@@ -13879,6 +13979,10 @@ var $;
             error;
             memory;
             memory_portion;
+            size;
+            size_portion;
+            deps;
+            deps_portion;
             get time() { return this.elapsed / this.iterations; }
             get frequency() { return this.iterations * 1000 / this.elapsed; }
             get memory_per_iteration() { return this.memory / this.iterations; }
@@ -14040,6 +14144,23 @@ var $;
                     + '\n\n' + this.postfix();
                 return code.trim().replace(/\{#\}/g, '1');
             }
+            case_size(index) {
+                return (this.case_prefix(index) + '\n' + this.source(index))
+                    .replace(/\/\/.*$/gm, '')
+                    .match(/\w+/g)?.length ?? 0;
+            }
+            case_deps_names(index) {
+                const src = (this.case_prefix(index) + '\n' + this.source(index));
+                const found = src.matchAll(/\$mol_import\.(?:script|module)\s*\(\s*['"]https?:\/\/[^/]*\/((?:@[\w.-]*\/)?[\w.-]*)/g);
+                return [...found].map(([imp, mod]) => mod);
+            }
+            case_deps(index) {
+                return this.case_deps_names(index)
+                    .reduce((sum, name) => sum + this.module_size(name), 0);
+            }
+            module_size(name) {
+                return this.$.$mol_fetch.json(`https://bundlephobia.com/api/size?record=true&package=${name}`).gzip;
+            }
             measures_for(index, next) {
                 this.prefix();
                 this.postfix();
@@ -14064,18 +14185,41 @@ var $;
                     }, 0));
                 }, 0);
             }
+            max_size() {
+                return this.measures()
+                    .map((_, i) => this.case_size(i))
+                    .reduce((max, size) => Math.max(max, size));
+            }
+            max_deps() {
+                return this.measures()
+                    .map((_, i) => this.case_deps(i))
+                    .reduce((max, size) => Math.max(max, size));
+            }
             results(index) {
                 const measure = this.measures_for(index);
                 if (!measure)
                     return [];
-                return measure.map((stats) => $hyoo_js_perf_stats.create(stats2 => {
-                    stats2.frequency_portion = stats.frequency / this.max_frequency();
-                    stats2.memory_portion = stats.memory_per_iteration / this.max_memory();
-                    stats2.memory = stats.memory;
-                    stats2.elapsed = stats.elapsed;
-                    stats2.iterations = stats.iterations;
-                    stats2.error = stats.error;
-                }));
+                return [
+                    $hyoo_js_perf_stats.create(stats2 => {
+                        try {
+                            stats2.size = this.case_size(index);
+                            stats2.size_portion = this.case_size(index) / this.max_size();
+                            stats2.deps = this.case_deps(index);
+                            stats2.deps_portion = this.case_deps(index) / this.max_deps();
+                        }
+                        catch (error) {
+                            $mol_fail_log(error);
+                        }
+                    }),
+                    ...measure.map((stats) => $hyoo_js_perf_stats.create(stats2 => {
+                        stats2.frequency_portion = stats.frequency / this.max_frequency();
+                        stats2.memory_portion = stats.memory_per_iteration / this.max_memory();
+                        stats2.memory = stats.memory;
+                        stats2.elapsed = stats.elapsed;
+                        stats2.iterations = stats.iterations;
+                        stats2.error = stats.error;
+                    })),
+                ];
             }
             token() {
                 return Math.random().toString(16).substring(2);
@@ -14241,6 +14385,18 @@ var $;
         ], $hyoo_js_perf.prototype, "case_sample", null);
         __decorate([
             $mol_mem_key
+        ], $hyoo_js_perf.prototype, "case_size", null);
+        __decorate([
+            $mol_mem_key
+        ], $hyoo_js_perf.prototype, "case_deps_names", null);
+        __decorate([
+            $mol_mem_key
+        ], $hyoo_js_perf.prototype, "case_deps", null);
+        __decorate([
+            $mol_mem_key
+        ], $hyoo_js_perf.prototype, "module_size", null);
+        __decorate([
+            $mol_mem_key
         ], $hyoo_js_perf.prototype, "measures_for", null);
         __decorate([
             $mol_mem
@@ -14251,6 +14407,12 @@ var $;
         __decorate([
             $mol_mem
         ], $hyoo_js_perf.prototype, "max_memory", null);
+        __decorate([
+            $mol_mem
+        ], $hyoo_js_perf.prototype, "max_size", null);
+        __decorate([
+            $mol_mem
+        ], $hyoo_js_perf.prototype, "max_deps", null);
         __decorate([
             $mol_mem_key
         ], $hyoo_js_perf.prototype, "results", null);
@@ -14274,14 +14436,11 @@ var $;
         ], $hyoo_js_perf.prototype, "run", null);
         $$.$hyoo_js_perf = $hyoo_js_perf;
         class $hyoo_js_perf_case extends $.$hyoo_js_perf_case {
-            result_rows() {
-                return [this.Result(0), this.Result(1)];
-            }
             columns() {
                 return [
                     this.Prefix(),
                     this.Source(),
-                    ...this.results().length
+                    ...this.results().length > 1
                         ? [this.Results()]
                         : this.source()
                             ? [this.Eval_labeler()]
@@ -14292,7 +14451,7 @@ var $;
                 return this.results()[level];
             }
             result_title(level) {
-                return ['❄', '🔥'][level] ?? '';
+                return ['🔠', '🥶', '🥵'][level] ?? '';
             }
             eval_standalone() {
                 const code = this.sample();
@@ -14304,27 +14463,30 @@ var $;
         }
         __decorate([
             $mol_mem
-        ], $hyoo_js_perf_case.prototype, "result_rows", null);
-        __decorate([
-            $mol_mem
         ], $hyoo_js_perf_case.prototype, "columns", null);
         $$.$hyoo_js_perf_case = $hyoo_js_perf_case;
         class $hyoo_js_perf_case_result extends $.$hyoo_js_perf_case_result {
             sub() {
                 if (!this.result())
                     return [];
-                return this.result().error ? [this.Error()] : [this.Portions(), this.Stats(),];
+                return this.result().error ? [this.Error()] : [this.Stats(), this.Portions()];
             }
             portions() {
+                const result = this.result();
                 return [
-                    this.Frequency_portion(),
-                    ...this.result().memory ? [this.Memory_portion()] : [],
+                    ...result.frequency ? [this.Frequency_portion()] : [],
+                    ...result.memory ? [this.Memory_portion()] : [],
+                    ...result.size ? [this.Size_portion()] : [],
+                    ...result.deps ? [this.Deps_portion()] : [],
                 ];
             }
             stats() {
+                const result = this.result();
                 return [
-                    this.Stats_main(),
-                    ...this.result().memory ? [this.Stats_mem()] : [],
+                    ...result.frequency ? [this.Stats_main()] : [],
+                    ...result.memory ? [this.Stats_mem()] : [],
+                    ...result.size ? [this.Stats_size()] : [],
+                    ...result.deps ? [this.Stats_deps()] : [],
                 ];
             }
             error() {
@@ -14347,11 +14509,23 @@ var $;
                 const val = this.result().memory_per_iteration;
                 return val ? $mol_si_short(val, 'B') : '?B';
             }
+            size() {
+                return this.result().size;
+            }
+            deps() {
+                return $mol_si_short(this.result().deps, 'B');
+            }
             frequency_portion() {
                 return this.result().frequency_portion;
             }
             memory_portion() {
                 return this.result().memory_portion;
+            }
+            size_portion() {
+                return this.result().size_portion;
+            }
+            deps_portion() {
+                return this.result().deps_portion;
             }
         }
         __decorate([

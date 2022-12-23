@@ -727,7 +727,9 @@ $hyoo_js_eval $mol_book2
 					offset <= error_offset /
 						0
 						0
-					Sub <= Error_icon $mol_icon_flash
+					Sub <= Error_view $mol_view
+						attr * title <= error_message \
+						sub / <= Error_icon $mol_icon_flash
 		<= Result_page $mol_page
 			title <= result_label @ \Result
 			tools /
@@ -909,13 +911,13 @@ $hyoo_js_perf_case $mol_view
 				hint @ \Generated script
 				uri <= eval_standalone \
 			Content <= Eval_result
-		<= Results $mol_labeler
-			title @ \Results
-			Content <= Result_rows $mol_list
-				rows <= result_rows /
-	Result!level $hyoo_js_perf_case_result
-		title <= result_title!level \
-		result <= result!level $hyoo_js_perf_stats
+		<= Results $mol_list
+			rows <= result_rows /
+				<= Result*0 $hyoo_js_perf_case_result
+					title <= result_title* \
+					result <= result* $hyoo_js_perf_stats
+				<= Result*1
+				<= Result*2
 
 $hyoo_js_perf_case_result $mol_view
 	result $hyoo_js_perf_stats
@@ -923,6 +925,8 @@ $hyoo_js_perf_case_result $mol_view
 		<= Portions $mol_view sub <= portions /
 			<= Frequency_portion $mol_portion portion <= frequency_portion 0
 			<= Memory_portion $mol_portion portion <= memory_portion 0
+			<= Size_portion $mol_portion portion <= size_portion 0
+			<= Deps_portion $mol_portion portion <= deps_portion 0
 		<= Stats $mol_view sub <= stats /
 			<= Stats_main $mol_view sub /
 				<= title \
@@ -946,4 +950,14 @@ $hyoo_js_perf_case_result $mol_view
 				<= Memory $mol_view
 					attr * title <= memory_hint @ \Bytes for All Iterations
 					sub / <= memory_total \
+			<= Stats_size $mol_view sub /
+				<= title \
+				<= Size $mol_view
+					attr * title <= size_hint @ \Case Size
+					sub / <= size 0
+			<= Stats_deps $mol_view sub /
+				\🚂
+				<= Deps $mol_view
+					attr * title <= deps_hint @ \Deps Size
+					sub / <= deps \
 		<= Error $mol_view sub / <= error \
