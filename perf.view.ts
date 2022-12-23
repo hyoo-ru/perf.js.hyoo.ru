@@ -335,7 +335,14 @@ namespace $.$$ {
 		@ $mol_mem
 		max_deps() {
 			return this.measures()
-				.map( (_,i)=> this.case_deps(i) )
+				.map( (_,i)=> {
+					try {
+						return this.case_deps(i)
+					} catch( error ) {
+						$mol_fail_log( error )
+						return 0
+					}
+				} )
 				.reduce( ( max, size )=> Math.max( max, size ) )
 		}
 		
@@ -347,14 +354,10 @@ namespace $.$$ {
 			
 			return [
 				$hyoo_js_perf_stats.create( stats2 => {
-					try {
-						stats2.size = this.case_size( index )
-						stats2.size_portion = this.case_size( index ) / this.max_size()
-						stats2.deps = this.case_deps( index )
-						stats2.deps_portion = this.case_deps( index ) / this.max_deps()
-					} catch( error ) {
-						$mol_fail_log( error )
-					}
+					stats2.size = this.case_size( index )
+					stats2.size_portion = this.case_size( index ) / this.max_size()
+					stats2.deps = this.case_deps( index )
+					stats2.deps_portion = this.case_deps( index ) / this.max_deps()
 				} ),
 				... measure.map( ( stats )=> $hyoo_js_perf_stats.create( stats2 => {
 					stats2.frequency_portion = stats.frequency / this.max_frequency()
