@@ -34,7 +34,6 @@
 
 [hyoo_js_perf_cases] {
 	display: table;
-	border-spacing: .75rem;
 	background: var(--mol_theme_back);
 }
 
@@ -48,6 +47,7 @@
 	display: table-cell;
 	min-width: 14rem;
 	vertical-align: top;
+	padding: 0.75rem;
 }
 
 [hyoo_js_perf_case_title] {
@@ -55,11 +55,13 @@
 }
 
 [hyoo_js_perf_case_eval_labeler] {
-	width: 24rem;
+	width: 26rem;
+	padding: 0.75rem;
 }
-[hyoo_js_perf_case_result_rows] {
-	width: 24rem;
+[hyoo_js_perf_case_results] {
+	width: 26rem;
 	display: table-cell;
+	padding: 0.75rem;
 }
 
 [hyoo_js_perf_case_eval_labeler_trigger] {
@@ -67,7 +69,7 @@
 }
 
 [hyoo_js_perf_case_result] {
-	padding: .25rem .75rem .25rem;
+	padding: .5rem .75rem .25rem;
 	flex-direction: column;
 }
 
@@ -84,7 +86,7 @@
 [hyoo_js_perf_case_result_stats] > * {
 	word-break: keep-all;
 	white-space: nowrap;
-	margin: 0 .5rem;
+	/* margin: 0 .5rem; */
 }
 
 [hyoo_js_perf_case_result_stats_main],
@@ -117,19 +119,23 @@
 }
 
 [hyoo_js_perf_case_result]:nth-child(1) [mol_portion_indicator] {
-	background-color: royalblue;
+	background-color: dimgray;
 }
 
 [hyoo_js_perf_case_result]:nth-child(2) [mol_portion_indicator] {
-	background-color: orange;
+	background-color: royalblue;
 }
 
-[hyoo_js_perf_case_result]:nth-child(1) [hyoo_js_perf_case_result_frequency],
-[hyoo_js_perf_case_result]:nth-child(1) [hyoo_js_perf_case_result_memory_per_iteration] {
-	color: royalblue;
+[hyoo_js_perf_case_result]:nth-child(3) [mol_portion_indicator] {
+	background-color: orange;
 }
 
 [hyoo_js_perf_case_result]:nth-child(2) [hyoo_js_perf_case_result_frequency],
 [hyoo_js_perf_case_result]:nth-child(2) [hyoo_js_perf_case_result_memory_per_iteration] {
+	color: royalblue;
+}
+
+[hyoo_js_perf_case_result]:nth-child(3) [hyoo_js_perf_case_result_frequency],
+[hyoo_js_perf_case_result]:nth-child(3) [hyoo_js_perf_case_result_memory_per_iteration] {
 	color: orange;
 }

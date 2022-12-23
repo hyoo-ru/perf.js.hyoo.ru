@@ -8,6 +8,10 @@ namespace $.$$ {
 		error! : string
 		memory! : number
 		memory_portion! : number
+		size! : number
+		size_portion! : number
+		deps! : number
+		deps_portion! : number
 
 		get time() { return this.elapsed / this.iterations }
 		get frequency() { return this.iterations * 1000 / this.elapsed }
@@ -265,6 +269,31 @@ namespace $.$$ {
 		}
 		
 		@ $mol_mem_key
+		case_size( index: number ) {
+			return ( this.case_prefix( index ) + '\n' + this.source( index ) )
+				.replace( /\/\/.*$/gm, '' ) // drop comments
+				.match( /\w+/g )?.length ?? 0 // calc named tokens
+		}
+		
+		@ $mol_mem_key
+		case_deps_names( index: number ) {
+			const src = ( this.case_prefix( index ) + '\n' + this.source( index ) )
+			const found = src.matchAll( /\$mol_import\.(?:script|module)\s*\(\s*['"]https?:\/\/[^/]*\/((?:@[\w.-]*\/)?[\w.-]*)/g )
+			return [ ... found ].map( ([ imp, mod ])=> mod )
+		}
+		
+		@ $mol_mem_key
+		case_deps( index: number ) {
+			return this.case_deps_names( index )
+				.reduce( ( sum, name )=> sum + this.module_size( name ), 0 )
+		}
+		
+		@ $mol_mem_key
+		module_size( name: string ): number {
+			return ( this.$.$mol_fetch.json( `https://bundlephobia.com/api/size?record=true&package=${ name }` ) as any ).gzip
+		}
+		
+		@ $mol_mem_key
 		measures_for( index : number , next? : $hyoo_js_perf_stats[] ) {
 			this.prefix()
 			this.postfix()
@@ -296,20 +325,46 @@ namespace $.$$ {
 			} , 0 )
 		}
 		
+		@ $mol_mem
+		max_size() {
+			return this.measures()
+				.map( (_,i)=> this.case_size(i) )
+				.reduce( ( max, size )=> Math.max( max, size ) )
+		}
+		
+		@ $mol_mem
+		max_deps() {
+			return this.measures()
+				.map( (_,i)=> this.case_deps(i) )
+				.reduce( ( max, size )=> Math.max( max, size ) )
+		}
+		
 		@ $mol_mem_key 
 		results( index : number ) {
 			
 			const measure = this.measures_for( index )
 			if( !measure ) return []
 			
-			return measure.map( ( stats )=> $hyoo_js_perf_stats.create( stats2 => {
-				stats2.frequency_portion = stats.frequency / this.max_frequency()
-				stats2.memory_portion = stats.memory_per_iteration / this.max_memory()
-				stats2.memory = stats.memory
-				stats2.elapsed = stats.elapsed
-				stats2.iterations = stats.iterations
-				stats2.error = stats.error
-			} ) )
+			return [
+				$hyoo_js_perf_stats.create( stats2 => {
+					try {
+						stats2.size = this.case_size( index )
+						stats2.size_portion = this.case_size( index ) / this.max_size()
+						stats2.deps = this.case_deps( index )
+						stats2.deps_portion = this.case_deps( index ) / this.max_deps()
+					} catch( error ) {
+						$mol_fail_log( error )
+					}
+				} ),
+				... measure.map( ( stats )=> $hyoo_js_perf_stats.create( stats2 => {
+					stats2.frequency_portion = stats.frequency / this.max_frequency()
+					stats2.memory_portion = stats.memory_per_iteration / this.max_memory()
+					stats2.memory = stats.memory
+					stats2.elapsed = stats.elapsed
+					stats2.iterations = stats.iterations
+					stats2.error = stats.error
+				} ) ),
+			]
 
 		}
 
@@ -480,16 +535,11 @@ namespace $.$$ {
 	export class $hyoo_js_perf_case extends $.$hyoo_js_perf_case {
 
 		@ $mol_mem
-		result_rows() {
-			return [ this.Result( 0 ) , this.Result( 1 ) ]
-		}
-
-		@ $mol_mem
 		columns() {
 			return [
 				this.Prefix(),
 				this.Source(),
-				... this.results().length
+				... this.results().length > 1
 					? [ this.Results() ]
 					: this.source()
 						? [ this.Eval_labeler() ]
@@ -502,7 +552,7 @@ namespace $.$$ {
 		}
 
 		result_title( level : number ) {
-			return [ '❄' , '🔥' ][ level ] ?? ''
+			return [ '🔠', '🥶' , '🥵' ][ level ] ?? ''
 		}
 		
 		eval_standalone() {
@@ -520,29 +570,35 @@ namespace $.$$ {
 		// 		?? $mol_wire_probe( ()=> this.prefix_showed() )
 		// 		?? this.prefix().split( '\n' ).length <= 2
 		// }
-
+		
 	}
 
 	export class $hyoo_js_perf_case_result extends $.$hyoo_js_perf_case_result {
 
 		sub() {
 			if( !this.result() ) return []
-			return this.result().error ? [ this.Error() ] : [ this.Portions(), this.Stats(), ]
+			return this.result().error ? [ this.Error() ] : [ this.Stats(), this.Portions() ]
 		}
 		
 		@ $mol_mem
 		portions() {
+			const result = this.result()
 			return [
-				this.Frequency_portion(),
-				... this.result().memory ? [ this.Memory_portion() ] : [],
+				... result.frequency ? [ this.Frequency_portion() ] : [],
+				... result.memory ? [ this.Memory_portion() ] : [],
+				... result.size ? [ this.Size_portion() ] : [],
+				... result.deps ? [ this.Deps_portion() ] : [],
 			]
 		}
 
 		@ $mol_mem
 		stats() {
+			const result = this.result()
 			return [
-				this.Stats_main(),
-				... this.result().memory ? [ this.Stats_mem() ] : [],
+				... result.frequency ? [ this.Stats_main() ] : [],
+				... result.memory ? [ this.Stats_mem() ] : [],
+				... result.size ? [ this.Stats_size() ] : [],
+				... result.deps ? [ this.Stats_deps() ] : [],
 			]
 		}
 
@@ -572,12 +628,28 @@ namespace $.$$ {
 			return val ? $mol_si_short( val, 'B' ) : '?B'
 		}
 
+		size() {
+			return this.result().size
+		}
+
+		deps() {
+			return $mol_si_short( this.result().deps, 'B' )
+		}
+
 		frequency_portion() {
 			return this.result().frequency_portion
 		}
 
 		memory_portion() {
 			return this.result().memory_portion
+		}
+
+		size_portion() {
+			return this.result().size_portion
+		}
+
+		deps_portion() {
+			return this.result().deps_portion
 		}
 
 	}

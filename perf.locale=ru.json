@@ -14,6 +14,8 @@
 	"$hyoo_js_perf_case_Dupe_hint": "Дублировать вариант",
 	"$hyoo_js_perf_case_Swap_hint": "Поменять варианты местами",
 	"$hyoo_js_perf_case_Results_title": "Результаты",
+	"$hyoo_js_perf_case_result_size_hint": "Размер кода",
+	"$hyoo_js_perf_case_result_deps_hint": "Размер зависимостей",
 	"$hyoo_js_perf_case_result_frequency_hint": "Итераций в секунду",
 	"$hyoo_js_perf_case_result_time_hint": "Секунд на итерацию",
 	"$hyoo_js_perf_case_result_iterations_hint": "Число итераций",
