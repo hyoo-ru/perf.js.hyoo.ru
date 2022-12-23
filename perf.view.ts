@@ -360,6 +360,7 @@ namespace $.$$ {
 						stats2.deps = this.case_deps( index )
 						stats2.deps_portion = this.case_deps( index ) / this.max_deps()
 					} catch( error: any ) {
+						$mol_fail_log( error )
 						stats2.error = error.message
 					}
 				} ),
