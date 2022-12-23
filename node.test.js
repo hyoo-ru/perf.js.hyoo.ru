@@ -14611,10 +14611,15 @@ var $;
                     return [];
                 return [
                     $hyoo_js_perf_stats.create(stats2 => {
-                        stats2.size = this.case_size(index);
-                        stats2.size_portion = this.case_size(index) / this.max_size();
-                        stats2.deps = this.case_deps(index);
-                        stats2.deps_portion = this.case_deps(index) / this.max_deps();
+                        try {
+                            stats2.size = this.case_size(index);
+                            stats2.size_portion = this.case_size(index) / this.max_size();
+                            stats2.deps = this.case_deps(index);
+                            stats2.deps_portion = this.case_deps(index) / this.max_deps();
+                        }
+                        catch (error) {
+                            stats2.error = error.message;
+                        }
                     }),
                     ...measure.map((stats) => $hyoo_js_perf_stats.create(stats2 => {
                         stats2.frequency_portion = stats.frequency / this.max_frequency();
