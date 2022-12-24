@@ -329,7 +329,7 @@ namespace $.$$ {
 		max_size() {
 			return this.measures()
 				.map( (_,i)=> this.case_size(i) )
-				.reduce( ( max, size )=> Math.max( max, size ) )
+				.reduce( ( max, size )=> Math.max( max, size ), 0 )
 		}
 		
 		@ $mol_mem
@@ -343,7 +343,7 @@ namespace $.$$ {
 						return 0
 					}
 				} )
-				.reduce( ( max, size )=> Math.max( max, size ) )
+				.reduce( ( max, size )=> Math.max( max, size ), 0 )
 		}
 		
 		@ $mol_mem_key 
