@@ -3581,7 +3581,7 @@ var $;
 //mol/locale/locale.ts
 ;
 "use strict";
-let $hyoo_sync_revision = "4d87c3b";
+let $hyoo_sync_revision = "de1290f";
 //hyoo/sync/-meta.tree/revision.meta.tree.ts
 ;
 "use strict";
@@ -3907,7 +3907,10 @@ var $;
 (function ($) {
     async function $hyoo_sync_peer(path) {
         let serial = $mol_state_local.value('$hyoo_sync_peer');
-        if (typeof serial !== 'string') {
+        if (typeof serial === 'string') {
+            return await $hyoo_crowd_peer.restore(serial);
+        }
+        else {
             serial = $mol_state_local.value(path);
             if (typeof serial === 'string') {
                 $mol_state_local.value('$hyoo_sync_peer', serial);
@@ -14188,7 +14191,7 @@ var $;
             max_size() {
                 return this.measures()
                     .map((_, i) => this.case_size(i))
-                    .reduce((max, size) => Math.max(max, size));
+                    .reduce((max, size) => Math.max(max, size), 0);
             }
             max_deps() {
                 return this.measures()
@@ -14201,7 +14204,7 @@ var $;
                         return 0;
                     }
                 })
-                    .reduce((max, size) => Math.max(max, size));
+                    .reduce((max, size) => Math.max(max, size), 0);
             }
             results(index) {
                 const measure = this.measures_for(index);

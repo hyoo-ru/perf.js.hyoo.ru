@@ -3960,7 +3960,7 @@ var $;
 //mol/locale/locale.ts
 ;
 "use strict";
-let $hyoo_sync_revision = "4d87c3b";
+let $hyoo_sync_revision = "de1290f";
 //hyoo/sync/-meta.tree/revision.meta.tree.ts
 ;
 "use strict";
@@ -14590,7 +14590,7 @@ var $;
             max_size() {
                 return this.measures()
                     .map((_, i) => this.case_size(i))
-                    .reduce((max, size) => Math.max(max, size));
+                    .reduce((max, size) => Math.max(max, size), 0);
             }
             max_deps() {
                 return this.measures()
@@ -14603,7 +14603,7 @@ var $;
                         return 0;
                     }
                 })
-                    .reduce((max, size) => Math.max(max, size));
+                    .reduce((max, size) => Math.max(max, size), 0);
             }
             results(index) {
                 const measure = this.measures_for(index);
