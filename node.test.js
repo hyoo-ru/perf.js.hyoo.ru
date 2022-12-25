@@ -14604,6 +14604,7 @@ var $;
             case_size(index) {
                 return (this.case_prefix(index) + '\n' + this.source(index))
                     .replace(/\/\/.*$/gm, '')
+                    .replace(/\/\*[\s\S]*\*\//g, '')
                     .match(/\w+/g)?.length ?? 0;
             }
             case_deps_names(index) {
