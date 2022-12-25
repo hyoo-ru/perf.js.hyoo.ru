@@ -271,7 +271,8 @@ namespace $.$$ {
 		@ $mol_mem_key
 		case_size( index: number ) {
 			return ( this.case_prefix( index ) + '\n' + this.source( index ) )
-				.replace( /\/\/.*$/gm, '' ) // drop comments
+				.replace( /\/\/.*$/gm, '' ) // drop inline comments
+				.replace( /\/\*[\s\S]*\*\//g, '' ) // drop block comments
 				.match( /\w+/g )?.length ?? 0 // calc named tokens
 		}
 		
