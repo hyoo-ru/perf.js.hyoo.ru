@@ -158,6 +158,7 @@
     "$mol_string_button",
     "$mol_string",
     "$mol_hotkey",
+    "$mol_keyboard_code",
     "$mol_keyboard",
     "$mol_layer",
     "$mol_theme_auto",
