@@ -877,6 +877,7 @@ $hyoo_js_perf_case $mol_view
 	results /
 	Eval $hyoo_js_eval
 		code <= sample \
+		run <= eval_showed
 		Result => Eval_result
 	sub <= columns /
 		<= Prefix $mol_expander
