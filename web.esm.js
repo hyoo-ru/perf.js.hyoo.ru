@@ -11403,6 +11403,9 @@ var $;
             try {
                 this.watch()?.();
             }
+            catch (error) {
+                $mol_fail_log(error);
+            }
             finally {
                 for (const pub of $mol_wire_auto().pub_list) {
                     if (pub instanceof $mol_wire_fiber) {
