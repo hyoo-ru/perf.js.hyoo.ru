@@ -4620,7 +4620,7 @@ var $;
     class $hyoo_crowd_node extends Object {
         land;
         head;
-        constructor(land, head) {
+        constructor(land = new $hyoo_crowd_land, head = '0_0') {
             super();
             this.land = land;
             this.head = head;
@@ -5941,7 +5941,7 @@ var $;
             this.native.abort();
         }
         commit() {
-            this.native.commit();
+            this.native.commit?.();
             return new Promise((done, fail) => {
                 this.native.onerror = () => fail(new Error(this.native.error.message));
                 this.native.oncomplete = () => done();
