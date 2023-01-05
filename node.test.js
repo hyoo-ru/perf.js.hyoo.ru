@@ -13422,6 +13422,81 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_check_group extends $mol_check_box {
+        checks() {
+            return [];
+        }
+        full() {
+            return true;
+        }
+    }
+    $.$mol_check_group = $mol_check_group;
+})($ || ($ = {}));
+//mol/check/group/-view.tree/group.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_icon_check extends $mol_icon {
+        path() {
+            return "M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z";
+        }
+    }
+    $.$mol_icon_check = $mol_icon_check;
+})($ || ($ = {}));
+//mol/icon/check/-view.tree/check.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_icon_check_all extends $mol_icon {
+        path() {
+            return "M0.41,13.41L6,19L7.41,17.58L1.83,12M22.24,5.58L11.66,16.17L7.5,12L6.07,13.41L11.66,19L23.66,7M18,7L16.59,5.58L10.24,11.93L11.66,13.34L18,7Z";
+        }
+    }
+    $.$mol_icon_check_all = $mol_icon_check_all;
+})($ || ($ = {}));
+//mol/icon/check/all/-view.tree/all.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_check_group extends $.$mol_check_group {
+            checked(next) {
+                if (next !== undefined) {
+                    for (const check of this.checks()) {
+                        check.checked(next);
+                    }
+                    return next;
+                }
+                return this.checks().some(check => check.checked());
+            }
+            full() {
+                return this.checks().every(check => check.checked());
+            }
+            Icon() {
+                return this.full() ? new $mol_icon_check_all : new $mol_icon_tick;
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_check_group.prototype, "checked", null);
+        __decorate([
+            $mol_mem
+        ], $mol_check_group.prototype, "full", null);
+        __decorate([
+            $mol_mem
+        ], $mol_check_group.prototype, "Icon", null);
+        $$.$mol_check_group = $mol_check_group;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/check/group/group.view.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_button_major extends $mol_button_typed {
         attr() {
             return {
@@ -13838,6 +13913,9 @@ var $;
             ];
             return obj;
         }
+        Case_measurable(id) {
+            return this.Case(id).Measurable();
+        }
         Case(id) {
             const obj = new this.$.$hyoo_js_perf_case_row();
             obj.title = (next) => this.case_title(id, next);
@@ -13860,6 +13938,7 @@ var $;
         }
         tools() {
             return [
+                this.Measurable_all(),
                 this.Run(),
                 this.Share(),
                 this.Fork(),
@@ -14028,6 +14107,15 @@ var $;
                 return next;
             return "";
         }
+        measurable_all() {
+            return [];
+        }
+        Measurable_all() {
+            const obj = new this.$.$mol_check_group();
+            obj.checks = () => this.measurable_all();
+            obj.hint = () => this.$.$mol_locale.text('$hyoo_js_perf_Measurable_all_hint');
+            return obj;
+        }
         Run_icon() {
             const obj = new this.$.$mol_icon_play();
             return obj;
@@ -14182,6 +14270,9 @@ var $;
     __decorate([
         $mol_mem
     ], $hyoo_js_perf.prototype, "bench_title", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_js_perf.prototype, "Measurable_all", null);
     __decorate([
         $mol_mem
     ], $hyoo_js_perf.prototype, "Run_icon", null);
@@ -15046,6 +15137,11 @@ var $;
             iterations_reset() {
                 this._run_iteration = 0;
             }
+            measurable_all() {
+                return [...this.sources().entries()]
+                    .filter(([index, inner]) => inner.trim())
+                    .map(([index]) => this.Case_measurable(index));
+            }
             run() {
                 for (const [index, inner] of this.sources().entries()) {
                     this.measures_for(index, []);
@@ -15180,6 +15276,9 @@ var $;
         __decorate([
             $mol_action
         ], $hyoo_js_perf.prototype, "iterations_reset", null);
+        __decorate([
+            $mol_mem
+        ], $hyoo_js_perf.prototype, "measurable_all", null);
         __decorate([
             $mol_action
         ], $hyoo_js_perf.prototype, "run", null);

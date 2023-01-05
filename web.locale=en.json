@@ -5,6 +5,7 @@
 	"$hyoo_js_eval_Perf_hint": "Measure Performance",
 	"$hyoo_js_eval_result_label": "Result",
 	"$hyoo_js_perf_Fork_hint": "Fork benchmark",
+	"$hyoo_js_perf_Measurable_all_hint": "Whether to measure all",
 	"$hyoo_js_perf_New_hint": "New benchmark",
 	"$hyoo_js_perf_Postfix_title": "Common Teardown",
 	"$hyoo_js_perf_Prefix_title": "Common Setup",

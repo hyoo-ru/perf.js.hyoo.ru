@@ -3798,6 +3798,33 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
+    class $mol_check_group extends $mol_check_box {
+        checks(): readonly $mol_check[];
+        full(): boolean;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_check extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_check_all extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_check_group extends $.$mol_check_group {
+        checked(next?: boolean): boolean;
+        full(): boolean;
+        Icon(): $mol_icon_tick | $mol_icon_check_all;
+    }
+}
+
+declare namespace $ {
     class $mol_button_major extends $mol_button_typed {
         attr(): {
             mol_theme: string;
@@ -3892,6 +3919,7 @@ declare namespace $ {
         sources(): readonly string[];
         plugins(): readonly any[];
         Body(): $$.$mol_book2;
+        Case_measurable(id: any): $mol_check_box;
         Case(id: any): $$.$hyoo_js_perf_case_row;
         Title(): $mol_string_button;
         tools(): readonly any[];
@@ -3925,6 +3953,8 @@ declare namespace $ {
         case_dupe(id: any, next?: any): any;
         case_swap(id: any, next?: any): any;
         bench_title(next?: any): string;
+        measurable_all(): readonly any[];
+        Measurable_all(): $$.$mol_check_group;
         Run_icon(): $mol_icon_play;
         Run(): $mol_button_major;
         Share(): $$.$mol_button_share;
@@ -4073,6 +4103,7 @@ declare namespace $.$$ {
         measure_safe(index: number, prefix: string, inner: string, postfix: string): $hyoo_js_perf_stats;
         _run_iteration: number;
         iterations_reset(): void;
+        measurable_all(): $mol_check_box[];
         run(): void;
     }
 }
