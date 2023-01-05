@@ -488,6 +488,13 @@ namespace $.$$ {
 		iterations_reset() {
 			this._run_iteration = 0
 		}
+		
+		@ $mol_mem
+		measurable_all() {
+			return [ ... this.sources().entries() ]
+				.filter( ([ index, inner ])=> inner.trim() )
+				.map( ([ index ])=> this.Case_measurable( index ) )
+		}
 
 		@ $mol_action
 		run() {

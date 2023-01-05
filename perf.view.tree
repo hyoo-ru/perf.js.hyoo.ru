@@ -69,6 +69,7 @@ $hyoo_js_perf $mol_page
 		prefix? <=> case_prefix*? \
 		source? <=> source*? \
 		measurable? <=> case_measurable*? true
+		Measurable => Case_measurable*
 		sample <= case_sample* \
 		results? <=> results*? /
 		changable <= changable true
@@ -79,6 +80,9 @@ $hyoo_js_perf $mol_page
 		value? <=> bench_title? \
 		hint <= title
 	tools /
+		<= Measurable_all $mol_check_group
+			checks <= measurable_all /
+			hint @ \Whether to measure all
 		<= Run $mol_button_major
 			hint @ \Run
 			click?event <=> run?event null
