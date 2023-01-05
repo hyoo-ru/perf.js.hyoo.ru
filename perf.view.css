@@ -40,6 +40,7 @@
 [hyoo_js_perf_case] {
 	display: table-row;
 	flex: 0 1 auto;
+	background: var(--mol_theme_card);
 }
 
 [hyoo_js_perf_case_prefix] ,
