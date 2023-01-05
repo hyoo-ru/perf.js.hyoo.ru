@@ -1,6 +1,6 @@
 namespace $ {
 	
-	export class $hyoo_js_perf_bench_case extends $hyoo_crowd_struct {
+	export class $hyoo_js_perf_case extends $hyoo_crowd_struct {
 		
 		@ $mol_mem
 		title( next?: string ) {
@@ -18,7 +18,7 @@ namespace $ {
 		}
 		
 		@ $mol_action
-		steal( donor: $hyoo_js_perf_bench_case ) {
+		steal( donor: $hyoo_js_perf_case ) {
 			this.title( donor.title() )
 			this.setup( donor.setup() )
 			this.measure( donor.measure() )

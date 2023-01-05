@@ -1,0 +1,42 @@
+$hyoo_js_perf_case_result $mol_view
+	result $hyoo_js_perf_stats
+	sub /
+		<= Portions $mol_view sub <= portions /
+			<= Frequency_portion $mol_portion portion <= frequency_portion 0
+			<= Memory_portion $mol_portion portion <= memory_portion 0
+			<= Size_portion $mol_portion portion <= size_portion 0
+			<= Deps_portion $mol_portion portion <= deps_portion 0
+		<= Stats $mol_view sub <= stats /
+			<= Stats_main $mol_view sub /
+				<= title \
+				<= Frequency $mol_view
+					attr * title <= frequency_hint @ \Iterations per Second
+					sub / <= frequency \
+				\≈
+				<= Time $mol_view
+					attr * title <= time_hint @ \Seconds per Iteration
+					sub / <= time_total \
+				\×
+				<= Iterations $mol_view
+					attr * title <= iterations_hint @ \Iterations Count
+					sub / <= iterations \
+			<= Stats_mem $mol_view sub /
+				\×
+				<= Memory_per_iteration $mol_view
+					attr * title <= memory_per_iteration_hint @ \Bytes per Itaration
+					sub / <= memory_per_iteration \
+				\=
+				<= Memory $mol_view
+					attr * title <= memory_hint @ \Bytes for All Iterations
+					sub / <= memory_total \
+			<= Stats_size $mol_view sub /
+				<= title \
+				<= Size $mol_view
+					attr * title <= size_hint @ \Case Size
+					sub / <= size 0
+			<= Stats_deps $mol_view sub /
+				\📦
+				<= Deps $mol_view
+					attr * title <= deps_hint @ \Deps Size
+					sub / <= deps \
+		<= Error $mol_view sub / <= error \

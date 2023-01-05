@@ -1,0 +1,31 @@
+[hyoo_js_perf_case_row] {
+	display: table-row;
+	flex: 0 1 auto;
+	background: var(--mol_theme_card);
+}
+
+[hyoo_js_perf_case_row_prefix] ,
+[hyoo_js_perf_case_row_source] {
+	display: table-cell;
+	min-width: 14rem;
+	vertical-align: top;
+	padding: 0.75rem;
+}
+
+[hyoo_js_perf_case_row_source_tools] {
+	flex-grow: 1000;
+}
+
+[hyoo_js_perf_case_row_eval_labeler] {
+	width: 26rem;
+	padding: 0.75rem;
+}
+[hyoo_js_perf_case_row_results] {
+	width: 26rem;
+	display: table-cell;
+	padding: 0.75rem;
+}
+
+[hyoo_js_perf_case_row_eval_labeler_trigger] {
+	flex-grow: 0;
+}

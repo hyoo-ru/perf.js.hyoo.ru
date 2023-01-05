@@ -56,12 +56,13 @@ $hyoo_js_perf $mol_page
 				\[V8 Optimizations](https://opt.js.hyoo.ru/) [Sandbox](https://eval.js.hyoo.ru)
 		<= Cases_pane $mol_scroll sub <= cases_pane_content /
 			<= Cases $mol_view sub <= cases /
-	Case* $hyoo_js_perf_case
-		title?val <=> case_title*?val \
-		prefix?val <=> case_prefix*?val \
-		source?val <=> source*?val \
+	Case* $hyoo_js_perf_case_row
+		title? <=> case_title*? \
+		prefix? <=> case_prefix*? \
+		source? <=> source*? \
+		measurable? <=> case_measurable*? true
 		sample <= case_sample* \
-		results?val <=> results*?val /
+		results? <=> results*? /
 		changable <= changable true
 		drop? <=> case_drop*? null
 		dupe? <=> case_dupe*? null
@@ -95,107 +96,3 @@ $hyoo_js_perf $mol_page
 			uri \https://github.com/hyoo-ru/perf.js.hyoo.ru
 		<= Online $hyoo_sync_online
 			yard <= yard
-
-$hyoo_js_perf_case $mol_view
-	results /
-	Eval $hyoo_js_eval
-		code <= sample \
-		run <= eval_showed
-		Result => Eval_result
-	sub <= columns /
-		<= Prefix $mol_expander
-			title @ \Setup
-			expanded? <=> prefix_showed? false
-			minimal_width 150
-			Tools <= Prefix_tools $mol_bar sub <= prefix_tools /
-				<= Drop $mol_button_minor
-					click? <=> drop? null
-					hint @ \Drop case
-					sub /
-						<= Drop_icon $mol_icon_cross
-				<= Dupe $mol_button_minor
-					click? <=> dupe? null
-					hint @ \Duplicate case
-					sub /
-						<= Dupe_icon $mol_icon_chevron_double_down
-				<= Swap $mol_button_minor
-					click? <=> swap? null
-					hint @ \Swap cases
-					sub /
-						<= Swap_icon $mol_icon_unfold_more_horizontal
-			content / <= Prefix_code $mol_textarea
-				enabled <= changable true
-				spellcheck false
-				value?val <=> prefix?val \
-				hint \let count = {#}
-		<= Source $mol_expander
-			title @ \Measure
-			expanded? <=> source_showed? true
-			minimal_width 150
-			Tools <= Title $mol_string_button
-				hint @ \Case Name
-				enabled <= changable true
-				value? <=> title? \
-			content / <= Source_code $mol_textarea
-				enabled <= changable true
-				spellcheck false
-				value?val <=> source?val \
-				hint \res = {#} % count
-		<= Eval_labeler $mol_expander
-			expanded? <=> eval_showed? false
-			title @ \Debug
-			Tools <= Eval_sandalone $mol_link_iconed
-				title \
-				hint @ \Generated script
-				uri <= eval_standalone \
-			Content <= Eval_result
-		<= Results $mol_list
-			rows <= result_rows /
-				<= Result*0 $hyoo_js_perf_case_result
-					title <= result_title* \
-					result <= result* $hyoo_js_perf_stats
-				<= Result*1
-				<= Result*2
-
-$hyoo_js_perf_case_result $mol_view
-	result $hyoo_js_perf_stats
-	sub /
-		<= Portions $mol_view sub <= portions /
-			<= Frequency_portion $mol_portion portion <= frequency_portion 0
-			<= Memory_portion $mol_portion portion <= memory_portion 0
-			<= Size_portion $mol_portion portion <= size_portion 0
-			<= Deps_portion $mol_portion portion <= deps_portion 0
-		<= Stats $mol_view sub <= stats /
-			<= Stats_main $mol_view sub /
-				<= title \
-				<= Frequency $mol_view
-					attr * title <= frequency_hint @ \Iterations per Second
-					sub / <= frequency \
-				\≈
-				<= Time $mol_view
-					attr * title <= time_hint @ \Seconds per Iteration
-					sub / <= time_total \
-				\×
-				<= Iterations $mol_view
-					attr * title <= iterations_hint @ \Iterations Count
-					sub / <= iterations \
-			<= Stats_mem $mol_view sub /
-				\×
-				<= Memory_per_iteration $mol_view
-					attr * title <= memory_per_iteration_hint @ \Bytes per Itaration
-					sub / <= memory_per_iteration \
-				\=
-				<= Memory $mol_view
-					attr * title <= memory_hint @ \Bytes for All Iterations
-					sub / <= memory_total \
-			<= Stats_size $mol_view sub /
-				<= title \
-				<= Size $mol_view
-					attr * title <= size_hint @ \Case Size
-					sub / <= size 0
-			<= Stats_deps $mol_view sub /
-				\🚂
-				<= Deps $mol_view
-					attr * title <= deps_hint @ \Deps Size
-					sub / <= deps \
-		<= Error $mol_view sub / <= error \

@@ -19,7 +19,7 @@ namespace $ {
 		
 		@ $mol_mem
 		cases() {
-			return this.sub( 'cases', $hyoo_crowd_list ).nodes( $hyoo_js_perf_bench_case )
+			return this.sub( 'cases', $hyoo_crowd_list ).nodes( $hyoo_js_perf_case )
 		}
 		
 		case_ensure( index: number ) {
