@@ -10,50 +10,58 @@ $hyoo_js_perf $mol_page
 			mod_ctrl true
 			key * enter?event <=> run?event null
 	Body $mol_book2 pages /
-		<= Common $mol_scroll sub /
-			<= Prefix $mol_labeler
-				title @ \Common Setup
-				Content <= Prefix_code $mol_textarea
-					enabled <= changable true
-					spellcheck false
-					value?val <=> prefix?val \
-					hint \let res = 0
-			<= Postfix $mol_labeler
-				title @ \Common Teardown
-				Content <= Postfix_code $mol_textarea
-					enabled <= changable true
-					spellcheck false
-					value?val <=> postfix?val \
-					hint \$mol_assert_like( res, {#} - 1 )
-			<= Hint $mol_text text <= hint \
-				\### Iterations count / number
-				\	{#}
-				\
-				\### Load generic Script
-				\
-				\	const { some } = $mol_import.script(
-				\		'https://unpkg.org/...'
-				\	)
-				\
-				\### Load ESM Module
-				\
-				\	const { some } = $mol_import.module(
-				\		'https://esm.sh/...'
-				\	).default
-				\
-				\### Assert equality
-				\
-				\	$mol_assert_like( [777], [777] )
-				\
-				\### Measure memory
-				\
-				\Call Chrome with:
-				\	--js-flags="--expose-gc"
-				\	--enable-precise-memory-info
-				\
-				\### Other JS Tools
-				\
-				\[V8 Optimizations](https://opt.js.hyoo.ru/) [Sandbox](https://eval.js.hyoo.ru)
+		<= Common $mol_page
+			Head null
+			foot /
+				<= Online $hyoo_sync_online
+					yard <= yard
+				<= Source $mol_link_source
+					uri \https://github.com/hyoo-ru/perf.js.hyoo.ru
+				<= Lights $mol_lights_toggle
+			body /
+				<= Prefix $mol_labeler
+					title @ \Common Setup
+					Content <= Prefix_code $mol_textarea
+						enabled <= changable true
+						spellcheck false
+						value?val <=> prefix?val \
+						hint \let res = 0
+				<= Postfix $mol_labeler
+					title @ \Common Teardown
+					Content <= Postfix_code $mol_textarea
+						enabled <= changable true
+						spellcheck false
+						value?val <=> postfix?val \
+						hint \$mol_assert_like( res, {#} - 1 )
+				<= Hint $mol_text text <= hint \
+					\### Iterations count / number
+					\	{#}
+					\
+					\### Load generic Script
+					\
+					\	const { some } = $mol_import.script(
+					\		'https://unpkg.org/...'
+					\	)
+					\
+					\### Load ESM Module
+					\
+					\	const { some } = $mol_import.module(
+					\		'https://esm.sh/...'
+					\	).default
+					\
+					\### Assert equality
+					\
+					\	$mol_assert_like( [777], [777] )
+					\
+					\### Measure memory
+					\
+					\Call Chrome with:
+					\	--js-flags="--expose-gc"
+					\	--enable-precise-memory-info
+					\
+					\### Other JS Tools
+					\
+					\[V8 Optimizations](https://opt.js.hyoo.ru/) [Sandbox](https://eval.js.hyoo.ru)
 		<= Cases_pane $mol_scroll sub <= cases_pane_content /
 			<= Cases $mol_view sub <= cases /
 	Case* $hyoo_js_perf_case_row
@@ -91,8 +99,3 @@ $hyoo_js_perf $mol_page
 			uri \https://habhub.hyoo.ru/#author=nin-jin/repo=HabHub/article=42
 			sub /
 				<= About_icon $mol_icon_help_circle_outline
-		<= Lights $mol_lights_toggle
-		<= Source $mol_link_source
-			uri \https://github.com/hyoo-ru/perf.js.hyoo.ru
-		<= Online $hyoo_sync_online
-			yard <= yard

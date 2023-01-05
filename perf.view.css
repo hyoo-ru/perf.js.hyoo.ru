@@ -36,3 +36,7 @@
 	display: table;
 	background: var(--mol_theme_back);
 }
+
+[hyoo_js_perf_common_foot] {
+	padding: var(--mol_gap_block);
+}
