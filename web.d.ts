@@ -3346,6 +3346,73 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
+    class $mol_avatar extends $mol_icon {
+        view_box(): string;
+        id(): string;
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    function $mol_hash_string(str: string, seed?: number): number;
+}
+
+declare namespace $ {
+}
+
+declare namespace $.$$ {
+    class $mol_avatar extends $.$mol_avatar {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_sync extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_sync_off extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $hyoo_sync_online extends $mol_link {
+        minimal_width(): number;
+        minimal_height(): number;
+        yard(): $hyoo_sync_yard<unknown>;
+        uri(): string;
+        sub(): readonly any[];
+        attr(): {
+            title: string;
+            href: string;
+            target: string;
+            download: string;
+            mol_link_current: boolean;
+        };
+        master_link(): string;
+        Well(): $$.$mol_avatar;
+        Fail(): $mol_icon_sync_off;
+        hint(): string;
+        message(): string;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $.$$ {
+    class $hyoo_sync_online extends $.$hyoo_sync_online {
+        message(): string;
+        sub(): $mol_icon_sync_off[];
+        hint(): string;
+        master_link(): string;
+    }
+}
+
+declare namespace $ {
     class $mol_labeler extends $mol_list {
         rows(): readonly any[];
         label(): readonly $mol_view_content[];
@@ -3817,73 +3884,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_avatar extends $mol_icon {
-        view_box(): string;
-        id(): string;
-        path(): string;
-    }
-}
-
-declare namespace $ {
-    function $mol_hash_string(str: string, seed?: number): number;
-}
-
-declare namespace $ {
-}
-
-declare namespace $.$$ {
-    class $mol_avatar extends $.$mol_avatar {
-        path(): string;
-    }
-}
-
-declare namespace $ {
-    class $mol_icon_sync extends $mol_icon {
-        path(): string;
-    }
-}
-
-declare namespace $ {
-    class $mol_icon_sync_off extends $mol_icon {
-        path(): string;
-    }
-}
-
-declare namespace $ {
-    class $hyoo_sync_online extends $mol_link {
-        minimal_width(): number;
-        minimal_height(): number;
-        yard(): $hyoo_sync_yard<unknown>;
-        uri(): string;
-        sub(): readonly any[];
-        attr(): {
-            title: string;
-            href: string;
-            target: string;
-            download: string;
-            mol_link_current: boolean;
-        };
-        master_link(): string;
-        Well(): $$.$mol_avatar;
-        Fail(): $mol_icon_sync_off;
-        hint(): string;
-        message(): string;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $.$$ {
-    class $hyoo_sync_online extends $.$hyoo_sync_online {
-        message(): string;
-        sub(): $mol_icon_sync_off[];
-        hint(): string;
-        master_link(): string;
-    }
-}
-
-declare namespace $ {
     class $hyoo_js_perf extends $mol_page {
         title(): string;
         yard(): $hyoo_sync_client;
@@ -3898,6 +3898,9 @@ declare namespace $ {
         Theme(): $$.$mol_theme_auto;
         run(event?: any): any;
         Hotkey(): $$.$mol_hotkey;
+        Online(): $$.$hyoo_sync_online;
+        Source(): $mol_link_source;
+        Lights(): $$.$mol_lights_toggle;
         changable(): boolean;
         prefix(val?: any): string;
         Prefix_code(): $$.$mol_textarea;
@@ -3907,7 +3910,7 @@ declare namespace $ {
         Postfix(): $mol_labeler;
         hint(): string;
         Hint(): $$.$mol_text;
-        Common(): $$.$mol_scroll;
+        Common(): $mol_page;
         cases(): readonly any[];
         Cases(): $mol_view;
         cases_pane_content(): readonly any[];
@@ -3933,9 +3936,6 @@ declare namespace $ {
         New(): $mol_button_minor;
         About_icon(): $mol_icon_help_circle_outline;
         About(): $$.$mol_link;
-        Lights(): $$.$mol_lights_toggle;
-        Source(): $mol_link_source;
-        Online(): $$.$hyoo_sync_online;
     }
 }
 
