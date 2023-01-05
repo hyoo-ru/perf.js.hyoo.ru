@@ -37,6 +37,9 @@ $mol_book2 $mol_scroll
 	minimal_width 0
 	Placeholder $mol_view
 
+$mol_theme_auto $mol_plugin
+	attr * mol_theme <= theme \
+
 $mol_hotkey $mol_plugin
 	event *
 		^
@@ -46,41 +49,156 @@ $mol_hotkey $mol_plugin
 	mod_alt false
 	mod_shift false
 
-$mol_string $mol_view
-	dom_name \input
-	enabled true
-	minimal_height 40
-	autocomplete false
-	selection?val /number
-		0
-		0
-	auto /
-		<= selection_watcher null
-	field *
-		^
-		disabled <= disabled false
-		value <= value_changed?val <=> value?val \
-		placeholder <= hint_visible <= hint \
-		spellcheck <= spellcheck true
-		autocomplete <= autocomplete_native \
-		selectionEnd <= selection_end 0
-		selectionStart <= selection_start 0
-		inputMode <= keyboard \text
+$mol_svg $mol_view
+	dom_name \svg
+	dom_name_space \http://www.w3.org/2000/svg
+	font_size 16
+	font_family \
+	style_size *
+
+$mol_svg_root $mol_svg
+	dom_name \svg
 	attr *
 		^
-		maxlength <= length_max +Infinity
-		type <= type?val \text
+		viewBox <= view_box \0 0 100 100
+		preserveAspectRatio <= aspect \xMidYMid
+
+$mol_svg_path $mol_svg
+	dom_name \path
+	attr *
+		^
+		d <= geometry \
+
+
+$mol_icon $mol_svg_root
+	view_box \0 0 24 24
+	minimal_width 16
+	minimal_height 16
+	sub /
+		<= Path $mol_svg_path
+			geometry <= path \
+
+$mol_icon_plus $mol_icon path \M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z
+
+$mol_link $mol_view
+	uri \
+	dom_name \a
+	attr *
+		^
+		href <= uri_toggle \
+		title <= hint_safe <= hint \
+		target <= target \_self
+		download <= file_name \
+		mol_link_current <= current false
+	sub /$mol_view_content
+		<= title
+	arg *
 	event *
 		^
-		input?event <=> event_change?event null
-	plugins /
-		<= Submit $mol_hotkey
-			key * enter?event <=> submit?event null
+		click?event <=> click?event <=> event_click?event null
 
-$mol_string_button $mol_string
+$mol_icon_github_circle $mol_icon path \M12,2C6.48,2 2,6.48 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21C9.5,20.77 9.5,20.14 9.5,19.31C6.73,19.91 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.81,16.41C14.17,16.72 14.5,17.33 14.5,18.26C14.5,19.6 14.5,20.68 14.5,21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12C22,6.48 17.52,2 12,2Z
 
-$mol_theme_auto $mol_plugin
-	attr * mol_theme <= theme \
+$mol_link_source $mol_link
+	hint @ \Source code
+	sub /
+		<= Icon $mol_icon_github_circle
+
+$mol_speck $mol_view
+	attr *
+		^
+		mol_theme \$mol_theme_accent
+	style *
+		^
+		minHeight \1em
+	sub /
+		<= value null
+
+$mol_button $mol_view
+	enabled true
+	click?event null
+	event_click?event null
+	event *
+		^
+		click?event <=> event_activate?event null
+		dblclick?event <=> clicks?event null
+		keydown?event <=> event_key_press?event null 
+	attr *
+		^
+		disabled <= disabled false
+		role \button
+		tabindex <= tab_index 0
+		title <= hint_safe <= hint \
+	sub /$mol_view_content
+		<= title
+	Speck $mol_speck
+		value <= error \
+
+$mol_button_typed $mol_button
+	minimal_height 40
+	minimal_width 40
+
+$mol_button_minor $mol_button_typed
+
+$mol_check $mol_button_minor
+	attr *
+		^
+		mol_check_checked <= checked?val false
+		aria-checked <= checked?val false
+		role \checkbox
+	sub /$mol_view_content
+		<= Icon null
+		<= label /
+			<= Title $mol_view
+				sub /
+					<= title \
+
+$mol_check_icon $mol_check
+
+$mol_icon_brightness_6 $mol_icon path \M12,18V6C15.31,6 18,8.69 18,12C18,15.31 15.31,18 12,18M20,15.31L23.31,12L20,8.69V4H15.31L12,0.69L8.69,4H4V8.69L0.69,12L4,15.31V20H8.69L12,23.31L15.31,20H20V15.31Z
+
+$mol_lights_toggle $mol_check_icon
+	Icon <= Lights_icon $mol_icon_brightness_6
+	hint @ \Toggle lights
+	checked?val <=> lights?val false
+
+$mol_list $mol_view
+	render_visible_only true
+	render_over 0
+	sub <= rows /$mol_view
+	Empty $mol_view
+	Gap_before $mol_view style * paddingTop <= gap_before 0
+	Gap_after $mol_view style * paddingTop <= gap_after 0
+	view_window /
+		0
+		0
+
+$mol_image $mol_view
+	dom_name \img
+	field *
+		^
+		src <= uri \
+		alt <= title
+		loading <= loading \eager
+		decoding <= decoding \async
+		crossOrigin <= cors null
+	minimal_width 16
+	minimal_height 16
+
+$mol_link_iconed $mol_link
+	sub /
+		<= Icon $mol_image
+			uri <= icon \
+			title \
+	content /
+		<= title <= uri
+	host \
+
+$mol_icon_bookmark $mol_icon path \M17,3H7C5.9,3 5,3.9 5,5V21L12,18L19,21V5C19,3.89 18.1,3 17,3Z
+
+$mol_icon_bookmark_outline $mol_icon path \M17,18L12,15.82L7,18V5H17M17,3H7C5.9,3 5,3.9 5,5V21L12,18L19,21V5C19,3.89 18.1,3 17,3Z
+
+$mol_icon_play $mol_icon path \M8,5.14V19.14L19,12.14L8,5.14Z
 
 $mol_stack $mol_view
 
@@ -133,82 +251,6 @@ $mol_text_code_row $mol_paragraph
 		uri <= token_uri* \
 	find_pos* null
 
-$mol_list $mol_view
-	render_visible_only true
-	render_over 0
-	sub <= rows /$mol_view
-	Empty $mol_view
-	Gap_before $mol_view style * paddingTop <= gap_before 0
-	Gap_after $mol_view style * paddingTop <= gap_after 0
-	view_window /
-		0
-		0
-
-$mol_speck $mol_view
-	attr *
-		^
-		mol_theme \$mol_theme_accent
-	style *
-		^
-		minHeight \1em
-	sub /
-		<= value null
-
-$mol_button $mol_view
-	enabled true
-	click?event null
-	event_click?event null
-	event *
-		^
-		click?event <=> event_activate?event null
-		dblclick?event <=> clicks?event null
-		keydown?event <=> event_key_press?event null 
-	attr *
-		^
-		disabled <= disabled false
-		role \button
-		tabindex <= tab_index 0
-		title <= hint_safe <= hint \
-	sub /$mol_view_content
-		<= title
-	Speck $mol_speck
-		value <= error \
-
-$mol_button_typed $mol_button
-	minimal_height 40
-	minimal_width 40
-
-$mol_button_minor $mol_button_typed
-
-$mol_svg $mol_view
-	dom_name \svg
-	dom_name_space \http://www.w3.org/2000/svg
-	font_size 16
-	font_family \
-	style_size *
-
-$mol_svg_root $mol_svg
-	dom_name \svg
-	attr *
-		^
-		viewBox <= view_box \0 0 100 100
-		preserveAspectRatio <= aspect \xMidYMid
-
-$mol_svg_path $mol_svg
-	dom_name \path
-	attr *
-		^
-		d <= geometry \
-
-
-$mol_icon $mol_svg_root
-	view_box \0 0 24 24
-	minimal_width 16
-	minimal_height 16
-	sub /
-		<= Path $mol_svg_path
-			geometry <= path \
-
 $mol_icon_content_copy $mol_icon path \M19,21H8V7H19M19,5H8C6.9,5 6,5.9 6,7V21C6,22.1 6.9,23 8,23H19C20.1,23 21,22.1 21,21V7C21,5.9 20.1,5 19,5M16,1H4C2.9,1 2,1.9 2,3V17H4V3H16V1Z
 
 $mol_button_copy $mol_button_minor
@@ -238,6 +280,37 @@ $mol_text_code $mol_stack
 		<= Copy $mol_button_copy
 			hint @ \Copy whole code
 			text <= text
+
+$mol_string $mol_view
+	dom_name \input
+	enabled true
+	minimal_height 40
+	autocomplete false
+	selection?val /number
+		0
+		0
+	auto /
+		<= selection_watcher null
+	field *
+		^
+		disabled <= disabled false
+		value <= value_changed?val <=> value?val \
+		placeholder <= hint_visible <= hint \
+		spellcheck <= spellcheck true
+		autocomplete <= autocomplete_native \
+		selectionEnd <= selection_end 0
+		selectionStart <= selection_start 0
+		inputMode <= keyboard \text
+	attr *
+		^
+		maxlength <= length_max +Infinity
+		type <= type?val \text
+	event *
+		^
+		input?event <=> event_change?event null
+	plugins /
+		<= Submit $mol_hotkey
+			key * enter?event <=> submit?event null
 
 $mol_textarea $mol_stack
 	attr *
@@ -269,351 +342,10 @@ $mol_textarea_edit $mol_string
 		^
 		scrollTop 0
 
-$mol_labeler $mol_list
-	rows /
-		<= Label $mol_view
-			minimal_height 32
-			sub <= label /$mol_view_content
-				<= title
-		<= Content $mol_view
-			minimal_height 24
-			sub <= content /
-
-$mol_float $mol_view
-	style *
-		^
-		minHeight \auto
-
-$mol_check $mol_button_minor
-	attr *
-		^
-		mol_check_checked <= checked?val false
-		aria-checked <= checked?val false
-		role \checkbox
-	sub /$mol_view_content
-		<= Icon null
-		<= label /
-			<= Title $mol_view
-				sub /
-					<= title \
-
-$mol_icon_chevron $mol_icon path \M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z
-
-$mol_check_expand $mol_check
-	Icon $mol_icon_chevron
-	level 0
-	style *
-		^
-		paddingLeft <= level_style \0px
-	checked?val <=> expanded?val false
-	enabled <= expandable false
-
-$mol_grid $mol_view
-	row_height 32
-	row_ids /string[]
-	row_id* null
-	col_ids /
-	records *
-	record* null
-	hierarchy null
-	hierarchy_col \
-	minimal_width 0
-	-
-	sub /
-		<= Head
-		<= Table $mol_grid_table
-			sub <= rows /$mol_view
-	Head $mol_grid_row
-		cells <= head_cells /$mol_view
-	Row* $mol_grid_row
-		minimal_height <= row_height
-		minimal_width <= minimal_width
-		cells <= cells* /$mol_view
-	-
-	Cell* $mol_view
-	cell* null
-	Cell_text* $mol_grid_cell
-		sub <= cell_content_text* <= cell_content* /$mol_view_content
-	Cell_number* $mol_grid_number
-		sub <= cell_content_number* <= cell_content* /$mol_view_content
-	Col_head* $mol_float
-		dom_name \th
-		sub <= col_head_content* /$mol_view_content
-	Cell_branch* $mol_check_expand
-		level <= cell_level* 0
-		label <= cell_content* /$mol_view_content
-		expanded?val <=> cell_expanded*?val false
-	Cell_content* /
-		<= Cell_dimmer* $mol_dimmer
-			needle <= needle \
-			haystack <= cell_value* \
-
-$mol_grid_table $mol_list
-	dom_name \table
-
-$mol_grid_row $mol_view
-	dom_name \tr
-	sub <= cells /$mol_view
-
-$mol_grid_cell $mol_view
-	dom_name \td
-	minimal_height 40
-
-$mol_grid_number $mol_grid_cell
-
-$mol_link $mol_view
-	uri \
-	dom_name \a
-	attr *
-		^
-		href <= uri_toggle \
-		title <= hint_safe <= hint \
-		target <= target \_self
-		download <= file_name \
-		mol_link_current <= current false
-	sub /$mol_view_content
-		<= title
-	arg *
-	event *
-		^
-		click?event <=> click?event <=> event_click?event null
-
-$mol_image $mol_view
-	dom_name \img
-	field *
-		^
-		src <= uri \
-		alt <= title
-		loading <= loading \eager
-		decoding <= decoding \async
-		crossOrigin <= cors null
-	minimal_width 16
-	minimal_height 16
-
-$mol_link_iconed $mol_link
-	sub /
-		<= Icon $mol_image
-			uri <= icon \
-			title \
-	content /
-		<= title <= uri
-	host \
+$mol_icon_flash $mol_icon path \M7,2V13H10V22L17,10H13L17,2H7Z
 
 $mol_ghost $mol_view
 	Sub $mol_view
-
-$mol_embed_native $mol_scroll
-	uri?val \
-	dom_name \object
-	window null
-	attr *
-		^
-		data <= uri
-		type <= mime \
-	sub /
-		<= Fallback $mol_link
-			uri <= uri
-			sub /
-				<= title \
-	message *
-		hashchange? <=> uri_change? null
-
-$mol_frame $mol_embed_native
-	dom_name \iframe
-	attr *
-		^
-		data null
-		type null
-		src <= uri?val \
-		srcdoc <= html null
-		allow <= allow \
-		allowfullscreen <= fullscreen true
-	accelerometer true
-	autoplay true
-	encription true
-	gyroscope true
-	pip true
-
-$mol_embed_youtube $mol_check
-	uri \
-	video_preview \
-	video_id \
-	checked? <=> active? false
-	sub /
-		<= Image $mol_image
-			title <= title \
-			uri <= video_preview \
-		<= Frame $mol_frame
-			title <= title \
-			uri <= video_embed \
-
-
-$mol_embed_any $mol_ghost
-	Image $mol_image
-		title <= title \
-		uri <= uri \
-	Object $mol_embed_native
-		title <= title \
-		uri <= uri \
-	Youtube $mol_embed_youtube
-		title <= title \
-		uri <= uri \
-
-$mol_text $mol_list
-	uri_base \
-	text \
-	param \
-	flow_tokens /
-	auto /
-		<= auto_scroll null
-	- \Blocks
-	Paragraph* $mol_paragraph
-		sub <= block_content* /
-	Quote* $mol_text
-		uri_resolve* <= uri_resolve* \
-		text <= quote_text* \
-		highlight <= highlight \
-		auto_scroll null
-	List* $mol_text
-		uri_resolve* <= uri_resolve* \
-		text <= list_text* \
-		highlight <= highlight \
-		auto_scroll null
-	Header* $mol_text_header
-		minimal_height 40
-		level <= header_level* 1
-		content <= block_content* /
-		arg <= header_arg* *
-	Pre* $mol_text_code
-		text <= pre_text* \
-		highlight <= highlight \
-		uri_resolve* <= uri_resolve* \
-		sidebar_showed <= pre_sidebar_showed <= code_sidebar_showed true
-	- \Table
-	Table* $mol_grid
-		head_cells <= table_head_cells* /
-		rows <= table_rows* /
-	Table_row* $mol_grid_row
-		cells <= table_cells* /
-	Table_cell* $mol_text
-		auto_scroll null
-		highlight <= highlight \
-		uri_resolve* <= uri_resolve* \
-		text <= table_cell_text* \
-	- \Lines
-	String* $mol_dimmer
-		dom_name \span
-		needle <= highlight \
-		haystack <= line_text* \
-	Span* $mol_text_span
-		dom_name \span
-		type <= line_type* \
-		sub <= line_content* /
-	Code_line* $mol_text_code_row
-		numb_showed false
-		highlight <= highlight \
-		text <= line_text* \
-		uri_resolve* <= uri_resolve* \
-		syntax <= code_syntax null
-	Link* $mol_link_iconed
-		uri <= link_uri* \
-		content <= line_content* /
-	Link_http* $mol_link_iconed
-		uri <= link_uri* \
-		content / <= link_host* \
-	Embed* $mol_embed_any
-		uri <= link_uri* \
-		title <= line_text* \
-
-$mol_text_header $mol_paragraph
-	level 1
-	sub /
-		<= Link $mol_link
-			arg <= arg *
-			hint @ \Permalink to this section
-			sub <= content /
-
-$mol_text_span $mol_paragraph
-	dom_name \span
-	attr *
-		^
-		mol_text_type <= type \
-
-$mol_icon_play $mol_icon path \M8,5.14V19.14L19,12.14L8,5.14Z
-
-$mol_button_major $mol_button_typed
-	attr *
-		^
-		mol_theme \$mol_theme_accent
-
-$mol_icon_share $mol_icon path \M21,12L14,5V9C7,10 4,15 3,20C5.5,16.5 9,14.9 14,14.9V19L21,12Z
-
-$mol_icon_share_variant $mol_icon path \M18,16.08C17.24,16.08 16.56,16.38 16.04,16.85L8.91,12.7C8.96,12.47 9,12.24 9,12C9,11.76 8.96,11.53 8.91,11.3L15.96,7.19C16.5,7.69 17.21,8 18,8C19.66,8 21,6.66 21,5C21,3.34 19.66,2 18,2C16.34,2 15,3.34 15,5C15,5.24 15.04,5.47 15.09,5.7L8.04,9.81C7.5,9.31 6.79,9 6,9C4.34,9 3,10.34 3,12C3,13.66 4.34,15 6,15C6.79,15 7.5,14.69 8.04,14.19L15.16,18.34C15.11,18.55 15.08,18.77 15.08,19C15.08,20.61 16.39,21.91 18,21.91C19.61,21.91 20.92,20.61 20.92,19C20.92,17.39 19.61,16.08 18,16.08Z
-
-$mol_button_share $mol_button_minor
-	uri \
-	capture null
-	hint @ \Share
-	sub /
-		<= Icon $mol_icon_share_variant
-
-$mol_icon_directions $mol_icon path \M14,14.5V12H10V15H8V11C8,10.45 8.45,10 9,10H14V7.5L17.5,11M21.71,11.29L12.71,2.29H12.7C12.31,1.9 11.68,1.9 11.29,2.29L2.29,11.29C1.9,11.68 1.9,12.32 2.29,12.71L11.29,21.71C11.68,22.09 12.31,22.1 12.71,21.71L21.71,12.71C22.1,12.32 22.1,11.68 21.71,11.29Z
-
-$mol_icon_directions_fork $mol_icon path \M3,4V12.5L6,9.5L9,13C10,14 10,15 10,15V21H14V14C14,14 14,13 13.47,12C12.94,11 12,10 12,10L9,6.58L11.5,4M18,4L13.54,8.47L14,9C14,9 14.93,10 15.47,11C15.68,11.4 15.8,11.79 15.87,12.13L21,7
-
-$mol_icon_plus $mol_icon path \M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z
-
-$mol_icon_plus_box $mol_icon path \M17,13H13V17H11V13H7V11H11V7H13V11H17M19,3H5C3.89,3 3,3.89 3,5V19C3,20.1 3.9,21 5,21H19C20.1,21 21,20.1 21,19V5C21,3.89 20.1,3 19,3Z
-
-$mol_icon_help $mol_icon path \M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5C10.34,5 9,6.34 9,8H6C6,4.69 8.69,2 12,2Z
-
-$mol_icon_help_circle $mol_icon path \M15.07,11.25L14.17,12.17C13.45,12.89 13,13.5 13,15H11V14.5C11,13.39 11.45,12.39 12.17,11.67L13.41,10.41C13.78,10.05 14,9.55 14,9C14,7.89 13.1,7 12,7C10.9,7 10,7.9 10,9H8C8,6.79 9.79,5 12,5C14.21,5 16,6.79 16,9C16,9.88 15.64,10.67 15.07,11.25M13,19H11V17H13M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.47 17.5,2 12,2Z
-
-$mol_icon_help_circle_outline $mol_icon path \M11,18H13V16H11V18M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.48 17.52,2 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,6C9.79,6 8,7.79 8,10H10C10,8.9 10.9,8 12,8C13.1,8 14,8.9 14,10C14,12 11,11.75 11,15H13C13,12.75 16,12.5 16,10C16,7.79 14.21,6 12,6Z
-
-$mol_check_icon $mol_check
-
-$mol_icon_brightness_6 $mol_icon path \M12,18V6C15.31,6 18,8.69 18,12C18,15.31 15.31,18 12,18M20,15.31L23.31,12L20,8.69V4H15.31L12,0.69L8.69,4H4V8.69L0.69,12L4,15.31V20H8.69L12,23.31L15.31,20H20V15.31Z
-
-$mol_lights_toggle $mol_check_icon
-	Icon <= Lights_icon $mol_icon_brightness_6
-	hint @ \Toggle lights
-	checked?val <=> lights?val false
-
-$mol_icon_github_circle $mol_icon path \M12,2C6.48,2 2,6.48 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21C9.5,20.77 9.5,20.14 9.5,19.31C6.73,19.91 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.81,16.41C14.17,16.72 14.5,17.33 14.5,18.26C14.5,19.6 14.5,20.68 14.5,21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12C22,6.48 17.52,2 12,2Z
-
-$mol_link_source $mol_link
-	hint @ \Source code
-	sub /
-		<= Icon $mol_icon_github_circle
-
-$mol_avatar $mol_icon
-	view_box \0 0 24 24
-	id \
-	path \M 12 12 l 0 0 M 0 0 l 0 0 M 24 24 l 0 0 M 0 24 l 0 0 M 24 0 l 0 0
-
-$mol_icon_sync $mol_icon path \M12,18C8.69,18 6,15.31 6,12C6,11 6.25,10.03 6.7,9.2L5.24,7.74C4.46,8.97 4,10.43 4,12C4,16.42 7.58,20 12,20V23L16,19L12,15M12,4V1L8,5L12,9V6C15.31,6 18,8.69 18,12C18,13 17.75,13.97 17.3,14.8L18.76,16.26C19.54,15.03 20,13.57 20,12C20,7.58 16.42,4 12,4Z
-
-$mol_icon_sync_off $mol_icon path \M20,4H14V10L16.24,7.76C17.32,8.85 18,10.34 18,12C18,13 17.75,13.94 17.32,14.77L18.78,16.23C19.55,15 20,13.56 20,12C20,9.79 19.09,7.8 17.64,6.36L20,4M2.86,5.41L5.22,7.77C4.45,9 4,10.44 4,12C4,14.21 4.91,16.2 6.36,17.64L4,20H10V14L7.76,16.24C6.68,15.15 6,13.66 6,12C6,11 6.25,10.06 6.68,9.23L14.76,17.31C14.5,17.44 14.26,17.56 14,17.65V19.74C14.79,19.53 15.54,19.2 16.22,18.78L18.58,21.14L19.85,19.87L4.14,4.14L2.86,5.41M10,6.35V4.26C9.2,4.47 8.45,4.8 7.77,5.22L9.23,6.68C9.5,6.56 9.73,6.44 10,6.35Z
-
-$hyoo_sync_online $mol_link
-	minimal_width 40
-	minimal_height 40
-	yard $hyoo_sync_yard
-	uri <= master_link \
-	sub /
-		<= Well $mol_avatar
-			id <= master_link \
-		<= Fail $mol_icon_sync_off
-	attr *
-		^
-		title <= message <= hint \$hyoo_sync
-
-$mol_icon_bookmark $mol_icon path \M17,3H7C5.9,3 5,3.9 5,5V21L12,18L19,21V5C19,3.89 18.1,3 17,3Z
-
-$mol_icon_bookmark_outline $mol_icon path \M17,18L12,15.82L7,18V5H17M17,3H7C5.9,3 5,3.9 5,5V21L12,18L19,21V5C19,3.89 18.1,3 17,3Z
-
-$mol_icon_flash $mol_icon path \M7,2V13H10V22L17,10H13L17,2H7Z
 
 $mol_follower $mol_ghost
 	Anchor $mol_view
@@ -625,6 +357,17 @@ $mol_follower $mol_ghost
 		transform <= transform \
 
 $mol_icon_cross $mol_icon path \M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z
+
+$mol_icon_chevron $mol_icon path \M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z
+
+$mol_check_expand $mol_check
+	Icon $mol_icon_chevron
+	level 0
+	style *
+		^
+		paddingLeft <= level_style \0px
+	checked?val <=> expanded?val false
+	enabled <= expandable false
 
 $mol_expander $mol_list
 	rows /
@@ -764,6 +507,13 @@ $mol_icon_unfold_more_horizontal $mol_icon path \M12,18.17L8.83,15L7.42,16.41L12
 
 $mol_bar $mol_view
 
+$mol_icon_tick $mol_icon path \M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z
+
+$mol_check_box $mol_check
+	Icon $mol_icon_tick
+
+$mol_string_button $mol_string
+
 $mol_portion_indicator $mol_view
 	style *
 		^
@@ -774,6 +524,371 @@ $mol_portion $mol_view
 	sub /
 		<= indicator $mol_portion_indicator
 			width_style <= indicator_width_style \0
+
+$hyoo_js_perf_case_result $mol_view
+	result $hyoo_js_perf_stats
+	sub /
+		<= Portions $mol_view sub <= portions /
+			<= Frequency_portion $mol_portion portion <= frequency_portion 0
+			<= Memory_portion $mol_portion portion <= memory_portion 0
+			<= Size_portion $mol_portion portion <= size_portion 0
+			<= Deps_portion $mol_portion portion <= deps_portion 0
+		<= Stats $mol_view sub <= stats /
+			<= Stats_main $mol_view sub /
+				<= title \
+				<= Frequency $mol_view
+					attr * title <= frequency_hint @ \Iterations per Second
+					sub / <= frequency \
+				\≈
+				<= Time $mol_view
+					attr * title <= time_hint @ \Seconds per Iteration
+					sub / <= time_total \
+				\×
+				<= Iterations $mol_view
+					attr * title <= iterations_hint @ \Iterations Count
+					sub / <= iterations \
+			<= Stats_mem $mol_view sub /
+				\×
+				<= Memory_per_iteration $mol_view
+					attr * title <= memory_per_iteration_hint @ \Bytes per Itaration
+					sub / <= memory_per_iteration \
+				\=
+				<= Memory $mol_view
+					attr * title <= memory_hint @ \Bytes for All Iterations
+					sub / <= memory_total \
+			<= Stats_size $mol_view sub /
+				<= title \
+				<= Size $mol_view
+					attr * title <= size_hint @ \Case Size
+					sub / <= size 0
+			<= Stats_deps $mol_view sub /
+				\📦
+				<= Deps $mol_view
+					attr * title <= deps_hint @ \Deps Size
+					sub / <= deps \
+		<= Error $mol_view sub / <= error \
+
+$hyoo_js_perf_case_row $mol_view
+	results /
+	Eval $hyoo_js_eval
+		code <= sample \
+		run <= eval_showed
+		Result => Eval_result
+	sub <= columns /
+		<= Prefix $mol_expander
+			title @ \Setup
+			expanded? <=> prefix_showed? false
+			minimal_width 150
+			Tools <= Prefix_tools $mol_bar sub <= prefix_tools /
+				<= Drop $mol_button_minor
+					click? <=> drop? null
+					hint @ \Drop case
+					sub /
+						<= Drop_icon $mol_icon_cross
+				<= Dupe $mol_button_minor
+					click? <=> dupe? null
+					hint @ \Duplicate case
+					sub /
+						<= Dupe_icon $mol_icon_chevron_double_down
+				<= Swap $mol_button_minor
+					click? <=> swap? null
+					hint @ \Swap cases
+					sub /
+						<= Swap_icon $mol_icon_unfold_more_horizontal
+			content / <= Prefix_code $mol_textarea
+				enabled <= changable true
+				spellcheck false
+				value?val <=> prefix?val \
+				hint \let count = {#}
+		<= Source $mol_expander
+			title @ \Measure
+			expanded? <=> source_showed? true
+			minimal_width 150
+			Tools <= Source_tools $mol_view sub /
+				<= Measurable $mol_check_box
+					checked? <=> measurable? true
+					hint @ \Measutre on run
+				<= Title $mol_string_button
+					hint @ \Case Name
+					enabled <= changable true
+					value? <=> title? \
+				<= Eval_sandalone $mol_link_iconed
+					title \
+					hint @ \Generated script
+					uri <= eval_standalone \
+			content /
+				<= Source_code $mol_textarea
+					enabled <= changable true
+					spellcheck false
+					value?val <=> source?val \
+					hint \res = {#} % count
+		<= Eval_labeler $mol_expander
+			expanded? <=> eval_showed? false
+			title @ \Debug
+			Content <= Eval_result
+		<= Results $mol_list
+			rows <= result_rows /
+				<= Result*0 $hyoo_js_perf_case_result
+					title <= result_title* \
+					result <= result* $hyoo_js_perf_stats
+				<= Result*1
+				<= Result*2
+
+
+$mol_labeler $mol_list
+	rows /
+		<= Label $mol_view
+			minimal_height 32
+			sub <= label /$mol_view_content
+				<= title
+		<= Content $mol_view
+			minimal_height 24
+			sub <= content /
+
+$mol_float $mol_view
+	style *
+		^
+		minHeight \auto
+
+$mol_grid $mol_view
+	row_height 32
+	row_ids /string[]
+	row_id* null
+	col_ids /
+	records *
+	record* null
+	hierarchy null
+	hierarchy_col \
+	minimal_width 0
+	-
+	sub /
+		<= Head
+		<= Table $mol_grid_table
+			sub <= rows /$mol_view
+	Head $mol_grid_row
+		cells <= head_cells /$mol_view
+	Row* $mol_grid_row
+		minimal_height <= row_height
+		minimal_width <= minimal_width
+		cells <= cells* /$mol_view
+	-
+	Cell* $mol_view
+	cell* null
+	Cell_text* $mol_grid_cell
+		sub <= cell_content_text* <= cell_content* /$mol_view_content
+	Cell_number* $mol_grid_number
+		sub <= cell_content_number* <= cell_content* /$mol_view_content
+	Col_head* $mol_float
+		dom_name \th
+		sub <= col_head_content* /$mol_view_content
+	Cell_branch* $mol_check_expand
+		level <= cell_level* 0
+		label <= cell_content* /$mol_view_content
+		expanded?val <=> cell_expanded*?val false
+	Cell_content* /
+		<= Cell_dimmer* $mol_dimmer
+			needle <= needle \
+			haystack <= cell_value* \
+
+$mol_grid_table $mol_list
+	dom_name \table
+
+$mol_grid_row $mol_view
+	dom_name \tr
+	sub <= cells /$mol_view
+
+$mol_grid_cell $mol_view
+	dom_name \td
+	minimal_height 40
+
+$mol_grid_number $mol_grid_cell
+
+$mol_embed_native $mol_scroll
+	uri?val \
+	dom_name \object
+	window null
+	attr *
+		^
+		data <= uri
+		type <= mime \
+	sub /
+		<= Fallback $mol_link
+			uri <= uri
+			sub /
+				<= title \
+	message *
+		hashchange? <=> uri_change? null
+
+$mol_frame $mol_embed_native
+	dom_name \iframe
+	attr *
+		^
+		data null
+		type null
+		src <= uri?val \
+		srcdoc <= html null
+		allow <= allow \
+		allowfullscreen <= fullscreen true
+	accelerometer true
+	autoplay true
+	encription true
+	gyroscope true
+	pip true
+
+$mol_embed_youtube $mol_check
+	uri \
+	video_preview \
+	video_id \
+	checked? <=> active? false
+	sub /
+		<= Image $mol_image
+			title <= title \
+			uri <= video_preview \
+		<= Frame $mol_frame
+			title <= title \
+			uri <= video_embed \
+
+
+$mol_embed_any $mol_ghost
+	Image $mol_image
+		title <= title \
+		uri <= uri \
+	Object $mol_embed_native
+		title <= title \
+		uri <= uri \
+	Youtube $mol_embed_youtube
+		title <= title \
+		uri <= uri \
+
+$mol_text $mol_list
+	uri_base \
+	text \
+	param \
+	flow_tokens /
+	auto /
+		<= auto_scroll null
+	- \Blocks
+	Paragraph* $mol_paragraph
+		sub <= block_content* /
+	Quote* $mol_text
+		uri_resolve* <= uri_resolve* \
+		text <= quote_text* \
+		highlight <= highlight \
+		auto_scroll null
+	List* $mol_text
+		uri_resolve* <= uri_resolve* \
+		text <= list_text* \
+		highlight <= highlight \
+		auto_scroll null
+	Header* $mol_text_header
+		minimal_height 40
+		level <= header_level* 1
+		content <= block_content* /
+		arg <= header_arg* *
+	Pre* $mol_text_code
+		text <= pre_text* \
+		highlight <= highlight \
+		uri_resolve* <= uri_resolve* \
+		sidebar_showed <= pre_sidebar_showed <= code_sidebar_showed true
+	- \Table
+	Table* $mol_grid
+		head_cells <= table_head_cells* /
+		rows <= table_rows* /
+	Table_row* $mol_grid_row
+		cells <= table_cells* /
+	Table_cell* $mol_text
+		auto_scroll null
+		highlight <= highlight \
+		uri_resolve* <= uri_resolve* \
+		text <= table_cell_text* \
+	- \Lines
+	String* $mol_dimmer
+		dom_name \span
+		needle <= highlight \
+		haystack <= line_text* \
+	Span* $mol_text_span
+		dom_name \span
+		type <= line_type* \
+		sub <= line_content* /
+	Code_line* $mol_text_code_row
+		numb_showed false
+		highlight <= highlight \
+		text <= line_text* \
+		uri_resolve* <= uri_resolve* \
+		syntax <= code_syntax null
+	Link* $mol_link_iconed
+		uri <= link_uri* \
+		content <= line_content* /
+	Link_http* $mol_link_iconed
+		uri <= link_uri* \
+		content / <= link_host* \
+	Embed* $mol_embed_any
+		uri <= link_uri* \
+		title <= line_text* \
+
+$mol_text_header $mol_paragraph
+	level 1
+	sub /
+		<= Link $mol_link
+			arg <= arg *
+			hint @ \Permalink to this section
+			sub <= content /
+
+$mol_text_span $mol_paragraph
+	dom_name \span
+	attr *
+		^
+		mol_text_type <= type \
+
+$mol_button_major $mol_button_typed
+	attr *
+		^
+		mol_theme \$mol_theme_accent
+
+$mol_icon_share $mol_icon path \M21,12L14,5V9C7,10 4,15 3,20C5.5,16.5 9,14.9 14,14.9V19L21,12Z
+
+$mol_icon_share_variant $mol_icon path \M18,16.08C17.24,16.08 16.56,16.38 16.04,16.85L8.91,12.7C8.96,12.47 9,12.24 9,12C9,11.76 8.96,11.53 8.91,11.3L15.96,7.19C16.5,7.69 17.21,8 18,8C19.66,8 21,6.66 21,5C21,3.34 19.66,2 18,2C16.34,2 15,3.34 15,5C15,5.24 15.04,5.47 15.09,5.7L8.04,9.81C7.5,9.31 6.79,9 6,9C4.34,9 3,10.34 3,12C3,13.66 4.34,15 6,15C6.79,15 7.5,14.69 8.04,14.19L15.16,18.34C15.11,18.55 15.08,18.77 15.08,19C15.08,20.61 16.39,21.91 18,21.91C19.61,21.91 20.92,20.61 20.92,19C20.92,17.39 19.61,16.08 18,16.08Z
+
+$mol_button_share $mol_button_minor
+	uri \
+	capture null
+	hint @ \Share
+	sub /
+		<= Icon $mol_icon_share_variant
+
+$mol_icon_directions $mol_icon path \M14,14.5V12H10V15H8V11C8,10.45 8.45,10 9,10H14V7.5L17.5,11M21.71,11.29L12.71,2.29H12.7C12.31,1.9 11.68,1.9 11.29,2.29L2.29,11.29C1.9,11.68 1.9,12.32 2.29,12.71L11.29,21.71C11.68,22.09 12.31,22.1 12.71,21.71L21.71,12.71C22.1,12.32 22.1,11.68 21.71,11.29Z
+
+$mol_icon_directions_fork $mol_icon path \M3,4V12.5L6,9.5L9,13C10,14 10,15 10,15V21H14V14C14,14 14,13 13.47,12C12.94,11 12,10 12,10L9,6.58L11.5,4M18,4L13.54,8.47L14,9C14,9 14.93,10 15.47,11C15.68,11.4 15.8,11.79 15.87,12.13L21,7
+
+$mol_icon_plus_box $mol_icon path \M17,13H13V17H11V13H7V11H11V7H13V11H17M19,3H5C3.89,3 3,3.89 3,5V19C3,20.1 3.9,21 5,21H19C20.1,21 21,20.1 21,19V5C21,3.89 20.1,3 19,3Z
+
+$mol_icon_help $mol_icon path \M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5C10.34,5 9,6.34 9,8H6C6,4.69 8.69,2 12,2Z
+
+$mol_icon_help_circle $mol_icon path \M15.07,11.25L14.17,12.17C13.45,12.89 13,13.5 13,15H11V14.5C11,13.39 11.45,12.39 12.17,11.67L13.41,10.41C13.78,10.05 14,9.55 14,9C14,7.89 13.1,7 12,7C10.9,7 10,7.9 10,9H8C8,6.79 9.79,5 12,5C14.21,5 16,6.79 16,9C16,9.88 15.64,10.67 15.07,11.25M13,19H11V17H13M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.47 17.5,2 12,2Z
+
+$mol_icon_help_circle_outline $mol_icon path \M11,18H13V16H11V18M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.48 17.52,2 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,6C9.79,6 8,7.79 8,10H10C10,8.9 10.9,8 12,8C13.1,8 14,8.9 14,10C14,12 11,11.75 11,15H13C13,12.75 16,12.5 16,10C16,7.79 14.21,6 12,6Z
+
+$mol_avatar $mol_icon
+	view_box \0 0 24 24
+	id \
+	path \M 12 12 l 0 0 M 0 0 l 0 0 M 24 24 l 0 0 M 0 24 l 0 0 M 24 0 l 0 0
+
+$mol_icon_sync $mol_icon path \M12,18C8.69,18 6,15.31 6,12C6,11 6.25,10.03 6.7,9.2L5.24,7.74C4.46,8.97 4,10.43 4,12C4,16.42 7.58,20 12,20V23L16,19L12,15M12,4V1L8,5L12,9V6C15.31,6 18,8.69 18,12C18,13 17.75,13.97 17.3,14.8L18.76,16.26C19.54,15.03 20,13.57 20,12C20,7.58 16.42,4 12,4Z
+
+$mol_icon_sync_off $mol_icon path \M20,4H14V10L16.24,7.76C17.32,8.85 18,10.34 18,12C18,13 17.75,13.94 17.32,14.77L18.78,16.23C19.55,15 20,13.56 20,12C20,9.79 19.09,7.8 17.64,6.36L20,4M2.86,5.41L5.22,7.77C4.45,9 4,10.44 4,12C4,14.21 4.91,16.2 6.36,17.64L4,20H10V14L7.76,16.24C6.68,15.15 6,13.66 6,12C6,11 6.25,10.06 6.68,9.23L14.76,17.31C14.5,17.44 14.26,17.56 14,17.65V19.74C14.79,19.53 15.54,19.2 16.22,18.78L18.58,21.14L19.85,19.87L4.14,4.14L2.86,5.41M10,6.35V4.26C9.2,4.47 8.45,4.8 7.77,5.22L9.23,6.68C9.5,6.56 9.73,6.44 10,6.35Z
+
+$hyoo_sync_online $mol_link
+	minimal_width 40
+	minimal_height 40
+	yard $hyoo_sync_yard
+	uri <= master_link \
+	sub /
+		<= Well $mol_avatar
+			id <= master_link \
+		<= Fail $mol_icon_sync_off
+	attr *
+		^
+		title <= message <= hint \$hyoo_sync
 
 $hyoo_js_perf $mol_page
 	title @ \JS Benchmark
@@ -833,12 +948,13 @@ $hyoo_js_perf $mol_page
 				\[V8 Optimizations](https://opt.js.hyoo.ru/) [Sandbox](https://eval.js.hyoo.ru)
 		<= Cases_pane $mol_scroll sub <= cases_pane_content /
 			<= Cases $mol_view sub <= cases /
-	Case* $hyoo_js_perf_case
-		title?val <=> case_title*?val \
-		prefix?val <=> case_prefix*?val \
-		source?val <=> source*?val \
+	Case* $hyoo_js_perf_case_row
+		title? <=> case_title*? \
+		prefix? <=> case_prefix*? \
+		source? <=> source*? \
+		measurable? <=> case_measurable*? true
 		sample <= case_sample* \
-		results?val <=> results*?val /
+		results? <=> results*? /
 		changable <= changable true
 		drop? <=> case_drop*? null
 		dupe? <=> case_dupe*? null
@@ -872,107 +988,3 @@ $hyoo_js_perf $mol_page
 			uri \https://github.com/hyoo-ru/perf.js.hyoo.ru
 		<= Online $hyoo_sync_online
 			yard <= yard
-
-$hyoo_js_perf_case $mol_view
-	results /
-	Eval $hyoo_js_eval
-		code <= sample \
-		run <= eval_showed
-		Result => Eval_result
-	sub <= columns /
-		<= Prefix $mol_expander
-			title @ \Setup
-			expanded? <=> prefix_showed? false
-			minimal_width 150
-			Tools <= Prefix_tools $mol_bar sub <= prefix_tools /
-				<= Drop $mol_button_minor
-					click? <=> drop? null
-					hint @ \Drop case
-					sub /
-						<= Drop_icon $mol_icon_cross
-				<= Dupe $mol_button_minor
-					click? <=> dupe? null
-					hint @ \Duplicate case
-					sub /
-						<= Dupe_icon $mol_icon_chevron_double_down
-				<= Swap $mol_button_minor
-					click? <=> swap? null
-					hint @ \Swap cases
-					sub /
-						<= Swap_icon $mol_icon_unfold_more_horizontal
-			content / <= Prefix_code $mol_textarea
-				enabled <= changable true
-				spellcheck false
-				value?val <=> prefix?val \
-				hint \let count = {#}
-		<= Source $mol_expander
-			title @ \Measure
-			expanded? <=> source_showed? true
-			minimal_width 150
-			Tools <= Title $mol_string_button
-				hint @ \Case Name
-				enabled <= changable true
-				value? <=> title? \
-			content / <= Source_code $mol_textarea
-				enabled <= changable true
-				spellcheck false
-				value?val <=> source?val \
-				hint \res = {#} % count
-		<= Eval_labeler $mol_expander
-			expanded? <=> eval_showed? false
-			title @ \Debug
-			Tools <= Eval_sandalone $mol_link_iconed
-				title \
-				hint @ \Generated script
-				uri <= eval_standalone \
-			Content <= Eval_result
-		<= Results $mol_list
-			rows <= result_rows /
-				<= Result*0 $hyoo_js_perf_case_result
-					title <= result_title* \
-					result <= result* $hyoo_js_perf_stats
-				<= Result*1
-				<= Result*2
-
-$hyoo_js_perf_case_result $mol_view
-	result $hyoo_js_perf_stats
-	sub /
-		<= Portions $mol_view sub <= portions /
-			<= Frequency_portion $mol_portion portion <= frequency_portion 0
-			<= Memory_portion $mol_portion portion <= memory_portion 0
-			<= Size_portion $mol_portion portion <= size_portion 0
-			<= Deps_portion $mol_portion portion <= deps_portion 0
-		<= Stats $mol_view sub <= stats /
-			<= Stats_main $mol_view sub /
-				<= title \
-				<= Frequency $mol_view
-					attr * title <= frequency_hint @ \Iterations per Second
-					sub / <= frequency \
-				\≈
-				<= Time $mol_view
-					attr * title <= time_hint @ \Seconds per Iteration
-					sub / <= time_total \
-				\×
-				<= Iterations $mol_view
-					attr * title <= iterations_hint @ \Iterations Count
-					sub / <= iterations \
-			<= Stats_mem $mol_view sub /
-				\×
-				<= Memory_per_iteration $mol_view
-					attr * title <= memory_per_iteration_hint @ \Bytes per Itaration
-					sub / <= memory_per_iteration \
-				\=
-				<= Memory $mol_view
-					attr * title <= memory_hint @ \Bytes for All Iterations
-					sub / <= memory_total \
-			<= Stats_size $mol_view sub /
-				<= title \
-				<= Size $mol_view
-					attr * title <= size_hint @ \Case Size
-					sub / <= size 0
-			<= Stats_deps $mol_view sub /
-				\🚂
-				<= Deps $mol_view
-					attr * title <= deps_hint @ \Deps Size
-					sub / <= deps \
-		<= Error $mol_view sub / <= error \
