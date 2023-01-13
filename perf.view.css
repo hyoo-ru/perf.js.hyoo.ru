@@ -15,16 +15,8 @@
 	min-width: 20rem;
 }
 
-[hyoo_js_perf_hint] {
-	padding: var(--mol_gap_block);
-}
-
-[hyoo_js_perf_prefix] {
-	margin: .75rem;
-}
-
-[hyoo_js_perf_postfix] {
-	margin: .75rem;
+[hyoo_js_perf_common_content] {
+	gap: var(--mol_gap_block);
 }
 
 [hyoo_js_perf_cases_pane] {
