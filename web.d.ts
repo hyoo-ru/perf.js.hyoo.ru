@@ -3967,6 +3967,7 @@ declare namespace $ {
         Postfix(): $mol_labeler;
         hint(): string;
         Hint(): $$.$mol_text;
+        Common_content(): $$.$mol_list;
         Common(): $mol_page;
         cases(): readonly any[];
         Cases(): $mol_view;
