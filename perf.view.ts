@@ -438,7 +438,7 @@ namespace $.$$ {
 				times.push( time )
 				mems.push( mem )
 				const avg_next = avg( times )
-				if( times.length > 4 && Math.abs( avg_next - avg_last ) / avg_next < 0.0001 ) break
+				if( times.length > 4 && Math.abs( avg_next - avg_last ) / avg_next < 0.001 ) break
 				avg_last = avg_next
 			}
 			
