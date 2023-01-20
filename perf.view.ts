@@ -432,6 +432,7 @@ namespace $.$$ {
 			const mems = [] as number[]
 
 			const avg = ( numbs : number[] )=> Math.pow( numbs.reduce( ( a, b )=> a * b ) , 1 / numbs.length )
+			const med = ( numbs : number[] )=> numbs.sort( ( l, r )=> l - r )[ numbs.length/2 | 0 ]
 			
 			while( times.length < 100 ) {
 				const { time, mem } = this.measure_step( iterations , prefix , inner , postfix )
@@ -443,8 +444,8 @@ namespace $.$$ {
 			}
 			
 			return $hyoo_js_perf_stats.create( stats => {
-				stats.elapsed = Math.min( ... times )
-				stats.memory = Math.min( ... mems )
+				stats.elapsed = med( times )
+				stats.memory = med( mems )
 				stats.iterations = iterations
 			} )
 
