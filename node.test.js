@@ -9194,7 +9194,7 @@ var $;
                         color: $mol_theme.card,
                     },
                 },
-                transform: 'translate( -14px, 0px )',
+                transform: 'translate( -.25rem, 0px )',
             },
             '@': {
                 'mol_text_code_sidebar_showed': {
@@ -15191,6 +15191,7 @@ var $;
                 const times = [];
                 const mems = [];
                 const avg = (numbs) => Math.pow(numbs.reduce((a, b) => a * b), 1 / numbs.length);
+                const med = (numbs) => numbs.sort((l, r) => l - r)[numbs.length / 2 | 0];
                 while (times.length < 100) {
                     const { time, mem } = this.measure_step(iterations, prefix, inner, postfix);
                     times.push(time);
@@ -15201,8 +15202,8 @@ var $;
                     avg_last = avg_next;
                 }
                 return $hyoo_js_perf_stats.create(stats => {
-                    stats.elapsed = Math.min(...times);
-                    stats.memory = Math.min(...mems);
+                    stats.elapsed = med(times);
+                    stats.memory = med(mems);
                     stats.iterations = iterations;
                 });
             }
