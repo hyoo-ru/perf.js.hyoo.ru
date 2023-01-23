@@ -265,7 +265,7 @@ namespace $.$$ {
 				+ '\n\n' + this.source( index )
 				+ '\n\n' + this.postfix()
 			
-			return code.trim().replace( /\{#\}/g , '1' )
+			return code.trim().replace( /\{#\}/g , '0' )
 		}
 		
 		@ $mol_mem_key
