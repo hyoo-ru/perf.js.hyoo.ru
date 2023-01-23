@@ -15087,7 +15087,7 @@ var $;
                     + '\n\n' + this.case_prefix(index)
                     + '\n\n' + this.source(index)
                     + '\n\n' + this.postfix();
-                return code.trim().replace(/\{#\}/g, '1');
+                return code.trim().replace(/\{#\}/g, '0');
             }
             case_size(index) {
                 return (this.case_prefix(index) + '\n' + this.source(index))
