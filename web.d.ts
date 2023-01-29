@@ -1183,7 +1183,7 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    type $hyoo_crowd_unit_id = `${$mol_int62_string}/${$mol_int62_string}`;
+    type $hyoo_crowd_unit_id = `${$mol_int62_string}!${$mol_int62_string}`;
     enum $hyoo_crowd_unit_kind {
         grab = 0,
         join = 1,
@@ -1254,6 +1254,7 @@ declare namespace $ {
         readonly head: $mol_int62_string;
         constructor(land?: $hyoo_crowd_land, head?: $mol_int62_string);
         static for<Node extends typeof $hyoo_crowd_node>(this: Node, land: $hyoo_crowd_land, head: $mol_int62_string): InstanceType<Node>;
+        id(): `${string}_${string}`;
         world(): $hyoo_crowd_world | null;
         as<Node extends typeof $hyoo_crowd_node>(Node: Node): InstanceType<Node>;
         units(): readonly $hyoo_crowd_unit[];
@@ -1292,7 +1293,7 @@ declare namespace $ {
         get clocks(): readonly [$hyoo_crowd_clock, $hyoo_crowd_clock];
         readonly pub: $mol_wire_pub;
         readonly _clocks: readonly [$hyoo_crowd_clock, $hyoo_crowd_clock];
-        _unit_all: Map<`${string}_${string}/${string}_${string}`, $hyoo_crowd_unit>;
+        _unit_all: Map<`${string}_${string}!${string}_${string}`, $hyoo_crowd_unit>;
         unit(head: $mol_int62_string, self: $mol_int62_string): $hyoo_crowd_unit | undefined;
         _unit_lists: Map<`${string}_${string}`, ($hyoo_crowd_unit[] & {
             dirty: boolean;
@@ -1369,7 +1370,7 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $hyoo_crowd_world extends $mol_object2 {
+    class $hyoo_crowd_world extends $mol_object {
         readonly peer?: $hyoo_crowd_peer | undefined;
         constructor(peer?: $hyoo_crowd_peer | undefined);
         readonly lands_pub: $mol_wire_pub;
