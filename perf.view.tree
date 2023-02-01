@@ -35,6 +35,10 @@ $hyoo_js_perf $mol_page
 							value?val <=> postfix?val \
 							hint \$mol_assert_like( res, {#} - 1 )
 					<= Hint $mol_text text <= hint \
+						\### Results Legend
+						\	🔠 Source Size 📦 Bundle Size
+						\	🥶 Cold Run 🥵 Hot Run
+						\
 						\### Iterations count / number
 						\	{#}
 						\
