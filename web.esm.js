@@ -13960,7 +13960,7 @@ var $;
             return obj;
         }
         hint() {
-            return "### Iterations count / number\n\t{#}\n\n### Load generic Script\n\n\tconst { some } = $mol_import.script(\n\t\t'https://unpkg.org/...'\n\t)\n\n### Load ESM Module\n\n\tconst { some } = $mol_import.module(\n\t\t'https://esm.sh/...'\n\t).default\n\n### Assert equality\n\n\t$mol_assert_like( [777], [777] )\n\n### Measure memory\n\nCall Chrome with:\n\t--js-flags=\"--expose-gc\"\n\t--enable-precise-memory-info\n\n### Other JS Tools\n\n[V8 Optimizations](https://opt.js.hyoo.ru/) [Sandbox](https://eval.js.hyoo.ru)";
+            return "### Results Legend\n\t🔠 Source Size 📦 Bundle Size\n\t🥶 Cold Run 🥵 Hot Run\n\n### Iterations count / number\n\t{#}\n\n### Load generic Script\n\n\tconst { some } = $mol_import.script(\n\t\t'https://unpkg.org/...'\n\t)\n\n### Load ESM Module\n\n\tconst { some } = $mol_import.module(\n\t\t'https://esm.sh/...'\n\t).default\n\n### Assert equality\n\n\t$mol_assert_like( [777], [777] )\n\n### Measure memory\n\nCall Chrome with:\n\t--js-flags=\"--expose-gc\"\n\t--enable-precise-memory-info\n\n### Other JS Tools\n\n[V8 Optimizations](https://opt.js.hyoo.ru/) [Sandbox](https://eval.js.hyoo.ru)";
         }
         Hint() {
             const obj = new this.$.$mol_text();
