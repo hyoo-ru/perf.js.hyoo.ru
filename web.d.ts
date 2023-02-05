@@ -1776,12 +1776,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_media extends $mol_object2 {
-        static match(query: string, next?: boolean): boolean;
-    }
-}
-
-declare namespace $ {
     function $mol_lights(this: $, next?: boolean): boolean;
 }
 
@@ -2702,13 +2696,7 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_icon_clipboard_arrow_up extends $mol_icon {
-        path(): string;
-    }
-}
-
-declare namespace $ {
-    class $mol_icon_clipboard_arrow_up_outline extends $mol_icon {
+    class $mol_icon_clipboard_outline extends $mol_icon {
         path(): string;
     }
 }
@@ -2717,7 +2705,7 @@ declare namespace $ {
     class $mol_button_copy extends $mol_button_minor {
         text(): string;
         sub(): readonly any[];
-        Icon(): $mol_icon_clipboard_arrow_up_outline;
+        Icon(): $mol_icon_clipboard_outline;
     }
 }
 
