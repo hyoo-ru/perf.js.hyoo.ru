@@ -253,6 +253,7 @@
     "$mol_icon_sync",
     "$mol_labeler",
     "$mol_text_text",
+    "$mol_text_list",
     "$mol_grid",
     "$mol_float",
     "$mol_state_session",

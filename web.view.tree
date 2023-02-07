@@ -207,6 +207,7 @@ $mol_paragraph $mol_view
 	line_height 24
 	letter_width 7
 	width_limit +Infinity
+	row_width 0
 	sub / <= title
 
 $mol_dimmer $mol_paragraph
@@ -801,11 +802,12 @@ $mol_text $mol_list
 		text <= quote_text* \
 		highlight <= highlight \
 		auto_scroll null
-	List* $mol_text
+	List* $mol_text_list
 		uri_resolve* <= uri_resolve* \
+		type <= list_type* \-
 		text <= list_text* \
 		highlight <= highlight \
-		auto_scroll null
+	item_index* 0
 	Header* $mol_text_header
 		minimal_height 40
 		level <= header_level* 1
@@ -912,6 +914,20 @@ $mol_icon_help $mol_icon path \M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.
 $mol_icon_help_circle $mol_icon path \M15.07,11.25L14.17,12.17C13.45,12.89 13,13.5 13,15H11V14.5C11,13.39 11.45,12.39 12.17,11.67L13.41,10.41C13.78,10.05 14,9.55 14,9C14,7.89 13.1,7 12,7C10.9,7 10,7.9 10,9H8C8,6.79 9.79,5 12,5C14.21,5 16,6.79 16,9C16,9.88 15.64,10.67 15.07,11.25M13,19H11V17H13M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.47 17.5,2 12,2Z
 
 $mol_icon_help_circle_outline $mol_icon path \M11,18H13V16H11V18M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.48 17.52,2 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,6C9.79,6 8,7.79 8,10H10C10,8.9 10.9,8 12,8C13.1,8 14,8.9 14,10C14,12 11,11.75 11,15H13C13,12.75 16,12.5 16,10C16,7.79 14.21,6 12,6Z
+
+$mol_text_list $mol_text
+	auto_scroll null
+	attr *
+		^
+		mol_text_list_type <= type \
+	Paragraph* $mol_text_list_item
+		index <= item_index*
+		sub <= block_content*
+
+$mol_text_list_item $mol_paragraph
+	attr *
+		^
+		mol_text_list_item_index <= index 0
 
 $hyoo_js_perf $mol_page
 	title @ \JS Benchmark
