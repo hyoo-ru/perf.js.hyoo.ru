@@ -1,6 +1,7 @@
 [hyoo_js_perf_case_result] {
 	padding: .5rem .75rem .25rem;
 	flex-direction: column;
+	flex: 1 1 24rem;
 }
 
 [hyoo_js_perf_case_result] > * {

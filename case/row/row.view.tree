@@ -56,8 +56,8 @@ $hyoo_js_perf_case_row $mol_view
 			expanded? <=> eval_showed? false
 			title @ \Debug
 			Content <= Eval_result
-		<= Results $mol_list
-			rows <= result_rows /
+		<= Results $mol_view
+			sub <= result_rows /
 				<= Result*0 $hyoo_js_perf_case_result
 					title <= result_title* \
 					result <= result* $hyoo_js_perf_stats

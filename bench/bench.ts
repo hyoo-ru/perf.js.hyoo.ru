@@ -39,7 +39,7 @@ namespace $ {
 		
 		@ $mol_action
 		case_dupe( index: number ) {
-			this.sub( 'cases', $hyoo_crowd_list ).insert( [ [] ], index + 1 )
+			this.sub( 'cases', $hyoo_crowd_list ).insert( [ {} ], index + 1 )
 			const [ prev, next ] = this.cases().slice( index, index + 2 )
 			next.steal( prev )
 			return next

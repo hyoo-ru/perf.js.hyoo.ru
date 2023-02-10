@@ -36,8 +36,8 @@ $hyoo_js_perf $mol_page
 							hint \$mol_assert_like( res, {#} - 1 )
 					<= Hint $mol_text text <= hint \
 						\### Results Legend
-						\	🔠 Source Size 📦 Bundle Size
-						\	🥶 Cold Run 🥵 Hot Run
+						\🔠 Source Size 📦 Bundle Size
+						\🥶 Cold Run 🥵 Hot Run
 						\
 						\### Iterations count / number
 						\	{#}
@@ -68,7 +68,7 @@ $hyoo_js_perf $mol_page
 						\
 						\[V8 Optimizations](https://opt.js.hyoo.ru/) [Sandbox](https://eval.js.hyoo.ru)
 		<= Cases_pane $mol_scroll sub <= cases_pane_content /
-			<= Cases $mol_view sub <= cases /
+			<= Cases $mol_list rows <= cases /
 	Case* $hyoo_js_perf_case_row
 		title? <=> case_title*? \
 		prefix? <=> case_prefix*? \
