@@ -23,6 +23,7 @@
 	flex: 1 1 26rem;
 	flex-wrap: wrap;
 	padding: var(--mol_gap_block);
+	align-content: flex-start;
 }
 
 [hyoo_js_perf_case_row_eval_labeler_trigger] {
