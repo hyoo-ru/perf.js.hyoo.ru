@@ -631,8 +631,8 @@ $hyoo_js_perf_case_row $mol_view
 			expanded? <=> eval_showed? false
 			title @ \Debug
 			Content <= Eval_result
-		<= Results $mol_list
-			rows <= result_rows /
+		<= Results $mol_view
+			sub <= result_rows /
 				<= Result*0 $hyoo_js_perf_case_result
 					title <= result_title* \
 					result <= result* $hyoo_js_perf_stats
@@ -967,8 +967,8 @@ $hyoo_js_perf $mol_page
 							hint \$mol_assert_like( res, {#} - 1 )
 					<= Hint $mol_text text <= hint \
 						\### Results Legend
-						\	🔠 Source Size 📦 Bundle Size
-						\	🥶 Cold Run 🥵 Hot Run
+						\🔠 Source Size 📦 Bundle Size
+						\🥶 Cold Run 🥵 Hot Run
 						\
 						\### Iterations count / number
 						\	{#}
@@ -999,7 +999,7 @@ $hyoo_js_perf $mol_page
 						\
 						\[V8 Optimizations](https://opt.js.hyoo.ru/) [Sandbox](https://eval.js.hyoo.ru)
 		<= Cases_pane $mol_scroll sub <= cases_pane_content /
-			<= Cases $mol_view sub <= cases /
+			<= Cases $mol_list rows <= cases /
 	Case* $hyoo_js_perf_case_row
 		title? <=> case_title*? \
 		prefix? <=> case_prefix*? \

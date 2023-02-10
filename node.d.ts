@@ -3338,7 +3338,7 @@ declare namespace $ {
         result(id: any): $$.$hyoo_js_perf_stats;
         Result(id: any): $$.$hyoo_js_perf_case_result;
         result_rows(): readonly any[];
-        Results(): $$.$mol_list;
+        Results(): $mol_view;
         columns(): readonly any[];
     }
 }
@@ -3348,7 +3348,7 @@ declare namespace $ {
 
 declare namespace $.$$ {
     class $hyoo_js_perf_case_row extends $.$hyoo_js_perf_case_row {
-        columns(): ($mol_list | $mol_expander)[];
+        columns(): $mol_view[];
         result(level: number): any;
         result_title(level: number): string;
         eval_standalone(): string;
@@ -4032,7 +4032,7 @@ declare namespace $ {
         Common_content(): $$.$mol_list;
         Common(): $mol_page;
         cases(): readonly any[];
-        Cases(): $mol_view;
+        Cases(): $$.$mol_list;
         cases_pane_content(): readonly any[];
         Cases_pane(): $$.$mol_scroll;
         case_title(id: any, next?: any): string;
