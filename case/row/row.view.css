@@ -2,6 +2,7 @@
 	flex: 0 1 auto;
 	flex-wrap: wrap;
 	background: var(--mol_theme_card);
+	border-radius: var(--mol_gap_round);
 }
 
 [hyoo_js_perf_case_row_prefix] ,
