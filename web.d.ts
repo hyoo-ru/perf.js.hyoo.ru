@@ -48,7 +48,7 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    function $mol_offline(uri?: string): void;
+    function $mol_offline(): void;
 }
 
 declare namespace $ {
