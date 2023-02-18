@@ -4255,6 +4255,7 @@ declare namespace $.$$ {
         case_size(index: number): number;
         case_deps_names(index: number): string[];
         case_deps(index: number): number;
+        case_measurable(index: number, next?: boolean): boolean;
         module_size(name: string): number;
         measures_for(index: number, next?: $hyoo_js_perf_stats[]): $hyoo_js_perf_stats[];
         measures(): $hyoo_js_perf_stats[][];

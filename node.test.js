@@ -7194,7 +7194,7 @@ var $;
         boxSizing: 'border-box',
         position: 'relative',
         minWidth: rem(2.5),
-        gap: $mol_gap.block,
+        gap: $mol_gap.space,
         border: {
             radius: $mol_gap.round,
         },
@@ -11127,7 +11127,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("mol/check/box/box.view.css", "[mol_check_box_icon] {\n\tborder-radius: var(--mol_gap_round);\n\tbox-shadow: 0 0 0 1px var(--mol_theme_line);\n\tcolor: var(--mol_theme_shade);\n\theight: 1rem;\n\talign-self: center;\n}\n\n[mol_check]:not([mol_check_checked]) > [mol_check_box_icon] {\n\tfill: transparent;\n}\n\n[mol_check]:not([disabled]) > [mol_check_box_icon] {\n\tbackground: var(--mol_theme_field);\n\tcolor: var(--mol_theme_text);\n}\n");
+    $mol_style_attach("mol/check/box/box.view.css", "[mol_check_box_icon] {\n\tborder-radius: var(--mol_gap_round);\n\tbox-shadow: inset 0 0 0 1px var(--mol_theme_line);\n\tcolor: var(--mol_theme_shade);\n\theight: 1rem;\n\talign-self: center;\n}\n\n[mol_check]:not([mol_check_checked]) > [mol_check_box_icon] {\n\tfill: transparent;\n}\n\n[mol_check]:not([disabled]) > [mol_check_box_icon] {\n\tbackground: var(--mol_theme_field);\n\tcolor: var(--mol_theme_text);\n}\n");
 })($ || ($ = {}));
 //mol/check/box/-css/box.view.css.ts
 ;
@@ -15350,6 +15350,13 @@ var $;
                 return this.case_deps_names(index)
                     .reduce((sum, name) => sum + this.module_size(name), 0);
             }
+            case_measurable(index, next) {
+                const bench = this.bench();
+                if (!bench)
+                    return next ?? true;
+                const key = `${this}.case_measurable("${bench.cases()[index].id()}")`;
+                return this.$.$mol_state_local.value(key, next) ?? true;
+            }
             module_size(name) {
                 return this.$.$mol_fetch.json(`https://bundlephobia.com/api/size?record=true&package=${name}`).gzip;
             }
@@ -15601,6 +15608,9 @@ var $;
         __decorate([
             $mol_mem_key
         ], $hyoo_js_perf.prototype, "case_deps", null);
+        __decorate([
+            $mol_mem_key
+        ], $hyoo_js_perf.prototype, "case_measurable", null);
         __decorate([
             $mol_mem_key
         ], $hyoo_js_perf.prototype, "module_size", null);
