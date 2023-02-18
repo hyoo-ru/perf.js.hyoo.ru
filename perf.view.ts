@@ -289,6 +289,17 @@ namespace $.$$ {
 		}
 		
 		@ $mol_mem_key
+		case_measurable( index: number, next?: boolean ) {
+			
+			const bench = this.bench()
+			if( !bench ) return next ?? true
+			
+			const key = `${ this }.case_measurable("${ bench.cases()[ index ].id() }")`
+			return this.$.$mol_state_local.value( key, next ) ?? true
+			
+		}
+		
+		@ $mol_mem_key
 		module_size( name: string ): number {
 			return ( this.$.$mol_fetch.json( `https://bundlephobia.com/api/size?record=true&package=${ name }` ) as any ).gzip
 		}
