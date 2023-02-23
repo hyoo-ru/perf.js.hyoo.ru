@@ -2970,12 +2970,6 @@ var $;
 //mol/view/view/view.ts
 ;
 "use strict";
-//mol/type/result/result.ts
-;
-"use strict";
-//mol/type/error/error.ts
-;
-"use strict";
 //mol/type/override/override.ts
 ;
 "use strict";
@@ -2986,6 +2980,9 @@ var $;
 ;
 "use strict";
 //mol/style/pseudo/element.ts
+;
+"use strict";
+//mol/type/error/error.ts
 ;
 "use strict";
 //mol/style/guard/guard.ts
@@ -6368,6 +6365,9 @@ var $;
     $.$mol_wire_patch = $mol_wire_patch;
 })($ || ($ = {}));
 //mol/wire/patch/patch.ts
+;
+"use strict";
+//mol/type/result/result.ts
 ;
 "use strict";
 var $;
@@ -17336,9 +17336,6 @@ var $;
 //mol/view/view/view.test.ts
 ;
 "use strict";
-//mol/type/result/result.test.ts
-;
-"use strict";
 var $;
 (function ($) {
     class $mol_style_sheet_test1 extends $mol_view {
@@ -20066,6 +20063,9 @@ var $;
     });
 })($ || ($ = {}));
 //mol/wire/field/field.test.ts
+;
+"use strict";
+//mol/type/result/result.test.ts
 ;
 "use strict";
 var $;
