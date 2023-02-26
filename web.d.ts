@@ -286,6 +286,7 @@ declare namespace $ {
         static solo<Host, Args extends readonly unknown[], Result>(host: Host, task: (this: Host, ...args: Args) => Result): $mol_wire_atom<Host, Args, Result>;
         static plex<Host, Args extends readonly unknown[], Result>(host: Host, task: (this: Host, ...args: Args) => Result, key: Args[0]): $mol_wire_atom<Host, Args, Result>;
         static watching: Set<$mol_wire_atom<any, any, any>>;
+        static watcher: $mol_after_frame | null;
         static watch(): void;
         watch(): void;
         resync(args: Args): Error | Result | Promise<Error | Result>;
@@ -3027,6 +3028,7 @@ declare namespace $ {
     class $mol_expander extends $mol_list {
         rows(): readonly any[];
         expanded(val?: any): boolean;
+        expandable(): boolean;
         label(): readonly any[];
         Trigger(): $$.$mol_check_expand;
         Tools(): any;
@@ -3042,16 +3044,19 @@ declare namespace $ {
 declare namespace $.$$ {
     class $mol_expander extends $.$mol_expander {
         rows(): $mol_view[];
+        expandable(): boolean;
     }
 }
 
 declare namespace $ {
     class $mol_dump_value extends $mol_view {
         value(): any;
+        preview_show(): boolean;
         sub(): readonly any[];
         simple(): string;
         Simple(): $$.$mol_text_code;
         expanded(next?: any): boolean;
+        expandable(): boolean;
         expand_all(next?: any): any;
         expand_title(): string;
         Expand_title(): $$.$mol_text_code;
@@ -3083,6 +3088,7 @@ declare namespace $.$$ {
         rows_values(): any[][];
         preview_dom(): Element | null;
         expand_content(): ($mol_view | $mol_dump_list)[];
+        expandable(): boolean;
         row_values(index: number): any[];
         expand_all(event?: Event, blacklist?: Set<unknown>): void;
     }
@@ -3095,6 +3101,7 @@ declare namespace $ {
         dump_value(id: any): any;
         dump_expanded(id: any, next?: any): boolean;
         prototypes(): boolean;
+        preview_show(): boolean;
         Dump(id: any): $$.$mol_dump_value;
     }
 }
