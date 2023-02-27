@@ -3086,7 +3086,6 @@ var $;
                 justifyContent: 'space-between',
                 flex: 'none',
                 margin: 0,
-                overflow: 'hidden',
                 background: {
                     color: $mol_theme.card,
                 },
@@ -3625,7 +3624,7 @@ var $;
 //mol/locale/locale.ts
 ;
 "use strict";
-let $hyoo_sync_revision = "b5b9292";
+let $hyoo_sync_revision = "44aabf8";
 //hyoo/sync/-meta.tree/revision.meta.tree.ts
 ;
 "use strict";
@@ -6520,7 +6519,7 @@ var $;
             const cut = {};
             for (const key in dict) {
                 if (except.indexOf(key) >= 0)
-                    continue;
+                    break;
                 cut[key] = dict[key];
             }
             return cut;
