@@ -3815,7 +3815,7 @@ var $;
 //mol/locale/locale.ts
 ;
 "use strict";
-let $hyoo_sync_revision = "a0ca8ec";
+let $hyoo_sync_revision = "6f92ff4";
 //hyoo/sync/-meta.tree/revision.meta.tree.ts
 ;
 "use strict";
@@ -13066,7 +13066,7 @@ var $;
                     ?? 'about:blank';
             }
             video_preview() {
-                return `https://i.ytimg.com/vi_webp/${this.video_id()}/sddefault.webp`;
+                return `https://i.ytimg.com/vi/${this.video_id()}/hqdefault.jpg`;
             }
             sub() {
                 return [this.active() ? this.Frame() : this.Image()];
