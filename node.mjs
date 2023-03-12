@@ -3815,7 +3815,7 @@ var $;
 //mol/locale/locale.ts
 ;
 "use strict";
-let $hyoo_sync_revision = "792f351";
+let $hyoo_sync_revision = "1b2fd4b";
 //hyoo/sync/-meta.tree/revision.meta.tree.ts
 ;
 "use strict";
