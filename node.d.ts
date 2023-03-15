@@ -1636,6 +1636,58 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    function $mol_reconcile<Prev, Next>({ prev, from, to, next, equal, drop, insert, update, }: {
+        prev: readonly Prev[];
+        from: number;
+        to: number;
+        next: ArrayLike<Next>;
+        equal: (next: Next, prev: Prev) => boolean;
+        drop: (prev: Prev, lead: Prev | null) => Prev | null;
+        insert: (next: Next, lead: Prev | null) => Prev;
+        update?: (next: Next, prev: Prev, lead: Prev | null) => Prev;
+    }): void;
+}
+
+declare namespace $ {
+    class $hyoo_crowd_list extends $hyoo_crowd_node {
+        list(next?: readonly unknown[]): readonly unknown[];
+        set(next?: ReadonlySet<string | number | boolean | null>): Set<unknown>;
+        insert(next: readonly unknown[], from?: number, to?: number): void;
+        move(from: number, to: number): void;
+        cut(seat: number): $hyoo_crowd_unit;
+        has(val: string | number | boolean | null): boolean;
+        add(val: string | number | boolean | null): void;
+        drop(val: string | number | boolean | null): void;
+        node_make<Node extends typeof $hyoo_crowd_node>(val: unknown, Node: Node): InstanceType<Node>;
+    }
+}
+
+declare namespace $ {
+    class $hyoo_js_perf_case extends $hyoo_crowd_struct {
+        title(next?: string): string;
+        setup(next?: string): string;
+        measure(next?: string): string;
+        steal(donor: $hyoo_js_perf_case): void;
+    }
+}
+
+declare namespace $ {
+    class $hyoo_js_perf_bench extends $hyoo_crowd_struct {
+        title(next?: string): string;
+        prefix(next?: string): string;
+        postfix(next?: string): string;
+        cases(): $hyoo_js_perf_case[];
+        case_ensure(index: number): $hyoo_js_perf_case;
+        case_add(): $hyoo_js_perf_case;
+        case_drop(index: number): void;
+        case_dupe(index: number): $hyoo_js_perf_case;
+        case_swap(index: number): number;
+        steal(donor: $hyoo_js_perf_bench): void;
+        changable(): boolean;
+    }
+}
+
+declare namespace $ {
     class $mol_book2 extends $mol_scroll {
         menu_title(): string;
         sub(): readonly $mol_view[];
@@ -1656,15 +1708,6 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
-}
-
-declare namespace $ {
-    class $hyoo_js_perf_case extends $hyoo_crowd_struct {
-        title(next?: string): string;
-        setup(next?: string): string;
-        measure(next?: string): string;
-        steal(donor: $hyoo_js_perf_case): void;
-    }
 }
 
 declare namespace $ {
@@ -4111,6 +4154,8 @@ declare namespace $ {
     class $hyoo_js_perf extends $mol_page {
         title(): string;
         yard(): $hyoo_sync_client;
+        bench_id(): any;
+        bench(): $hyoo_js_perf_bench;
         titles(): readonly string[];
         prefixes(): readonly string[];
         sources(): readonly string[];
@@ -4164,49 +4209,6 @@ declare namespace $ {
         New(): $mol_button_minor;
         About_icon(): $mol_icon_help_circle_outline;
         About(): $$.$mol_link;
-    }
-}
-
-declare namespace $ {
-    function $mol_reconcile<Prev, Next>({ prev, from, to, next, equal, drop, insert, update, }: {
-        prev: readonly Prev[];
-        from: number;
-        to: number;
-        next: ArrayLike<Next>;
-        equal: (next: Next, prev: Prev) => boolean;
-        drop: (prev: Prev, lead: Prev | null) => Prev | null;
-        insert: (next: Next, lead: Prev | null) => Prev;
-        update?: (next: Next, prev: Prev, lead: Prev | null) => Prev;
-    }): void;
-}
-
-declare namespace $ {
-    class $hyoo_crowd_list extends $hyoo_crowd_node {
-        list(next?: readonly unknown[]): readonly unknown[];
-        set(next?: ReadonlySet<string | number | boolean | null>): Set<unknown>;
-        insert(next: readonly unknown[], from?: number, to?: number): void;
-        move(from: number, to: number): void;
-        cut(seat: number): $hyoo_crowd_unit;
-        has(val: string | number | boolean | null): boolean;
-        add(val: string | number | boolean | null): void;
-        drop(val: string | number | boolean | null): void;
-        node_make<Node extends typeof $hyoo_crowd_node>(val: unknown, Node: Node): InstanceType<Node>;
-    }
-}
-
-declare namespace $ {
-    class $hyoo_js_perf_bench extends $hyoo_crowd_struct {
-        title(next?: string): string;
-        prefix(next?: string): string;
-        postfix(next?: string): string;
-        cases(): $hyoo_js_perf_case[];
-        case_ensure(index: number): $hyoo_js_perf_case;
-        case_add(): $hyoo_js_perf_case;
-        case_drop(index: number): void;
-        case_dupe(index: number): $hyoo_js_perf_case;
-        case_swap(index: number): number;
-        steal(donor: $hyoo_js_perf_bench): void;
-        changable(): boolean;
     }
 }
 
@@ -4295,7 +4297,8 @@ declare namespace $.$$ {
     class $hyoo_js_perf extends $.$hyoo_js_perf {
         title(): string;
         bench_fund(): $hyoo_crowd_fund<typeof $hyoo_js_perf_bench>;
-        bench(): $hyoo_js_perf_bench | null;
+        bench_id(): `${string}_${string}` | null;
+        bench(): $hyoo_js_perf_bench;
         bench_new(): $hyoo_js_perf_bench;
         bench_fork(): $hyoo_js_perf_bench;
         bench_changable(): $hyoo_js_perf_bench;

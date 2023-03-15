@@ -6101,6 +6101,229 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    function $mol_reconcile({ prev, from, to, next, equal, drop, insert, update, }) {
+        if (!update)
+            update = (next, prev, lead) => insert(next, drop(prev, lead));
+        let p = from;
+        let n = 0;
+        let lead = p ? prev[p - 1] : null;
+        if (to > prev.length)
+            $mol_fail(new RangeError(`To(${to}) greater then length(${prev.length})`));
+        if (from > to)
+            $mol_fail(new RangeError(`From(${to}) greater then to(${to})`));
+        while (p < to || n < next.length) {
+            if (p < to && n < next.length && equal(next[n], prev[p])) {
+                lead = prev[p];
+                ++p;
+                ++n;
+            }
+            else if (next.length - n > to - p) {
+                lead = insert(next[n], lead);
+                ++n;
+            }
+            else if (next.length - n < to - p) {
+                lead = drop(prev[p], lead);
+                ++p;
+            }
+            else {
+                lead = update(next[n], prev[p], lead);
+                ++p;
+                ++n;
+            }
+        }
+    }
+    $.$mol_reconcile = $mol_reconcile;
+})($ || ($ = {}));
+//mol/reconcile/reconcile.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $hyoo_crowd_list extends $hyoo_crowd_node {
+        list(next) {
+            const units = this.units();
+            if (next === undefined) {
+                return units.map(unit => unit.data);
+            }
+            else {
+                this.insert(next, 0, units.length);
+                return next;
+            }
+        }
+        set(next) {
+            return new Set(this.list(next && [...next]));
+        }
+        insert(next, from = this.units().length, to = from) {
+            $mol_reconcile({
+                prev: this.units(),
+                from,
+                to,
+                next,
+                equal: (next, prev) => $mol_compare_deep(prev.data, next),
+                drop: (prev, lead) => this.land.wipe(prev),
+                insert: (next, lead) => this.land.put(this.head, this.land.id_new(), lead?.self ?? '0_0', next),
+                update: (next, prev, lead) => this.land.put(prev.head, prev.self, lead?.self ?? '0_0', next),
+            });
+        }
+        move(from, to) {
+            const units = this.units();
+            const lead = to ? units[to - 1] : null;
+            this.land.move(units[from], this.head, lead?.self ?? '0_0');
+        }
+        cut(seat) {
+            return this.land.wipe(this.units()[seat]);
+        }
+        has(val) {
+            for (const unit of this.units()) {
+                if (unit.data === val)
+                    return true;
+            }
+            return false;
+        }
+        add(val) {
+            if (this.has(val))
+                return;
+            this.insert([val]);
+        }
+        drop(val) {
+            for (const unit of this.units()) {
+                if (unit.data !== val)
+                    continue;
+                this.land.wipe(unit);
+            }
+        }
+        node_make(val, Node) {
+            this.insert([val]);
+            const unit = this.units().at(-1);
+            return this.land.node(unit.self, Node);
+        }
+    }
+    $.$hyoo_crowd_list = $hyoo_crowd_list;
+})($ || ($ = {}));
+//hyoo/crowd/list/list.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $hyoo_js_perf_case extends $hyoo_crowd_struct {
+        title(next) {
+            return this.sub('title', $hyoo_crowd_reg).str(next);
+        }
+        setup(next) {
+            return this.sub('setup', $hyoo_crowd_reg).str(next);
+        }
+        measure(next) {
+            return this.sub('measure', $hyoo_crowd_reg).str(next);
+        }
+        steal(donor) {
+            this.title(donor.title());
+            this.setup(donor.setup());
+            this.measure(donor.measure());
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $hyoo_js_perf_case.prototype, "title", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_js_perf_case.prototype, "setup", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_js_perf_case.prototype, "measure", null);
+    __decorate([
+        $mol_action
+    ], $hyoo_js_perf_case.prototype, "steal", null);
+    $.$hyoo_js_perf_case = $hyoo_js_perf_case;
+})($ || ($ = {}));
+//hyoo/js/perf/case/case.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $hyoo_js_perf_bench extends $hyoo_crowd_struct {
+        title(next) {
+            return this.sub('title', $hyoo_crowd_reg).str(next);
+        }
+        prefix(next) {
+            return this.sub('prefix', $hyoo_crowd_reg).str(next);
+        }
+        postfix(next) {
+            return this.sub('postfix', $hyoo_crowd_reg).str(next);
+        }
+        cases() {
+            return this.sub('cases', $hyoo_crowd_list).nodes($hyoo_js_perf_case);
+        }
+        case_ensure(index) {
+            return this.cases()[index] ?? this.case_add();
+        }
+        case_add() {
+            this.sub('cases', $hyoo_crowd_list).insert([{}]);
+            return this.cases().slice(-1)[0];
+        }
+        case_drop(index) {
+            this.sub('cases', $hyoo_crowd_list).cut(index);
+        }
+        case_dupe(index) {
+            this.sub('cases', $hyoo_crowd_list).insert([{}], index + 1);
+            const [prev, next] = this.cases().slice(index, index + 2);
+            next.steal(prev);
+            return next;
+        }
+        case_swap(index) {
+            const list = this.sub('cases', $hyoo_crowd_list);
+            const pos = index ? index - 1 : list.units().length;
+            list.move(index, pos);
+            return pos;
+        }
+        steal(donor) {
+            this.title(donor.title());
+            this.prefix(donor.prefix());
+            this.postfix(donor.postfix());
+            for (const _case of donor.cases()) {
+                this.case_add().steal(_case);
+            }
+        }
+        changable() {
+            return this.land.level('') >= $hyoo_crowd_peer_level.mod;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $hyoo_js_perf_bench.prototype, "title", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_js_perf_bench.prototype, "prefix", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_js_perf_bench.prototype, "postfix", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_js_perf_bench.prototype, "cases", null);
+    __decorate([
+        $mol_action
+    ], $hyoo_js_perf_bench.prototype, "case_add", null);
+    __decorate([
+        $mol_action
+    ], $hyoo_js_perf_bench.prototype, "case_drop", null);
+    __decorate([
+        $mol_action
+    ], $hyoo_js_perf_bench.prototype, "case_dupe", null);
+    __decorate([
+        $mol_action
+    ], $hyoo_js_perf_bench.prototype, "case_swap", null);
+    __decorate([
+        $mol_action
+    ], $hyoo_js_perf_bench.prototype, "steal", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_js_perf_bench.prototype, "changable", null);
+    $.$hyoo_js_perf_bench = $hyoo_js_perf_bench;
+})($ || ($ = {}));
+//hyoo/js/perf/bench/bench.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_book2 extends $mol_scroll {
         menu_title() {
             return "";
@@ -6190,41 +6413,6 @@ var $;
     $mol_style_attach("mol/book2/book2.view.css", "[mol_book2] {\n\tdisplay: flex;\n\tflex-flow: row nowrap;\n\talign-items: stretch;\n\tflex: 1 1 auto;\n\talign-self: stretch;\n\tmargin: 0;\n\t/* box-shadow: 0 0 0 1px var(--mol_theme_line); */\n\t/* transform: translateZ(0); */\n\ttransition: none;\n\toverflow: overlay;\n\tscroll-snap-type: x mandatory;\n\tpadding: 0 1px;\n\tscroll-padding: 0 1px;\n\tgap: 1px;\n}\n\n[mol_book2] > * {\n/* \tflex: none; */\n\tscroll-snap-stop: always;\n\tscroll-snap-align: end;\n\tposition: relative;\n\tmin-height: 100%;\n\tmax-height: 100%;\n\tmax-width: 100%;\n\tflex-shrink: 0;\n}\n\n[mol_book2] > *:not(:first-of-type):before {\n\tcontent: '';\n\twidth: 1px;\n\theight: 2rem;\n\ttop: 1rem;\n\tleft: -1px;\n\tposition: absolute;\n\tbackground: var(--mol_theme_line);\n\tborder-radius: var(--mol_gap_round);\n}\n\n[mol_book2] > *:not(:last-of-type)::after {\n\tcontent: '';\n\twidth: 1px;\n\theight: 2rem;\n\ttop: 1rem;\n\tright: -1px;\n\tposition: absolute;\n\tbackground: var(--mol_theme_line);\n\tborder-radius: var(--mol_gap_round);\n}\n\n:where([mol_book2]) > * {\n\tbackground-color: var(--mol_theme_card);\n\t/* box-shadow: 0 0 0 1px var(--mol_theme_back); */\n}\n\n[mol_book2] > [mol_book2] {\n\tdisplay: contents;\n}\n\n[mol_book2] > *:first-child {\n\tscroll-snap-align: start;\n}\n\n[mol_book2] > [mol_view] {\n\ttransform: none; /* prevent content clipping */\n}\n\n[mol_book2_placeholder] {\n\tflex: 1 1 0;\n\tbackground: none;\n}\n\n[mol_book2_gap] {\n\tbackground: none;\n\tflex-grow: 1;\n\tscroll-snap-align: none;\n\tmargin-right: -1px;\n\tbox-shadow: none;\n}\n\n[mol_book2_gap]::before,\n[mol_book2_gap]::after {\n\tdisplay: none;\n}\n");
 })($ || ($ = {}));
 //mol/book2/-css/book2.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $hyoo_js_perf_case extends $hyoo_crowd_struct {
-        title(next) {
-            return this.sub('title', $hyoo_crowd_reg).str(next);
-        }
-        setup(next) {
-            return this.sub('setup', $hyoo_crowd_reg).str(next);
-        }
-        measure(next) {
-            return this.sub('measure', $hyoo_crowd_reg).str(next);
-        }
-        steal(donor) {
-            this.title(donor.title());
-            this.setup(donor.setup());
-            this.measure(donor.measure());
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $hyoo_js_perf_case.prototype, "title", null);
-    __decorate([
-        $mol_mem
-    ], $hyoo_js_perf_case.prototype, "setup", null);
-    __decorate([
-        $mol_mem
-    ], $hyoo_js_perf_case.prototype, "measure", null);
-    __decorate([
-        $mol_action
-    ], $hyoo_js_perf_case.prototype, "steal", null);
-    $.$hyoo_js_perf_case = $hyoo_js_perf_case;
-})($ || ($ = {}));
-//hyoo/js/perf/case/case.ts
 ;
 "use strict";
 var $;
@@ -12014,7 +12202,9 @@ var $;
             const obj = new this.$.$mol_expander();
             obj.expanded = (next) => this.eval_showed(next);
             obj.title = () => this.$.$mol_locale.text('$hyoo_js_perf_case_row_Eval_labeler_title');
-            obj.Content = () => this.Eval_result();
+            obj.content = () => [
+                this.Eval_result()
+            ];
             return obj;
         }
         result_title(id) {
@@ -14423,6 +14613,13 @@ var $;
             const obj = new this.$.$hyoo_sync_client();
             return obj;
         }
+        bench_id() {
+            return null;
+        }
+        bench() {
+            const obj = new this.$.$hyoo_js_perf_bench();
+            return obj;
+        }
         titles() {
             return [];
         }
@@ -14467,6 +14664,7 @@ var $;
             const obj = new this.$.$mol_string_button();
             obj.value = (next) => this.bench_title(next);
             obj.hint = () => this.title();
+            obj.enabled = () => this.changable();
             return obj;
         }
         tools() {
@@ -14728,6 +14926,9 @@ var $;
     ], $hyoo_js_perf.prototype, "yard", null);
     __decorate([
         $mol_mem
+    ], $hyoo_js_perf.prototype, "bench", null);
+    __decorate([
+        $mol_mem
     ], $hyoo_js_perf.prototype, "Body", null);
     __decorate([
         $mol_mem_key
@@ -14852,194 +15053,6 @@ var $;
     $.$hyoo_js_perf = $hyoo_js_perf;
 })($ || ($ = {}));
 //hyoo/js/perf/-view.tree/perf.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    function $mol_reconcile({ prev, from, to, next, equal, drop, insert, update, }) {
-        if (!update)
-            update = (next, prev, lead) => insert(next, drop(prev, lead));
-        let p = from;
-        let n = 0;
-        let lead = p ? prev[p - 1] : null;
-        if (to > prev.length)
-            $mol_fail(new RangeError(`To(${to}) greater then length(${prev.length})`));
-        if (from > to)
-            $mol_fail(new RangeError(`From(${to}) greater then to(${to})`));
-        while (p < to || n < next.length) {
-            if (p < to && n < next.length && equal(next[n], prev[p])) {
-                lead = prev[p];
-                ++p;
-                ++n;
-            }
-            else if (next.length - n > to - p) {
-                lead = insert(next[n], lead);
-                ++n;
-            }
-            else if (next.length - n < to - p) {
-                lead = drop(prev[p], lead);
-                ++p;
-            }
-            else {
-                lead = update(next[n], prev[p], lead);
-                ++p;
-                ++n;
-            }
-        }
-    }
-    $.$mol_reconcile = $mol_reconcile;
-})($ || ($ = {}));
-//mol/reconcile/reconcile.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $hyoo_crowd_list extends $hyoo_crowd_node {
-        list(next) {
-            const units = this.units();
-            if (next === undefined) {
-                return units.map(unit => unit.data);
-            }
-            else {
-                this.insert(next, 0, units.length);
-                return next;
-            }
-        }
-        set(next) {
-            return new Set(this.list(next && [...next]));
-        }
-        insert(next, from = this.units().length, to = from) {
-            $mol_reconcile({
-                prev: this.units(),
-                from,
-                to,
-                next,
-                equal: (next, prev) => $mol_compare_deep(prev.data, next),
-                drop: (prev, lead) => this.land.wipe(prev),
-                insert: (next, lead) => this.land.put(this.head, this.land.id_new(), lead?.self ?? '0_0', next),
-                update: (next, prev, lead) => this.land.put(prev.head, prev.self, lead?.self ?? '0_0', next),
-            });
-        }
-        move(from, to) {
-            const units = this.units();
-            const lead = to ? units[to - 1] : null;
-            this.land.move(units[from], this.head, lead?.self ?? '0_0');
-        }
-        cut(seat) {
-            return this.land.wipe(this.units()[seat]);
-        }
-        has(val) {
-            for (const unit of this.units()) {
-                if (unit.data === val)
-                    return true;
-            }
-            return false;
-        }
-        add(val) {
-            if (this.has(val))
-                return;
-            this.insert([val]);
-        }
-        drop(val) {
-            for (const unit of this.units()) {
-                if (unit.data !== val)
-                    continue;
-                this.land.wipe(unit);
-            }
-        }
-        node_make(val, Node) {
-            this.insert([val]);
-            const unit = this.units().at(-1);
-            return this.land.node(unit.self, Node);
-        }
-    }
-    $.$hyoo_crowd_list = $hyoo_crowd_list;
-})($ || ($ = {}));
-//hyoo/crowd/list/list.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $hyoo_js_perf_bench extends $hyoo_crowd_struct {
-        title(next) {
-            return this.sub('title', $hyoo_crowd_reg).str(next);
-        }
-        prefix(next) {
-            return this.sub('prefix', $hyoo_crowd_reg).str(next);
-        }
-        postfix(next) {
-            return this.sub('postfix', $hyoo_crowd_reg).str(next);
-        }
-        cases() {
-            return this.sub('cases', $hyoo_crowd_list).nodes($hyoo_js_perf_case);
-        }
-        case_ensure(index) {
-            return this.cases()[index] ?? this.case_add();
-        }
-        case_add() {
-            this.sub('cases', $hyoo_crowd_list).insert([{}]);
-            return this.cases().slice(-1)[0];
-        }
-        case_drop(index) {
-            this.sub('cases', $hyoo_crowd_list).cut(index);
-        }
-        case_dupe(index) {
-            this.sub('cases', $hyoo_crowd_list).insert([{}], index + 1);
-            const [prev, next] = this.cases().slice(index, index + 2);
-            next.steal(prev);
-            return next;
-        }
-        case_swap(index) {
-            const list = this.sub('cases', $hyoo_crowd_list);
-            const pos = index ? index - 1 : list.units().length;
-            list.move(index, pos);
-            return pos;
-        }
-        steal(donor) {
-            this.title(donor.title());
-            this.prefix(donor.prefix());
-            this.postfix(donor.postfix());
-            for (const _case of donor.cases()) {
-                this.case_add().steal(_case);
-            }
-        }
-        changable() {
-            return this.land.level('') >= $hyoo_crowd_peer_level.mod;
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $hyoo_js_perf_bench.prototype, "title", null);
-    __decorate([
-        $mol_mem
-    ], $hyoo_js_perf_bench.prototype, "prefix", null);
-    __decorate([
-        $mol_mem
-    ], $hyoo_js_perf_bench.prototype, "postfix", null);
-    __decorate([
-        $mol_mem
-    ], $hyoo_js_perf_bench.prototype, "cases", null);
-    __decorate([
-        $mol_action
-    ], $hyoo_js_perf_bench.prototype, "case_add", null);
-    __decorate([
-        $mol_action
-    ], $hyoo_js_perf_bench.prototype, "case_drop", null);
-    __decorate([
-        $mol_action
-    ], $hyoo_js_perf_bench.prototype, "case_dupe", null);
-    __decorate([
-        $mol_action
-    ], $hyoo_js_perf_bench.prototype, "case_swap", null);
-    __decorate([
-        $mol_action
-    ], $hyoo_js_perf_bench.prototype, "steal", null);
-    __decorate([
-        $mol_mem
-    ], $hyoo_js_perf_bench.prototype, "changable", null);
-    $.$hyoo_js_perf_bench = $hyoo_js_perf_bench;
-})($ || ($ = {}));
-//hyoo/js/perf/bench/bench.ts
 ;
 "use strict";
 var $;
@@ -15376,11 +15389,12 @@ var $;
             bench_fund() {
                 return this.yard().world().Fund($hyoo_js_perf_bench);
             }
+            bench_id() {
+                return $mol_int62_string_ensure(this.$.$mol_state_arg.value('bench'));
+            }
             bench() {
-                const id = $mol_int62_string_ensure(this.$.$mol_state_arg.value('bench'));
-                if (!id)
-                    return null;
-                return this.bench_fund().Item(id);
+                const id = this.bench_id();
+                return id ? this.bench_fund().Item(id) : null;
             }
             bench_new() {
                 const bench = this.bench_fund().make();
@@ -15543,7 +15557,10 @@ var $;
                 const bench = this.bench();
                 if (!bench)
                     return next ?? true;
-                const key = `${this}.case_measurable("${bench.cases()[index].id()}")`;
+                const case_ = bench.cases()[index];
+                if (!case_)
+                    return false;
+                const key = `${this}.case_measurable("${case_.id()}")`;
                 return this.$.$mol_state_local.value(key, next) ?? true;
             }
             module_size(name) {

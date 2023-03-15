@@ -680,7 +680,7 @@ $hyoo_js_perf_case_row $mol_view
 		<= Eval_labeler $mol_expander
 			expanded? <=> eval_showed? false
 			title @ \Debug
-			Content <= Eval_result
+			content / <= Eval_result
 		<= Results $mol_view
 			sub <= result_rows /
 				<= Result*0 $hyoo_js_perf_case_result
@@ -982,6 +982,8 @@ $mol_text_list_item $mol_paragraph
 $hyoo_js_perf $mol_page
 	title @ \JS Benchmark
 	yard $hyoo_sync_client
+	bench_id null
+	bench $hyoo_js_perf_bench
 	titles /string
 	prefixes /string
 	sources /string
@@ -1065,6 +1067,7 @@ $hyoo_js_perf $mol_page
 	Title $mol_string_button
 		value? <=> bench_title? \
 		hint <= title
+		enabled <= changable
 	tools /
 		<= Measurable_all $mol_check_group
 			checks <= measurable_all /
