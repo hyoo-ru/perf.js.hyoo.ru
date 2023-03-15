@@ -31,14 +31,14 @@ namespace $.$$ {
 			return this.yard().world().Fund( $hyoo_js_perf_bench )
 		}
 		
+		bench_id() {
+			return $mol_int62_string_ensure( this.$.$mol_state_arg.value( 'bench' ) )
+		}
+		
 		@ $mol_mem
 		bench() {
-			
-			const id = $mol_int62_string_ensure( this.$.$mol_state_arg.value( 'bench' ) )
-			if( !id ) return null
-			
-			return this.bench_fund().Item( id )
-			
+			const id = this.bench_id()
+			return id ? this.bench_fund().Item( id ) : null as any
 		}
 		
 		@ $mol_action
@@ -294,7 +294,10 @@ namespace $.$$ {
 			const bench = this.bench()
 			if( !bench ) return next ?? true
 			
-			const key = `${ this }.case_measurable("${ bench.cases()[ index ].id() }")`
+			const case_ = bench.cases()[ index ]
+			if( !case_ ) return false
+			
+			const key = `${ this }.case_measurable("${ case_.id() }")`
 			return this.$.$mol_state_local.value( key, next ) ?? true
 			
 		}
