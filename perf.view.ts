@@ -38,7 +38,7 @@ namespace $.$$ {
 		@ $mol_mem
 		bench() {
 			const id = this.bench_id()
-			return id ? this.bench_fund().Item( id ) : null as any
+			return id ? this.bench_fund().Item( id ) : null as never
 		}
 		
 		@ $mol_action
