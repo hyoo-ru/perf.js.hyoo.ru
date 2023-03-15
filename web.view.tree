@@ -33,6 +33,7 @@ $mol_page $mol_view
 			sub <= foot /$mol_view
 
 $mol_book2 $mol_scroll
+	menu_title \
 	sub <= pages /$mol_view
 	minimal_width 0
 	Placeholder $mol_view
