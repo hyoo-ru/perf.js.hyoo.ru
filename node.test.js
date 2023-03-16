@@ -1758,7 +1758,7 @@ var $;
             }
             if (str.length === pos && stack.length > 0) {
                 const sp = span.span(row, pos - line_start + 1, 1);
-                this.$mol_fail(new this.$mol_error_syntax(`Undexpected EOF, LF required`, str.substring(line_start, str.length), sp));
+                this.$mol_fail(new this.$mol_error_syntax(`Unexpected EOF, LF required`, str.substring(line_start, str.length), sp));
             }
             stack.push(parent);
             pos++;
@@ -8955,7 +8955,7 @@ var $;
 (function ($) {
     class $mol_button_copy extends $mol_button_minor {
         text() {
-            return "";
+            return this.title();
         }
         sub() {
             return [
@@ -8963,12 +8963,12 @@ var $;
                 this.title()
             ];
         }
+        title() {
+            return "";
+        }
         Icon() {
             const obj = new this.$.$mol_icon_clipboard_outline();
             return obj;
-        }
-        title() {
-            return "";
         }
     }
     __decorate([
@@ -9093,7 +9093,7 @@ var $;
                 return this.$.$mol_support_css_overflow_anchor();
             }
             text_lines() {
-                return this.text().split('\n');
+                return this.text().replace(/\n$/, '').split('\n');
             }
             rows() {
                 return this.text_lines().map((_, index) => this.Row(index + 1));
@@ -13195,9 +13195,11 @@ var $;
                 type: null,
                 src: this.uri(),
                 srcdoc: this.html(),
-                allow: this.allow(),
-                allowfullscreen: this.fullscreen()
+                allow: this.allow()
             };
+        }
+        fullscreen() {
+            return true;
         }
         accelerometer() {
             return true;
@@ -13214,6 +13216,12 @@ var $;
         pip() {
             return true;
         }
+        clipboard_read() {
+            return true;
+        }
+        clipboard_write() {
+            return true;
+        }
         uri(val) {
             if (val !== undefined)
                 return val;
@@ -13224,9 +13232,6 @@ var $;
         }
         allow() {
             return "";
-        }
-        fullscreen() {
-            return true;
         }
     }
     __decorate([
@@ -13253,7 +13258,9 @@ var $;
                     ...this.encription() ? ['encrypted-media'] : [],
                     ...this.gyroscope() ? ['gyroscope'] : [],
                     ...this.pip() ? ['picture-in-picture'] : [],
-                ].join(';');
+                    ...this.clipboard_read() ? [`clipboard-read ${this.uri()}`] : [],
+                    ...this.clipboard_write() ? [`clipboard-write ${this.uri()}`] : [],
+                ].join('; ');
             }
         }
         $$.$mol_frame = $mol_frame;
@@ -13830,7 +13837,7 @@ var $;
             }
             pre_text(index) {
                 const token = this.flow_tokens()[index];
-                return (token.chunks[2] ?? token.chunks[0].replace(/^(\t|  (?:\+\+|--|\*\*|  ))/gm, '')).replace(/[\n\r]*$/, '');
+                return (token.chunks[2] ?? token.chunks[0].replace(/^(\t|  (?:\+\+|--|\*\*|  ))/gm, '')).replace(/[\n\r]*$/, '\n');
             }
             quote_text(index) {
                 return this.flow_tokens()[index].chunks[0].replace(/^[>"] /mg, '');
@@ -18032,11 +18039,11 @@ var $;
                 $.$mol_tree2_from_string(tree, 'test');
             }, 'Wrong nodes separator\ntest#1:4/2\n   !!\nfoo  bar');
         },
-        'Undexpected EOF, LF required'($) {
+        'Unexpected EOF, LF required'($) {
             const tree = `	foo`;
             $mol_assert_fail(() => {
                 $.$mol_tree2_from_string(tree, 'test');
-            }, 'Undexpected EOF, LF required\ntest#1:5/1\n	   !\n	foo');
+            }, 'Unexpected EOF, LF required\ntest#1:5/1\n	   !\n	foo');
         },
         'Errors skip and collect'($) {
             const tree = `foo  bar`;
@@ -18050,7 +18057,7 @@ var $;
             const res = $$.$mol_tree2_from_string(tree, 'test');
             $mol_assert_like(errors, [
                 'Wrong nodes separator\ntest#1:4/2\n   !!\nfoo  bar',
-                'Undexpected EOF, LF required\ntest#1:9/1\n        !\nfoo  bar',
+                'Unexpected EOF, LF required\ntest#1:9/1\n        !\nfoo  bar',
             ]);
             $mol_assert_equal(res.toString(), 'foo bar\n');
         },
