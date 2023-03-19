@@ -2860,7 +2860,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("mol/view/view/view.css", "[mol_view] {\n\ttransition-property: height, width, min-height, min-width, max-width, max-height, transform;\n\ttransition-duration: .2s;\n\ttransition-timing-function: ease-out;\n\t-webkit-appearance: none;\n\tbox-sizing: border-box;\n\tdisplay: flex;\n\tflex-shrink: 0;\n\tcontain: style;\n\tscrollbar-color: var(--mol_theme_line) transparent;\n\tscrollbar-width: thin;\n}\t\n\n[mol_view]::selection {\n\tbackground: var(--mol_theme_line);\n}\t\n\n[mol_view]::-webkit-scrollbar {\n\twidth: .25rem;\n\theight: .25rem;\n}\n\n[mol_view]::-webkit-scrollbar-corner {\n\tbackground-color: var(--mol_theme_line);\n}\n\n[mol_view]::-webkit-scrollbar-track {\n\tbackground-color: transparent;\n}\n\n[mol_view]::-webkit-scrollbar-thumb {\n\tbackground-color: var(--mol_theme_line);\n\tborder-radius: var(--mol_gap_round);\n}\n\n[mol_view] > * {\n\tword-break: inherit;\n}\n\n[mol_view_root] {\n\tmargin: 0;\n\tpadding: 0;\n\twidth: 100%;\n\theight: 100%;\n\tbox-sizing: border-box;\n\tfont-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n\tfont-size: 1rem;\n\tline-height: 1.5rem;\n\tbackground: var(--mol_theme_back);\n\tcolor: var(--mol_theme_text);\n\tcontain: unset; /** Fixes bg ignoring when applied to body on Chrome */\n\ttab-size: 4;\n}\n\n[mol_view][mol_view_error]:not([mol_view_error=\"Promise\"]) {\n\tbackground-image: repeating-linear-gradient(\n\t\t-45deg,\n\t\t#f92323,\n\t\t#f92323 .5rem,\n\t\t#ff3d3d .5rem,\n\t\t#ff3d3d 1.5rem\n\t);\n\tcolor: black;\n\talign-items: center;\n    justify-content: center;\n}\n\n@keyframes mol_view_wait {\n\tfrom {\n\t\topacity: .75;\n\t}\n\t80% {\n\t\topacity: .25;\n\t}\n\tto {\n\t\topacity: .75;\n\t}\n}\n\n:where([mol_view][mol_view_error=\"Promise\"]) {\n\tbackground: var(--mol_theme_card);\n}\n\n[mol_view][mol_view_error=\"Promise\"] {\n\tanimation: mol_view_wait 1s steps( 10, end ) infinite;\n}\n");
+    $mol_style_attach("mol/view/view/view.css", "[mol_view] {\n\ttransition-property: height, width, min-height, min-width, max-width, max-height, transform;\n\ttransition-duration: .2s;\n\ttransition-timing-function: ease-out;\n\t-webkit-appearance: none;\n\tbox-sizing: border-box;\n\tdisplay: flex;\n\tflex-shrink: 0;\n\tcontain: style;\n\tscrollbar-color: var(--mol_theme_line) transparent;\n\tscrollbar-width: thin;\n}\t\n\n[mol_view]::selection {\n\tbackground: var(--mol_theme_line);\n}\t\n\n[mol_view]::-webkit-scrollbar {\n\twidth: .25rem;\n\theight: .25rem;\n}\n\n[mol_view]::-webkit-scrollbar-corner {\n\tbackground-color: var(--mol_theme_line);\n}\n\n[mol_view]::-webkit-scrollbar-track {\n\tbackground-color: transparent;\n}\n\n[mol_view]::-webkit-scrollbar-thumb {\n\tbackground-color: var(--mol_theme_line);\n\tborder-radius: var(--mol_gap_round);\n}\n\n[mol_view] > * {\n\tword-break: inherit;\n}\n\n[mol_view_root] {\n\tmargin: 0;\n\tpadding: 0;\n\twidth: 100%;\n\theight: 100%;\n\tbox-sizing: border-box;\n\tfont-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n\tfont-size: 1rem;\n\tline-height: 1.5rem;\n\tbackground: var(--mol_theme_back);\n\tcolor: var(--mol_theme_text);\n\tcontain: unset; /** Fixes bg ignoring when applied to body on Chrome */\n\ttab-size: 4;\n}\n\n[mol_view][mol_view_error]:not([mol_view_error=\"Promise\"]) {\n\tbackground-image: repeating-linear-gradient(\n\t\t-45deg,\n\t\t#f92323,\n\t\t#f92323 .5rem,\n\t\t#ff3d3d .5rem,\n\t\t#ff3d3d 1.5rem\n\t);\n\tcolor: black;\n\talign-items: center;\n    justify-content: center;\n}\n\n@keyframes mol_view_wait {\n\tfrom {\n\t\topacity: .75;\n\t}\n\t80% {\n\t\topacity: .25;\n\t}\n\tto {\n\t\topacity: .75;\n\t}\n}\n\n:where([mol_view][mol_view_error=\"Promise\"]) {\n\tbackground: var(--mol_theme_hover);\n}\n\n[mol_view][mol_view_error=\"Promise\"] {\n\tanimation: mol_view_wait 1s steps( 10, end ) infinite;\n}\n");
 })($ || ($ = {}));
 //mol/view/view/-css/view.css.ts
 ;
@@ -3895,7 +3895,7 @@ var $;
 //mol/locale/locale.ts
 ;
 "use strict";
-let $hyoo_sync_revision = "c1ce41a";
+let $hyoo_sync_revision = "e443b9f";
 //hyoo/sync/-meta.tree/revision.meta.tree.ts
 ;
 "use strict";
@@ -4582,6 +4582,9 @@ var $;
         static for(land, head) {
             return new this(land, head);
         }
+        static toJSON() {
+            return this.name;
+        }
         id() {
             return this.head === '0_0'
                 ? this.land.id()
@@ -4644,7 +4647,7 @@ var $;
             let land_id = $mol_int62_string_ensure(this.value());
             if (land_id)
                 return world.land_sync(land_id);
-            if (this.land.level(this.land.peer().id) < $hyoo_crowd_peer_level.add)
+            if (!this.land.allowed_add())
                 return null;
             const land = $mol_wire_sync(world).grab(law, mod, add);
             this.value(land.id());
@@ -4900,6 +4903,8 @@ var $;
             if (next === undefined)
                 return prev;
             if (next <= prev)
+                return prev;
+            if (!this.allowed_law())
                 return prev;
             const time = this._clocks[$hyoo_crowd_unit_group.auth].tick(peer);
             const auth = this.peer_id();
@@ -5424,9 +5429,9 @@ var $;
             return world;
         }
         land_init(land) {
-            this.db_land_init(land);
+            this.land_sync(land);
             if (!land.grabbed())
-                this.$.$mol_wait_timeout(1);
+                this.$.$mol_wait_timeout(10_000);
         }
         land(id) {
             return this.world().land_sync(id);
@@ -6051,7 +6056,7 @@ var $;
                 };
                 line.onerror = () => {
                     this.master_cursor((this.master_cursor() + 1) % this.$.$hyoo_sync_masters.length);
-                    fail(new Error(`Master is unabailable`));
+                    fail(new Error(`Master is unavailable`));
                 };
             });
         }
@@ -19839,25 +19844,24 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    async function make_land(id = '2_b') {
-        return $hyoo_crowd_land.make({
-            id: $mol_const(id),
-            peer: $mol_const(await $hyoo_crowd_peer.generate()),
-        });
+    async function make_land() {
+        const world = new $hyoo_crowd_world(await $hyoo_crowd_peer.generate());
+        return world.grab();
     }
     $mol_test({
         async 'Join & Leave'() {
             const store = await make_land();
-            $mol_assert_like(store.peers(), []);
+            $mol_assert_like(store.peers(), [store.id(), store.peer_id()]);
             $mol_assert_like(store.residents(), []);
+            const peer = await $hyoo_crowd_peer.generate();
             store.join();
-            $mol_assert_like(store.peers(), []);
+            $mol_assert_like(store.peers(), [store.id(), store.peer_id()]);
             $mol_assert_like(store.residents(), [store.peer_id()]);
-            store.level(store.peer_id(), $hyoo_crowd_peer_level.add);
-            $mol_assert_like(store.peers(), [store.peer_id()]);
+            store.level(peer.id, $hyoo_crowd_peer_level.add);
+            $mol_assert_like(store.peers(), [store.id(), store.peer_id(), peer.id]);
             $mol_assert_like(store.residents(), [store.peer_id()]);
             store.leave();
-            $mol_assert_like(store.peers(), [store.peer_id()]);
+            $mol_assert_like(store.peers(), [store.id(), store.peer_id(), peer.id]);
             $mol_assert_like(store.residents(), []);
         },
         async 'Default state'() {
@@ -19867,7 +19871,7 @@ var $;
             $mol_assert_like(store.chief.as($hyoo_crowd_reg).numb(), 0);
             $mol_assert_like(store.chief.as($hyoo_crowd_reg).str(), '');
             $mol_assert_like(store.chief.as($hyoo_crowd_list).list(), []);
-            $mol_assert_like(store.delta(), []);
+            $mol_assert_like(store.delta().length, 2);
         },
         async 'Return default state'() {
             const store = await make_land();
@@ -19901,7 +19905,7 @@ var $;
             store.chief.as($hyoo_crowd_reg).value(null);
             $mol_assert_like(store.chief.as($hyoo_crowd_reg).value(), null);
             $mol_assert_like(store.chief.as($hyoo_crowd_list).list(), []);
-            $mol_assert_like(store.delta().map(unit => unit.data), [null]);
+            $mol_assert_like(store.delta().map(unit => unit.data).slice(1), [3, null]);
         },
         async 'Name spaces'() {
             const store = await make_land();
@@ -19915,7 +19919,7 @@ var $;
         async 'Name spaces merging'() {
             const left = await make_land();
             left.chief.sub('foo', $hyoo_crowd_list).list([111]);
-            const right = await make_land('a_2');
+            const right = await make_land();
             right.clock_data.tick(right.peer().id);
             right.chief.sub('foo', $hyoo_crowd_list).list([222]);
             const left_delta = left.delta();
@@ -19930,7 +19934,7 @@ var $;
             const time = store.clock_data.last_time;
             store.chief.as($hyoo_crowd_reg).str('foo');
             store.chief.as($hyoo_crowd_list).list(['foo']);
-            $mol_assert_like(store.delta().map(unit => unit.time), [time, time]);
+            $mol_assert_like(store.delta().map(unit => unit.time).slice(2), [time + 2, time]);
         },
         async 'Serial insert values'() {
             const store = await make_land();
@@ -20006,25 +20010,25 @@ var $;
                 new $hyoo_crowd_clock([
                     [store.peer().id, store.clock_data.last_time - 3],
                 ])
-            ]).map(unit => unit.data), ['foo', 'bar', 'lol']);
+            ]).map(unit => unit.data).slice(2), ['foo', 'bar', 'lol']);
             $mol_assert_like(store.delta([
                 new $hyoo_crowd_clock,
                 new $hyoo_crowd_clock([
                     [store.peer().id, store.clock_data.last_time - 2],
                 ])
-            ]).map(unit => unit.data), ['bar', 'lol']);
+            ]).map(unit => unit.data).slice(2), ['bar', 'lol']);
             $mol_assert_like(store.delta([
                 new $hyoo_crowd_clock,
                 new $hyoo_crowd_clock([
                     [store.peer().id, store.clock_data.last_time - 1],
                 ])
-            ]).map(unit => unit.data), ['lol']);
+            ]).map(unit => unit.data).slice(2), ['lol']);
             $mol_assert_like(store.delta([
                 new $hyoo_crowd_clock,
                 new $hyoo_crowd_clock([
                     [store.peer().id, store.clock_data.last_time],
                 ])
-            ]), []);
+            ]).slice(2), []);
         },
         async 'Delete without subtree and ignore inserted into deleted'() {
             const store = await make_land();
@@ -20106,7 +20110,7 @@ var $;
         async 'Merge different sequences'() {
             const left = await make_land();
             left.chief.as($hyoo_crowd_text).str('foo bar.');
-            const right = await make_land('a_2');
+            const right = await make_land();
             right.clock_data.tick(right.peer().id);
             right.chief.as($hyoo_crowd_text).str('xxx yyy.');
             const left_delta = left.delta();
@@ -20503,7 +20507,7 @@ var $;
             $mol_assert_like(land1.delta().length, 4);
             level_get: {
                 const batch = await world2.delta_batch(land2);
-                $mol_assert_like([...(await world1.apply(batch)).forbid.values()], ['Level too low', 'Level too low', 'Level too low']);
+                $mol_assert_like([...(await world1.apply(batch)).forbid.values()], ['Level too low', 'Level too low']);
                 $mol_assert_like(land1.delta().length, 5);
                 $mol_assert_like(land1.chief.sub('foo', $hyoo_crowd_reg).numb(), 123);
                 $mol_assert_like(land1.chief.sub('bar', $hyoo_crowd_reg).numb(), 0);
@@ -20512,7 +20516,7 @@ var $;
             level_add: {
                 land1.level(land2.peer().id, $hyoo_crowd_peer_level.add);
                 const batch = await world2.delta_batch(land2);
-                $mol_assert_like([...(await world1.apply(batch)).forbid.values()], ['Level too low', 'Level too low']);
+                $mol_assert_like([...(await world1.apply(batch)).forbid.values()], ['Level too low']);
                 $mol_assert_like(land1.delta().length, 7);
                 $mol_assert_like(land1.chief.sub('foo', $hyoo_crowd_reg).numb(), 123);
                 $mol_assert_like(land1.chief.sub('bar', $hyoo_crowd_reg).numb(), 234);
@@ -20521,7 +20525,7 @@ var $;
             level_mod: {
                 land1.level(land2.peer().id, $hyoo_crowd_peer_level.mod);
                 const batch = await world2.delta_batch(land2);
-                $mol_assert_like([...(await world1.apply(batch)).forbid.values()], ['Level too low']);
+                $mol_assert_like([...(await world1.apply(batch)).forbid.values()], []);
                 $mol_assert_like(land1.delta().length, 7);
                 $mol_assert_like(land1.chief.sub('foo', $hyoo_crowd_reg).numb(), 234);
                 $mol_assert_like(land1.chief.sub('bar', $hyoo_crowd_reg).numb(), 234);
@@ -20529,6 +20533,10 @@ var $;
             }
             level_law: {
                 land1.level(land2.peer().id, $hyoo_crowd_peer_level.law);
+                for await (const batch of world1.delta()) {
+                    $mol_assert_like([...(await world2.apply(batch)).forbid.values()], []);
+                }
+                land2.level(peer.id, $hyoo_crowd_peer_level.law);
                 const batch = await world2.delta_batch(land2);
                 $mol_assert_like([...(await world1.apply(batch)).forbid.values()], []);
                 $mol_assert_like(land1.delta().length, 8);
@@ -20553,7 +20561,7 @@ var $;
             level_add: {
                 land1.level_base($hyoo_crowd_peer_level.add);
                 const batch = await world2.delta_batch(land2);
-                $mol_assert_like([...(await world1.apply(batch)).forbid.values()], ['Level too low', 'Level too low']);
+                $mol_assert_like([...(await world1.apply(batch)).forbid.values()], ['Level too low']);
                 $mol_assert_like(land1.delta().length, 7);
                 $mol_assert_like(land1.chief.sub('foo', $hyoo_crowd_reg).numb(), 123);
                 $mol_assert_like(land1.chief.sub('bar', $hyoo_crowd_reg).numb(), 234);
@@ -20562,7 +20570,7 @@ var $;
             level_mod: {
                 land1.level_base($hyoo_crowd_peer_level.mod);
                 const batch = await world2.delta_batch(land2);
-                $mol_assert_like([...(await world1.apply(batch)).forbid.values()], ['Level too low']);
+                $mol_assert_like([...(await world1.apply(batch)).forbid.values()], []);
                 $mol_assert_like(land1.delta().length, 7);
                 $mol_assert_like(land1.chief.sub('foo', $hyoo_crowd_reg).numb(), 234);
                 $mol_assert_like(land1.chief.sub('bar', $hyoo_crowd_reg).numb(), 234);
@@ -20570,9 +20578,13 @@ var $;
             }
             level_law: {
                 land1.level_base($hyoo_crowd_peer_level.law);
+                for await (const batch of world1.delta()) {
+                    $mol_assert_like([...(await world2.apply(batch)).forbid.values()], []);
+                }
+                land2.level(peer.id, $hyoo_crowd_peer_level.law);
                 const batch = await world2.delta_batch(land2);
                 $mol_assert_like([...(await world1.apply(batch)).forbid.values()], []);
-                $mol_assert_like(land1.delta().length, 8);
+                $mol_assert_like(land1.delta().length, 7);
                 $mol_assert_like(land1.chief.sub('foo', $hyoo_crowd_reg).numb(), 234);
                 $mol_assert_like(land1.chief.sub('bar', $hyoo_crowd_reg).numb(), 234);
                 $mol_assert_like(land1.level(peer.id), $hyoo_crowd_peer_level.law);
