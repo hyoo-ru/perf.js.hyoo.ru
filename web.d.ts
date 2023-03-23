@@ -4113,6 +4113,7 @@ declare namespace $ {
         prefixes(): readonly string[];
         sources(): readonly string[];
         menu_title(): string;
+        permalink(): string;
         plugins(): readonly any[];
         pages(): readonly any[];
         Theme(): $$.$mol_theme_auto;
@@ -4213,6 +4214,7 @@ declare namespace $.$$ {
     class $hyoo_js_perf extends $.$hyoo_js_perf {
         bench_fund(): $hyoo_crowd_fund<typeof $hyoo_js_perf_bench>;
         bench_id(): `${string}_${string}` | null;
+        permalink(): string;
         bench(): $hyoo_js_perf_bench;
         bench_new(): $hyoo_js_perf_bench;
         bench_fork(): $hyoo_js_perf_bench;

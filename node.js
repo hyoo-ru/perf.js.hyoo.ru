@@ -14752,6 +14752,9 @@ var $;
         menu_title() {
             return this.bench_title();
         }
+        permalink() {
+            return "";
+        }
         plugins() {
             return [
                 this.Theme(),
@@ -15509,6 +15512,9 @@ var $;
             }
             bench_id() {
                 return $mol_int62_string_ensure(this.$.$mol_state_arg.value('bench'));
+            }
+            permalink() {
+                return `https://perf.js.hyoo.ru/#!bench=${this.bench_id()}`;
             }
             bench() {
                 const id = this.bench_id();
