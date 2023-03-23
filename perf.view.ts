@@ -22,11 +22,6 @@ namespace $.$$ {
 	export class $hyoo_js_perf extends $.$hyoo_js_perf {
 
 		@ $mol_mem
-		title() {
-			return ( this.bench_title() ? this.bench_title() + ' | ' : '' ) + super.title()
-		}
-		
-		@ $mol_mem
 		bench_fund() {
 			return this.yard().world().Fund( $hyoo_js_perf_bench )
 		}

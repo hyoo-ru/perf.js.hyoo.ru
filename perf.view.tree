@@ -1,24 +1,29 @@
-$hyoo_js_perf $mol_page
-	title @ \JS Benchmark
+$hyoo_js_perf $mol_book2
 	yard $hyoo_sync_client
 	bench_id null
 	bench $hyoo_js_perf_bench
 	titles /string
 	prefixes /string
 	sources /string
+	menu_title <= bench_title
 	plugins /
 		<= Theme $mol_theme_auto
 		<= Hotkey $mol_hotkey
 			mod_ctrl true
 			key * enter?event <=> run?event null
-	Body $mol_book2 pages /
+	pages /
 		<= Common $mol_page
-			Head null
+			title @ \JS Benchmark
+			tools <= menu_tools /
 			foot /
 				<= Online $hyoo_sync_online
 					yard <= yard
 				<= Source $mol_link_source
 					uri \https://github.com/hyoo-ru/perf.js.hyoo.ru
+				<= About $mol_link
+					uri \https://page.hyoo.ru/#!=btunlj_fp1tum
+					sub /
+						<= About_icon $mol_icon_help_circle_outline
 				<= Lights $mol_lights_toggle
 			body /
 				<= Common_content $mol_list rows /
@@ -69,45 +74,43 @@ $hyoo_js_perf $mol_page
 						\### Other JS Tools
 						\
 						\[V8 Optimizations](https://opt.js.hyoo.ru/) [Sandbox](https://eval.js.hyoo.ru)
-		<= Cases_pane $mol_scroll sub <= cases_pane_content /
-			<= Cases $mol_list rows <= cases /
-	Case* $hyoo_js_perf_case_row
-		title? <=> case_title*? \
-		prefix? <=> case_prefix*? \
-		source? <=> source*? \
-		measurable? <=> case_measurable*? true
-		Measurable => Case_measurable*
-		sample <= case_sample* \
-		results? <=> results*? /
-		changable <= changable true
-		drop? <=> case_drop*? null
-		dupe? <=> case_dupe*? null
-		swap? <=> case_swap*? null
-	Title $mol_string_button
-		value? <=> bench_title? \
-		hint <= title
-		enabled <= changable
-	tools /
-		<= Measurable_all $mol_check_group
-			checks <= measurable_all /
-			hint @ \Whether to measure all
-		<= Run $mol_button_major
-			hint @ \Run
-			click?event <=> run?event null
-			sub / <= Run_icon $mol_icon_play
-		<= Share $mol_button_share
-			capture <= Cases
-		<= Fork $mol_button_minor
-			hint @ \Fork benchmark
-			click? <=> bench_fork? null
-			sub /
-				<= Fork_icon $mol_icon_directions_fork
-		<= New $mol_button_minor
-			hint @ \New benchmark
-			click? <=> bench_new? null
-			sub /
-				<= New_icon $mol_icon_plus_box
-		<= About $mol_link
-			uri \https://habhub.hyoo.ru/#author=nin-jin/repo=HabHub/article=42
-			sub /
-				<= About_icon $mol_icon_help_circle_outline
+		<= Cases_pane $mol_page
+			title <= bench_title
+			Title <= Title $mol_string_button
+				value? <=> bench_title? \
+				hint <= menu_title
+				enabled <= changable
+			body /
+				<= Cases $mol_list rows <= cases /
+					<= Case*0 $hyoo_js_perf_case_row
+						title? <=> case_title*? \
+						prefix? <=> case_prefix*? \
+						source? <=> source*? \
+						measurable? <=> case_measurable*? true
+						Measurable => Case_measurable*
+						sample <= case_sample* \
+						results? <=> results*? /
+						changable <= changable true
+						drop? <=> case_drop*? null
+						dupe? <=> case_dupe*? null
+						swap? <=> case_swap*? null
+			tools /
+				<= Measurable_all $mol_check_group
+					checks <= measurable_all /
+					hint @ \Whether to measure all
+				<= Run $mol_button_major
+					hint @ \Run
+					click?event <=> run?event null
+					sub / <= Run_icon $mol_icon_play
+				<= Share $mol_button_share
+					capture <= Cases
+				<= Fork $mol_button_minor
+					hint @ \Fork benchmark
+					click? <=> bench_fork? null
+					sub /
+						<= Fork_icon $mol_icon_directions_fork
+				<= New $mol_button_minor
+					hint @ \New benchmark
+					click? <=> bench_new? null
+					sub /
+						<= New_icon $mol_icon_plus_box

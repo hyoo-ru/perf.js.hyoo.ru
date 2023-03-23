@@ -1,5 +1,5 @@
 {
-	"$hyoo_js_perf_title": "JS бенчмарк",
+	"$hyoo_js_perf_Common_title": "JS бенчмарк",
 	"$hyoo_js_perf_Prefix_title": "Общее вступление",
 	"$hyoo_js_perf_Postfix_title": "Общее завершение",
 	"$hyoo_js_perf_New_hint": "Новый бенчмарк",
