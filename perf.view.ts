@@ -30,6 +30,10 @@ namespace $.$$ {
 			return $mol_int62_string_ensure( this.$.$mol_state_arg.value( 'bench' ) )
 		}
 		
+		permalink() {
+			return `https://perf.js.hyoo.ru/#!bench=${ this.bench_id() }`
+		}
+		
 		@ $mol_mem
 		bench() {
 			const id = this.bench_id()

@@ -6,6 +6,7 @@ $hyoo_js_perf $mol_book2
 	prefixes /string
 	sources /string
 	menu_title <= bench_title
+	permalink \
 	plugins /
 		<= Theme $mol_theme_auto
 		<= Hotkey $mol_hotkey
