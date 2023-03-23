@@ -8,30 +8,6 @@ $mol_scroll $mol_view
 		^
 		scroll?event <=> event_scroll?event null
 
-$mol_page $mol_view
-	dom_name \article
-	field *
-		^
-		tabIndex <= tabindex -1
-	sub /
-		<= Head $mol_view
-			minimal_height 64
-			dom_name \header
-			sub <= head /
-				<= Title $mol_view
-					dom_name \h1
-					sub <= title_content /
-						<= Logo null
-						<= title
-				<= Tools $mol_view
-					sub <= tools /$mol_view_content
-		<= Body $mol_scroll
-			scroll_top?val => body_scroll_top?val
-			sub <= body /$mol_view_content
-		<= Foot $mol_view
-			dom_name \footer
-			sub <= foot /$mol_view
-
 $mol_book2 $mol_scroll
 	menu_title \
 	sub <= pages /$mol_view
@@ -50,6 +26,23 @@ $mol_hotkey $mol_plugin
 	mod_ctrl false
 	mod_alt false
 	mod_shift false
+
+$mol_link $mol_view
+	uri \
+	dom_name \a
+	attr *
+		^
+		href <= uri_toggle \
+		title <= hint_safe <= hint \
+		target <= target \_self
+		download <= file_name \
+		mol_link_current <= current false
+	sub /$mol_view_content
+		<= title
+	arg *
+	event *
+		^
+		click?event <=> click?event <=> event_click?event null
 
 $mol_svg $mol_view
 	dom_name \svg
@@ -80,24 +73,27 @@ $mol_icon $mol_svg_root
 		<= Path $mol_svg_path
 			geometry <= path \
 
-$mol_icon_plus $mol_icon path \M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z
+$mol_avatar $mol_icon
+	view_box \0 0 24 24
+	id \
+	path \M 12 12 l 0 0 M 0 0 l 0 0 M 24 24 l 0 0 M 0 24 l 0 0 M 24 0 l 0 0
 
-$mol_link $mol_view
-	uri \
-	dom_name \a
+$mol_icon_sync $mol_icon path \M12,18C8.69,18 6,15.31 6,12C6,11 6.25,10.03 6.7,9.2L5.24,7.74C4.46,8.97 4,10.43 4,12C4,16.42 7.58,20 12,20V23L16,19L12,15M12,4V1L8,5L12,9V6C15.31,6 18,8.69 18,12C18,13 17.75,13.97 17.3,14.8L18.76,16.26C19.54,15.03 20,13.57 20,12C20,7.58 16.42,4 12,4Z
+
+$mol_icon_sync_off $mol_icon path \M20,4H14V10L16.24,7.76C17.32,8.85 18,10.34 18,12C18,13 17.75,13.94 17.32,14.77L18.78,16.23C19.55,15 20,13.56 20,12C20,9.79 19.09,7.8 17.64,6.36L20,4M2.86,5.41L5.22,7.77C4.45,9 4,10.44 4,12C4,14.21 4.91,16.2 6.36,17.64L4,20H10V14L7.76,16.24C6.68,15.15 6,13.66 6,12C6,11 6.25,10.06 6.68,9.23L14.76,17.31C14.5,17.44 14.26,17.56 14,17.65V19.74C14.79,19.53 15.54,19.2 16.22,18.78L18.58,21.14L19.85,19.87L4.14,4.14L2.86,5.41M10,6.35V4.26C9.2,4.47 8.45,4.8 7.77,5.22L9.23,6.68C9.5,6.56 9.73,6.44 10,6.35Z
+
+$hyoo_sync_online $mol_link
+	minimal_width 40
+	minimal_height 40
+	yard $hyoo_sync_yard
+	uri <= master_link \
+	sub /
+		<= Well $mol_avatar
+			id <= master_link \
+		<= Fail $mol_icon_sync_off
 	attr *
 		^
-		href <= uri_toggle \
-		title <= hint_safe <= hint \
-		target <= target \_self
-		download <= file_name \
-		mol_link_current <= current false
-	sub /$mol_view_content
-		<= title
-	arg *
-	event *
-		^
-		click?event <=> click?event <=> event_click?event null
+		title <= message <= hint \$hyoo_sync
 
 $mol_icon_github_circle $mol_icon path \M12,2C6.48,2 2,6.48 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21C9.5,20.77 9.5,20.14 9.5,19.31C6.73,19.91 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.81,16.41C14.17,16.72 14.5,17.33 14.5,18.26C14.5,19.6 14.5,20.68 14.5,21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12C22,6.48 17.52,2 12,2Z
 
@@ -105,6 +101,12 @@ $mol_link_source $mol_link
 	hint @ \Source code
 	sub /
 		<= Icon $mol_icon_github_circle
+
+$mol_icon_help $mol_icon path \M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5C10.34,5 9,6.34 9,8H6C6,4.69 8.69,2 12,2Z
+
+$mol_icon_help_circle $mol_icon path \M15.07,11.25L14.17,12.17C13.45,12.89 13,13.5 13,15H11V14.5C11,13.39 11.45,12.39 12.17,11.67L13.41,10.41C13.78,10.05 14,9.55 14,9C14,7.89 13.1,7 12,7C10.9,7 10,7.9 10,9H8C8,6.79 9.79,5 12,5C14.21,5 16,6.79 16,9C16,9.88 15.64,10.67 15.07,11.25M13,19H11V17H13M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.47 17.5,2 12,2Z
+
+$mol_icon_help_circle_outline $mol_icon path \M11,18H13V16H11V18M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.48 17.52,2 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,6C9.79,6 8,7.79 8,10H10C10,8.9 10.9,8 12,8C13.1,8 14,8.9 14,10C14,12 11,11.75 11,15H13C13,12.75 16,12.5 16,10C16,7.79 14.21,6 12,6Z
 
 $mol_speck $mol_view
 	attr *
@@ -164,44 +166,6 @@ $mol_lights_toggle $mol_check_icon
 	hint @ \Toggle lights
 	checked?val <=> lights?val false
 
-$mol_list $mol_view
-	render_visible_only true
-	render_over 0
-	sub <= rows /$mol_view
-	Empty $mol_view
-	Gap_before $mol_view style * paddingTop <= gap_before 0
-	Gap_after $mol_view style * paddingTop <= gap_after 0
-	view_window /
-		0
-		0
-
-$mol_image $mol_view
-	dom_name \img
-	field *
-		^
-		src <= uri \
-		alt <= title
-		loading <= loading \eager
-		decoding <= decoding \async
-		crossOrigin <= cors null
-	minimal_width 16
-	minimal_height 16
-
-$mol_link_iconed $mol_link
-	sub /
-		<= Icon $mol_image
-			uri <= icon \
-			title \
-	content /
-		<= title <= uri
-	host \
-
-$mol_icon_bookmark $mol_icon path \M17,3H7C5.9,3 5,3.9 5,5V21L12,18L19,21V5C19,3.89 18.1,3 17,3Z
-
-$mol_icon_bookmark_outline $mol_icon path \M17,18L12,15.82L7,18V5H17M17,3H7C5.9,3 5,3.9 5,5V21L12,18L19,21V5C19,3.89 18.1,3 17,3Z
-
-$mol_icon_play $mol_icon path \M8,5.14V19.14L19,12.14L8,5.14Z
-
 $mol_stack $mol_view
 
 $mol_paragraph $mol_view
@@ -253,6 +217,17 @@ $mol_text_code_row $mol_paragraph
 		needle <= highlight \
 		uri <= token_uri* \
 	find_pos* null
+
+$mol_list $mol_view
+	render_visible_only true
+	render_over 0
+	sub <= rows /$mol_view
+	Empty $mol_view
+	Gap_before $mol_view style * paddingTop <= gap_before 0
+	Gap_after $mol_view style * paddingTop <= gap_after 0
+	view_window /
+		0
+		0
 
 $mol_icon_clipboard $mol_icon path \M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5C3.9,3 3,3.9 3,5V19C3,20.1 3.9,21 5,21H19C20.1,21 21,20.1 21,19V5C21,3.9 20.1,3 19,3M12,3C12.55,3 13,3.45 13,4C13,4.55 12.55,5 12,5C11.45,5 11,4.55 11,4C11,3.45 11.45,3 12,3
 
@@ -398,326 +373,6 @@ $mol_textarea_edit $mol_string
 		^
 		scrollTop 0
 
-$mol_icon_flash $mol_icon path \M7,2V13H10V22L17,10H13L17,2H7Z
-
-$mol_ghost $mol_view
-	Sub $mol_view
-
-$mol_follower $mol_ghost
-	Anchor $mol_view
-	offset /
-		0
-		0
-	style *
-		^
-		transform <= transform \
-
-$mol_icon_cross $mol_icon path \M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z
-
-$mol_icon_chevron $mol_icon path \M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z
-
-$mol_check_expand $mol_check
-	Icon $mol_icon_chevron
-	level 0
-	style *
-		^
-		paddingLeft <= level_style \0px
-	checked?val <=> expanded?val false
-	enabled <= expandable false
-
-$mol_expander $mol_list
-	rows /
-		<= Label $mol_view
-			sub /
-				<= Trigger $mol_check_expand
-					checked?val <=> expanded?val false
-					expandable <= expandable true
-					label <= label /
-						<= title
-				<= Tools null
-		<= Content $mol_list
-			rows <= content /
-
-$mol_dump_value $mol_view
-	value null
-	preview_show true
-	sub /
-		<= Simple $mol_text_code
-			text <= simple \
-		<= Expand $mol_expander
-			expanded? <=> expanded? false
-			Trigger <= Expand_head $mol_check_expand
-				minimal_height 24
-				minimal_width 24
-				expanded? <=> expanded? false
-				expandable <= expandable true
-				clicks? <=> expand_all? null
-				label /
-					<= Expand_title $mol_text_code
-						text <= expand_title \
-			content <= expand_content /
-				<= Preview $mol_view sub /
-					<= Preview_dom $mol_view
-						dom_node <= preview_dom null
-						render <= preview null
-				<= Row*0 $mol_dump_list
-					values <= row_values* /
-					prototypes <= prototypes false
-					preview_show <= preview_show
-
-$mol_dump_list $mol_view
-	values /
-	sub /
-		<= Dump*0 $mol_dump_value
-			value <= dump_value* null
-			expanded? <=> dump_expanded*? false
-			prototypes <= prototypes false
-			preview_show <= preview_show true
-
-$hyoo_js_eval $mol_book2
-	Placeholder null
-	plugins /
-		<= Theme $mol_theme_auto
-		<= Submit $mol_hotkey
-			key * enter? <=> submit? null
-			mod_ctrl true
-	bookmark_list? /string
-		\
-			\// Example Notebook
-			\
-			\// load external script
-			\const {
-			\	$mol_compare_deep: compare
-			\} = $mol_import.module(
-			\	'https://esm.sh/mol_compare_deep'
-			\).default
-			\
-			\// local vars
-			\const one = [1]
-			\one.push( one )
-			\const left =  { a: [1,one], b:    one  }
-			\const right = { a:    one,  b: [1,one] }
-			\
-			\// result
-			\compare( left, right )
-	pages /
-		<= Menu_page $mol_page
-			title @ \Bookmarks
-			tools /
-				<= Clear $mol_link
-					arg * code null
-					sub /
-						<= Clear_icon $mol_icon_plus
-				<= Source $mol_link_source
-					uri \https://github.com/hyoo-ru/eval.js.hyoo.ru
-				<= Lights $mol_lights_toggle
-			body /
-				<= Menu $mol_list
-					rows <= menu /
-						<= Menu_link*default $mol_link
-							title <= menu_link_title* \
-							arg * code <= menu_link_code* \
-		<= Code_page $mol_page
-			title @ \Code
-			bring <= bring
-			tools /
-				<= Perf $mol_link_iconed
-					title \
-					hint @ \Measure Performance
-					uri <= perf \
-				<= Bookmark $mol_check_icon
-					Icon <= Bookmark_icon $mol_icon_bookmark_outline
-					checked?val <=> bookmark?val false
-					hint @ \Bookmark
-				<= Run $mol_check_icon
-					Icon <= Run_icon $mol_icon_play
-					checked?val <=> run?val true
-					hint <= result_label
-			body /
-				<= Code $mol_textarea
-					bring => bring
-					hint \javascript..
-					sidebar_showed true
-					spellcheck false
-					value?val <=> code?val \
-				<= Error_mark $mol_follower
-					Anchor <= error_anchor null
-					offset <= error_offset /
-						0
-						0
-					Sub <= Error_view $mol_view
-						attr * title <= error_message \
-						sub / <= Error_icon $mol_icon_flash
-		<= Result_page $mol_page
-			title <= result_label @ \Result
-			tools /
-				<= Results_close $mol_link
-					arg * run \false
-					sub /
-						<= Results_close_icon $mol_icon_cross
-			body /
-				<= Result $mol_list
-					rows <= logs /
-						<= Log*0 $mol_dump_list
-							values <= log* /
-							prototypes true
-
-$mol_icon_chevron_double_down $mol_icon path \M16.59,5.59L18,7L12,13L6,7L7.41,5.59L12,10.17L16.59,5.59M16.59,11.59L18,13L12,19L6,13L7.41,11.59L12,16.17L16.59,11.59Z
-
-$mol_icon_unfold_more_horizontal $mol_icon path \M12,18.17L8.83,15L7.42,16.41L12,21L16.59,16.41L15.17,15M12,5.83L15.17,9L16.58,7.59L12,3L7.41,7.59L8.83,9L12,5.83Z
-
-$mol_bar $mol_view
-
-$mol_icon_tick $mol_icon path \M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z
-
-$mol_check_box $mol_check
-	Icon $mol_icon_tick
-
-$mol_string_button $mol_string
-
-$mol_portion_indicator $mol_view
-	style *
-		^
-		width <= width_style \0
-
-$mol_portion $mol_view
-	portion 0
-	sub /
-		<= indicator $mol_portion_indicator
-			width_style <= indicator_width_style \0
-
-$hyoo_js_perf_case_result $mol_view
-	result $hyoo_js_perf_stats
-	sub /
-		<= Portions $mol_view sub <= portions /
-			<= Frequency_portion $mol_portion portion <= frequency_portion 0
-			<= Memory_portion $mol_portion portion <= memory_portion 0
-			<= Size_portion $mol_portion portion <= size_portion 0
-			<= Deps_portion $mol_portion portion <= deps_portion 0
-		<= Stats $mol_view sub <= stats /
-			<= Stats_main $mol_view sub /
-				<= title \
-				<= Frequency $mol_view
-					attr * title <= frequency_hint @ \Iterations per Second
-					sub / <= frequency \
-				\≈
-				<= Time $mol_view
-					attr * title <= time_hint @ \Seconds per Iteration
-					sub / <= time_total \
-				\×
-				<= Iterations $mol_view
-					attr * title <= iterations_hint @ \Iterations Count
-					sub / <= iterations \
-			<= Stats_mem $mol_view sub /
-				\×
-				<= Memory_per_iteration $mol_view
-					attr * title <= memory_per_iteration_hint @ \Bytes per Itaration
-					sub / <= memory_per_iteration \
-				\=
-				<= Memory $mol_view
-					attr * title <= memory_hint @ \Bytes for All Iterations
-					sub / <= memory_total \
-			<= Stats_size $mol_view sub /
-				<= title \
-				<= Size $mol_view
-					attr * title <= size_hint @ \Case Size
-					sub / <= size 0
-			<= Stats_deps $mol_view sub /
-				\📦
-				<= Deps $mol_view
-					attr * title <= deps_hint @ \Deps Size
-					sub / <= deps \
-		<= Error $mol_view sub / <= error \
-
-$hyoo_js_perf_case_row $mol_view
-	results /
-	Eval $hyoo_js_eval
-		code <= sample \
-		run <= eval_showed
-		Result => Eval_result
-	sub <= columns /
-		<= Prefix $mol_expander
-			title @ \Setup
-			expanded? <=> prefix_showed? false
-			minimal_width 150
-			Tools <= Prefix_tools $mol_bar sub <= prefix_tools /
-				<= Drop $mol_button_minor
-					click? <=> drop? null
-					hint @ \Drop case
-					sub /
-						<= Drop_icon $mol_icon_cross
-				<= Dupe $mol_button_minor
-					click? <=> dupe? null
-					hint @ \Duplicate case
-					sub /
-						<= Dupe_icon $mol_icon_chevron_double_down
-				<= Swap $mol_button_minor
-					click? <=> swap? null
-					hint @ \Swap cases
-					sub /
-						<= Swap_icon $mol_icon_unfold_more_horizontal
-			content / <= Prefix_code $mol_textarea
-				enabled <= changable true
-				spellcheck false
-				value?val <=> prefix?val \
-				hint \let count = {#}
-		<= Source $mol_expander
-			title @ \Measure
-			expanded? <=> source_showed? true
-			minimal_width 150
-			Tools <= Source_tools $mol_view sub /
-				<= Measurable $mol_check_box
-					checked? <=> measurable? true
-					hint @ \Measutre on run
-				<= Title $mol_string_button
-					hint @ \Case Name
-					enabled <= changable true
-					value? <=> title? \
-				<= Eval_sandalone $mol_link_iconed
-					title \
-					hint @ \Generated script
-					uri <= eval_standalone \
-			content /
-				<= Source_code $mol_textarea
-					enabled <= changable true
-					spellcheck false
-					value?val <=> source?val \
-					hint \res = {#} % count
-		<= Eval_labeler $mol_expander
-			expanded? <=> eval_showed? false
-			title @ \Debug
-			content / <= Eval_result
-		<= Results $mol_view
-			sub <= result_rows /
-				<= Result*0 $hyoo_js_perf_case_result
-					title <= result_title* \
-					result <= result* $hyoo_js_perf_stats
-				<= Result*1
-				<= Result*2
-
-
-$mol_avatar $mol_icon
-	view_box \0 0 24 24
-	id \
-	path \M 12 12 l 0 0 M 0 0 l 0 0 M 24 24 l 0 0 M 0 24 l 0 0 M 24 0 l 0 0
-
-$mol_icon_sync $mol_icon path \M12,18C8.69,18 6,15.31 6,12C6,11 6.25,10.03 6.7,9.2L5.24,7.74C4.46,8.97 4,10.43 4,12C4,16.42 7.58,20 12,20V23L16,19L12,15M12,4V1L8,5L12,9V6C15.31,6 18,8.69 18,12C18,13 17.75,13.97 17.3,14.8L18.76,16.26C19.54,15.03 20,13.57 20,12C20,7.58 16.42,4 12,4Z
-
-$mol_icon_sync_off $mol_icon path \M20,4H14V10L16.24,7.76C17.32,8.85 18,10.34 18,12C18,13 17.75,13.94 17.32,14.77L18.78,16.23C19.55,15 20,13.56 20,12C20,9.79 19.09,7.8 17.64,6.36L20,4M2.86,5.41L5.22,7.77C4.45,9 4,10.44 4,12C4,14.21 4.91,16.2 6.36,17.64L4,20H10V14L7.76,16.24C6.68,15.15 6,13.66 6,12C6,11 6.25,10.06 6.68,9.23L14.76,17.31C14.5,17.44 14.26,17.56 14,17.65V19.74C14.79,19.53 15.54,19.2 16.22,18.78L18.58,21.14L19.85,19.87L4.14,4.14L2.86,5.41M10,6.35V4.26C9.2,4.47 8.45,4.8 7.77,5.22L9.23,6.68C9.5,6.56 9.73,6.44 10,6.35Z
-
-$hyoo_sync_online $mol_link
-	minimal_width 40
-	minimal_height 40
-	yard $hyoo_sync_yard
-	uri <= master_link \
-	sub /
-		<= Well $mol_avatar
-			id <= master_link \
-		<= Fail $mol_icon_sync_off
-	attr *
-		^
-		title <= message <= hint \$hyoo_sync
-
 $mol_labeler $mol_list
 	rows /
 		<= Label $mol_view
@@ -732,6 +387,17 @@ $mol_float $mol_view
 	style *
 		^
 		minHeight \auto
+
+$mol_icon_chevron $mol_icon path \M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z
+
+$mol_check_expand $mol_check
+	Icon $mol_icon_chevron
+	level 0
+	style *
+		^
+		paddingLeft <= level_style \0px
+	checked?val <=> expanded?val false
+	enabled <= expandable false
 
 $mol_grid $mol_view
 	row_height 32
@@ -785,6 +451,27 @@ $mol_grid_cell $mol_view
 	minimal_height 40
 
 $mol_grid_number $mol_grid_cell
+
+$mol_image $mol_view
+	dom_name \img
+	field *
+		^
+		src <= uri \
+		alt <= title
+		loading <= loading \eager
+		decoding <= decoding \async
+		crossOrigin <= cors null
+	minimal_width 16
+	minimal_height 16
+
+$mol_link_iconed $mol_link
+	sub /
+		<= Icon $mol_image
+			uri <= icon \
+			title \
+	content /
+		<= title <= uri
+	host \
 
 $mol_embed_native $mol_scroll
 	uri?val \
@@ -938,6 +625,325 @@ $mol_text_span $mol_paragraph
 		^
 		mol_text_type <= type \
 
+$mol_page $mol_view
+	dom_name \article
+	field *
+		^
+		tabIndex <= tabindex -1
+	sub /
+		<= Head $mol_view
+			minimal_height 64
+			dom_name \header
+			sub <= head /
+				<= Title $mol_view
+					dom_name \h1
+					sub <= title_content /
+						<= Logo null
+						<= title
+				<= Tools $mol_view
+					sub <= tools /$mol_view_content
+		<= Body $mol_scroll
+			scroll_top?val => body_scroll_top?val
+			sub <= body /$mol_view_content
+		<= Foot $mol_view
+			dom_name \footer
+			sub <= foot /$mol_view
+
+$mol_string_button $mol_string
+
+$mol_icon_plus $mol_icon path \M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z
+
+$mol_icon_bookmark $mol_icon path \M17,3H7C5.9,3 5,3.9 5,5V21L12,18L19,21V5C19,3.89 18.1,3 17,3Z
+
+$mol_icon_bookmark_outline $mol_icon path \M17,18L12,15.82L7,18V5H17M17,3H7C5.9,3 5,3.9 5,5V21L12,18L19,21V5C19,3.89 18.1,3 17,3Z
+
+$mol_icon_play $mol_icon path \M8,5.14V19.14L19,12.14L8,5.14Z
+
+$mol_icon_flash $mol_icon path \M7,2V13H10V22L17,10H13L17,2H7Z
+
+$mol_ghost $mol_view
+	Sub $mol_view
+
+$mol_follower $mol_ghost
+	Anchor $mol_view
+	offset /
+		0
+		0
+	style *
+		^
+		transform <= transform \
+
+$mol_icon_cross $mol_icon path \M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z
+
+$mol_expander $mol_list
+	rows /
+		<= Label $mol_view
+			sub /
+				<= Trigger $mol_check_expand
+					checked?val <=> expanded?val false
+					expandable <= expandable true
+					label <= label /
+						<= title
+				<= Tools null
+		<= Content $mol_list
+			rows <= content /
+
+$mol_dump_value $mol_view
+	value null
+	preview_show true
+	sub /
+		<= Simple $mol_text_code
+			text <= simple \
+		<= Expand $mol_expander
+			expanded? <=> expanded? false
+			Trigger <= Expand_head $mol_check_expand
+				minimal_height 24
+				minimal_width 24
+				expanded? <=> expanded? false
+				expandable <= expandable true
+				clicks? <=> expand_all? null
+				label /
+					<= Expand_title $mol_text_code
+						text <= expand_title \
+			content <= expand_content /
+				<= Preview $mol_view sub /
+					<= Preview_dom $mol_view
+						dom_node <= preview_dom null
+						render <= preview null
+				<= Row*0 $mol_dump_list
+					values <= row_values* /
+					prototypes <= prototypes false
+					preview_show <= preview_show
+
+$mol_dump_list $mol_view
+	values /
+	sub /
+		<= Dump*0 $mol_dump_value
+			value <= dump_value* null
+			expanded? <=> dump_expanded*? false
+			prototypes <= prototypes false
+			preview_show <= preview_show true
+
+$hyoo_js_eval $mol_book2
+	Placeholder null
+	plugins /
+		<= Theme $mol_theme_auto
+		<= Submit $mol_hotkey
+			key * enter? <=> submit? null
+			mod_ctrl true
+	bookmark_list? /string
+		\
+			\// Example Notebook
+			\
+			\// load external script
+			\const {
+			\	$mol_compare_deep: compare
+			\} = $mol_import.module(
+			\	'https://esm.sh/mol_compare_deep'
+			\).default
+			\
+			\// local vars
+			\const one = [1]
+			\one.push( one )
+			\const left =  { a: [1,one], b:    one  }
+			\const right = { a:    one,  b: [1,one] }
+			\
+			\// result
+			\compare( left, right )
+	pages /
+		<= Menu_page $mol_page
+			title @ \Bookmarks
+			tools /
+				<= Clear $mol_link
+					arg * code null
+					sub /
+						<= Clear_icon $mol_icon_plus
+				<= Source $mol_link_source
+					uri \https://github.com/hyoo-ru/eval.js.hyoo.ru
+				<= Lights $mol_lights_toggle
+			body /
+				<= Menu $mol_list
+					rows <= menu /
+						<= Menu_link*default $mol_link
+							title <= menu_link_title* \
+							arg * code <= menu_link_code* \
+		<= Code_page $mol_page
+			title @ \Code
+			bring <= bring
+			tools /
+				<= Perf $mol_link_iconed
+					title \
+					hint @ \Measure Performance
+					uri <= perf \
+				<= Bookmark $mol_check_icon
+					Icon <= Bookmark_icon $mol_icon_bookmark_outline
+					checked?val <=> bookmark?val false
+					hint @ \Bookmark
+				<= Run $mol_check_icon
+					Icon <= Run_icon $mol_icon_play
+					checked?val <=> run?val true
+					hint <= result_label
+			body /
+				<= Code $mol_textarea
+					bring => bring
+					hint \javascript..
+					sidebar_showed true
+					spellcheck false
+					value?val <=> code?val \
+				<= Error_mark $mol_follower
+					Anchor <= error_anchor null
+					offset <= error_offset /
+						0
+						0
+					Sub <= Error_view $mol_view
+						attr * title <= error_message \
+						sub / <= Error_icon $mol_icon_flash
+		<= Result_page $mol_page
+			title <= result_label @ \Result
+			tools /
+				<= Results_close $mol_link
+					arg * run \false
+					sub /
+						<= Results_close_icon $mol_icon_cross
+			body /
+				<= Result $mol_list
+					rows <= logs /
+						<= Log*0 $mol_dump_list
+							values <= log* /
+							prototypes true
+
+$mol_icon_chevron_double_down $mol_icon path \M16.59,5.59L18,7L12,13L6,7L7.41,5.59L12,10.17L16.59,5.59M16.59,11.59L18,13L12,19L6,13L7.41,11.59L12,16.17L16.59,11.59Z
+
+$mol_icon_unfold_more_horizontal $mol_icon path \M12,18.17L8.83,15L7.42,16.41L12,21L16.59,16.41L15.17,15M12,5.83L15.17,9L16.58,7.59L12,3L7.41,7.59L8.83,9L12,5.83Z
+
+$mol_bar $mol_view
+
+$mol_icon_tick $mol_icon path \M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z
+
+$mol_check_box $mol_check
+	Icon $mol_icon_tick
+
+$mol_portion_indicator $mol_view
+	style *
+		^
+		width <= width_style \0
+
+$mol_portion $mol_view
+	portion 0
+	sub /
+		<= indicator $mol_portion_indicator
+			width_style <= indicator_width_style \0
+
+$hyoo_js_perf_case_result $mol_view
+	result $hyoo_js_perf_stats
+	sub /
+		<= Portions $mol_view sub <= portions /
+			<= Frequency_portion $mol_portion portion <= frequency_portion 0
+			<= Memory_portion $mol_portion portion <= memory_portion 0
+			<= Size_portion $mol_portion portion <= size_portion 0
+			<= Deps_portion $mol_portion portion <= deps_portion 0
+		<= Stats $mol_view sub <= stats /
+			<= Stats_main $mol_view sub /
+				<= title \
+				<= Frequency $mol_view
+					attr * title <= frequency_hint @ \Iterations per Second
+					sub / <= frequency \
+				\≈
+				<= Time $mol_view
+					attr * title <= time_hint @ \Seconds per Iteration
+					sub / <= time_total \
+				\×
+				<= Iterations $mol_view
+					attr * title <= iterations_hint @ \Iterations Count
+					sub / <= iterations \
+			<= Stats_mem $mol_view sub /
+				\×
+				<= Memory_per_iteration $mol_view
+					attr * title <= memory_per_iteration_hint @ \Bytes per Itaration
+					sub / <= memory_per_iteration \
+				\=
+				<= Memory $mol_view
+					attr * title <= memory_hint @ \Bytes for All Iterations
+					sub / <= memory_total \
+			<= Stats_size $mol_view sub /
+				<= title \
+				<= Size $mol_view
+					attr * title <= size_hint @ \Case Size
+					sub / <= size 0
+			<= Stats_deps $mol_view sub /
+				\📦
+				<= Deps $mol_view
+					attr * title <= deps_hint @ \Deps Size
+					sub / <= deps \
+		<= Error $mol_view sub / <= error \
+
+$hyoo_js_perf_case_row $mol_view
+	results /
+	Eval $hyoo_js_eval
+		code <= sample \
+		run <= eval_showed
+		Result => Eval_result
+	sub <= columns /
+		<= Prefix $mol_expander
+			title @ \Setup
+			expanded? <=> prefix_showed? false
+			minimal_width 150
+			Tools <= Prefix_tools $mol_bar sub <= prefix_tools /
+				<= Drop $mol_button_minor
+					click? <=> drop? null
+					hint @ \Drop case
+					sub /
+						<= Drop_icon $mol_icon_cross
+				<= Dupe $mol_button_minor
+					click? <=> dupe? null
+					hint @ \Duplicate case
+					sub /
+						<= Dupe_icon $mol_icon_chevron_double_down
+				<= Swap $mol_button_minor
+					click? <=> swap? null
+					hint @ \Swap cases
+					sub /
+						<= Swap_icon $mol_icon_unfold_more_horizontal
+			content / <= Prefix_code $mol_textarea
+				enabled <= changable true
+				spellcheck false
+				value?val <=> prefix?val \
+				hint \let count = {#}
+		<= Source $mol_expander
+			title @ \Measure
+			expanded? <=> source_showed? true
+			minimal_width 150
+			Tools <= Source_tools $mol_view sub /
+				<= Measurable $mol_check_box
+					checked? <=> measurable? true
+					hint @ \Measutre on run
+				<= Title $mol_string_button
+					hint @ \Case Name
+					enabled <= changable true
+					value? <=> title? \
+				<= Eval_sandalone $mol_link_iconed
+					title \
+					hint @ \Generated script
+					uri <= eval_standalone \
+			content /
+				<= Source_code $mol_textarea
+					enabled <= changable true
+					spellcheck false
+					value?val <=> source?val \
+					hint \res = {#} % count
+		<= Eval_labeler $mol_expander
+			expanded? <=> eval_showed? false
+			title @ \Debug
+			content / <= Eval_result
+		<= Results $mol_view
+			sub <= result_rows /
+				<= Result*0 $hyoo_js_perf_case_result
+					title <= result_title* \
+					result <= result* $hyoo_js_perf_stats
+				<= Result*1
+				<= Result*2
+
+
 $mol_check_group $mol_check_box
 	checks /$mol_check
 	full true
@@ -968,12 +974,6 @@ $mol_icon_directions_fork $mol_icon path \M3,4V12.5L6,9.5L9,13C10,14 10,15 10,15
 
 $mol_icon_plus_box $mol_icon path \M17,13H13V17H11V13H7V11H11V7H13V11H17M19,3H5C3.89,3 3,3.89 3,5V19C3,20.1 3.9,21 5,21H19C20.1,21 21,20.1 21,19V5C21,3.89 20.1,3 19,3Z
 
-$mol_icon_help $mol_icon path \M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5C10.34,5 9,6.34 9,8H6C6,4.69 8.69,2 12,2Z
-
-$mol_icon_help_circle $mol_icon path \M15.07,11.25L14.17,12.17C13.45,12.89 13,13.5 13,15H11V14.5C11,13.39 11.45,12.39 12.17,11.67L13.41,10.41C13.78,10.05 14,9.55 14,9C14,7.89 13.1,7 12,7C10.9,7 10,7.9 10,9H8C8,6.79 9.79,5 12,5C14.21,5 16,6.79 16,9C16,9.88 15.64,10.67 15.07,11.25M13,19H11V17H13M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.47 17.5,2 12,2Z
-
-$mol_icon_help_circle_outline $mol_icon path \M11,18H13V16H11V18M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.48 17.52,2 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,6C9.79,6 8,7.79 8,10H10C10,8.9 10.9,8 12,8C13.1,8 14,8.9 14,10C14,12 11,11.75 11,15H13C13,12.75 16,12.5 16,10C16,7.79 14.21,6 12,6Z
-
 $mol_text_list $mol_text
 	auto_scroll null
 	attr *
@@ -988,27 +988,32 @@ $mol_text_list_item $mol_paragraph
 		^
 		mol_text_list_item_index <= index 0
 
-$hyoo_js_perf $mol_page
-	title @ \JS Benchmark
+$hyoo_js_perf $mol_book2
 	yard $hyoo_sync_client
 	bench_id null
 	bench $hyoo_js_perf_bench
 	titles /string
 	prefixes /string
 	sources /string
+	menu_title <= bench_title
 	plugins /
 		<= Theme $mol_theme_auto
 		<= Hotkey $mol_hotkey
 			mod_ctrl true
 			key * enter?event <=> run?event null
-	Body $mol_book2 pages /
+	pages /
 		<= Common $mol_page
-			Head null
+			title @ \JS Benchmark
+			tools <= menu_tools /
 			foot /
 				<= Online $hyoo_sync_online
 					yard <= yard
 				<= Source $mol_link_source
 					uri \https://github.com/hyoo-ru/perf.js.hyoo.ru
+				<= About $mol_link
+					uri \https://page.hyoo.ru/#!=btunlj_fp1tum
+					sub /
+						<= About_icon $mol_icon_help_circle_outline
 				<= Lights $mol_lights_toggle
 			body /
 				<= Common_content $mol_list rows /
@@ -1059,45 +1064,43 @@ $hyoo_js_perf $mol_page
 						\### Other JS Tools
 						\
 						\[V8 Optimizations](https://opt.js.hyoo.ru/) [Sandbox](https://eval.js.hyoo.ru)
-		<= Cases_pane $mol_scroll sub <= cases_pane_content /
-			<= Cases $mol_list rows <= cases /
-	Case* $hyoo_js_perf_case_row
-		title? <=> case_title*? \
-		prefix? <=> case_prefix*? \
-		source? <=> source*? \
-		measurable? <=> case_measurable*? true
-		Measurable => Case_measurable*
-		sample <= case_sample* \
-		results? <=> results*? /
-		changable <= changable true
-		drop? <=> case_drop*? null
-		dupe? <=> case_dupe*? null
-		swap? <=> case_swap*? null
-	Title $mol_string_button
-		value? <=> bench_title? \
-		hint <= title
-		enabled <= changable
-	tools /
-		<= Measurable_all $mol_check_group
-			checks <= measurable_all /
-			hint @ \Whether to measure all
-		<= Run $mol_button_major
-			hint @ \Run
-			click?event <=> run?event null
-			sub / <= Run_icon $mol_icon_play
-		<= Share $mol_button_share
-			capture <= Cases
-		<= Fork $mol_button_minor
-			hint @ \Fork benchmark
-			click? <=> bench_fork? null
-			sub /
-				<= Fork_icon $mol_icon_directions_fork
-		<= New $mol_button_minor
-			hint @ \New benchmark
-			click? <=> bench_new? null
-			sub /
-				<= New_icon $mol_icon_plus_box
-		<= About $mol_link
-			uri \https://habhub.hyoo.ru/#author=nin-jin/repo=HabHub/article=42
-			sub /
-				<= About_icon $mol_icon_help_circle_outline
+		<= Cases_pane $mol_page
+			title <= bench_title
+			Title <= Title $mol_string_button
+				value? <=> bench_title? \
+				hint <= menu_title
+				enabled <= changable
+			body /
+				<= Cases $mol_list rows <= cases /
+					<= Case*0 $hyoo_js_perf_case_row
+						title? <=> case_title*? \
+						prefix? <=> case_prefix*? \
+						source? <=> source*? \
+						measurable? <=> case_measurable*? true
+						Measurable => Case_measurable*
+						sample <= case_sample* \
+						results? <=> results*? /
+						changable <= changable true
+						drop? <=> case_drop*? null
+						dupe? <=> case_dupe*? null
+						swap? <=> case_swap*? null
+			tools /
+				<= Measurable_all $mol_check_group
+					checks <= measurable_all /
+					hint @ \Whether to measure all
+				<= Run $mol_button_major
+					hint @ \Run
+					click?event <=> run?event null
+					sub / <= Run_icon $mol_icon_play
+				<= Share $mol_button_share
+					capture <= Cases
+				<= Fork $mol_button_minor
+					hint @ \Fork benchmark
+					click? <=> bench_fork? null
+					sub /
+						<= Fork_icon $mol_icon_directions_fork
+				<= New $mol_button_minor
+					hint @ \New benchmark
+					click? <=> bench_new? null
+					sub /
+						<= New_icon $mol_icon_plus_box

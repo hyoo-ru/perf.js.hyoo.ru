@@ -1,4 +1,5 @@
 {
+	"$hyoo_js_perf_Common_title": "JS бенчмарк",
 	"$hyoo_js_perf_Fork_hint": "Форкнуть бенчмарк",
 	"$hyoo_js_perf_Measurable_all_hint": "Все ли измерять",
 	"$hyoo_js_perf_New_hint": "Створити бенчмарк",
@@ -21,7 +22,6 @@
 	"$hyoo_js_perf_case_row_Source_title": "Вимір",
 	"$hyoo_js_perf_case_row_Swap_hint": "Поменять варианты местами",
 	"$hyoo_js_perf_case_row_Title_hint": "Имя варианта",
-	"$hyoo_js_perf_title": "JS бенчмарк",
 	"$mol_button_share_hint": "Поділитися",
 	"$mol_lights_toggle_hint": "Переключити освітлення",
 	"$mol_text_code_Copy_hint": "Скопіювати весь код",
