@@ -2658,10 +2658,8 @@ declare namespace $ {
 
 declare namespace $ {
     class $mol_button_copy extends $mol_button_minor {
-        data(): {
-            "text/plain": Blob;
-            "text/html": Blob;
-        };
+        blobs(): readonly Blob[];
+        data(): {};
         sub(): readonly any[];
         text(): string;
         text_blob(next?: any): Blob;
@@ -2678,6 +2676,9 @@ declare namespace $ {
 
 declare namespace $.$$ {
     class $mol_button_copy extends $.$mol_button_copy {
+        data(): {
+            [k: string]: Blob;
+        };
         html(): string;
         attachments(): ClipboardItem[];
         click(event?: Event): void;
