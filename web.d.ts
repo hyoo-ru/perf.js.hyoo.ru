@@ -2141,8 +2141,8 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    function $mol_huggingface_run(this: $, space: string, method: string | number, ...data: readonly any[]): readonly string[];
-    function $mol_huggingface_async(space: string, method: number, ...data: readonly any[]): Promise<[string]> & {
+    function $mol_huggingface_run(this: $, space: string, method: string | number, ...data: readonly any[]): any[] | readonly string[];
+    function $mol_huggingface_async(space: string, method: number, ...data: readonly any[]): Promise<any[]> & {
         destructor: () => void;
     };
 }
@@ -2160,7 +2160,7 @@ declare namespace $ {
         static lang(next?: string): string;
         static source(lang: string): any;
         static texts(lang: string, next?: $mol_locale_dict): $mol_locale_dict;
-        static text(key: string): {} | null;
+        static text(key: string): string;
         static warn(key: string): null;
     }
 }
@@ -2173,7 +2173,7 @@ declare namespace $ {
 
 declare namespace $ {
     class $mol_link_source extends $mol_link {
-        hint(): {} | null;
+        hint(): string;
         sub(): readonly any[];
         Icon(): $mol_icon_github_circle;
     }
@@ -2340,7 +2340,7 @@ declare namespace $ {
 declare namespace $ {
     class $mol_lights_toggle extends $mol_check_icon {
         Icon(): $mol_icon_brightness_6;
-        hint(): {} | null;
+        hint(): string;
         checked(val?: any): boolean;
         Lights_icon(): $mol_icon_brightness_6;
         lights(val?: any): boolean;
@@ -3723,7 +3723,7 @@ declare namespace $ {
         Error_view(): $mol_view;
         Error_mark(): $$.$mol_follower;
         Code_page(): $mol_page;
-        result_label(): {} | null;
+        result_label(): string;
         Results_close_icon(): $mol_icon_cross;
         Results_close(): $$.$mol_link;
         log(id: any): readonly any[];
@@ -3914,28 +3914,28 @@ declare namespace $ {
         portions(): readonly any[];
         Portions(): $mol_view;
         title(): string;
-        frequency_hint(): {} | null;
+        frequency_hint(): string;
         frequency(): string;
         Frequency(): $mol_view;
-        time_hint(): {} | null;
+        time_hint(): string;
         time_total(): string;
         Time(): $mol_view;
-        iterations_hint(): {} | null;
+        iterations_hint(): string;
         iterations(): string;
         Iterations(): $mol_view;
         Stats_main(): $mol_view;
-        memory_per_iteration_hint(): {} | null;
+        memory_per_iteration_hint(): string;
         memory_per_iteration(): string;
         Memory_per_iteration(): $mol_view;
-        memory_hint(): {} | null;
+        memory_hint(): string;
         memory_total(): string;
         Memory(): $mol_view;
         Stats_mem(): $mol_view;
-        size_hint(): {} | null;
+        size_hint(): string;
         size(): number;
         Size(): $mol_view;
         Stats_size(): $mol_view;
-        deps_hint(): {} | null;
+        deps_hint(): string;
         deps(): string;
         Deps(): $mol_view;
         Stats_deps(): $mol_view;
@@ -4111,7 +4111,7 @@ declare namespace $ {
     class $mol_button_share extends $mol_button_minor {
         uri(): string;
         capture(): any;
-        hint(): {} | null;
+        hint(): string;
         sub(): readonly any[];
         Icon(): $mol_icon_share_variant;
     }
