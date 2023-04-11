@@ -893,7 +893,7 @@ $hyoo_js_perf_case_row $mol_view
 	sub <= columns /
 		<= Prefix $mol_expander
 			title @ \Setup
-			expanded? <=> prefix_showed? false
+			expanded? <=> prefix_showed? true
 			minimal_width 150
 			Tools <= Prefix_tools $mol_bar sub <= prefix_tools /
 				<= Drop $mol_button_minor
