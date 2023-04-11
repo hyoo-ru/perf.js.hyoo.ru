@@ -24,10 +24,5 @@
 }
 
 [hyoo_js_perf_cases] {
-	padding: var(--mol_gap_block);
 	gap: var(--mol_gap_block);
-}
-
-[hyoo_js_perf_common_foot] {
-	padding: var(--mol_gap_block);
 }
