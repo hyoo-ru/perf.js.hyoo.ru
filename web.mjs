@@ -5696,9 +5696,9 @@ var $;
         $mol_action
     ], $mol_state_arg, "go", null);
     $.$mol_state_arg = $mol_state_arg;
-    const $mol_state_arg_change = (event) => {
+    function $mol_state_arg_change() {
         $mol_state_arg.href($mol_dom_context.location.href);
-    };
+    }
     self.addEventListener('hashchange', $mol_state_arg_change);
 })($ || ($ = {}));
 //mol/state/arg/arg.web.ts
@@ -6074,7 +6074,6 @@ var $;
 var $;
 (function ($) {
     const { rem } = $mol_style_unit;
-    const { scale } = $mol_style_func;
     $mol_style_define($mol_link, {
         textDecoration: 'none',
         color: $mol_theme.control,
@@ -7005,9 +7004,9 @@ var $;
                     const def = this.lang_default();
                     if (lang === def)
                         throw error;
-                    return {};
                 }
             }
+            return {};
         }
         static text(key) {
             const lang = this.lang();
@@ -7925,7 +7924,7 @@ var $;
                 });
                 const regexp = new $mol_regexp(`(?:${chunks.join('|')})`, flags, groups);
                 const validator = new RegExp('^' + regexp.source + '$', flags);
-                regexp.generate = params => {
+                regexp.generate = (params) => {
                     for (let option in source) {
                         if (option in params) {
                             if (typeof params[option] === 'boolean') {
@@ -12751,12 +12750,13 @@ var $;
     function $mol_offline() {
         if (typeof window === 'undefined') {
             self.addEventListener('install', (event) => {
-                self['skipWaiting']();
+                ;
+                self.skipWaiting();
             });
             self.addEventListener('activate', (event) => {
                 caches.delete('v1');
                 caches.delete('$mol_offline');
-                self['clients'].claim();
+                self.clients.claim();
                 console.info('$mol_offline activated');
             });
             self.addEventListener('fetch', (event) => {
@@ -14433,19 +14433,20 @@ var $;
                 const context = canvas.getContext('2d');
                 context.drawImage(el, 0, 0);
                 try {
-                    re['src'] = canvas.toDataURL();
+                    ;
+                    re.src = canvas.toDataURL();
                 }
                 catch (error) {
                     $mol_fail_log(error);
                 }
             }
             if (re instanceof HTMLInputElement) {
-                re.setAttribute('value', el['value']);
-                if (el['checked'])
+                re.setAttribute('value', el.value);
+                if (el.checked)
                     re.setAttribute('checked', '');
             }
             if (re instanceof HTMLTextAreaElement) {
-                re.setAttribute('value', el['value']);
+                re.setAttribute('value', el.value);
             }
             const styles = $mol_dom_context.getComputedStyle(el);
             restyle(re, styles);
