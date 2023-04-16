@@ -1030,7 +1030,7 @@ var $;
                 const sub = $mol_wire_auto();
                 const existen = sub?.track_next();
                 reuse: if (existen) {
-                    if (!(existen instanceof $mol_wire_task))
+                    if (!(existen.constructor.name === '$mol_wire_task'))
                         break reuse;
                     if (existen.host !== host)
                         break reuse;
@@ -4151,7 +4151,6 @@ var $;
             const unit_new = new $hyoo_crowd_unit(this.id(), auth, head, self, next, prev, time, data, null);
             this._unit_all.set(old_id, unit_new);
             unit_list.splice(seat, 0, unit_new);
-            unit_list.dirty = true;
             this._unit_alives.set(head, undefined);
             this.pub.emit();
             return unit_new;
@@ -9678,6 +9677,7 @@ var $;
             return import(uri);
         }
         static script(uri) {
+            $mol_wire_solid();
             return $mol_wire_sync(this).script_async(uri);
         }
         static script_async(uri) {
