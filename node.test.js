@@ -3354,7 +3354,7 @@ var $;
 //mol/book2/-css/book2.view.css.ts
 ;
 "use strict";
-let $hyoo_sync_revision = "06f569e";
+let $hyoo_sync_revision = "8b9fe5e";
 //hyoo/sync/-meta.tree/revision.meta.tree.ts
 ;
 "use strict";
@@ -4255,6 +4255,9 @@ var $;
             this.pub.promote();
             return this._clocks;
         }
+        get clocks_bin() {
+            return new Uint8Array($hyoo_crowd_clock_bin.from(this.id(), this._clocks).buffer);
+        }
         pub = new $mol_wire_pub;
         _clocks = [new $hyoo_crowd_clock, new $hyoo_crowd_clock];
         _unit_all = new Map();
@@ -5029,10 +5032,15 @@ var $;
             for (const land of this.world().lands.values()) {
                 this.db_land_sync(land);
             }
-            const master = this.master();
-            if (master)
-                $mol_wire_race(...[...this.world().lands.values()].map(land => () => this.line_land_sync({ line: master, land })));
             $mol_wire_race(...this.slaves().map(line => () => this.line_sync(line)));
+            try {
+                const master = this.master();
+                if (master)
+                    $mol_wire_race(...[...this.world().lands.values()].map(land => () => this.line_land_sync({ line: master, land })));
+            }
+            catch (error) {
+                $mol_fail_log(error);
+            }
         }
         land_sync(land) {
             this.db_land_init(land);
@@ -5127,7 +5135,6 @@ var $;
         }
         line_land_clocks({ line, land }, next) {
             $mol_wire_solid();
-            this.master();
             return next;
         }
         line_sync(line) {
@@ -5224,6 +5231,13 @@ var $;
             };
             this.line_land_neck({ line, land: land_id }, [
                 handle(this.line_land_neck({ line, land: land_id })[0])
+                    .catch(error => {
+                    this.$.$mol_log3_fail({
+                        place: this,
+                        land: land_id,
+                        message: String(error?.message ?? error),
+                    });
+                })
             ]);
         }
         line_send_clocks(line, land) { }
@@ -5588,7 +5602,7 @@ var $;
         master() {
             this.reconnects();
             const link = this.master_link();
-            const line = new $mol_dom_context.WebSocket(link);
+            const line = new $mol_dom_context.WebSocket(link, ['$hyoo_sync']);
             line.binaryType = 'arraybuffer';
             line.onmessage = async (event) => {
                 if (event.data instanceof ArrayBuffer) {
@@ -5636,12 +5650,10 @@ var $;
         }
         line_send_clocks(line, land) {
             if (line instanceof WebSocket) {
-                const message = new Uint8Array($hyoo_crowd_clock_bin.from(land.id(), land._clocks).buffer);
-                line.send(message);
+                line.send(land.clocks_bin);
             }
             else {
-                const message = land._clocks;
-                line.postMessage(['hyoo_sync_clocks', land.id(), message]);
+                line.postMessage(['hyoo_sync_clocks', land.id(), land._clocks]);
             }
         }
         async line_send_units(line, units) {
