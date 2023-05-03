@@ -2802,222 +2802,8 @@ var $;
 //mol/book2/-css/book2.view.css.ts
 ;
 "use strict";
-let $hyoo_sync_revision = "8b9fe5e";
+let $hyoo_sync_revision = "827fd0d";
 //hyoo/sync/-meta.tree/revision.meta.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    function $mol_wire_sync(obj) {
-        return new Proxy(obj, {
-            get(obj, field) {
-                const val = obj[field];
-                if (typeof val !== 'function')
-                    return val;
-                const temp = $mol_wire_task.getter(val);
-                return function $mol_wire_sync(...args) {
-                    const fiber = temp(obj, args);
-                    return fiber.sync();
-                };
-            },
-            apply(obj, self, args) {
-                const temp = $mol_wire_task.getter(obj);
-                const fiber = temp(self, args);
-                return fiber.sync();
-            },
-        });
-    }
-    $.$mol_wire_sync = $mol_wire_sync;
-})($ || ($ = {}));
-//mol/wire/sync/sync.ts
-;
-"use strict";
-//mol/type/partial/deep/deep.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $.$mol_jsx_prefix = '';
-    $.$mol_jsx_crumbs = '';
-    $.$mol_jsx_booked = null;
-    $.$mol_jsx_document = {
-        getElementById: () => null,
-        createElementNS: (space, name) => $mol_dom_context.document.createElementNS(space, name),
-        createDocumentFragment: () => $mol_dom_context.document.createDocumentFragment(),
-    };
-    $.$mol_jsx_frag = '';
-    function $mol_jsx(Elem, props, ...childNodes) {
-        const id = props && props.id || '';
-        const guid = id ? $.$mol_jsx_prefix ? $.$mol_jsx_prefix + '/' + id : id : $.$mol_jsx_prefix;
-        const crumbs_self = id ? $.$mol_jsx_crumbs.replace(/(\S+)/g, `$1_${id.replace(/\/.*/i, '')}`) : $.$mol_jsx_crumbs;
-        if (Elem && $.$mol_jsx_booked) {
-            if ($.$mol_jsx_booked.has(id)) {
-                $mol_fail(new Error(`JSX already has tag with id ${JSON.stringify(guid)}`));
-            }
-            else {
-                $.$mol_jsx_booked.add(id);
-            }
-        }
-        let node = guid ? $.$mol_jsx_document.getElementById(guid) : null;
-        if ($.$mol_jsx_prefix) {
-            const prefix_ext = $.$mol_jsx_prefix;
-            const booked_ext = $.$mol_jsx_booked;
-            const crumbs_ext = $.$mol_jsx_crumbs;
-            for (const field in props) {
-                const func = props[field];
-                if (typeof func !== 'function')
-                    continue;
-                const wrapper = function (...args) {
-                    const prefix = $.$mol_jsx_prefix;
-                    const booked = $.$mol_jsx_booked;
-                    const crumbs = $.$mol_jsx_crumbs;
-                    try {
-                        $.$mol_jsx_prefix = prefix_ext;
-                        $.$mol_jsx_booked = booked_ext;
-                        $.$mol_jsx_crumbs = crumbs_ext;
-                        return func.call(this, ...args);
-                    }
-                    finally {
-                        $.$mol_jsx_prefix = prefix;
-                        $.$mol_jsx_booked = booked;
-                        $.$mol_jsx_crumbs = crumbs;
-                    }
-                };
-                $mol_func_name_from(wrapper, func);
-                props[field] = wrapper;
-            }
-        }
-        if (typeof Elem !== 'string') {
-            if ('prototype' in Elem) {
-                const view = node && node[String(Elem)] || new Elem;
-                Object.assign(view, props);
-                view[Symbol.toStringTag] = guid;
-                view.childNodes = childNodes;
-                if (!view.ownerDocument)
-                    view.ownerDocument = $.$mol_jsx_document;
-                view.className = (crumbs_self ? crumbs_self + ' ' : '') + (Elem['name'] || Elem);
-                node = view.valueOf();
-                node[String(Elem)] = view;
-                return node;
-            }
-            else {
-                const prefix = $.$mol_jsx_prefix;
-                const booked = $.$mol_jsx_booked;
-                const crumbs = $.$mol_jsx_crumbs;
-                try {
-                    $.$mol_jsx_prefix = guid;
-                    $.$mol_jsx_booked = new Set;
-                    $.$mol_jsx_crumbs = (crumbs_self ? crumbs_self + ' ' : '') + (Elem['name'] || Elem);
-                    return Elem(props, ...childNodes);
-                }
-                finally {
-                    $.$mol_jsx_prefix = prefix;
-                    $.$mol_jsx_booked = booked;
-                    $.$mol_jsx_crumbs = crumbs;
-                }
-            }
-        }
-        if (!node) {
-            node = Elem
-                ? $.$mol_jsx_document.createElementNS(props?.xmlns ?? 'http://www.w3.org/1999/xhtml', Elem)
-                : $.$mol_jsx_document.createDocumentFragment();
-        }
-        $mol_dom_render_children(node, [].concat(...childNodes));
-        if (!Elem)
-            return node;
-        if (guid)
-            node.id = guid;
-        for (const key in props) {
-            if (key === 'id')
-                continue;
-            if (typeof props[key] === 'string') {
-                if (typeof node[key] === 'string')
-                    node[key] = props[key];
-                node.setAttribute(key, props[key]);
-            }
-            else if (props[key] &&
-                typeof props[key] === 'object' &&
-                Reflect.getPrototypeOf(props[key]) === Reflect.getPrototypeOf({})) {
-                if (typeof node[key] === 'object') {
-                    Object.assign(node[key], props[key]);
-                    continue;
-                }
-            }
-            else {
-                node[key] = props[key];
-            }
-        }
-        if ($.$mol_jsx_crumbs)
-            node.className = (props?.['class'] ? props['class'] + ' ' : '') + crumbs_self;
-        return node;
-    }
-    $.$mol_jsx = $mol_jsx;
-})($ || ($ = {}));
-//mol/jsx/jsx.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_state_local extends $mol_object {
-        static 'native()';
-        static native() {
-            if (this['native()'])
-                return this['native()'];
-            check: try {
-                const native = $mol_dom_context.localStorage;
-                if (!native)
-                    break check;
-                native.setItem('', '');
-                native.removeItem('');
-                return this['native()'] = native;
-            }
-            catch (error) {
-                console.warn(error);
-            }
-            return this['native()'] = {
-                getItem(key) {
-                    return this[':' + key];
-                },
-                setItem(key, value) {
-                    this[':' + key] = value;
-                },
-                removeItem(key) {
-                    this[':' + key] = void 0;
-                }
-            };
-        }
-        static changes(next) { return next; }
-        static value(key, next) {
-            this.changes();
-            if (next === void 0)
-                return JSON.parse(this.native().getItem(key) || 'null');
-            if (next === null)
-                this.native().removeItem(key);
-            else
-                this.native().setItem(key, JSON.stringify(next));
-            return next;
-        }
-        prefix() { return ''; }
-        value(key, next) {
-            return $mol_state_local.value(this.prefix() + '.' + key, next);
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $mol_state_local, "changes", null);
-    __decorate([
-        $mol_mem_key
-    ], $mol_state_local, "value", null);
-    $.$mol_state_local = $mol_state_local;
-})($ || ($ = {}));
-//mol/state/local/local.ts
-;
-"use strict";
-var $;
-(function ($) {
-    self.addEventListener('storage', event => $.$mol_state_local.changes(event));
-})($ || ($ = {}));
-//mol/state/local/local.web.ts
 ;
 "use strict";
 //node/node.ts
@@ -3107,6 +2893,102 @@ var $;
     $.$mol_int62_hash_buffer = $mol_int62_hash_buffer;
 })($ || ($ = {}));
 //mol/int62/int62.ts
+;
+"use strict";
+//mol/data/value/value.ts
+;
+"use strict";
+var $;
+(function ($) {
+    function $mol_data_setup(value, config) {
+        return Object.assign(value, {
+            config,
+            Value: null
+        });
+    }
+    $.$mol_data_setup = $mol_data_setup;
+})($ || ($ = {}));
+//mol/data/setup/setup.ts
+;
+"use strict";
+var $;
+(function ($) {
+    function $mol_diff_path(...paths) {
+        const limit = Math.min(...paths.map(path => path.length));
+        lookup: for (var i = 0; i < limit; ++i) {
+            const first = paths[0][i];
+            for (let j = 1; j < paths.length; ++j) {
+                if (paths[j][i] !== first)
+                    break lookup;
+            }
+        }
+        return {
+            prefix: paths[0].slice(0, i),
+            suffix: paths.map(path => path.slice(i)),
+        };
+    }
+    $.$mol_diff_path = $mol_diff_path;
+})($ || ($ = {}));
+//mol/diff/path/path.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_error_mix extends Error {
+        errors;
+        constructor(message, ...errors) {
+            super(message);
+            this.errors = errors;
+            if (errors.length) {
+                const stacks = [...errors.map(error => error.stack), this.stack];
+                const diff = $mol_diff_path(...stacks.map(stack => {
+                    if (!stack)
+                        return [];
+                    return stack.split('\n').reverse();
+                }));
+                const head = diff.prefix.reverse().join('\n');
+                const tails = diff.suffix.map(path => path.reverse().map(line => line.replace(/^(?!\s+at)/, '\tat (.) ')).join('\n')).join('\n\tat (.) -----\n');
+                this.stack = `Error: ${this.constructor.name}\n\tat (.) /"""\\\n${tails}\n\tat (.) \\___/\n${head}`;
+                this.message += errors.map(error => '\n' + error.message).join('');
+            }
+        }
+        toJSON() {
+            return this.message;
+        }
+    }
+    $.$mol_error_mix = $mol_error_mix;
+})($ || ($ = {}));
+//mol/error/mix/mix.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_data_error extends $mol_error_mix {
+    }
+    $.$mol_data_error = $mol_data_error;
+})($ || ($ = {}));
+//mol/data/error/error.ts
+;
+"use strict";
+var $;
+(function ($) {
+    function $mol_data_enum(name, dict) {
+        const index = {};
+        for (let key in dict) {
+            if (Number.isNaN(Number(key))) {
+                index[dict[key]] = key;
+            }
+        }
+        return $mol_data_setup((value) => {
+            if (typeof index[value] !== 'string') {
+                return $mol_fail(new $mol_data_error(`${value} is not value of ${name} enum`));
+            }
+            return value;
+        }, { name, dict });
+    }
+    $.$mol_data_enum = $mol_data_enum;
+})($ || ($ = {}));
+//mol/data/enum/enum.ts
 ;
 "use strict";
 var $;
@@ -3231,150 +3113,6 @@ var $;
     $.$hyoo_crowd_peer = $hyoo_crowd_peer;
 })($ || ($ = {}));
 //hyoo/crowd/peer/peer.ts
-;
-"use strict";
-var $;
-(function ($) {
-    async function $hyoo_sync_peer(path) {
-        let serial = $mol_state_local.value('$hyoo_sync_peer');
-        if (typeof serial === 'string') {
-            return await $hyoo_crowd_peer.restore(serial);
-        }
-        else {
-            serial = $mol_state_local.value(path);
-            if (typeof serial === 'string') {
-                $mol_state_local.value('$hyoo_sync_peer', serial);
-                $mol_state_local.value(path, null);
-            }
-        }
-        const frame = $mol_jsx("iframe", { src: "https://sync.hyoo.ru/auth/" });
-        frame.style.display = 'none';
-        await new Promise((done, fail) => {
-            frame.onload = done;
-            frame.onerror = fail;
-            frame.onabort = fail;
-            document.body.appendChild(frame);
-        });
-        const serial_ext = await new Promise((done, fail) => {
-            window.addEventListener('message', event => {
-                if (!Array.isArray(event.data))
-                    return;
-                if (event.data[0] !== '$hyoo_sync_peer')
-                    return;
-                done(event.data[1]);
-            });
-            frame.contentWindow.postMessage(['$hyoo_sync_peer', serial], '*');
-            setTimeout(() => done(serial), 5000);
-        });
-        document.body.removeChild(frame);
-        if (typeof serial_ext === 'string') {
-            if (!serial)
-                $mol_state_local.value('$hyoo_sync_peer', serial_ext);
-            return await $hyoo_crowd_peer.restore(serial_ext);
-        }
-        const peer = await $hyoo_crowd_peer.generate();
-        $mol_state_local.value('$hyoo_sync_peer', peer.key_private_serial);
-        return peer;
-    }
-    $.$hyoo_sync_peer = $hyoo_sync_peer;
-})($ || ($ = {}));
-//hyoo/sync/peer/peer.web.tsx
-;
-"use strict";
-//mol/data/value/value.ts
-;
-"use strict";
-var $;
-(function ($) {
-    function $mol_data_setup(value, config) {
-        return Object.assign(value, {
-            config,
-            Value: null
-        });
-    }
-    $.$mol_data_setup = $mol_data_setup;
-})($ || ($ = {}));
-//mol/data/setup/setup.ts
-;
-"use strict";
-var $;
-(function ($) {
-    function $mol_diff_path(...paths) {
-        const limit = Math.min(...paths.map(path => path.length));
-        lookup: for (var i = 0; i < limit; ++i) {
-            const first = paths[0][i];
-            for (let j = 1; j < paths.length; ++j) {
-                if (paths[j][i] !== first)
-                    break lookup;
-            }
-        }
-        return {
-            prefix: paths[0].slice(0, i),
-            suffix: paths.map(path => path.slice(i)),
-        };
-    }
-    $.$mol_diff_path = $mol_diff_path;
-})($ || ($ = {}));
-//mol/diff/path/path.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_error_mix extends Error {
-        errors;
-        constructor(message, ...errors) {
-            super(message);
-            this.errors = errors;
-            if (errors.length) {
-                const stacks = [...errors.map(error => error.stack), this.stack];
-                const diff = $mol_diff_path(...stacks.map(stack => {
-                    if (!stack)
-                        return [];
-                    return stack.split('\n').reverse();
-                }));
-                const head = diff.prefix.reverse().join('\n');
-                const tails = diff.suffix.map(path => path.reverse().map(line => line.replace(/^(?!\s+at)/, '\tat (.) ')).join('\n')).join('\n\tat (.) -----\n');
-                this.stack = `Error: ${this.constructor.name}\n\tat (.) /"""\\\n${tails}\n\tat (.) \\___/\n${head}`;
-                this.message += errors.map(error => '\n' + error.message).join('');
-            }
-        }
-        toJSON() {
-            return this.message;
-        }
-    }
-    $.$mol_error_mix = $mol_error_mix;
-})($ || ($ = {}));
-//mol/error/mix/mix.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_data_error extends $mol_error_mix {
-    }
-    $.$mol_data_error = $mol_data_error;
-})($ || ($ = {}));
-//mol/data/error/error.ts
-;
-"use strict";
-var $;
-(function ($) {
-    function $mol_data_enum(name, dict) {
-        const index = {};
-        for (let key in dict) {
-            if (Number.isNaN(Number(key))) {
-                index[dict[key]] = key;
-            }
-        }
-        return $mol_data_setup((value) => {
-            if (typeof index[value] !== 'string') {
-                return $mol_fail(new $mol_data_error(`${value} is not value of ${name} enum`));
-            }
-            return value;
-        }, { name, dict });
-    }
-    $.$mol_data_enum = $mol_data_enum;
-})($ || ($ = {}));
-//mol/data/enum/enum.ts
 ;
 "use strict";
 //mol/charset/encoding/encoding.ts
@@ -3615,6 +3353,268 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    function $mol_wire_sync(obj) {
+        return new Proxy(obj, {
+            get(obj, field) {
+                const val = obj[field];
+                if (typeof val !== 'function')
+                    return val;
+                const temp = $mol_wire_task.getter(val);
+                return function $mol_wire_sync(...args) {
+                    const fiber = temp(obj, args);
+                    return fiber.sync();
+                };
+            },
+            apply(obj, self, args) {
+                const temp = $mol_wire_task.getter(obj);
+                const fiber = temp(self, args);
+                return fiber.sync();
+            },
+        });
+    }
+    $.$mol_wire_sync = $mol_wire_sync;
+})($ || ($ = {}));
+//mol/wire/sync/sync.ts
+;
+"use strict";
+//mol/type/partial/deep/deep.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $.$mol_jsx_prefix = '';
+    $.$mol_jsx_crumbs = '';
+    $.$mol_jsx_booked = null;
+    $.$mol_jsx_document = {
+        getElementById: () => null,
+        createElementNS: (space, name) => $mol_dom_context.document.createElementNS(space, name),
+        createDocumentFragment: () => $mol_dom_context.document.createDocumentFragment(),
+    };
+    $.$mol_jsx_frag = '';
+    function $mol_jsx(Elem, props, ...childNodes) {
+        const id = props && props.id || '';
+        const guid = id ? $.$mol_jsx_prefix ? $.$mol_jsx_prefix + '/' + id : id : $.$mol_jsx_prefix;
+        const crumbs_self = id ? $.$mol_jsx_crumbs.replace(/(\S+)/g, `$1_${id.replace(/\/.*/i, '')}`) : $.$mol_jsx_crumbs;
+        if (Elem && $.$mol_jsx_booked) {
+            if ($.$mol_jsx_booked.has(id)) {
+                $mol_fail(new Error(`JSX already has tag with id ${JSON.stringify(guid)}`));
+            }
+            else {
+                $.$mol_jsx_booked.add(id);
+            }
+        }
+        let node = guid ? $.$mol_jsx_document.getElementById(guid) : null;
+        if ($.$mol_jsx_prefix) {
+            const prefix_ext = $.$mol_jsx_prefix;
+            const booked_ext = $.$mol_jsx_booked;
+            const crumbs_ext = $.$mol_jsx_crumbs;
+            for (const field in props) {
+                const func = props[field];
+                if (typeof func !== 'function')
+                    continue;
+                const wrapper = function (...args) {
+                    const prefix = $.$mol_jsx_prefix;
+                    const booked = $.$mol_jsx_booked;
+                    const crumbs = $.$mol_jsx_crumbs;
+                    try {
+                        $.$mol_jsx_prefix = prefix_ext;
+                        $.$mol_jsx_booked = booked_ext;
+                        $.$mol_jsx_crumbs = crumbs_ext;
+                        return func.call(this, ...args);
+                    }
+                    finally {
+                        $.$mol_jsx_prefix = prefix;
+                        $.$mol_jsx_booked = booked;
+                        $.$mol_jsx_crumbs = crumbs;
+                    }
+                };
+                $mol_func_name_from(wrapper, func);
+                props[field] = wrapper;
+            }
+        }
+        if (typeof Elem !== 'string') {
+            if ('prototype' in Elem) {
+                const view = node && node[String(Elem)] || new Elem;
+                Object.assign(view, props);
+                view[Symbol.toStringTag] = guid;
+                view.childNodes = childNodes;
+                if (!view.ownerDocument)
+                    view.ownerDocument = $.$mol_jsx_document;
+                view.className = (crumbs_self ? crumbs_self + ' ' : '') + (Elem['name'] || Elem);
+                node = view.valueOf();
+                node[String(Elem)] = view;
+                return node;
+            }
+            else {
+                const prefix = $.$mol_jsx_prefix;
+                const booked = $.$mol_jsx_booked;
+                const crumbs = $.$mol_jsx_crumbs;
+                try {
+                    $.$mol_jsx_prefix = guid;
+                    $.$mol_jsx_booked = new Set;
+                    $.$mol_jsx_crumbs = (crumbs_self ? crumbs_self + ' ' : '') + (Elem['name'] || Elem);
+                    return Elem(props, ...childNodes);
+                }
+                finally {
+                    $.$mol_jsx_prefix = prefix;
+                    $.$mol_jsx_booked = booked;
+                    $.$mol_jsx_crumbs = crumbs;
+                }
+            }
+        }
+        if (!node) {
+            node = Elem
+                ? $.$mol_jsx_document.createElementNS(props?.xmlns ?? 'http://www.w3.org/1999/xhtml', Elem)
+                : $.$mol_jsx_document.createDocumentFragment();
+        }
+        $mol_dom_render_children(node, [].concat(...childNodes));
+        if (!Elem)
+            return node;
+        if (guid)
+            node.id = guid;
+        for (const key in props) {
+            if (key === 'id')
+                continue;
+            if (typeof props[key] === 'string') {
+                if (typeof node[key] === 'string')
+                    node[key] = props[key];
+                node.setAttribute(key, props[key]);
+            }
+            else if (props[key] &&
+                typeof props[key] === 'object' &&
+                Reflect.getPrototypeOf(props[key]) === Reflect.getPrototypeOf({})) {
+                if (typeof node[key] === 'object') {
+                    Object.assign(node[key], props[key]);
+                    continue;
+                }
+            }
+            else {
+                node[key] = props[key];
+            }
+        }
+        if ($.$mol_jsx_crumbs)
+            node.className = (props?.['class'] ? props['class'] + ' ' : '') + crumbs_self;
+        return node;
+    }
+    $.$mol_jsx = $mol_jsx;
+})($ || ($ = {}));
+//mol/jsx/jsx.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_state_local extends $mol_object {
+        static 'native()';
+        static native() {
+            if (this['native()'])
+                return this['native()'];
+            check: try {
+                const native = $mol_dom_context.localStorage;
+                if (!native)
+                    break check;
+                native.setItem('', '');
+                native.removeItem('');
+                return this['native()'] = native;
+            }
+            catch (error) {
+                console.warn(error);
+            }
+            return this['native()'] = {
+                getItem(key) {
+                    return this[':' + key];
+                },
+                setItem(key, value) {
+                    this[':' + key] = value;
+                },
+                removeItem(key) {
+                    this[':' + key] = void 0;
+                }
+            };
+        }
+        static changes(next) { return next; }
+        static value(key, next) {
+            this.changes();
+            if (next === void 0)
+                return JSON.parse(this.native().getItem(key) || 'null');
+            if (next === null)
+                this.native().removeItem(key);
+            else
+                this.native().setItem(key, JSON.stringify(next));
+            return next;
+        }
+        prefix() { return ''; }
+        value(key, next) {
+            return $mol_state_local.value(this.prefix() + '.' + key, next);
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_state_local, "changes", null);
+    __decorate([
+        $mol_mem_key
+    ], $mol_state_local, "value", null);
+    $.$mol_state_local = $mol_state_local;
+})($ || ($ = {}));
+//mol/state/local/local.ts
+;
+"use strict";
+var $;
+(function ($) {
+    self.addEventListener('storage', event => $.$mol_state_local.changes(event));
+})($ || ($ = {}));
+//mol/state/local/local.web.ts
+;
+"use strict";
+var $;
+(function ($) {
+    async function $hyoo_sync_peer(path) {
+        let serial = $mol_state_local.value('$hyoo_sync_peer');
+        if (typeof serial === 'string') {
+            return await $hyoo_crowd_peer.restore(serial);
+        }
+        else {
+            serial = $mol_state_local.value(path);
+            if (typeof serial === 'string') {
+                $mol_state_local.value('$hyoo_sync_peer', serial);
+                $mol_state_local.value(path, null);
+            }
+        }
+        const frame = $mol_jsx("iframe", { src: "https://sync.hyoo.ru/auth/" });
+        frame.style.display = 'none';
+        await new Promise((done, fail) => {
+            frame.onload = done;
+            frame.onerror = fail;
+            frame.onabort = fail;
+            document.body.appendChild(frame);
+        });
+        const serial_ext = await new Promise((done, fail) => {
+            window.addEventListener('message', event => {
+                if (!Array.isArray(event.data))
+                    return;
+                if (event.data[0] !== '$hyoo_sync_peer')
+                    return;
+                done(event.data[1]);
+            });
+            frame.contentWindow.postMessage(['$hyoo_sync_peer', serial], '*');
+            setTimeout(() => done(serial), 5000);
+        });
+        document.body.removeChild(frame);
+        if (typeof serial_ext === 'string') {
+            if (!serial)
+                $mol_state_local.value('$hyoo_sync_peer', serial_ext);
+            return await $hyoo_crowd_peer.restore(serial_ext);
+        }
+        const peer = await $hyoo_crowd_peer.generate();
+        $mol_state_local.value('$hyoo_sync_peer', peer.key_private_serial);
+        return peer;
+    }
+    $.$hyoo_sync_peer = $hyoo_sync_peer;
+})($ || ($ = {}));
+//hyoo/sync/peer/peer.web.tsx
+;
+"use strict";
+var $;
+(function ($) {
     function $hyoo_crowd_time_now() {
         return Math.floor(Date.now() / 100) - 1767e7;
     }
@@ -3699,16 +3699,18 @@ var $;
     const offset = {
         land_lo: 0,
         land_hi: 4,
-        clocks: 8,
+        count: 8,
+        clocks: 16,
     };
     class $hyoo_crowd_clock_bin extends DataView {
-        static from(land_id, clocks) {
+        static from(land_id, clocks, count) {
             const size = offset.clocks + clocks[0].size * 16;
             const mem = new Uint8Array(size);
             const bin = new $hyoo_crowd_clock_bin(mem.buffer);
             const land = $mol_int62_from_string(land_id);
             bin.setInt32(offset.land_lo, land.lo ^ (1 << 31), true);
             bin.setInt32(offset.land_hi, land.hi, true);
+            bin.setInt32(offset.count, count, true);
             let cursor = offset.clocks;
             for (const [peer_id, time] of clocks[0]) {
                 const peer = $mol_int62_from_string(peer_id);
@@ -3725,6 +3727,9 @@ var $;
                 lo: this.getInt32(offset.land_lo, true) << 1 >> 1,
                 hi: this.getInt32(offset.land_hi, true) << 1 >> 1,
             });
+        }
+        count() {
+            return this.getInt32(offset.count, true);
         }
     }
     $.$hyoo_crowd_clock_bin = $hyoo_crowd_clock_bin;
@@ -3791,7 +3796,7 @@ var $;
 (function ($) {
     class $hyoo_crowd_reg extends $hyoo_crowd_node {
         value(next) {
-            const unit = this.units()[0];
+            const unit = this.units().at(-1);
             if (next === undefined)
                 return unit?.data ?? null;
             if ($mol_compare_deep(unit?.data, next))
@@ -3874,7 +3879,7 @@ var $;
             return this._clocks;
         }
         get clocks_bin() {
-            return new Uint8Array($hyoo_crowd_clock_bin.from(this.id(), this._clocks).buffer);
+            return new Uint8Array($hyoo_crowd_clock_bin.from(this.id(), this._clocks, this._unit_all.size).buffer);
         }
         pub = new $mol_wire_pub;
         _clocks = [new $hyoo_crowd_clock, new $hyoo_crowd_clock];
@@ -4667,6 +4672,7 @@ var $;
 var $;
 (function ($) {
     class $hyoo_sync_yard extends $mol_object2 {
+        db_unit_persisted = new WeakSet();
         log_pack(data) {
             return data;
         }
@@ -4765,16 +4771,19 @@ var $;
         }
         db_land_sync(land) {
             this.db_land_init(land);
-            const db_clocks = this.db_land_clocks(land.id());
             land.clocks;
-            const units = land.delta(db_clocks);
+            const units = [];
+            for (const unit of land._unit_all.values()) {
+                if (this.db_unit_persisted.has(unit))
+                    continue;
+                units.push(unit);
+            }
             if (!units.length)
                 return;
             $mol_wire_sync(this.world()).sign_units(units);
             $mol_wire_sync(this).db_land_save(land, units);
-            for (const unit of units) {
-                db_clocks[unit.group()].see_peer(unit.auth, unit.time);
-            }
+            for (const unit of units)
+                this.db_unit_persisted.add(unit);
         }
         db_land_init(land) {
             try {
@@ -4790,13 +4799,10 @@ var $;
                 });
                 units = [];
             }
+            for (const unit of units)
+                this.db_unit_persisted.add(unit);
             units.sort($hyoo_crowd_unit_compare);
-            const clocks = [new $hyoo_crowd_clock, new $hyoo_crowd_clock];
-            this.db_land_clocks(land.id(), clocks);
             land.apply(units);
-            for (const unit of units) {
-                clocks[unit.group()].see_peer(unit.auth, unit.time);
-            }
         }
         async db_land_load(land) {
             return [];
@@ -4881,6 +4887,9 @@ var $;
                     const bin = new $hyoo_crowd_clock_bin(message.buffer, message.byteOffset, message.byteLength);
                     for (let group = 0; group < clocks.length; ++group) {
                         clocks[group].see_bin(bin, group);
+                    }
+                    if (bin.count() + land.delta(clocks).length < land._unit_all.size) {
+                        this.line_land_clocks({ line, land }, clocks = [new $hyoo_crowd_clock, new $hyoo_crowd_clock]);
                     }
                     const lands = this.line_lands(line);
                     if (lands.includes(land)) {
@@ -5276,7 +5285,7 @@ var $;
         master() {
             this.reconnects();
             const link = this.master_link();
-            const line = new $mol_dom_context.WebSocket(link, ['$hyoo_sync']);
+            const line = new $mol_dom_context.WebSocket(link, ['$hyoo_sync_protocol_1']);
             line.binaryType = 'arraybuffer';
             line.onmessage = async (event) => {
                 if (event.data instanceof ArrayBuffer) {
