@@ -1421,6 +1421,7 @@ declare namespace $ {
         db_land_search(from: string | number, to?: string | number): Promise<Set<`${string}_${string}`>>;
         db_land_save(land: $hyoo_crowd_land, units: readonly $hyoo_crowd_unit[]): Promise<void>;
         master_cursor(next?: number): number;
+        master_list(): string[];
         master_link(): string;
         master(): any;
         server(): any;
