@@ -1090,7 +1090,7 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    function $hyoo_sync_peer(path: string): Promise<$hyoo_crowd_peer>;
+    function $hyoo_sync_peer(path: string, next?: string): Promise<$hyoo_crowd_peer>;
 }
 
 declare namespace $ {
@@ -1346,7 +1346,7 @@ declare namespace $ {
     class $hyoo_sync_yard<Line> extends $mol_object2 {
         db_unit_persisted: WeakSet<$hyoo_crowd_unit>;
         log_pack(data: any): any;
-        peer(): $hyoo_crowd_peer;
+        peer(next?: string): $hyoo_crowd_peer;
         world(): $hyoo_crowd_world;
         land_init(land: $hyoo_crowd_land): void;
         land(id: $mol_int62_string): $hyoo_crowd_land;
