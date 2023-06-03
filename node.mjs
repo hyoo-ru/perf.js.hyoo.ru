@@ -5791,12 +5791,19 @@ var $;
         cut(seat) {
             return this.land.wipe(this.units()[seat]);
         }
-        has(val) {
-            for (const unit of this.units()) {
-                if (unit.data === val)
-                    return true;
+        has(val, next) {
+            if (next === undefined) {
+                for (const unit of this.units()) {
+                    if (unit.data === val)
+                        return true;
+                }
+                return false;
             }
-            return false;
+            if (next)
+                this.add(val);
+            else
+                this.drop(val);
+            return next;
         }
         add(val) {
             if (this.has(val))
@@ -16296,6 +16303,5 @@ var $;
     $mol_style_attach("hyoo/js/perf/perf.view.css", "[hyoo_js_perf_cases_pane_tools] {\n\tflex-grow: 0;\n}\n\n[hyoo_js_perf_body] {\n\tdisplay: flex;\n\tflex-direction: row;\n\tjustify-content: space-between;\n\tpadding: 0;\n}\n\n[hyoo_js_perf_common] {\n\tflex-direction: column;\n\tflex: 0 0 30rem;\n}\n\n[hyoo_js_perf_common_content] {\n\tgap: var(--mol_gap_block);\n}\n\n[hyoo_js_perf_cases_pane] {\n\tflex: 1000 0 90rem;\n\tbackground: var(--mol_theme_back);\n}\n\n[hyoo_js_perf_cases] {\n\tgap: var(--mol_gap_block);\n}\n");
 })($ || ($ = {}));
 //hyoo/js/perf/-css/perf.view.css.ts
-;
-export default $
-//# sourceMappingURL=node.mjs.map
+
+//# sourceMappingURL=node.js.map
