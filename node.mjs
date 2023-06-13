@@ -16356,4 +16356,5 @@ var $;
 })($ || ($ = {}));
 //hyoo/js/perf/-css/perf.view.css.ts
 
+export default $
 //# sourceMappingURL=node.js.map
