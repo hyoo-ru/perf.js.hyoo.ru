@@ -27,3 +27,7 @@
 [hyoo_js_perf_case_row_eval_labeler_trigger] {
 	flex-grow: 0;
 }
+
+[hyoo_js_perf_case_row_title] {
+	text-shadow: 0 0;
+}
