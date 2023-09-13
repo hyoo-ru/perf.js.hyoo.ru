@@ -1677,6 +1677,129 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    type $mol_file_type = 'file' | 'dir' | 'link';
+    interface $mol_file_stat {
+        type: $mol_file_type;
+        size: number;
+        atime: Date;
+        mtime: Date;
+        ctime: Date;
+    }
+    class $mol_file_not_found extends Error {
+    }
+    abstract class $mol_file extends $mol_object {
+        static absolute(path: string): $mol_file;
+        static relative(path: string): $mol_file;
+        static base: string;
+        path(): string;
+        parent(): $mol_file;
+        abstract stat(next?: $mol_file_stat | null, virt?: 'virt'): $mol_file_stat | null;
+        reset(): void;
+        version(): string;
+        abstract ensure(): void;
+        watcher(): {
+            destructor(): void;
+        };
+        exists(next?: boolean): boolean;
+        type(): "" | $mol_file_type;
+        name(): string;
+        ext(): string;
+        abstract buffer(next?: Uint8Array): Uint8Array;
+        text(next?: string, virt?: 'virt'): string;
+        abstract sub(): $mol_file[];
+        abstract resolve(path: string): $mol_file;
+        abstract relate(base?: $mol_file): string;
+        abstract append(next: Uint8Array | string): void;
+        find(include?: RegExp, exclude?: RegExp): $mol_file[];
+        size(): number;
+    }
+}
+
+declare namespace $ {
+    function $mol_compare_array<Value extends ArrayLike<unknown>>(a: Value, b: Value): boolean;
+}
+
+declare namespace $ {
+    class $mol_file_node extends $mol_file {
+        static absolute(path: string): $mol_file_node;
+        static relative(path: string): $mol_file_node;
+        watcher(): {
+            destructor(): void;
+        };
+        stat(next?: $mol_file_stat | null, virt?: 'virt'): $mol_file_stat | null;
+        ensure(): void;
+        buffer(next?: Uint8Array): Uint8Array;
+        sub(): $mol_file[];
+        resolve(path: string): $mol_file;
+        relate(base?: $mol_file): string;
+        append(next: Uint8Array | string): undefined;
+    }
+}
+
+declare namespace $ {
+    function $mol_dom_parse(text: string, type?: DOMParserSupportedType): Document;
+}
+
+declare namespace $ {
+    class $mol_fetch_response extends $mol_object2 {
+        readonly native: Response;
+        constructor(native: Response);
+        status(): "unknown" | "success" | "inform" | "redirect" | "wrong" | "failed";
+        code(): number;
+        message(): string;
+        headers(): Headers;
+        mime(): string | null;
+        stream(): ReadableStream<Uint8Array> | null;
+        text(): string;
+        json(): unknown;
+        buffer(): ArrayBuffer;
+        xml(): Document;
+        xhtml(): Document;
+        html(): Document;
+    }
+    class $mol_fetch extends $mol_object2 {
+        static request(input: RequestInfo, init?: RequestInit): Promise<Response> & {
+            destructor: () => void;
+        };
+        static response(input: RequestInfo, init?: RequestInit): $mol_fetch_response;
+        static success(input: RequestInfo, init?: RequestInit): $mol_fetch_response;
+        static stream(input: RequestInfo, init?: RequestInit): ReadableStream<Uint8Array> | null;
+        static text(input: RequestInfo, init?: RequestInit): string;
+        static json(input: RequestInfo, init?: RequestInit): unknown;
+        static buffer(input: RequestInfo, init?: RequestInit): ArrayBuffer;
+        static xml(input: RequestInfo, init?: RequestInit): Document;
+        static xhtml(input: RequestInfo, init?: RequestInit): Document;
+        static html(input: RequestInfo, init?: RequestInit): Document;
+    }
+}
+
+declare namespace $ {
+    function $mol_huggingface_run(this: $, space: string, method: string | number, ...data: readonly any[]): readonly any[];
+    function $mol_huggingface_rest(space: string, method: string, ...data: readonly any[]): readonly any[];
+    function $mol_huggingface_ws(space: string, fn_index: number, ...data: readonly any[]): Promise<readonly any[]> & {
+        destructor: () => void;
+    };
+}
+
+declare namespace $ {
+    function $hyoo_lingua_translate(this: $, lang: string, text: string): string;
+}
+
+declare namespace $ {
+    interface $mol_locale_dict {
+        [key: string]: string;
+    }
+    class $mol_locale extends $mol_object {
+        static lang_default(): string;
+        static lang(next?: string): string;
+        static source(lang: string): any;
+        static texts(lang: string, next?: $mol_locale_dict): $mol_locale_dict;
+        static text(key: string): string;
+        static warn(key: string): null;
+    }
+}
+
+declare namespace $ {
     class $mol_theme_auto extends $mol_plugin {
         attr(): Record<string, any>;
         theme(): string;
@@ -2098,129 +2221,6 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
-}
-
-declare namespace $ {
-    type $mol_file_type = 'file' | 'dir' | 'link';
-    interface $mol_file_stat {
-        type: $mol_file_type;
-        size: number;
-        atime: Date;
-        mtime: Date;
-        ctime: Date;
-    }
-    class $mol_file_not_found extends Error {
-    }
-    abstract class $mol_file extends $mol_object {
-        static absolute(path: string): $mol_file;
-        static relative(path: string): $mol_file;
-        static base: string;
-        path(): string;
-        parent(): $mol_file;
-        abstract stat(next?: $mol_file_stat | null, virt?: 'virt'): $mol_file_stat | null;
-        reset(): void;
-        version(): string;
-        abstract ensure(): void;
-        watcher(): {
-            destructor(): void;
-        };
-        exists(next?: boolean): boolean;
-        type(): "" | $mol_file_type;
-        name(): string;
-        ext(): string;
-        abstract buffer(next?: Uint8Array): Uint8Array;
-        text(next?: string, virt?: 'virt'): string;
-        abstract sub(): $mol_file[];
-        abstract resolve(path: string): $mol_file;
-        abstract relate(base?: $mol_file): string;
-        abstract append(next: Uint8Array | string): void;
-        find(include?: RegExp, exclude?: RegExp): $mol_file[];
-        size(): number;
-    }
-}
-
-declare namespace $ {
-    function $mol_compare_array<Value extends ArrayLike<unknown>>(a: Value, b: Value): boolean;
-}
-
-declare namespace $ {
-    class $mol_file_node extends $mol_file {
-        static absolute(path: string): $mol_file_node;
-        static relative(path: string): $mol_file_node;
-        watcher(): {
-            destructor(): void;
-        };
-        stat(next?: $mol_file_stat | null, virt?: 'virt'): $mol_file_stat | null;
-        ensure(): void;
-        buffer(next?: Uint8Array): Uint8Array;
-        sub(): $mol_file[];
-        resolve(path: string): $mol_file;
-        relate(base?: $mol_file): string;
-        append(next: Uint8Array | string): undefined;
-    }
-}
-
-declare namespace $ {
-    function $mol_dom_parse(text: string, type?: DOMParserSupportedType): Document;
-}
-
-declare namespace $ {
-    class $mol_fetch_response extends $mol_object2 {
-        readonly native: Response;
-        constructor(native: Response);
-        status(): "unknown" | "success" | "inform" | "redirect" | "wrong" | "failed";
-        code(): number;
-        message(): string;
-        headers(): Headers;
-        mime(): string | null;
-        stream(): ReadableStream<Uint8Array> | null;
-        text(): string;
-        json(): unknown;
-        buffer(): ArrayBuffer;
-        xml(): Document;
-        xhtml(): Document;
-        html(): Document;
-    }
-    class $mol_fetch extends $mol_object2 {
-        static request(input: RequestInfo, init?: RequestInit): Promise<Response> & {
-            destructor: () => void;
-        };
-        static response(input: RequestInfo, init?: RequestInit): $mol_fetch_response;
-        static success(input: RequestInfo, init?: RequestInit): $mol_fetch_response;
-        static stream(input: RequestInfo, init?: RequestInit): ReadableStream<Uint8Array> | null;
-        static text(input: RequestInfo, init?: RequestInit): string;
-        static json(input: RequestInfo, init?: RequestInit): unknown;
-        static buffer(input: RequestInfo, init?: RequestInit): ArrayBuffer;
-        static xml(input: RequestInfo, init?: RequestInit): Document;
-        static xhtml(input: RequestInfo, init?: RequestInit): Document;
-        static html(input: RequestInfo, init?: RequestInit): Document;
-    }
-}
-
-declare namespace $ {
-    function $mol_huggingface_run(this: $, space: string, method: string | number, ...data: readonly any[]): readonly any[];
-    function $mol_huggingface_rest(space: string, method: string, ...data: readonly any[]): readonly any[];
-    function $mol_huggingface_ws(space: string, fn_index: number, ...data: readonly any[]): Promise<readonly any[]> & {
-        destructor: () => void;
-    };
-}
-
-declare namespace $ {
-    function $hyoo_lingua_translate(this: $, lang: string, text: string): string;
-}
-
-declare namespace $ {
-    interface $mol_locale_dict {
-        [key: string]: string;
-    }
-    class $mol_locale extends $mol_object {
-        static lang_default(): string;
-        static lang(next?: string): string;
-        static source(lang: string): any;
-        static texts(lang: string, next?: $mol_locale_dict): $mol_locale_dict;
-        static text(key: string): string;
-        static warn(key: string): null;
-    }
 }
 
 declare namespace $ {
@@ -3787,26 +3787,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_icon_chevron_double_down extends $mol_icon {
-        path(): string;
-    }
-}
-
-declare namespace $ {
-    class $mol_icon_unfold_more_horizontal extends $mol_icon {
-        path(): string;
-    }
-}
-
-declare namespace $ {
-    class $mol_bar extends $mol_view {
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
     class $mol_icon_tick extends $mol_icon {
         path(): string;
     }
@@ -3819,6 +3799,26 @@ declare namespace $ {
 }
 
 declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_bar extends $mol_view {
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_icon_chevron_double_down extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_unfold_more_horizontal extends $mol_icon {
+        path(): string;
+    }
 }
 
 declare namespace $ {
@@ -3947,6 +3947,18 @@ declare namespace $ {
         sub(): readonly any[];
         sample(): string;
         prefix_showed(next?: any): boolean;
+        measurable(next?: any): boolean;
+        Measurable(): $mol_check_box;
+        changable(): boolean;
+        title(next?: any): string;
+        Title(): $mol_string_button;
+        eval_standalone(): string;
+        Eval_sandalone(): $$.$mol_link_iconed;
+        Prefix_tools(): $mol_bar;
+        prefix(val?: any): string;
+        Prefix_code(): $$.$mol_textarea;
+        Prefix(): $$.$mol_expander;
+        source_showed(next?: any): boolean;
         drop(next?: any): any;
         Drop_icon(): $mol_icon_cross;
         Drop(): $mol_button_minor;
@@ -3956,19 +3968,7 @@ declare namespace $ {
         swap(next?: any): any;
         Swap_icon(): $mol_icon_unfold_more_horizontal;
         Swap(): $mol_button_minor;
-        prefix_tools(): readonly any[];
-        Prefix_tools(): $mol_bar;
-        changable(): boolean;
-        prefix(val?: any): string;
-        Prefix_code(): $$.$mol_textarea;
-        Prefix(): $$.$mol_expander;
-        source_showed(next?: any): boolean;
-        measurable(next?: any): boolean;
-        Measurable(): $mol_check_box;
-        title(next?: any): string;
-        Title(): $mol_string_button;
-        eval_standalone(): string;
-        Eval_sandalone(): $$.$mol_link_iconed;
+        edit_tools(): readonly any[];
         Source_tools(): $mol_view;
         source(val?: any): string;
         Source_code(): $$.$mol_textarea;
@@ -3990,7 +3990,7 @@ declare namespace $.$$ {
         result(level: number): any;
         result_title(level: number): string;
         eval_standalone(): string;
-        prefix_tools(): readonly any[];
+        edit_tools(): readonly any[];
         prefix_showed(next?: boolean): boolean;
         source_showed(next?: boolean): boolean;
     }
@@ -4266,6 +4266,7 @@ declare namespace $.$$ {
         prefixes(next?: string[]): string[];
         sources(next?: string[]): string[];
         bench_title(next?: string): string;
+        menu_title(): string;
         prefix(next?: string): string;
         postfix(next?: string): string;
         case_drop(index: number): void;

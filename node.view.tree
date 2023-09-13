@@ -822,16 +822,16 @@ $hyoo_js_eval $mol_book2
 							values <= log* /
 							prototypes true
 
-$mol_icon_chevron_double_down $mol_icon path \M16.59,5.59L18,7L12,13L6,7L7.41,5.59L12,10.17L16.59,5.59M16.59,11.59L18,13L12,19L6,13L7.41,11.59L12,16.17L16.59,11.59Z
-
-$mol_icon_unfold_more_horizontal $mol_icon path \M12,18.17L8.83,15L7.42,16.41L12,21L16.59,16.41L15.17,15M12,5.83L15.17,9L16.58,7.59L12,3L7.41,7.59L8.83,9L12,5.83Z
-
-$mol_bar $mol_view
-
 $mol_icon_tick $mol_icon path \M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z
 
 $mol_check_box $mol_check
 	Icon $mol_icon_tick
+
+$mol_bar $mol_view
+
+$mol_icon_chevron_double_down $mol_icon path \M16.59,5.59L18,7L12,13L6,7L7.41,5.59L12,10.17L16.59,5.59M16.59,11.59L18,13L12,19L6,13L7.41,11.59L12,16.17L16.59,11.59Z
+
+$mol_icon_unfold_more_horizontal $mol_icon path \M12,18.17L8.83,15L7.42,16.41L12,21L16.59,16.41L15.17,15M12,5.83L15.17,9L16.58,7.59L12,3L7.41,7.59L8.83,9L12,5.83Z
 
 $mol_portion_indicator $mol_view
 	style *
@@ -898,7 +898,28 @@ $hyoo_js_perf_case_row $mol_view
 			title @ \Setup
 			expanded? <=> prefix_showed? true
 			minimal_width 150
-			Tools <= Prefix_tools $mol_bar sub <= prefix_tools /
+			Tools <= Prefix_tools $mol_bar sub /
+				<= Measurable $mol_check_box
+					checked? <=> measurable? true
+					hint @ \Measutre on run
+				<= Title $mol_string_button
+					hint @ \Case Name
+					enabled <= changable true
+					value? <=> title? \
+				<= Eval_sandalone $mol_link_iconed
+					title \
+					hint @ \Generated script
+					uri <= eval_standalone \
+			content / <= Prefix_code $mol_textarea
+				enabled <= changable true
+				spellcheck false
+				value?val <=> prefix?val \
+				hint \let count = {#}
+		<= Source $mol_expander
+			title @ \Measure
+			expanded? <=> source_showed? true
+			minimal_width 150
+			Tools <= Source_tools $mol_view sub <= edit_tools /
 				<= Drop $mol_button_minor
 					click? <=> drop? null
 					hint @ \Drop case
@@ -914,27 +935,6 @@ $hyoo_js_perf_case_row $mol_view
 					hint @ \Swap cases
 					sub /
 						<= Swap_icon $mol_icon_unfold_more_horizontal
-			content / <= Prefix_code $mol_textarea
-				enabled <= changable true
-				spellcheck false
-				value?val <=> prefix?val \
-				hint \let count = {#}
-		<= Source $mol_expander
-			title @ \Measure
-			expanded? <=> source_showed? true
-			minimal_width 150
-			Tools <= Source_tools $mol_view sub /
-				<= Measurable $mol_check_box
-					checked? <=> measurable? true
-					hint @ \Measutre on run
-				<= Title $mol_string_button
-					hint @ \Case Name
-					enabled <= changable true
-					value? <=> title? \
-				<= Eval_sandalone $mol_link_iconed
-					title \
-					hint @ \Generated script
-					uri <= eval_standalone \
 			content /
 				<= Source_code $mol_textarea
 					enabled <= changable true
@@ -1006,7 +1006,7 @@ $hyoo_js_perf $mol_book2
 	titles /string
 	prefixes /string
 	sources /string
-	menu_title <= bench_title
+	menu_title @ \Title
 	permalink \
 	plugins /
 		<= Theme $mol_theme_auto
