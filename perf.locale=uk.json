@@ -2,6 +2,7 @@
 	"$hyoo_js_perf_Common_title": "JS бенчмарк",
 	"$hyoo_js_perf_Prefix_title": "Загальний вступ",
 	"$hyoo_js_perf_Postfix_title": "Загальне завршення",
+	"$hyoo_js_perf_menu_title": "Название",
 	"$hyoo_js_perf_New_hint": "Створити бенчмарк",
 	"$hyoo_js_perf_Fork_hint": "Форкнуть бенчмарк",
 	"$hyoo_js_perf_Run_hint": "Запустити",

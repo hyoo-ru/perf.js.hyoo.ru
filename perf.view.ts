@@ -136,6 +136,10 @@ namespace $.$$ {
 			
 		}
 
+		menu_title() {
+			return this.bench_title() || super.menu_title()
+		}
+
 		@ $mol_mem
 		prefix( next? : string ) : string {
 			

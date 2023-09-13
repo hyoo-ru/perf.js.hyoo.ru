@@ -27,8 +27,8 @@ namespace $.$$ {
 			return `https://eval.js.hyoo.ru/#!code=${ encodeURIComponent( code ) }/run=true`
 		}
 		
-		prefix_tools() {
-			return this.changable() ? super.prefix_tools() : []
+		edit_tools() {
+			return this.changable() ? super.edit_tools() : []
 		}
 		
 		@ $mol_mem

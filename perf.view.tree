@@ -5,7 +5,7 @@ $hyoo_js_perf $mol_book2
 	titles /string
 	prefixes /string
 	sources /string
-	menu_title <= bench_title
+	menu_title @ \Title
 	permalink \
 	plugins /
 		<= Theme $mol_theme_auto

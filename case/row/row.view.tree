@@ -9,7 +9,28 @@ $hyoo_js_perf_case_row $mol_view
 			title @ \Setup
 			expanded? <=> prefix_showed? true
 			minimal_width 150
-			Tools <= Prefix_tools $mol_bar sub <= prefix_tools /
+			Tools <= Prefix_tools $mol_bar sub /
+				<= Measurable $mol_check_box
+					checked? <=> measurable? true
+					hint @ \Measutre on run
+				<= Title $mol_string_button
+					hint @ \Case Name
+					enabled <= changable true
+					value? <=> title? \
+				<= Eval_sandalone $mol_link_iconed
+					title \
+					hint @ \Generated script
+					uri <= eval_standalone \
+			content / <= Prefix_code $mol_textarea
+				enabled <= changable true
+				spellcheck false
+				value?val <=> prefix?val \
+				hint \let count = {#}
+		<= Source $mol_expander
+			title @ \Measure
+			expanded? <=> source_showed? true
+			minimal_width 150
+			Tools <= Source_tools $mol_view sub <= edit_tools /
 				<= Drop $mol_button_minor
 					click? <=> drop? null
 					hint @ \Drop case
@@ -25,27 +46,6 @@ $hyoo_js_perf_case_row $mol_view
 					hint @ \Swap cases
 					sub /
 						<= Swap_icon $mol_icon_unfold_more_horizontal
-			content / <= Prefix_code $mol_textarea
-				enabled <= changable true
-				spellcheck false
-				value?val <=> prefix?val \
-				hint \let count = {#}
-		<= Source $mol_expander
-			title @ \Measure
-			expanded? <=> source_showed? true
-			minimal_width 150
-			Tools <= Source_tools $mol_view sub /
-				<= Measurable $mol_check_box
-					checked? <=> measurable? true
-					hint @ \Measutre on run
-				<= Title $mol_string_button
-					hint @ \Case Name
-					enabled <= changable true
-					value? <=> title? \
-				<= Eval_sandalone $mol_link_iconed
-					title \
-					hint @ \Generated script
-					uri <= eval_standalone \
 			content /
 				<= Source_code $mol_textarea
 					enabled <= changable true
