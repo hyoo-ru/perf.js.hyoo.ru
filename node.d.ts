@@ -3991,6 +3991,8 @@ declare namespace $.$$ {
         result_title(level: number): string;
         eval_standalone(): string;
         prefix_tools(): readonly any[];
+        prefix_showed(next?: boolean): boolean;
+        source_showed(next?: boolean): boolean;
     }
 }
 

@@ -14792,10 +14792,26 @@ var $;
             prefix_tools() {
                 return this.changable() ? super.prefix_tools() : [];
             }
+            prefix_showed(next) {
+                return next
+                    ?? $mol_wire_probe(() => this.prefix_showed())
+                    ?? this.prefix().split('\n').length <= 2;
+            }
+            source_showed(next) {
+                return next
+                    ?? $mol_wire_probe(() => this.source_showed())
+                    ?? this.source().split('\n').length <= 2;
+            }
         }
         __decorate([
             $mol_mem
         ], $hyoo_js_perf_case_row.prototype, "columns", null);
+        __decorate([
+            $mol_mem
+        ], $hyoo_js_perf_case_row.prototype, "prefix_showed", null);
+        __decorate([
+            $mol_mem
+        ], $hyoo_js_perf_case_row.prototype, "source_showed", null);
         $$.$hyoo_js_perf_case_row = $hyoo_js_perf_case_row;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
