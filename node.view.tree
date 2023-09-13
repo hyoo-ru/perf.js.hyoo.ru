@@ -822,11 +822,6 @@ $hyoo_js_eval $mol_book2
 							values <= log* /
 							prototypes true
 
-$mol_icon_tick $mol_icon path \M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z
-
-$mol_check_box $mol_check
-	Icon $mol_icon_tick
-
 $mol_bar $mol_view
 
 $mol_icon_chevron_double_down $mol_icon path \M16.59,5.59L18,7L12,13L6,7L7.41,5.59L12,10.17L16.59,5.59M16.59,11.59L18,13L12,19L6,13L7.41,11.59L12,16.17L16.59,11.59Z
@@ -899,9 +894,10 @@ $hyoo_js_perf_case_row $mol_view
 			expanded? <=> prefix_showed? true
 			minimal_width 150
 			Tools <= Prefix_tools $mol_bar sub /
-				<= Measurable $mol_check_box
+				<= Measurable $mol_check_icon
 					checked? <=> measurable? true
 					hint @ \Measutre on run
+					Icon <= Measurable_icon $mol_icon_play
 				<= Title $mol_string_button
 					hint @ \Case Name
 					enabled <= changable true
@@ -953,6 +949,11 @@ $hyoo_js_perf_case_row $mol_view
 				<= Result*1
 				<= Result*2
 
+
+$mol_icon_tick $mol_icon path \M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z
+
+$mol_check_box $mol_check
+	Icon $mol_icon_tick
 
 $mol_check_group $mol_check_box
 	checks /$mol_check
@@ -1097,22 +1098,26 @@ $hyoo_js_perf $mol_book2
 						dupe? <=> case_dupe*? null
 						swap? <=> case_swap*? null
 			tools /
-				<= Measurable_all $mol_check_group
-					checks <= measurable_all /
-					hint @ \Whether to measure all
-				<= Run $mol_button_major
-					hint @ \Run
-					click?event <=> run?event null
-					sub / <= Run_icon $mol_icon_play
-				<= Share $mol_button_share
-					capture <= Cases
-				<= Fork $mol_button_minor
-					hint @ \Fork benchmark
-					click? <=> bench_fork? null
-					sub /
-						<= Fork_icon $mol_icon_directions_fork
-				<= New $mol_button_minor
-					hint @ \New benchmark
-					click? <=> bench_new? null
-					sub /
-						<= New_icon $mol_icon_plus_box
+				- <= Filter $mol_search
+					hint @ \Filter
+					query? <=> filter? \
+				<= Tool_buttons $mol_view sub /
+					<= Measurable_all $mol_check_group
+						checks <= measurable_all /
+						hint @ \Whether to measure all
+					<= Run $mol_button_major
+						hint @ \Run
+						click?event <=> run?event null
+						sub / <= Run_icon $mol_icon_play
+					<= Share $mol_button_share
+						capture <= Cases
+					<= Fork $mol_button_minor
+						hint @ \Fork benchmark
+						click? <=> bench_fork? null
+						sub /
+							<= Fork_icon $mol_icon_directions_fork
+					<= New $mol_button_minor
+						hint @ \New benchmark
+						click? <=> bench_new? null
+						sub /
+							<= New_icon $mol_icon_plus_box

@@ -3720,21 +3720,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_icon_tick extends $mol_icon {
-        path(): string;
-    }
-}
-
-declare namespace $ {
-    class $mol_check_box extends $mol_check {
-        Icon(): $mol_icon_tick;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
     class $mol_bar extends $mol_view {
     }
 }
@@ -3881,7 +3866,8 @@ declare namespace $ {
         sample(): string;
         prefix_showed(next?: any): boolean;
         measurable(next?: any): boolean;
-        Measurable(): $mol_check_box;
+        Measurable_icon(): $mol_icon_play;
+        Measurable(): $mol_check_icon;
         changable(): boolean;
         title(next?: any): string;
         Title(): $mol_string_button;
@@ -3926,6 +3912,21 @@ declare namespace $.$$ {
         edit_tools(): readonly any[];
         prefix_showed(next?: boolean): boolean;
         source_showed(next?: boolean): boolean;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_icon_tick extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_check_box extends $mol_check {
+        Icon(): $mol_icon_tick;
     }
 }
 
@@ -4081,7 +4082,7 @@ declare namespace $ {
         case_drop(id: any, next?: any): any;
         case_dupe(id: any, next?: any): any;
         case_swap(id: any, next?: any): any;
-        Case_measurable(id: any): $mol_check_box;
+        Case_measurable(id: any): $mol_check_icon;
         Case(id: any): $$.$hyoo_js_perf_case_row;
         cases(): readonly any[];
         Cases(): $$.$mol_list;
@@ -4096,6 +4097,7 @@ declare namespace $ {
         bench_new(next?: any): any;
         New_icon(): $mol_icon_plus_box;
         New(): $mol_button_minor;
+        Tool_buttons(): $mol_view;
         Cases_pane(): $mol_page;
     }
 }
@@ -4192,7 +4194,7 @@ declare namespace $.$$ {
         measure_safe(index: number, prefix: string, inner: string, postfix: string): $hyoo_js_perf_stats;
         _run_iteration: number;
         iterations_reset(): void;
-        measurable_all(): $mol_check_box[];
+        measurable_all(): $mol_check_icon[];
         run(): void;
     }
 }

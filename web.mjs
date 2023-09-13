@@ -13486,41 +13486,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $mol_icon_tick extends $mol_icon {
-        path() {
-            return "M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z";
-        }
-    }
-    $.$mol_icon_tick = $mol_icon_tick;
-})($ || ($ = {}));
-//mol/icon/tick/-view.tree/tick.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_check_box extends $mol_check {
-        Icon() {
-            const obj = new this.$.$mol_icon_tick();
-            return obj;
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $mol_check_box.prototype, "Icon", null);
-    $.$mol_check_box = $mol_check_box;
-})($ || ($ = {}));
-//mol/check/box/-view.tree/box.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("mol/check/box/box.view.css", "[mol_check_box_icon] {\n\tborder-radius: var(--mol_gap_round);\n\tbox-shadow: inset 0 0 0 1px var(--mol_theme_line);\n\tcolor: var(--mol_theme_shade);\n\theight: 1rem;\n\talign-self: center;\n}\n\n[mol_check]:not([mol_check_checked]) > [mol_check_box_icon] {\n\tfill: transparent;\n}\n\n[mol_check]:not([disabled]) > [mol_check_box_icon] {\n\tbackground: var(--mol_theme_field);\n\tcolor: var(--mol_theme_text);\n}\n");
-})($ || ($ = {}));
-//mol/check/box/-css/box.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
     class $mol_bar extends $mol_view {
     }
     $.$mol_bar = $mol_bar;
@@ -14087,10 +14052,15 @@ var $;
                 return next;
             return true;
         }
+        Measurable_icon() {
+            const obj = new this.$.$mol_icon_play();
+            return obj;
+        }
         Measurable() {
-            const obj = new this.$.$mol_check_box();
+            const obj = new this.$.$mol_check_icon();
             obj.checked = (next) => this.measurable(next);
             obj.hint = () => this.$.$mol_locale.text('$hyoo_js_perf_case_row_Measurable_hint');
+            obj.Icon = () => this.Measurable_icon();
             return obj;
         }
         changable() {
@@ -14305,6 +14275,9 @@ var $;
     ], $hyoo_js_perf_case_row.prototype, "measurable", null);
     __decorate([
         $mol_mem
+    ], $hyoo_js_perf_case_row.prototype, "Measurable_icon", null);
+    __decorate([
+        $mol_mem
     ], $hyoo_js_perf_case_row.prototype, "Measurable", null);
     __decorate([
         $mol_mem
@@ -14449,6 +14422,41 @@ var $;
     $mol_style_attach("hyoo/js/perf/case/row/row.view.css", "[hyoo_js_perf_case_row] {\n\tflex: 0 1 auto;\n\tflex-wrap: wrap;\n\tbackground: var(--mol_theme_card);\n\tborder-radius: var(--mol_gap_round);\n}\n\n[hyoo_js_perf_case_row_prefix] ,\n[hyoo_js_perf_case_row_source] {\n\tflex: 1 1 40rem;\n\tvertical-align: top;\n}\n\n[hyoo_js_perf_case_row_prefix_tools] {\n\tflex-grow: 1000;\n}\n\n[hyoo_js_perf_case_row_eval_labeler] {\n\tflex: 1 1 26rem;\n}\n[hyoo_js_perf_case_row_results] {\n\tflex: 1 1 26rem;\n\tflex-wrap: wrap;\n\talign-content: flex-start;\n}\n\n[hyoo_js_perf_case_row_eval_labeler_trigger] {\n\tflex-grow: 0;\n}\n\n[hyoo_js_perf_case_row_title] {\n\ttext-shadow: 0 0;\n}\n");
 })($ || ($ = {}));
 //hyoo/js/perf/case/row/-css/row.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_icon_tick extends $mol_icon {
+        path() {
+            return "M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z";
+        }
+    }
+    $.$mol_icon_tick = $mol_icon_tick;
+})($ || ($ = {}));
+//mol/icon/tick/-view.tree/tick.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_check_box extends $mol_check {
+        Icon() {
+            const obj = new this.$.$mol_icon_tick();
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_check_box.prototype, "Icon", null);
+    $.$mol_check_box = $mol_check_box;
+})($ || ($ = {}));
+//mol/check/box/-view.tree/box.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/check/box/box.view.css", "[mol_check_box_icon] {\n\tborder-radius: var(--mol_gap_round);\n\tbox-shadow: inset 0 0 0 1px var(--mol_theme_line);\n\tcolor: var(--mol_theme_shade);\n\theight: 1rem;\n\talign-self: center;\n}\n\n[mol_check]:not([mol_check_checked]) > [mol_check_box_icon] {\n\tfill: transparent;\n}\n\n[mol_check]:not([disabled]) > [mol_check_box_icon] {\n\tbackground: var(--mol_theme_field);\n\tcolor: var(--mol_theme_text);\n}\n");
+})($ || ($ = {}));
+//mol/check/box/-css/box.view.css.ts
 ;
 "use strict";
 var $;
@@ -15110,6 +15118,17 @@ var $;
             ];
             return obj;
         }
+        Tool_buttons() {
+            const obj = new this.$.$mol_view();
+            obj.sub = () => [
+                this.Measurable_all(),
+                this.Run(),
+                this.Share(),
+                this.Fork(),
+                this.New()
+            ];
+            return obj;
+        }
         Cases_pane() {
             const obj = new this.$.$mol_page();
             obj.title = () => this.bench_title();
@@ -15118,11 +15137,7 @@ var $;
                 this.Cases()
             ];
             obj.tools = () => [
-                this.Measurable_all(),
-                this.Run(),
-                this.Share(),
-                this.Fork(),
-                this.New()
+                this.Tool_buttons()
             ];
             return obj;
         }
@@ -15250,6 +15265,9 @@ var $;
     __decorate([
         $mol_mem
     ], $hyoo_js_perf.prototype, "New", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_js_perf.prototype, "Tool_buttons", null);
     __decorate([
         $mol_mem
     ], $hyoo_js_perf.prototype, "Cases_pane", null);
