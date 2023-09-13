@@ -31,12 +31,19 @@ namespace $.$$ {
 			return this.changable() ? super.prefix_tools() : []
 		}
 		
-		// @ $mol_mem
-		// prefix_showed( next?: boolean ): boolean {
-		// 	return next
-		// 		?? $mol_wire_probe( ()=> this.prefix_showed() )
-		// 		?? this.prefix().split( '\n' ).length <= 2
-		// }
+		@ $mol_mem
+		prefix_showed( next?: boolean ): boolean {
+			return next
+				?? $mol_wire_probe( ()=> this.prefix_showed() )
+				?? this.prefix().split( '\n' ).length <= 2
+		}
+		
+		@ $mol_mem
+		source_showed( next?: boolean ): boolean {
+			return next
+				?? $mol_wire_probe( ()=> this.source_showed() )
+				?? this.source().split( '\n' ).length <= 2
+		}
 		
 	}
 }
