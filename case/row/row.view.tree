@@ -10,9 +10,10 @@ $hyoo_js_perf_case_row $mol_view
 			expanded? <=> prefix_showed? true
 			minimal_width 150
 			Tools <= Prefix_tools $mol_bar sub /
-				<= Measurable $mol_check_box
+				<= Measurable $mol_check_icon
 					checked? <=> measurable? true
 					hint @ \Measutre on run
+					Icon <= Measurable_icon $mol_icon_play
 				<= Title $mol_string_button
 					hint @ \Case Name
 					enabled <= changable true

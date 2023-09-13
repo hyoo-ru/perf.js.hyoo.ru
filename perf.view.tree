@@ -96,22 +96,26 @@ $hyoo_js_perf $mol_book2
 						dupe? <=> case_dupe*? null
 						swap? <=> case_swap*? null
 			tools /
-				<= Measurable_all $mol_check_group
-					checks <= measurable_all /
-					hint @ \Whether to measure all
-				<= Run $mol_button_major
-					hint @ \Run
-					click?event <=> run?event null
-					sub / <= Run_icon $mol_icon_play
-				<= Share $mol_button_share
-					capture <= Cases
-				<= Fork $mol_button_minor
-					hint @ \Fork benchmark
-					click? <=> bench_fork? null
-					sub /
-						<= Fork_icon $mol_icon_directions_fork
-				<= New $mol_button_minor
-					hint @ \New benchmark
-					click? <=> bench_new? null
-					sub /
-						<= New_icon $mol_icon_plus_box
+				- <= Filter $mol_search
+					hint @ \Filter
+					query? <=> filter? \
+				<= Tool_buttons $mol_view sub /
+					<= Measurable_all $mol_check_group
+						checks <= measurable_all /
+						hint @ \Whether to measure all
+					<= Run $mol_button_major
+						hint @ \Run
+						click?event <=> run?event null
+						sub / <= Run_icon $mol_icon_play
+					<= Share $mol_button_share
+						capture <= Cases
+					<= Fork $mol_button_minor
+						hint @ \Fork benchmark
+						click? <=> bench_fork? null
+						sub /
+							<= Fork_icon $mol_icon_directions_fork
+					<= New $mol_button_minor
+						hint @ \New benchmark
+						click? <=> bench_new? null
+						sub /
+							<= New_icon $mol_icon_plus_box
