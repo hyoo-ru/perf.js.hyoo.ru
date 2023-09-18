@@ -1181,7 +1181,7 @@ var $;
             const field = task.name + '()';
             let dict = Object.getOwnPropertyDescriptor(host ?? task, field)?.value;
             const prefix = host?.[Symbol.toStringTag] ?? (host instanceof Function ? $$.$mol_func_name(host) : host);
-            const id = `${prefix}.${task.name}(${$mol_key(key)})`;
+            const id = `${prefix}.${task.name}(${$mol_key(key).replace(/^"|"$/g, "'")})`;
             if (dict) {
                 const existen = dict.get(id);
                 if (existen)
@@ -1402,9 +1402,9 @@ var $node = new Proxy({ require }, {
         while (!fs.existsSync(path.join(dir, suffix))) {
             const parent = path.resolve(dir, '..');
             if (parent === dir) {
-                $$.$mol_exec('.', 'npm', 'install', '--omit=dev', '--no-save', name);
+                $$.$mol_exec('.', 'npm', 'install', '--omit=dev', name);
                 try {
-                    $$.$mol_exec('.', 'npm', 'install', '--omit=dev', '--no-save', '@types/' + name);
+                    $$.$mol_exec('.', 'npm', 'install', '--omit=dev', '@types/' + name);
                 }
                 catch { }
                 break;
@@ -3453,7 +3453,7 @@ var $;
 //mol/book2/-css/book2.view.css.ts
 ;
 "use strict";
-let $hyoo_sync_revision = "6efc2c3";
+let $hyoo_sync_revision = "bccfe4d";
 //hyoo/sync/-meta.tree/revision.meta.tree.ts
 ;
 "use strict";
@@ -5223,12 +5223,11 @@ var $;
             return next;
         }
         master_list() {
-            return this.$.$hyoo_sync_masters;
+            const scheme = this.$.$mol_dom_context.document.location.protocol.replace(/^http/, 'ws');
+            return this.$.$hyoo_sync_masters.map(host => `${scheme}//${host}`);
         }
         master_link() {
-            const scheme = this.$.$mol_dom_context.document.location.protocol.replace(/^http/, 'ws');
-            const host = this.master_list()[this.master_cursor()];
-            return `${scheme}//${host}`;
+            return this.master_list()[this.master_cursor()];
         }
         master() {
             return null;
@@ -7022,670 +7021,208 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $mol_link extends $mol_view {
-        uri() {
-            return "";
-        }
-        dom_name() {
-            return "a";
-        }
-        attr() {
-            return {
-                ...super.attr(),
-                href: this.uri_toggle(),
-                title: this.hint_safe(),
-                target: this.target(),
-                download: this.file_name(),
-                mol_link_current: this.current()
-            };
-        }
-        sub() {
-            return [
-                this.title()
-            ];
-        }
-        arg() {
-            return {};
-        }
-        event() {
-            return {
-                ...super.event(),
-                click: (event) => this.click(event)
-            };
-        }
-        uri_toggle() {
-            return "";
-        }
-        hint() {
-            return "";
-        }
-        hint_safe() {
-            return this.hint();
-        }
-        target() {
-            return "_self";
-        }
-        file_name() {
-            return "";
-        }
-        current() {
+    class $mol_pop extends $mol_view {
+        showed(next) {
+            if (next !== undefined)
+                return next;
             return false;
         }
-        event_click(event) {
-            if (event !== undefined)
-                return event;
+        align_vert() {
+            return "";
+        }
+        align_hor() {
+            return "";
+        }
+        prefer() {
+            return "vert";
+        }
+        sub() {
+            return [
+                this.Anchor()
+            ];
+        }
+        sub_visible() {
+            return [
+                this.Anchor(),
+                this.Bubble()
+            ];
+        }
+        Anchor() {
             return null;
         }
-        click(event) {
-            return this.event_click(event);
+        align() {
+            return "bottom_center";
         }
-    }
-    __decorate([
-        $mol_mem
-    ], $mol_link.prototype, "event_click", null);
-    $.$mol_link = $mol_link;
-})($ || ($ = {}));
-//mol/link/-view.tree/link.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $mol_link extends $.$mol_link {
-            uri_toggle() {
-                return this.current() ? this.uri_off() : this.uri();
-            }
-            uri() {
-                return new this.$.$mol_state_arg(this.state_key()).link(this.arg());
-            }
-            uri_off() {
-                const arg2 = {};
-                for (let i in this.arg())
-                    arg2[i] = null;
-                return new this.$.$mol_state_arg(this.state_key()).link(arg2);
-            }
-            uri_native() {
-                const base = this.$.$mol_state_arg.href();
-                return new URL(this.uri(), base);
-            }
-            current() {
-                const base = this.$.$mol_state_arg.href_normal();
-                const target = this.uri_native().toString();
-                if (base === target)
-                    return true;
-                const args = this.arg();
-                const keys = Object.keys(args).filter(key => args[key] != null);
-                if (keys.length === 0)
-                    return false;
-                for (const key of keys) {
-                    if (this.$.$mol_state_arg.value(key) != args[key])
-                        return false;
-                }
-                return true;
-            }
-            file_name() {
-                return null;
-            }
-            minimal_height() {
-                return Math.max(super.minimal_height(), 24);
-            }
-            external() {
-                return this.uri_native().origin !== $mol_dom_context.location.origin;
-            }
-            target() {
-                return this.external() ? '_blank' : '_self';
-            }
-            hint_safe() {
-                try {
-                    return this.hint();
-                }
-                catch (error) {
-                    $mol_fail_log(error);
-                    return '';
-                }
-            }
+        bubble_content() {
+            return [];
         }
-        __decorate([
-            $mol_mem
-        ], $mol_link.prototype, "uri_toggle", null);
-        __decorate([
-            $mol_mem
-        ], $mol_link.prototype, "uri", null);
-        __decorate([
-            $mol_mem
-        ], $mol_link.prototype, "uri_off", null);
-        __decorate([
-            $mol_mem
-        ], $mol_link.prototype, "uri_native", null);
-        __decorate([
-            $mol_mem
-        ], $mol_link.prototype, "current", null);
-        $$.$mol_link = $mol_link;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-//mol/link/link.view.ts
-;
-"use strict";
-var $;
-(function ($) {
-    const { rem } = $mol_style_unit;
-    $mol_style_define($mol_link, {
-        textDecoration: 'none',
-        color: $mol_theme.control,
-        stroke: 'currentcolor',
-        cursor: 'pointer',
-        padding: $mol_gap.text,
-        boxSizing: 'border-box',
-        position: 'relative',
-        minWidth: rem(2.5),
-        gap: $mol_gap.space,
-        border: {
-            radius: $mol_gap.round,
-        },
-        ':hover': {
-            background: {
-                color: $mol_theme.hover,
-            },
-        },
-        ':focus': {
-            outline: 'none',
-            background: {
-                color: $mol_theme.hover,
-            },
-        },
-        ':focus-within': {
-            outline: 'none',
-            background: {
-                color: $mol_theme.hover,
-            }
-        },
-        ':active': {
-            color: $mol_theme.focus,
-        },
-        '@': {
-            mol_link_current: {
-                'true': {
-                    color: $mol_theme.current,
-                    textShadow: '0 0',
-                }
-            }
-        },
-    });
-})($ || ($ = {}));
-//mol/link/link.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_svg extends $mol_view {
-        dom_name() {
-            return "svg";
+        height_max() {
+            return 9999;
         }
-        dom_name_space() {
-            return "http://www.w3.org/2000/svg";
-        }
-        font_size() {
-            return 16;
-        }
-        font_family() {
-            return "";
-        }
-        style_size() {
-            return {};
-        }
-    }
-    $.$mol_svg = $mol_svg;
-})($ || ($ = {}));
-//mol/svg/-view.tree/svg.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_state_time extends $mol_object {
-        static task(precision, reset) {
-            if (precision) {
-                return new $mol_after_timeout(precision, () => this.task(precision, null));
-            }
-            else {
-                return new $mol_after_frame(() => this.task(precision, null));
-            }
-        }
-        static now(precision) {
-            this.task(precision);
-            return Date.now();
-        }
-    }
-    __decorate([
-        $mol_mem_key
-    ], $mol_state_time, "task", null);
-    __decorate([
-        $mol_mem_key
-    ], $mol_state_time, "now", null);
-    $.$mol_state_time = $mol_state_time;
-})($ || ($ = {}));
-//mol/state/time/time.ts
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $mol_svg extends $.$mol_svg {
-            computed_style() {
-                const win = this.$.$mol_dom_context;
-                const style = win.getComputedStyle(this.dom_node());
-                if (!style['font-size'])
-                    $mol_state_time.now(0);
-                return style;
-            }
-            font_size() {
-                return parseInt(this.computed_style()['font-size']) || 16;
-            }
-            font_family() {
-                return this.computed_style()['font-family'];
-            }
-        }
-        __decorate([
-            $mol_mem
-        ], $mol_svg.prototype, "computed_style", null);
-        __decorate([
-            $mol_mem
-        ], $mol_svg.prototype, "font_size", null);
-        __decorate([
-            $mol_mem
-        ], $mol_svg.prototype, "font_family", null);
-        $$.$mol_svg = $mol_svg;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-//mol/svg/svg.view.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_svg_root extends $mol_svg {
-        dom_name() {
-            return "svg";
-        }
-        attr() {
-            return {
-                ...super.attr(),
-                viewBox: this.view_box(),
-                preserveAspectRatio: this.aspect()
-            };
-        }
-        view_box() {
-            return "0 0 100 100";
-        }
-        aspect() {
-            return "xMidYMid";
-        }
-    }
-    $.$mol_svg_root = $mol_svg_root;
-})($ || ($ = {}));
-//mol/svg/root/-view.tree/root.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("mol/svg/root/root.view.css", "[mol_svg_root] {\n\toverflow: hidden;\n}\n");
-})($ || ($ = {}));
-//mol/svg/root/-css/root.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_svg_path extends $mol_svg {
-        dom_name() {
-            return "path";
-        }
-        attr() {
-            return {
-                ...super.attr(),
-                d: this.geometry()
-            };
-        }
-        geometry() {
-            return "";
-        }
-    }
-    $.$mol_svg_path = $mol_svg_path;
-})($ || ($ = {}));
-//mol/svg/path/-view.tree/path.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_icon extends $mol_svg_root {
-        view_box() {
-            return "0 0 24 24";
-        }
-        minimal_width() {
-            return 16;
-        }
-        minimal_height() {
-            return 16;
-        }
-        sub() {
-            return [
-                this.Path()
-            ];
-        }
-        path() {
-            return "";
-        }
-        Path() {
-            const obj = new this.$.$mol_svg_path();
-            obj.geometry = () => this.path();
+        Bubble() {
+            const obj = new this.$.$mol_pop_bubble();
+            obj.align = () => this.align();
+            obj.content = () => this.bubble_content();
+            obj.height_max = () => this.height_max();
             return obj;
         }
     }
     __decorate([
         $mol_mem
-    ], $mol_icon.prototype, "Path", null);
-    $.$mol_icon = $mol_icon;
-})($ || ($ = {}));
-//mol/icon/-view.tree/icon.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("mol/icon/icon.view.css", "[mol_icon] {\n\tfill: currentColor;\n\tstroke: none;\n\twidth: 1em;\n\theight: 1.5em;\n\tflex: 0 0 auto;\n\tvertical-align: top;\n\tdisplay: inline-block;\n\tfilter: drop-shadow(0px 1px 1px var(--mol_theme_back));\n\ttransform-origin: center;\n}\n\n[mol_icon_path] {\n\ttransform-origin: center;\n}\n");
-})($ || ($ = {}));
-//mol/icon/-css/icon.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_avatar extends $mol_icon {
-        view_box() {
-            return "0 0 24 24";
+    ], $mol_pop.prototype, "showed", null);
+    __decorate([
+        $mol_mem
+    ], $mol_pop.prototype, "Bubble", null);
+    $.$mol_pop = $mol_pop;
+    class $mol_pop_bubble extends $mol_view {
+        sub() {
+            return this.content();
         }
-        id() {
+        style() {
+            return {
+                ...super.style(),
+                maxHeight: this.height_max()
+            };
+        }
+        attr() {
+            return {
+                ...super.attr(),
+                mol_pop_align: this.align(),
+                tabindex: 0
+            };
+        }
+        content() {
+            return [];
+        }
+        height_max() {
+            return 9999;
+        }
+        align() {
             return "";
         }
-        path() {
-            return "M 12 12 l 0 0 M 0 0 l 0 0 M 24 24 l 0 0 M 0 24 l 0 0 M 24 0 l 0 0";
-        }
     }
-    $.$mol_avatar = $mol_avatar;
+    $.$mol_pop_bubble = $mol_pop_bubble;
 })($ || ($ = {}));
-//mol/avatar/-view.tree/avatar.view.tree.ts
+//mol/pop/-view.tree/pop.view.tree.ts
 ;
 "use strict";
 var $;
 (function ($) {
-    function $mol_hash_string(str, seed = 0) {
-        let h1 = 0xdeadbeef ^ seed;
-        let h2 = 0x41c6ce57 ^ seed;
-        for (let i = 0; i < str.length; i++) {
-            const ch = str.charCodeAt(i);
-            h1 = Math.imul(h1 ^ ch, 2654435761);
-            h2 = Math.imul(h2 ^ ch, 1597334677);
-        }
-        h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
-        h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
-        return 4294967296 * (((1 << 16) - 1) & h2) + (h1 >>> 0);
-    }
-    $.$mol_hash_string = $mol_hash_string;
+    $.$mol_layer = $mol_style_prop('mol_layer', [
+        'hover',
+        'focus',
+        'speck',
+        'float',
+        'popup',
+    ]);
 })($ || ($ = {}));
-//mol/hash/string/string.ts
+//mol/layer/layer.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/layer/layer.css", ":root {\n\t--mol_layer_hover: 1;\n\t--mol_layer_focus: 2;\n\t--mol_layer_speck: 3;\n\t--mol_layer_float: 4;\n\t--mol_layer_popup: 5;\n}\n");
+})($ || ($ = {}));
+//mol/layer/-css/layer.css.ts
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
-        class $mol_avatar extends $.$mol_avatar {
-            path() {
-                const id = $mol_hash_string(this.id());
-                const p = 2.1;
-                const m = 2.7;
-                let path = '';
-                for (let x = 0; x < 4; ++x) {
-                    for (let y = 0; y < 8; ++y) {
-                        if ((id >> (x + y * 7)) & 1) {
-                            const mxp = Math.ceil(m * x + p);
-                            const myp = Math.ceil(m * y + p);
-                            path += `M ${mxp} ${myp} l 0 0 ` + `M ${24 - mxp} ${myp} l 0 0 `;
-                        }
+        class $mol_pop extends $.$mol_pop {
+            showed(next = false) {
+                this.focused();
+                return next;
+            }
+            sub_visible() {
+                return [
+                    this.Anchor(),
+                    ...this.showed() ? [this.Bubble()] : [],
+                ];
+            }
+            height_max() {
+                const viewport = this.$.$mol_window.size();
+                const rect_bubble = this.view_rect();
+                const align = this.align_vert();
+                if (align === 'bottom')
+                    return (viewport.height - rect_bubble.bottom) * .66;
+                if (align === 'top')
+                    return rect_bubble.top * .66;
+                return 0;
+            }
+            align() {
+                switch (this.prefer()) {
+                    case 'hor': return `${this.align_hor()}_${this.align_vert()}`;
+                    case 'vert': return `${this.align_vert()}_${this.align_hor()}`;
+                    default: return this.prefer();
+                }
+            }
+            align_vert() {
+                const viewport = this.view_port();
+                const rect_pop = this.view_rect();
+                if (!rect_pop)
+                    return 'suspense';
+                return rect_pop.top > (viewport.top + viewport.height / 2) ? 'top' : 'bottom';
+            }
+            align_hor() {
+                const viewport = this.view_port();
+                const rect_pop = this.view_rect();
+                if (!rect_pop)
+                    return 'suspense';
+                return rect_pop.left > (viewport.left + viewport.width / 2) ? 'left' : 'right';
+            }
+            View_port() {
+                const view = new $mol_view;
+                view.dom_node = () => {
+                    let node = this.dom_node();
+                    while (node = node.offsetParent) {
+                        if (this.$.$mol_dom_context.getComputedStyle(node).overflow !== 'visible')
+                            return node;
                     }
-                }
-                return path;
+                    return this.$.$mol_dom_context.document.documentElement;
+                };
+                return view;
+            }
+            view_port() {
+                return this.View_port().view_rect() ?? { ...this.$.$mol_window.size(), left: 0, top: 0 };
             }
         }
         __decorate([
             $mol_mem
-        ], $mol_avatar.prototype, "path", null);
-        $$.$mol_avatar = $mol_avatar;
+        ], $mol_pop.prototype, "showed", null);
+        __decorate([
+            $mol_mem
+        ], $mol_pop.prototype, "sub_visible", null);
+        __decorate([
+            $mol_mem
+        ], $mol_pop.prototype, "height_max", null);
+        __decorate([
+            $mol_mem
+        ], $mol_pop.prototype, "align", null);
+        __decorate([
+            $mol_mem
+        ], $mol_pop.prototype, "align_vert", null);
+        __decorate([
+            $mol_mem
+        ], $mol_pop.prototype, "align_hor", null);
+        __decorate([
+            $mol_mem
+        ], $mol_pop.prototype, "View_port", null);
+        __decorate([
+            $mol_mem
+        ], $mol_pop.prototype, "view_port", null);
+        $$.$mol_pop = $mol_pop;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
-//mol/avatar/avatar.view.ts
+//mol/pop/pop.view.ts
 ;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("mol/avatar/avatar.view.css", "[mol_avatar] {\n\tstroke-linecap: round;\n\tstroke-width: 3.5px;\n\tfill: none;\n\tstroke: currentColor;\n\t/* width: 1.5rem;\n\theight: 1.5rem;\n\tmargin: 0 -.25rem; */\n\t/* box-shadow: 0 0 0 1px var(--mol_theme_line); */\n}\n");
+    $mol_style_attach("mol/pop/pop.view.css", "[mol_pop] {\n\tposition: relative;\n\tdisplay: inline-flex;\n}\n\n[mol_pop_bubble] {\n\tbox-shadow: 0 0 1rem hsla(0,0%,0%,.5);\n\tborder-radius: var(--mol_gap_round);\n\tposition: absolute;\n\tz-index: var(--mol_layer_popup);\n\tbackground: var(--mol_theme_back);\n\tmax-width: none;\n\tmax-height: none;\n\t/* overflow: hidden;\n\toverflow-y: scroll;\n\toverflow-y: overlay; */\n\tword-break: normal;\n\twidth: max-content;\n\theight: max-content;\n\tflex-direction: column;\n\tmax-width: 80vw;\n\tmax-height: 80vw;\n}\n\n:where( [mol_pop_bubble] > * ) {\n\tbackground: var(--mol_theme_card);\n}\n\n[mol_pop_bubble][mol_scroll] {\n\tbackground: var(--mol_theme_back);\n}\n\n[mol_pop_bubble]:focus {\n\toutline: none;\n}\n\n[mol_pop_align=\"suspense_suspense\"] {\n\topacity: 0;\n}\n\n[mol_pop_align=\"left_top\"] {\n\ttransform: translate(-100%);\n\tleft: 0;\n\tbottom: 0;\n}\n\n[mol_pop_align=\"left_center\"] {\n\ttransform: translate(-100%, -50%);\n\tleft: 0;\n\ttop: 50%;\n}\n\n[mol_pop_align=\"left_bottom\"] {\n\ttransform: translate(-100%);\n\tleft: 0;\n\ttop: 0;\n}\n\n[mol_pop_align=\"right_top\"] {\n\ttransform: translate(100%);\n\tright: 0;\n\tbottom: 0;\n}\n\n[mol_pop_align=\"right_center\"] {\n\ttransform: translate(100%, -50%);\n\tright: 0;\n\ttop: 50%;\n}\n\n[mol_pop_align=\"right_bottom\"] {\n\ttransform: translate(100%);\n\tright: 0;\n\ttop: 0;\n}\n\n[mol_pop_align=\"center\"] {\n\tleft: 50%;\n\ttop: 50%;\n\ttransform: translate(-50%, -50%);\n}\n\n[mol_pop_align=\"top_left\"] {\n\tright: 0;\n\tbottom: 100%;\n}\n\n[mol_pop_align=\"top_center\"] {\n\ttransform: translate(-50%);\n\tleft: 50%;\n\tbottom: 100%;\n}\n\n[mol_pop_align=\"top_right\"] {\n\tleft: 0;\n\tbottom: 100%;\n}\n\n[mol_pop_align=\"bottom_left\"] {\n\tright: 0;\n\ttop: 100%;\n}\n\n[mol_pop_align=\"bottom_center\"] {\n\ttransform: translate(-50%);\n\tleft: 50%;\n\ttop: 100%;\n}\n\n[mol_pop_align=\"bottom_right\"] {\n\tleft: 0;\n\ttop: 100%;\n}\n");
 })($ || ($ = {}));
-//mol/avatar/-css/avatar.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_icon_sync extends $mol_icon {
-        path() {
-            return "M12,18C8.69,18 6,15.31 6,12C6,11 6.25,10.03 6.7,9.2L5.24,7.74C4.46,8.97 4,10.43 4,12C4,16.42 7.58,20 12,20V23L16,19L12,15M12,4V1L8,5L12,9V6C15.31,6 18,8.69 18,12C18,13 17.75,13.97 17.3,14.8L18.76,16.26C19.54,15.03 20,13.57 20,12C20,7.58 16.42,4 12,4Z";
-        }
-    }
-    $.$mol_icon_sync = $mol_icon_sync;
-})($ || ($ = {}));
-//mol/icon/sync/-view.tree/sync.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_icon_sync_off extends $mol_icon {
-        path() {
-            return "M20,4H14V10L16.24,7.76C17.32,8.85 18,10.34 18,12C18,13 17.75,13.94 17.32,14.77L18.78,16.23C19.55,15 20,13.56 20,12C20,9.79 19.09,7.8 17.64,6.36L20,4M2.86,5.41L5.22,7.77C4.45,9 4,10.44 4,12C4,14.21 4.91,16.2 6.36,17.64L4,20H10V14L7.76,16.24C6.68,15.15 6,13.66 6,12C6,11 6.25,10.06 6.68,9.23L14.76,17.31C14.5,17.44 14.26,17.56 14,17.65V19.74C14.79,19.53 15.54,19.2 16.22,18.78L18.58,21.14L19.85,19.87L4.14,4.14L2.86,5.41M10,6.35V4.26C9.2,4.47 8.45,4.8 7.77,5.22L9.23,6.68C9.5,6.56 9.73,6.44 10,6.35Z";
-        }
-    }
-    $.$mol_icon_sync_off = $mol_icon_sync_off;
-})($ || ($ = {}));
-//mol/icon/sync/off/-view.tree/off.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $hyoo_sync_online extends $mol_link {
-        minimal_width() {
-            return 40;
-        }
-        minimal_height() {
-            return 40;
-        }
-        yard() {
-            const obj = new this.$.$hyoo_sync_yard();
-            return obj;
-        }
-        uri() {
-            return this.master_link();
-        }
-        sub() {
-            return [
-                this.Well(),
-                this.Fail()
-            ];
-        }
-        attr() {
-            return {
-                ...super.attr(),
-                title: this.message()
-            };
-        }
-        master_link() {
-            return "";
-        }
-        Well() {
-            const obj = new this.$.$mol_avatar();
-            obj.id = () => this.master_link();
-            return obj;
-        }
-        Fail() {
-            const obj = new this.$.$mol_icon_sync_off();
-            return obj;
-        }
-        hint() {
-            return "$hyoo_sync";
-        }
-        message() {
-            return this.hint();
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $hyoo_sync_online.prototype, "yard", null);
-    __decorate([
-        $mol_mem
-    ], $hyoo_sync_online.prototype, "Well", null);
-    __decorate([
-        $mol_mem
-    ], $hyoo_sync_online.prototype, "Fail", null);
-    $.$hyoo_sync_online = $hyoo_sync_online;
-})($ || ($ = {}));
-//hyoo/sync/online/-view.tree/online.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $hyoo_sync_online extends $.$hyoo_sync_online {
-            message() {
-                try {
-                    this.yard().sync();
-                    return this.hint();
-                }
-                catch (error) {
-                    if (error instanceof Promise)
-                        $mol_fail_hidden(error);
-                    $mol_fail_log(error);
-                    return String(error);
-                }
-            }
-            sub() {
-                try {
-                    this.yard().sync();
-                    return [this.Well()];
-                }
-                catch (error) {
-                    if (error instanceof Promise)
-                        $mol_fail_hidden(error);
-                    $mol_fail_log(error);
-                    return [this.Fail()];
-                }
-            }
-            hint() {
-                return super.hint() + ' ' + $hyoo_sync_revision;
-            }
-            master_link() {
-                return this.yard().master_link().replace(/^ws(s?):/, 'http$1:');
-            }
-        }
-        __decorate([
-            $mol_mem
-        ], $hyoo_sync_online.prototype, "message", null);
-        __decorate([
-            $mol_mem
-        ], $hyoo_sync_online.prototype, "sub", null);
-        __decorate([
-            $mol_mem
-        ], $hyoo_sync_online.prototype, "hint", null);
-        __decorate([
-            $mol_mem
-        ], $hyoo_sync_online.prototype, "master_link", null);
-        $$.$hyoo_sync_online = $hyoo_sync_online;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-//hyoo/sync/online/online.view.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("hyoo/sync/online/online.view.css", "[hyoo_sync_online] {\n\tpadding: var(--mol_gap_text);\n}\n\n[hyoo_sync_online_well] {\n\tcolor: var(--mol_theme_current);\n}\n\n[hyoo_sync_online_fail] {\n\tcolor: var(--mol_theme_focus);\n}\n\n[hyoo_sync_online][mol_view_error=\"Promise\"] {\n\tanimation: hyoo_sync_online_wait 1s linear infinite;\n}\n\n@keyframes hyoo_sync_online_wait {\n\tfrom {\n\t\topacity: 1;\n\t}\n\tto {\n\t\topacity: .5;\n\t}\n}\n");
-})($ || ($ = {}));
-//hyoo/sync/online/-css/online.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_icon_github_circle extends $mol_icon {
-        path() {
-            return "M12,2C6.48,2 2,6.48 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21C9.5,20.77 9.5,20.14 9.5,19.31C6.73,19.91 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.81,16.41C14.17,16.72 14.5,17.33 14.5,18.26C14.5,19.6 14.5,20.68 14.5,21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12C22,6.48 17.52,2 12,2Z";
-        }
-    }
-    $.$mol_icon_github_circle = $mol_icon_github_circle;
-})($ || ($ = {}));
-//mol/icon/github/circle/-view.tree/circle.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_link_source extends $mol_link {
-        hint() {
-            return this.$.$mol_locale.text('$mol_link_source_hint');
-        }
-        sub() {
-            return [
-                this.Icon()
-            ];
-        }
-        Icon() {
-            const obj = new this.$.$mol_icon_github_circle();
-            return obj;
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $mol_link_source.prototype, "Icon", null);
-    $.$mol_link_source = $mol_link_source;
-})($ || ($ = {}));
-//mol/link/source/-view.tree/source.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_icon_help extends $mol_icon {
-        path() {
-            return "M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5C10.34,5 9,6.34 9,8H6C6,4.69 8.69,2 12,2Z";
-        }
-    }
-    $.$mol_icon_help = $mol_icon_help;
-})($ || ($ = {}));
-//mol/icon/help/-view.tree/help.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_icon_help_circle extends $mol_icon {
-        path() {
-            return "M15.07,11.25L14.17,12.17C13.45,12.89 13,13.5 13,15H11V14.5C11,13.39 11.45,12.39 12.17,11.67L13.41,10.41C13.78,10.05 14,9.55 14,9C14,7.89 13.1,7 12,7C10.9,7 10,7.9 10,9H8C8,6.79 9.79,5 12,5C14.21,5 16,6.79 16,9C16,9.88 15.64,10.67 15.07,11.25M13,19H11V17H13M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.47 17.5,2 12,2Z";
-        }
-    }
-    $.$mol_icon_help_circle = $mol_icon_help_circle;
-})($ || ($ = {}));
-//mol/icon/help/circle/-view.tree/circle.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_icon_help_circle_outline extends $mol_icon {
-        path() {
-            return "M11,18H13V16H11V18M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.48 17.52,2 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,6C9.79,6 8,7.79 8,10H10C10,8.9 10.9,8 12,8C13.1,8 14,8.9 14,10C14,12 11,11.75 11,15H13C13,12.75 16,12.5 16,10C16,7.79 14.21,6 12,6Z";
-        }
-    }
-    $.$mol_icon_help_circle_outline = $mol_icon_help_circle_outline;
-})($ || ($ = {}));
-//mol/icon/help/circle/outline/-view.tree/outline.view.tree.ts
+//mol/pop/-css/pop.view.css.ts
 ;
 "use strict";
 var $;
@@ -7718,26 +7255,6 @@ var $;
     $.$mol_speck = $mol_speck;
 })($ || ($ = {}));
 //mol/speck/-view.tree/speck.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $.$mol_layer = $mol_style_prop('mol_layer', [
-        'hover',
-        'focus',
-        'speck',
-        'float',
-        'popup',
-    ]);
-})($ || ($ = {}));
-//mol/layer/layer.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("mol/layer/layer.css", ":root {\n\t--mol_layer_hover: 1;\n\t--mol_layer_focus: 2;\n\t--mol_layer_speck: 3;\n\t--mol_layer_float: 4;\n\t--mol_layer_popup: 5;\n}\n");
-})($ || ($ = {}));
-//mol/layer/-css/layer.css.ts
 ;
 "use strict";
 var $;
@@ -8063,94 +7580,495 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $mol_check_icon extends $mol_check {
-    }
-    $.$mol_check_icon = $mol_check_icon;
-})($ || ($ = {}));
-//mol/check/icon/-view.tree/icon.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("mol/check/icon/icon.view.css", "[mol_check_icon]:where([mol_check_checked]) {\n\tcolor: var(--mol_theme_current);\n}\n");
-})($ || ($ = {}));
-//mol/check/icon/-css/icon.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_icon_brightness_6 extends $mol_icon {
-        path() {
-            return "M12,18V6C15.31,6 18,8.69 18,12C18,15.31 15.31,18 12,18M20,15.31L23.31,12L20,8.69V4H15.31L12,0.69L8.69,4H4V8.69L0.69,12L4,15.31V20H8.69L12,23.31L15.31,20H20V15.31Z";
+    class $mol_pick extends $mol_pop {
+        event() {
+            return {
+                ...super.event(),
+                keydown: (event) => this.keydown(event)
+            };
         }
-    }
-    $.$mol_icon_brightness_6 = $mol_icon_brightness_6;
-})($ || ($ = {}));
-//mol/icon/brightness/6/-view.tree/6.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_lights_toggle extends $mol_check_icon {
-        Icon() {
-            return this.Lights_icon();
+        Anchor() {
+            return this.Trigger();
+        }
+        keydown(event) {
+            if (event !== undefined)
+                return event;
+            return null;
+        }
+        trigger_enabled() {
+            return true;
+        }
+        trigger_content() {
+            return [
+                this.title()
+            ];
         }
         hint() {
-            return this.$.$mol_locale.text('$mol_lights_toggle_hint');
+            return "";
         }
-        checked(next) {
-            return this.lights(next);
-        }
-        Lights_icon() {
-            const obj = new this.$.$mol_icon_brightness_6();
+        Trigger() {
+            const obj = new this.$.$mol_check();
+            obj.minimal_width = () => 40;
+            obj.minimal_height = () => 40;
+            obj.enabled = () => this.trigger_enabled();
+            obj.checked = (next) => this.showed(next);
+            obj.sub = () => this.trigger_content();
+            obj.hint = () => this.hint();
             return obj;
-        }
-        lights(next) {
-            if (next !== undefined)
-                return next;
-            return false;
         }
     }
     __decorate([
         $mol_mem
-    ], $mol_lights_toggle.prototype, "Lights_icon", null);
+    ], $mol_pick.prototype, "keydown", null);
     __decorate([
         $mol_mem
-    ], $mol_lights_toggle.prototype, "lights", null);
-    $.$mol_lights_toggle = $mol_lights_toggle;
+    ], $mol_pick.prototype, "Trigger", null);
+    $.$mol_pick = $mol_pick;
 })($ || ($ = {}));
-//mol/lights/toggle/-view.tree/toggle.view.tree.ts
+//mol/pick/-view.tree/pick.view.tree.ts
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
-        class $mol_lights_toggle extends $.$mol_lights_toggle {
-            lights(next) {
-                return this.$.$mol_lights(next);
+        class $mol_pick extends $.$mol_pick {
+            keydown(event) {
+                if (!this.trigger_enabled())
+                    return;
+                if (event.defaultPrevented)
+                    return;
+                if (event.keyCode === $mol_keyboard_code.escape) {
+                    if (!this.showed())
+                        return;
+                    event.preventDefault();
+                    this.showed(false);
+                }
             }
         }
-        $$.$mol_lights_toggle = $mol_lights_toggle;
+        $$.$mol_pick = $mol_pick;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
-//mol/lights/toggle/toggle.view.ts
+//mol/pick/pick.view.ts
 ;
 "use strict";
 var $;
 (function ($) {
-    class $mol_stack extends $mol_view {
+    $mol_style_attach("mol/pick/pick.view.css", "[mol_pick_trigger] {\n\talign-items: center;\n\tflex-grow: 1;\n}\n");
+})($ || ($ = {}));
+//mol/pick/-css/pick.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_string extends $mol_view {
+        dom_name() {
+            return "input";
+        }
+        enabled() {
+            return true;
+        }
+        minimal_height() {
+            return 40;
+        }
+        autocomplete() {
+            return false;
+        }
+        selection(next) {
+            if (next !== undefined)
+                return next;
+            return [
+                0,
+                0
+            ];
+        }
+        auto() {
+            return [
+                this.selection_watcher()
+            ];
+        }
+        field() {
+            return {
+                ...super.field(),
+                disabled: this.disabled(),
+                value: this.value_changed(),
+                placeholder: this.hint_visible(),
+                spellcheck: this.spellcheck(),
+                autocomplete: this.autocomplete_native(),
+                selectionEnd: this.selection_end(),
+                selectionStart: this.selection_start(),
+                inputMode: this.keyboard(),
+                enterkeyhint: this.enter()
+            };
+        }
+        attr() {
+            return {
+                ...super.attr(),
+                maxlength: this.length_max(),
+                type: this.type()
+            };
+        }
+        event() {
+            return {
+                ...super.event(),
+                input: (event) => this.event_change(event)
+            };
+        }
+        plugins() {
+            return [
+                this.Submit()
+            ];
+        }
+        selection_watcher() {
+            return null;
+        }
+        disabled() {
+            return false;
+        }
+        value(next) {
+            if (next !== undefined)
+                return next;
+            return "";
+        }
+        value_changed(next) {
+            return this.value(next);
+        }
+        hint() {
+            return "";
+        }
+        hint_visible() {
+            return this.hint();
+        }
+        spellcheck() {
+            return true;
+        }
+        autocomplete_native() {
+            return "";
+        }
+        selection_end() {
+            return 0;
+        }
+        selection_start() {
+            return 0;
+        }
+        keyboard() {
+            return "text";
+        }
+        enter() {
+            return "go";
+        }
+        length_max() {
+            return +Infinity;
+        }
+        type(next) {
+            if (next !== undefined)
+                return next;
+            return "text";
+        }
+        event_change(event) {
+            if (event !== undefined)
+                return event;
+            return null;
+        }
+        submit_with_ctrl() {
+            return false;
+        }
+        submit(event) {
+            if (event !== undefined)
+                return event;
+            return null;
+        }
+        Submit() {
+            const obj = new this.$.$mol_hotkey();
+            obj.mod_ctrl = () => this.submit_with_ctrl();
+            obj.key = () => ({
+                enter: (event) => this.submit(event)
+            });
+            return obj;
+        }
     }
-    $.$mol_stack = $mol_stack;
+    __decorate([
+        $mol_mem
+    ], $mol_string.prototype, "selection", null);
+    __decorate([
+        $mol_mem
+    ], $mol_string.prototype, "value", null);
+    __decorate([
+        $mol_mem
+    ], $mol_string.prototype, "type", null);
+    __decorate([
+        $mol_mem
+    ], $mol_string.prototype, "event_change", null);
+    __decorate([
+        $mol_mem
+    ], $mol_string.prototype, "submit", null);
+    __decorate([
+        $mol_mem
+    ], $mol_string.prototype, "Submit", null);
+    $.$mol_string = $mol_string;
 })($ || ($ = {}));
-//mol/stack/-view.tree/stack.view.tree.ts
+//mol/string/-view.tree/string.view.tree.ts
 ;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("mol/stack/stack.view.css", "[mol_stack] {\n\tdisplay: grid;\n\t/* width: max-content; */\n\t/* height: max-content; */\n\talign-items: flex-start;\n\tjustify-items: flex-start;\n}\n\n[mol_stack] > * {\n\tgrid-area: 1/1;\n}\n");
+    var $$;
+    (function ($$) {
+        class $mol_string extends $.$mol_string {
+            event_change(next) {
+                if (!next)
+                    return;
+                const el = next.target;
+                const from = el.selectionStart;
+                const to = el.selectionEnd;
+                el.value = this.value_changed(el.value);
+                if (to === null)
+                    return;
+                el.selectionEnd = to;
+                el.selectionStart = from;
+                this.selection_change(next);
+            }
+            hint_visible() {
+                return (this.enabled() ? this.hint() : '') || ' ';
+            }
+            disabled() {
+                return !this.enabled();
+            }
+            autocomplete_native() {
+                return this.autocomplete() ? 'on' : 'off';
+            }
+            selection_watcher() {
+                return new $mol_dom_listener(this.$.$mol_dom_context.document, 'selectionchange', $mol_wire_async(event => this.selection_change(event)));
+            }
+            selection_change(event) {
+                const el = this.dom_node();
+                if (el !== this.$.$mol_dom_context.document.activeElement)
+                    return;
+                const [from, to] = this.selection([
+                    el.selectionStart,
+                    el.selectionEnd,
+                ]);
+                el.selectionEnd = to;
+                el.selectionStart = from;
+            }
+            selection_start() {
+                const el = this.dom_node();
+                if (el.selectionStart === null)
+                    return undefined;
+                return this.selection()[0];
+            }
+            selection_end() {
+                const el = this.dom_node();
+                if (el.selectionEnd === null)
+                    return undefined;
+                return this.selection()[1];
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_string.prototype, "selection_watcher", null);
+        $$.$mol_string = $mol_string;
+    })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
-//mol/stack/-css/stack.view.css.ts
+//mol/string/string.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/string/string.view.css", "[mol_string] {\n\tbox-sizing: border-box;\n\toutline-offset: 0;\n\tborder: none;\n\tborder-radius: var(--mol_gap_round);\n\twhite-space: pre-line;\n\toverflow: hidden;\n\ttext-overflow: ellipsis;\n\tpadding: var(--mol_gap_text);\n\ttext-align: left;\n\tposition: relative;\n\tfont: inherit;\n\tflex: 1 1 auto;\n\tbackground: transparent;\n\tmin-width: 0;\n\tcolor: inherit;\n\tbackground: var(--mol_theme_field);\n}\n\n[mol_string]:disabled:not(:placeholder-shown) {\n\tbackground-color: transparent;\n\tcolor: var(--mol_theme_text);\n}\n\n[mol_string]:where(:not(:disabled)) {\n\tbox-shadow: inset 0 0 0 1px var(--mol_theme_line);\n}\n\n[mol_string]:where(:not(:disabled)):hover {\n\tbox-shadow: inset 0 0 0 2px var(--mol_theme_line);\n\tz-index: var(--mol_layer_hover);\n}\n\n[mol_string]:focus {\n\toutline: none;\n\tz-index: var(--mol_layer_focus);\n\tcolor: var(--mol_theme_text);\n\tbox-shadow: inset 0 0 0 1px var(--mol_theme_focus);\n}\n\n[mol_string]::placeholder {\n\tcolor: var(--mol_theme_shade);\n}\n\n[mol_string]::-ms-clear {\n\tdisplay: none;\n}\n");
+})($ || ($ = {}));
+//mol/string/-css/string.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_svg extends $mol_view {
+        dom_name() {
+            return "svg";
+        }
+        dom_name_space() {
+            return "http://www.w3.org/2000/svg";
+        }
+        font_size() {
+            return 16;
+        }
+        font_family() {
+            return "";
+        }
+        style_size() {
+            return {};
+        }
+    }
+    $.$mol_svg = $mol_svg;
+})($ || ($ = {}));
+//mol/svg/-view.tree/svg.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_state_time extends $mol_object {
+        static task(precision, reset) {
+            if (precision) {
+                return new $mol_after_timeout(precision, () => this.task(precision, null));
+            }
+            else {
+                return new $mol_after_frame(() => this.task(precision, null));
+            }
+        }
+        static now(precision) {
+            this.task(precision);
+            return Date.now();
+        }
+    }
+    __decorate([
+        $mol_mem_key
+    ], $mol_state_time, "task", null);
+    __decorate([
+        $mol_mem_key
+    ], $mol_state_time, "now", null);
+    $.$mol_state_time = $mol_state_time;
+})($ || ($ = {}));
+//mol/state/time/time.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_svg extends $.$mol_svg {
+            computed_style() {
+                const win = this.$.$mol_dom_context;
+                const style = win.getComputedStyle(this.dom_node());
+                if (!style['font-size'])
+                    $mol_state_time.now(0);
+                return style;
+            }
+            font_size() {
+                return parseInt(this.computed_style()['font-size']) || 16;
+            }
+            font_family() {
+                return this.computed_style()['font-family'];
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_svg.prototype, "computed_style", null);
+        __decorate([
+            $mol_mem
+        ], $mol_svg.prototype, "font_size", null);
+        __decorate([
+            $mol_mem
+        ], $mol_svg.prototype, "font_family", null);
+        $$.$mol_svg = $mol_svg;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/svg/svg.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_svg_root extends $mol_svg {
+        dom_name() {
+            return "svg";
+        }
+        attr() {
+            return {
+                ...super.attr(),
+                viewBox: this.view_box(),
+                preserveAspectRatio: this.aspect()
+            };
+        }
+        view_box() {
+            return "0 0 100 100";
+        }
+        aspect() {
+            return "xMidYMid";
+        }
+    }
+    $.$mol_svg_root = $mol_svg_root;
+})($ || ($ = {}));
+//mol/svg/root/-view.tree/root.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/svg/root/root.view.css", "[mol_svg_root] {\n\toverflow: hidden;\n}\n");
+})($ || ($ = {}));
+//mol/svg/root/-css/root.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_svg_path extends $mol_svg {
+        dom_name() {
+            return "path";
+        }
+        attr() {
+            return {
+                ...super.attr(),
+                d: this.geometry()
+            };
+        }
+        geometry() {
+            return "";
+        }
+    }
+    $.$mol_svg_path = $mol_svg_path;
+})($ || ($ = {}));
+//mol/svg/path/-view.tree/path.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_icon extends $mol_svg_root {
+        view_box() {
+            return "0 0 24 24";
+        }
+        minimal_width() {
+            return 16;
+        }
+        minimal_height() {
+            return 16;
+        }
+        sub() {
+            return [
+                this.Path()
+            ];
+        }
+        path() {
+            return "";
+        }
+        Path() {
+            const obj = new this.$.$mol_svg_path();
+            obj.geometry = () => this.path();
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_icon.prototype, "Path", null);
+    $.$mol_icon = $mol_icon;
+})($ || ($ = {}));
+//mol/icon/-view.tree/icon.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/icon/icon.view.css", "[mol_icon] {\n\tfill: currentColor;\n\tstroke: none;\n\twidth: 1em;\n\theight: 1.5em;\n\tflex: 0 0 auto;\n\tvertical-align: top;\n\tdisplay: inline-block;\n\tfilter: drop-shadow(0px 1px 1px var(--mol_theme_back));\n\ttransform-origin: center;\n}\n\n[mol_icon_path] {\n\ttransform-origin: center;\n}\n");
+})($ || ($ = {}));
+//mol/icon/-css/icon.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_icon_dots_vertical extends $mol_icon {
+        path() {
+            return "M12,16C13.1,16 14,16.9 14,18C14,19.1 13.1,20 12,20C10.9,20 10,19.1 10,18C10,16.9 10.9,16 12,16M12,10C13.1,10 14,10.9 14,12C14,13.1 13.1,14 12,14C10.9,14 10,13.1 10,12C10,10.9 10.9,10 12,10M12,4C13.1,4 14,4.9 14,6C14,7.1 13.1,8 12,8C10.9,8 10,7.1 10,6C10,4.9 10.9,4 12,4Z";
+        }
+    }
+    $.$mol_icon_dots_vertical = $mol_icon_dots_vertical;
+})($ || ($ = {}));
+//mol/icon/dots/vertical/-view.tree/vertical.view.tree.ts
 ;
 "use strict";
 var $;
@@ -8618,6 +8536,1333 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_nav extends $mol_plugin {
+        cycle(next) {
+            if (next !== undefined)
+                return next;
+            return false;
+        }
+        mod_ctrl() {
+            return false;
+        }
+        mod_shift() {
+            return false;
+        }
+        mod_alt() {
+            return false;
+        }
+        keys_x(next) {
+            if (next !== undefined)
+                return next;
+            return [];
+        }
+        keys_y(next) {
+            if (next !== undefined)
+                return next;
+            return [];
+        }
+        current_x(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        current_y(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        event_up(event) {
+            if (event !== undefined)
+                return event;
+            return null;
+        }
+        event_down(event) {
+            if (event !== undefined)
+                return event;
+            return null;
+        }
+        event_left(event) {
+            if (event !== undefined)
+                return event;
+            return null;
+        }
+        event_right(event) {
+            if (event !== undefined)
+                return event;
+            return null;
+        }
+        event() {
+            return {
+                ...super.event(),
+                keydown: (event) => this.event_key(event)
+            };
+        }
+        event_key(event) {
+            if (event !== undefined)
+                return event;
+            return null;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_nav.prototype, "cycle", null);
+    __decorate([
+        $mol_mem
+    ], $mol_nav.prototype, "keys_x", null);
+    __decorate([
+        $mol_mem
+    ], $mol_nav.prototype, "keys_y", null);
+    __decorate([
+        $mol_mem
+    ], $mol_nav.prototype, "current_x", null);
+    __decorate([
+        $mol_mem
+    ], $mol_nav.prototype, "current_y", null);
+    __decorate([
+        $mol_mem
+    ], $mol_nav.prototype, "event_up", null);
+    __decorate([
+        $mol_mem
+    ], $mol_nav.prototype, "event_down", null);
+    __decorate([
+        $mol_mem
+    ], $mol_nav.prototype, "event_left", null);
+    __decorate([
+        $mol_mem
+    ], $mol_nav.prototype, "event_right", null);
+    __decorate([
+        $mol_mem
+    ], $mol_nav.prototype, "event_key", null);
+    $.$mol_nav = $mol_nav;
+})($ || ($ = {}));
+//mol/nav/-view.tree/nav.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_nav extends $.$mol_nav {
+            event_key(event) {
+                if (!event)
+                    return event;
+                if (event.defaultPrevented)
+                    return;
+                if (this.mod_ctrl() && !event.ctrlKey)
+                    return;
+                if (this.mod_shift() && !event.shiftKey)
+                    return;
+                if (this.mod_alt() && !event.altKey)
+                    return;
+                switch (event.keyCode) {
+                    case $mol_keyboard_code.up: return this.event_up(event);
+                    case $mol_keyboard_code.down: return this.event_down(event);
+                    case $mol_keyboard_code.left: return this.event_left(event);
+                    case $mol_keyboard_code.right: return this.event_right(event);
+                    case $mol_keyboard_code.pageUp: return this.event_up(event);
+                    case $mol_keyboard_code.pageDown: return this.event_down(event);
+                }
+            }
+            event_up(event) {
+                if (!event)
+                    return event;
+                const keys = this.keys_y();
+                if (keys.length < 1)
+                    return;
+                const index_y = this.index_y();
+                const index_old = index_y === null ? 0 : index_y;
+                const index_new = (index_old + keys.length - 1) % keys.length;
+                event.preventDefault();
+                if (index_old === 0 && !this.cycle())
+                    return;
+                this.current_y(this.keys_y()[index_new]);
+            }
+            event_down(event) {
+                if (!event)
+                    return event;
+                const keys = this.keys_y();
+                if (keys.length < 1)
+                    return;
+                const index_y = this.index_y();
+                const index_old = index_y === null ? keys.length - 1 : index_y;
+                const index_new = (index_old + 1) % keys.length;
+                event.preventDefault();
+                if (index_new === 0 && !this.cycle())
+                    return;
+                this.current_y(this.keys_y()[index_new]);
+            }
+            event_left(event) {
+                if (!event)
+                    return event;
+                const keys = this.keys_x();
+                if (keys.length < 1)
+                    return;
+                const index_x = this.index_x();
+                const index_old = index_x === null ? 0 : index_x;
+                const index_new = (index_old + keys.length - 1) % keys.length;
+                event.preventDefault();
+                if (index_old === 0 && !this.cycle())
+                    return;
+                this.current_x(this.keys_x()[index_new]);
+            }
+            event_right(event) {
+                if (!event)
+                    return event;
+                const keys = this.keys_x();
+                if (keys.length < 1)
+                    return;
+                const index_x = this.index_x();
+                const index_old = index_x === null ? keys.length - 1 : index_x;
+                const index_new = (index_old + 1) % keys.length;
+                event.preventDefault();
+                if (index_new === 0 && !this.cycle())
+                    return;
+                this.current_x(this.keys_x()[index_new]);
+            }
+            index_y() {
+                let index = this.keys_y().indexOf(this.current_y());
+                if (index < 0)
+                    return null;
+                return index;
+            }
+            index_x() {
+                let index = this.keys_x().indexOf(this.current_x());
+                if (index < 0)
+                    return null;
+                return index;
+            }
+        }
+        $$.$mol_nav = $mol_nav;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/nav/nav.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_list extends $mol_view {
+        render_visible_only() {
+            return true;
+        }
+        render_over() {
+            return 0;
+        }
+        sub() {
+            return this.rows();
+        }
+        Empty() {
+            const obj = new this.$.$mol_view();
+            return obj;
+        }
+        Gap_before() {
+            const obj = new this.$.$mol_view();
+            obj.style = () => ({
+                paddingTop: this.gap_before()
+            });
+            return obj;
+        }
+        Gap_after() {
+            const obj = new this.$.$mol_view();
+            obj.style = () => ({
+                paddingTop: this.gap_after()
+            });
+            return obj;
+        }
+        view_window() {
+            return [
+                0,
+                0
+            ];
+        }
+        rows() {
+            return [];
+        }
+        gap_before() {
+            return 0;
+        }
+        gap_after() {
+            return 0;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_list.prototype, "Empty", null);
+    __decorate([
+        $mol_mem
+    ], $mol_list.prototype, "Gap_before", null);
+    __decorate([
+        $mol_mem
+    ], $mol_list.prototype, "Gap_after", null);
+    $.$mol_list = $mol_list;
+})($ || ($ = {}));
+//mol/list/-view.tree/list.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    let cache = null;
+    function $mol_support_css_overflow_anchor() {
+        return cache ?? (cache = (!/Gecko\//.test(navigator.userAgent)
+            && this.$mol_dom_context.CSS?.supports('overflow-anchor:auto')) ?? false);
+    }
+    $.$mol_support_css_overflow_anchor = $mol_support_css_overflow_anchor;
+})($ || ($ = {}));
+//mol/support/css/css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_list extends $.$mol_list {
+            sub() {
+                const rows = this.rows();
+                return (rows.length === 0) ? [this.Empty()] : rows;
+            }
+            render_visible_only() {
+                return this.$.$mol_support_css_overflow_anchor();
+            }
+            view_window(next) {
+                const kids = this.sub();
+                if (kids.length < 3)
+                    return [0, kids.length];
+                if (this.$.$mol_print.active())
+                    return [0, kids.length];
+                const rect = this.view_rect();
+                if (next)
+                    return next;
+                let [min, max] = $mol_mem_cached(() => this.view_window()) ?? [0, 0];
+                let max2 = max = Math.min(max, kids.length);
+                let min2 = min = Math.max(0, Math.min(min, max - 1));
+                const anchoring = this.render_visible_only();
+                const window_height = this.$.$mol_window.size().height + 40;
+                const over = Math.ceil(window_height * this.render_over());
+                const limit_top = -over;
+                const limit_bottom = window_height + over;
+                const gap_before = $mol_mem_cached(() => this.gap_before()) ?? 0;
+                const gap_after = $mol_mem_cached(() => this.gap_after()) ?? 0;
+                let top = Math.ceil(rect?.top ?? 0) + gap_before;
+                let bottom = Math.ceil(rect?.bottom ?? 0) - gap_after;
+                if (top <= limit_top && bottom >= limit_bottom) {
+                    return [min2, max2];
+                }
+                if (anchoring && ((bottom < limit_top) || (top > limit_bottom))) {
+                    min = 0;
+                    top = Math.ceil(rect?.top ?? 0);
+                    while (min < (kids.length - 1)) {
+                        const height = kids[min].minimal_height();
+                        if (top + height >= limit_top)
+                            break;
+                        top += height;
+                        ++min;
+                    }
+                    min2 = min;
+                    max2 = max = min;
+                    bottom = top;
+                }
+                let top2 = top;
+                let bottom2 = bottom;
+                if (anchoring && (top <= limit_top) && (bottom2 < limit_bottom)) {
+                    min2 = Math.max(0, max - 1);
+                    top2 = bottom;
+                }
+                if ((bottom >= limit_bottom) && (top2 >= limit_top)) {
+                    max2 = Math.min(min + 1, kids.length);
+                    bottom2 = top;
+                }
+                while (bottom2 < limit_bottom && max2 < kids.length) {
+                    bottom2 += kids[max2].minimal_height();
+                    ++max2;
+                }
+                while (anchoring && ((top2 >= limit_top) && (min2 > 0))) {
+                    --min2;
+                    top2 -= kids[min2].minimal_height();
+                }
+                return [min2, max2];
+            }
+            gap_before() {
+                const skipped = this.sub().slice(0, this.view_window()[0]);
+                return Math.max(0, skipped.reduce((sum, view) => sum + view.minimal_height(), 0));
+            }
+            gap_after() {
+                const skipped = this.sub().slice(this.view_window()[1]);
+                return Math.max(0, skipped.reduce((sum, view) => sum + view.minimal_height(), 0));
+            }
+            sub_visible() {
+                return [
+                    ...this.gap_before() ? [this.Gap_before()] : [],
+                    ...this.sub().slice(...this.view_window()),
+                    ...this.gap_after() ? [this.Gap_after()] : [],
+                ];
+            }
+            minimal_height() {
+                return this.sub().reduce((sum, view) => {
+                    try {
+                        return sum + view.minimal_height();
+                    }
+                    catch (error) {
+                        $mol_fail_log(error);
+                        return sum;
+                    }
+                }, 0);
+            }
+            force_render(path) {
+                const kids = this.rows();
+                const index = kids.findIndex(item => path.has(item));
+                if (index >= 0) {
+                    const win = this.view_window();
+                    if (index < win[0] || index >= win[1]) {
+                        this.view_window([this.render_visible_only() ? index : 0, index + 1]);
+                    }
+                    kids[index].force_render(path);
+                }
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_list.prototype, "sub", null);
+        __decorate([
+            $mol_mem
+        ], $mol_list.prototype, "view_window", null);
+        __decorate([
+            $mol_mem
+        ], $mol_list.prototype, "gap_before", null);
+        __decorate([
+            $mol_mem
+        ], $mol_list.prototype, "gap_after", null);
+        __decorate([
+            $mol_mem
+        ], $mol_list.prototype, "sub_visible", null);
+        __decorate([
+            $mol_mem
+        ], $mol_list.prototype, "minimal_height", null);
+        $$.$mol_list = $mol_list;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/list/list.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/list/list.view.css", "[mol_list] {\n\twill-change: contents;\n\tdisplay: flex;\n\tflex-direction: column;\n\tflex-shrink: 0;\n\tmax-width: 100%;\n\t/* display: flex;\n\talign-items: stretch;\n\talign-content: stretch; */\n\ttransition: none;\n\tmin-height: .5rem;\n}\n\n[mol_list_gap_before] ,\n[mol_list_gap_after] {\n\tdisplay: block !important;\n\tflex: none;\n\ttransition: none;\n\toverflow-anchor: none;\n}\n");
+})($ || ($ = {}));
+//mol/list/-css/list.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_select extends $mol_pick {
+        dictionary(next) {
+            if (next !== undefined)
+                return next;
+            return {};
+        }
+        options() {
+            return [];
+        }
+        value(next) {
+            if (next !== undefined)
+                return next;
+            return "";
+        }
+        option_label_default() {
+            return "";
+        }
+        Option_row(id) {
+            const obj = new this.$.$mol_button_minor();
+            obj.event_click = (event) => this.event_select(id, event);
+            obj.sub = () => this.option_content(id);
+            return obj;
+        }
+        No_options() {
+            const obj = new this.$.$mol_view();
+            obj.sub = () => [
+                this.no_options_message()
+            ];
+            return obj;
+        }
+        plugins() {
+            return [
+                ...super.plugins(),
+                this.Nav()
+            ];
+        }
+        hint() {
+            return this.$.$mol_locale.text('$mol_select_hint');
+        }
+        bubble_content() {
+            return [
+                this.Filter(),
+                this.Bubble_pane()
+            ];
+        }
+        Filter() {
+            const obj = new this.$.$mol_string();
+            obj.value = (next) => this.filter_pattern(next);
+            obj.hint = () => this.$.$mol_locale.text('$mol_select_Filter_hint');
+            obj.submit = (event) => this.submit(event);
+            obj.enabled = () => this.enabled();
+            return obj;
+        }
+        Trigger_icon() {
+            const obj = new this.$.$mol_icon_dots_vertical();
+            return obj;
+        }
+        event_select(id, event) {
+            if (event !== undefined)
+                return event;
+            return null;
+        }
+        option_label(id) {
+            return "";
+        }
+        filter_pattern(next) {
+            if (next !== undefined)
+                return next;
+            return "";
+        }
+        Option_label(id) {
+            const obj = new this.$.$mol_dimmer();
+            obj.haystack = () => this.option_label(id);
+            obj.needle = () => this.filter_pattern();
+            return obj;
+        }
+        option_content(id) {
+            return [
+                this.Option_label(id)
+            ];
+        }
+        no_options_message() {
+            return this.$.$mol_locale.text('$mol_select_no_options_message');
+        }
+        nav_components() {
+            return [];
+        }
+        option_focused(component) {
+            if (component !== undefined)
+                return component;
+            return null;
+        }
+        nav_cycle(next) {
+            if (next !== undefined)
+                return next;
+            return true;
+        }
+        Nav() {
+            const obj = new this.$.$mol_nav();
+            obj.keys_y = () => this.nav_components();
+            obj.current_y = (component) => this.option_focused(component);
+            obj.cycle = (next) => this.nav_cycle(next);
+            return obj;
+        }
+        menu_content() {
+            return [];
+        }
+        Menu() {
+            const obj = new this.$.$mol_list();
+            obj.rows = () => this.menu_content();
+            return obj;
+        }
+        Bubble_pane() {
+            const obj = new this.$.$mol_scroll();
+            obj.sub = () => [
+                this.Menu()
+            ];
+            return obj;
+        }
+        submit(event) {
+            if (event !== undefined)
+                return event;
+            return null;
+        }
+        enabled() {
+            return true;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_select.prototype, "dictionary", null);
+    __decorate([
+        $mol_mem
+    ], $mol_select.prototype, "value", null);
+    __decorate([
+        $mol_mem_key
+    ], $mol_select.prototype, "Option_row", null);
+    __decorate([
+        $mol_mem
+    ], $mol_select.prototype, "No_options", null);
+    __decorate([
+        $mol_mem
+    ], $mol_select.prototype, "Filter", null);
+    __decorate([
+        $mol_mem
+    ], $mol_select.prototype, "Trigger_icon", null);
+    __decorate([
+        $mol_mem_key
+    ], $mol_select.prototype, "event_select", null);
+    __decorate([
+        $mol_mem
+    ], $mol_select.prototype, "filter_pattern", null);
+    __decorate([
+        $mol_mem_key
+    ], $mol_select.prototype, "Option_label", null);
+    __decorate([
+        $mol_mem
+    ], $mol_select.prototype, "option_focused", null);
+    __decorate([
+        $mol_mem
+    ], $mol_select.prototype, "nav_cycle", null);
+    __decorate([
+        $mol_mem
+    ], $mol_select.prototype, "Nav", null);
+    __decorate([
+        $mol_mem
+    ], $mol_select.prototype, "Menu", null);
+    __decorate([
+        $mol_mem
+    ], $mol_select.prototype, "Bubble_pane", null);
+    __decorate([
+        $mol_mem
+    ], $mol_select.prototype, "submit", null);
+    $.$mol_select = $mol_select;
+})($ || ($ = {}));
+//mol/select/-view.tree/select.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    function $mol_match_text(query, values) {
+        const tags = query.toLowerCase().trim().split(/\s+/).filter(tag => tag);
+        if (tags.length === 0)
+            return () => true;
+        return (variant) => {
+            const vals = values(variant);
+            return tags.every(tag => vals.some(val => val.toLowerCase().indexOf(tag) >= 0));
+        };
+    }
+    $.$mol_match_text = $mol_match_text;
+})($ || ($ = {}));
+//mol/match/text.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_select extends $.$mol_select {
+            filter_pattern(next) {
+                this.focused();
+                return next || '';
+            }
+            open() {
+                this.showed(true);
+            }
+            options() {
+                return Object.keys(this.dictionary());
+            }
+            options_filtered() {
+                let options = this.options();
+                options = options.filter($mol_match_text(this.filter_pattern(), (id) => [this.option_label(id)]));
+                const index = options.indexOf(this.value());
+                if (index >= 0)
+                    options = [...options.slice(0, index), ...options.slice(index + 1)];
+                return options;
+            }
+            option_label(id) {
+                const value = this.dictionary()[id];
+                return (value == null ? id : value) || this.option_label_default();
+            }
+            option_rows() {
+                return this.options_filtered().map((option) => this.Option_row(option));
+            }
+            option_focused(component) {
+                if (component == null) {
+                    for (let comp of this.nav_components()) {
+                        if (comp && comp.focused())
+                            return comp;
+                    }
+                    return null;
+                }
+                if (this.showed()) {
+                    component.focused(true);
+                }
+                return component;
+            }
+            event_select(id, event) {
+                this.value(id);
+                this.showed(false);
+                event?.preventDefault();
+            }
+            nav_components() {
+                if (this.options().length > 1 && this.Filter()) {
+                    return [this.Filter(), ...this.option_rows()];
+                }
+                else {
+                    return this.option_rows();
+                }
+            }
+            trigger_content() {
+                return [
+                    ...this.option_content(this.value()),
+                    this.Trigger_icon(),
+                ];
+            }
+            menu_content() {
+                return [
+                    ...this.option_rows(),
+                    ...(this.options_filtered().length === 0) ? [this.No_options()] : []
+                ];
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_select.prototype, "filter_pattern", null);
+        __decorate([
+            $mol_mem
+        ], $mol_select.prototype, "options", null);
+        __decorate([
+            $mol_mem
+        ], $mol_select.prototype, "options_filtered", null);
+        __decorate([
+            $mol_mem
+        ], $mol_select.prototype, "option_focused", null);
+        $$.$mol_select = $mol_select;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/select/select.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/select/select.view.css", "[mol_select] {\n\tdisplay: flex;\n\tword-break: normal;\n\talign-self: flex-start;\n}\n\n[mol_select_option_row] {\n\tmin-width: 100%;\n\tpadding: 0;\n\tjustify-content: flex-start;\n}\n\n[mol_select_bubble] {\n\tmin-width: 100%;\n}\n\n[mol_select_filter] {\n\tflex: 1 0 auto;\n\talign-self: stretch;\n}\n\n[mol_select_option_label] {\n\tpadding: var(--mol_gap_text);\n\ttext-align: left;\n\tmin-height: 1.5em;\n\tdisplay: block;\n\twhite-space: nowrap;\n}\n\n[mol_select_clear_option_content] {\n\tpadding: .5em 1rem .5rem 0;\n\ttext-align: left;\n\tbox-shadow: var(--mol_theme_line);\n\tflex: 1 0 auto;\n}\n\n[mol_select_no_options] {\n\tpadding: var(--mol_gap_text);\n\ttext-align: left;\n\tdisplay: block;\n\tcolor: var(--mol_theme_shade);\n}\n\n[mol_select_trigger] {\n\tpadding: 0;\n\tflex: 1 1 auto;\n\tdisplay: flex;\n}\n\n[mol_select_trigger] > * {\n\tmargin-right: -1rem;\n}\n\n[mol_select_trigger] > *:last-child {\n\tmargin-right: 0;\n}\n\n[mol_select_menu] {\n\tdisplay: flex;\n\tflex-direction: column;\n}\n\n");
+})($ || ($ = {}));
+//mol/select/-css/select.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_avatar extends $mol_icon {
+        view_box() {
+            return "0 0 24 24";
+        }
+        id() {
+            return "";
+        }
+        path() {
+            return "M 12 12 l 0 0 M 0 0 l 0 0 M 24 24 l 0 0 M 0 24 l 0 0 M 24 0 l 0 0";
+        }
+    }
+    $.$mol_avatar = $mol_avatar;
+})($ || ($ = {}));
+//mol/avatar/-view.tree/avatar.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    function $mol_hash_string(str, seed = 0) {
+        let h1 = 0xdeadbeef ^ seed;
+        let h2 = 0x41c6ce57 ^ seed;
+        for (let i = 0; i < str.length; i++) {
+            const ch = str.charCodeAt(i);
+            h1 = Math.imul(h1 ^ ch, 2654435761);
+            h2 = Math.imul(h2 ^ ch, 1597334677);
+        }
+        h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+        h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+        return 4294967296 * (((1 << 16) - 1) & h2) + (h1 >>> 0);
+    }
+    $.$mol_hash_string = $mol_hash_string;
+})($ || ($ = {}));
+//mol/hash/string/string.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_avatar extends $.$mol_avatar {
+            path() {
+                const id = $mol_hash_string(this.id());
+                const p = 2.1;
+                const m = 2.7;
+                let path = '';
+                for (let x = 0; x < 4; ++x) {
+                    for (let y = 0; y < 8; ++y) {
+                        if ((id >> (x + y * 7)) & 1) {
+                            const mxp = Math.ceil(m * x + p);
+                            const myp = Math.ceil(m * y + p);
+                            path += `M ${mxp} ${myp} l 0 0 ` + `M ${24 - mxp} ${myp} l 0 0 `;
+                        }
+                    }
+                }
+                return path;
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_avatar.prototype, "path", null);
+        $$.$mol_avatar = $mol_avatar;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/avatar/avatar.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/avatar/avatar.view.css", "[mol_avatar] {\n\tstroke-linecap: round;\n\tstroke-width: 3.5px;\n\tfill: none;\n\tstroke: currentColor;\n\t/* width: 1.5rem;\n\theight: 1.5rem;\n\tmargin: 0 -.25rem; */\n\t/* box-shadow: 0 0 0 1px var(--mol_theme_line); */\n}\n");
+})($ || ($ = {}));
+//mol/avatar/-css/avatar.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_icon_sync extends $mol_icon {
+        path() {
+            return "M12,18C8.69,18 6,15.31 6,12C6,11 6.25,10.03 6.7,9.2L5.24,7.74C4.46,8.97 4,10.43 4,12C4,16.42 7.58,20 12,20V23L16,19L12,15M12,4V1L8,5L12,9V6C15.31,6 18,8.69 18,12C18,13 17.75,13.97 17.3,14.8L18.76,16.26C19.54,15.03 20,13.57 20,12C20,7.58 16.42,4 12,4Z";
+        }
+    }
+    $.$mol_icon_sync = $mol_icon_sync;
+})($ || ($ = {}));
+//mol/icon/sync/-view.tree/sync.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_icon_sync_off extends $mol_icon {
+        path() {
+            return "M20,4H14V10L16.24,7.76C17.32,8.85 18,10.34 18,12C18,13 17.75,13.94 17.32,14.77L18.78,16.23C19.55,15 20,13.56 20,12C20,9.79 19.09,7.8 17.64,6.36L20,4M2.86,5.41L5.22,7.77C4.45,9 4,10.44 4,12C4,14.21 4.91,16.2 6.36,17.64L4,20H10V14L7.76,16.24C6.68,15.15 6,13.66 6,12C6,11 6.25,10.06 6.68,9.23L14.76,17.31C14.5,17.44 14.26,17.56 14,17.65V19.74C14.79,19.53 15.54,19.2 16.22,18.78L18.58,21.14L19.85,19.87L4.14,4.14L2.86,5.41M10,6.35V4.26C9.2,4.47 8.45,4.8 7.77,5.22L9.23,6.68C9.5,6.56 9.73,6.44 10,6.35Z";
+        }
+    }
+    $.$mol_icon_sync_off = $mol_icon_sync_off;
+})($ || ($ = {}));
+//mol/icon/sync/off/-view.tree/off.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_link extends $mol_view {
+        uri() {
+            return "";
+        }
+        dom_name() {
+            return "a";
+        }
+        attr() {
+            return {
+                ...super.attr(),
+                href: this.uri_toggle(),
+                title: this.hint_safe(),
+                target: this.target(),
+                download: this.file_name(),
+                mol_link_current: this.current()
+            };
+        }
+        sub() {
+            return [
+                this.title()
+            ];
+        }
+        arg() {
+            return {};
+        }
+        event() {
+            return {
+                ...super.event(),
+                click: (event) => this.click(event)
+            };
+        }
+        uri_toggle() {
+            return "";
+        }
+        hint() {
+            return "";
+        }
+        hint_safe() {
+            return this.hint();
+        }
+        target() {
+            return "_self";
+        }
+        file_name() {
+            return "";
+        }
+        current() {
+            return false;
+        }
+        event_click(event) {
+            if (event !== undefined)
+                return event;
+            return null;
+        }
+        click(event) {
+            return this.event_click(event);
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_link.prototype, "event_click", null);
+    $.$mol_link = $mol_link;
+})($ || ($ = {}));
+//mol/link/-view.tree/link.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_link extends $.$mol_link {
+            uri_toggle() {
+                return this.current() ? this.uri_off() : this.uri();
+            }
+            uri() {
+                return new this.$.$mol_state_arg(this.state_key()).link(this.arg());
+            }
+            uri_off() {
+                const arg2 = {};
+                for (let i in this.arg())
+                    arg2[i] = null;
+                return new this.$.$mol_state_arg(this.state_key()).link(arg2);
+            }
+            uri_native() {
+                const base = this.$.$mol_state_arg.href();
+                return new URL(this.uri(), base);
+            }
+            current() {
+                const base = this.$.$mol_state_arg.href_normal();
+                const target = this.uri_native().toString();
+                if (base === target)
+                    return true;
+                const args = this.arg();
+                const keys = Object.keys(args).filter(key => args[key] != null);
+                if (keys.length === 0)
+                    return false;
+                for (const key of keys) {
+                    if (this.$.$mol_state_arg.value(key) != args[key])
+                        return false;
+                }
+                return true;
+            }
+            file_name() {
+                return null;
+            }
+            minimal_height() {
+                return Math.max(super.minimal_height(), 24);
+            }
+            external() {
+                return this.uri_native().origin !== $mol_dom_context.location.origin;
+            }
+            target() {
+                return this.external() ? '_blank' : '_self';
+            }
+            hint_safe() {
+                try {
+                    return this.hint();
+                }
+                catch (error) {
+                    $mol_fail_log(error);
+                    return '';
+                }
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_link.prototype, "uri_toggle", null);
+        __decorate([
+            $mol_mem
+        ], $mol_link.prototype, "uri", null);
+        __decorate([
+            $mol_mem
+        ], $mol_link.prototype, "uri_off", null);
+        __decorate([
+            $mol_mem
+        ], $mol_link.prototype, "uri_native", null);
+        __decorate([
+            $mol_mem
+        ], $mol_link.prototype, "current", null);
+        $$.$mol_link = $mol_link;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/link/link.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    const { rem } = $mol_style_unit;
+    $mol_style_define($mol_link, {
+        textDecoration: 'none',
+        color: $mol_theme.control,
+        stroke: 'currentcolor',
+        cursor: 'pointer',
+        padding: $mol_gap.text,
+        boxSizing: 'border-box',
+        position: 'relative',
+        minWidth: rem(2.5),
+        gap: $mol_gap.space,
+        border: {
+            radius: $mol_gap.round,
+        },
+        ':hover': {
+            background: {
+                color: $mol_theme.hover,
+            },
+        },
+        ':focus': {
+            outline: 'none',
+            background: {
+                color: $mol_theme.hover,
+            },
+        },
+        ':focus-within': {
+            outline: 'none',
+            background: {
+                color: $mol_theme.hover,
+            }
+        },
+        ':active': {
+            color: $mol_theme.focus,
+        },
+        '@': {
+            mol_link_current: {
+                'true': {
+                    color: $mol_theme.current,
+                    textShadow: '0 0',
+                }
+            }
+        },
+    });
+})($ || ($ = {}));
+//mol/link/link.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $hyoo_sync_online extends $mol_select {
+        minimal_width() {
+            return 40;
+        }
+        minimal_height() {
+            return 40;
+        }
+        dictionary() {
+            return this.yard().master_list();
+        }
+        master_cursor(next) {
+            return this.yard().master_cursor(next);
+        }
+        yard() {
+            const obj = new this.$.$hyoo_sync_yard();
+            return obj;
+        }
+        Filter() {
+            return null;
+        }
+        option_content(id) {
+            return [
+                this.Option_logo(id),
+                this.option_label(id)
+            ];
+        }
+        trigger_content() {
+            return [
+                this.Link()
+            ];
+        }
+        master_id(id) {
+            return "";
+        }
+        Option_logo(id) {
+            const obj = new this.$.$mol_avatar();
+            obj.id = () => this.master_id(id);
+            return obj;
+        }
+        master_link() {
+            return "";
+        }
+        Well() {
+            const obj = new this.$.$mol_avatar();
+            obj.id = () => this.master_link();
+            return obj;
+        }
+        Fail() {
+            const obj = new this.$.$mol_icon_sync_off();
+            return obj;
+        }
+        link_content() {
+            return [
+                this.Well(),
+                this.Fail()
+            ];
+        }
+        hint() {
+            return "$hyoo_sync";
+        }
+        message() {
+            return this.hint();
+        }
+        Link() {
+            const obj = new this.$.$mol_link();
+            obj.uri = () => this.master_link();
+            obj.sub = () => this.link_content();
+            obj.hint = () => this.message();
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $hyoo_sync_online.prototype, "yard", null);
+    __decorate([
+        $mol_mem_key
+    ], $hyoo_sync_online.prototype, "Option_logo", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_sync_online.prototype, "Well", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_sync_online.prototype, "Fail", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_sync_online.prototype, "Link", null);
+    $.$hyoo_sync_online = $hyoo_sync_online;
+})($ || ($ = {}));
+//hyoo/sync/online/-view.tree/online.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $hyoo_sync_online extends $.$hyoo_sync_online {
+            message() {
+                try {
+                    this.yard().sync();
+                    return this.hint();
+                }
+                catch (error) {
+                    if (error instanceof Promise)
+                        $mol_fail_hidden(error);
+                    $mol_fail_log(error);
+                    return String(error);
+                }
+            }
+            link_content() {
+                try {
+                    this.yard().sync();
+                    return [this.Well()];
+                }
+                catch (error) {
+                    if (error instanceof Promise)
+                        $mol_fail_hidden(error);
+                    $mol_fail_log(error);
+                    return [this.Fail()];
+                }
+            }
+            hint() {
+                return super.hint() + ' ' + $hyoo_sync_revision;
+            }
+            master_link() {
+                return this.yard().master_link().replace(/^ws(s?):/, 'http$1:');
+            }
+            master_id(index) {
+                return this.dictionary()[index].replace(/^ws(s?):/, 'http$1:');
+            }
+            option_label(index) {
+                return this.dictionary()[index].replace(/^ws(s?):\/\//, '');
+            }
+            value(next) {
+                return String(this.master_cursor(next == undefined ? undefined : Number(next)));
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $hyoo_sync_online.prototype, "message", null);
+        __decorate([
+            $mol_mem
+        ], $hyoo_sync_online.prototype, "link_content", null);
+        __decorate([
+            $mol_mem
+        ], $hyoo_sync_online.prototype, "hint", null);
+        __decorate([
+            $mol_mem
+        ], $hyoo_sync_online.prototype, "master_link", null);
+        $$.$hyoo_sync_online = $hyoo_sync_online;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//hyoo/sync/online/online.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("hyoo/sync/online/online.view.css", "[hyoo_sync_online_option_row] {\n\tpadding: var(--mol_gap_text);\n}\n\n[hyoo_sync_online_well] {\n\tcolor: var(--mol_theme_current);\n}\n\n[hyoo_sync_online_fail] {\n\tcolor: var(--mol_theme_focus);\n}\n\n[hyoo_sync_online][mol_view_error=\"Promise\"] {\n\tanimation: hyoo_sync_online_wait 1s linear infinite;\n}\n\n@keyframes hyoo_sync_online_wait {\n\tfrom {\n\t\topacity: 1;\n\t}\n\tto {\n\t\topacity: .5;\n\t}\n}\n");
+})($ || ($ = {}));
+//hyoo/sync/online/-css/online.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_icon_github_circle extends $mol_icon {
+        path() {
+            return "M12,2C6.48,2 2,6.48 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21C9.5,20.77 9.5,20.14 9.5,19.31C6.73,19.91 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.81,16.41C14.17,16.72 14.5,17.33 14.5,18.26C14.5,19.6 14.5,20.68 14.5,21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12C22,6.48 17.52,2 12,2Z";
+        }
+    }
+    $.$mol_icon_github_circle = $mol_icon_github_circle;
+})($ || ($ = {}));
+//mol/icon/github/circle/-view.tree/circle.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_link_source extends $mol_link {
+        hint() {
+            return this.$.$mol_locale.text('$mol_link_source_hint');
+        }
+        sub() {
+            return [
+                this.Icon()
+            ];
+        }
+        Icon() {
+            const obj = new this.$.$mol_icon_github_circle();
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_link_source.prototype, "Icon", null);
+    $.$mol_link_source = $mol_link_source;
+})($ || ($ = {}));
+//mol/link/source/-view.tree/source.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_icon_help extends $mol_icon {
+        path() {
+            return "M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5C10.34,5 9,6.34 9,8H6C6,4.69 8.69,2 12,2Z";
+        }
+    }
+    $.$mol_icon_help = $mol_icon_help;
+})($ || ($ = {}));
+//mol/icon/help/-view.tree/help.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_icon_help_circle extends $mol_icon {
+        path() {
+            return "M15.07,11.25L14.17,12.17C13.45,12.89 13,13.5 13,15H11V14.5C11,13.39 11.45,12.39 12.17,11.67L13.41,10.41C13.78,10.05 14,9.55 14,9C14,7.89 13.1,7 12,7C10.9,7 10,7.9 10,9H8C8,6.79 9.79,5 12,5C14.21,5 16,6.79 16,9C16,9.88 15.64,10.67 15.07,11.25M13,19H11V17H13M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.47 17.5,2 12,2Z";
+        }
+    }
+    $.$mol_icon_help_circle = $mol_icon_help_circle;
+})($ || ($ = {}));
+//mol/icon/help/circle/-view.tree/circle.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_icon_help_circle_outline extends $mol_icon {
+        path() {
+            return "M11,18H13V16H11V18M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.48 17.52,2 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,6C9.79,6 8,7.79 8,10H10C10,8.9 10.9,8 12,8C13.1,8 14,8.9 14,10C14,12 11,11.75 11,15H13C13,12.75 16,12.5 16,10C16,7.79 14.21,6 12,6Z";
+        }
+    }
+    $.$mol_icon_help_circle_outline = $mol_icon_help_circle_outline;
+})($ || ($ = {}));
+//mol/icon/help/circle/outline/-view.tree/outline.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_check_icon extends $mol_check {
+    }
+    $.$mol_check_icon = $mol_check_icon;
+})($ || ($ = {}));
+//mol/check/icon/-view.tree/icon.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/check/icon/icon.view.css", "[mol_check_icon]:where([mol_check_checked]) {\n\tcolor: var(--mol_theme_current);\n}\n");
+})($ || ($ = {}));
+//mol/check/icon/-css/icon.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_icon_brightness_6 extends $mol_icon {
+        path() {
+            return "M12,18V6C15.31,6 18,8.69 18,12C18,15.31 15.31,18 12,18M20,15.31L23.31,12L20,8.69V4H15.31L12,0.69L8.69,4H4V8.69L0.69,12L4,15.31V20H8.69L12,23.31L15.31,20H20V15.31Z";
+        }
+    }
+    $.$mol_icon_brightness_6 = $mol_icon_brightness_6;
+})($ || ($ = {}));
+//mol/icon/brightness/6/-view.tree/6.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_lights_toggle extends $mol_check_icon {
+        Icon() {
+            return this.Lights_icon();
+        }
+        hint() {
+            return this.$.$mol_locale.text('$mol_lights_toggle_hint');
+        }
+        checked(next) {
+            return this.lights(next);
+        }
+        Lights_icon() {
+            const obj = new this.$.$mol_icon_brightness_6();
+            return obj;
+        }
+        lights(next) {
+            if (next !== undefined)
+                return next;
+            return false;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_lights_toggle.prototype, "Lights_icon", null);
+    __decorate([
+        $mol_mem
+    ], $mol_lights_toggle.prototype, "lights", null);
+    $.$mol_lights_toggle = $mol_lights_toggle;
+})($ || ($ = {}));
+//mol/lights/toggle/-view.tree/toggle.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_lights_toggle extends $.$mol_lights_toggle {
+            lights(next) {
+                return this.$.$mol_lights(next);
+            }
+        }
+        $$.$mol_lights_toggle = $mol_lights_toggle;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/lights/toggle/toggle.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_stack extends $mol_view {
+    }
+    $.$mol_stack = $mol_stack;
+})($ || ($ = {}));
+//mol/stack/-view.tree/stack.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/stack/stack.view.css", "[mol_stack] {\n\tdisplay: grid;\n\t/* width: max-content; */\n\t/* height: max-content; */\n\talign-items: flex-start;\n\tjustify-items: flex-start;\n}\n\n[mol_stack] > * {\n\tgrid-area: 1/1;\n}\n");
+})($ || ($ = {}));
+//mol/stack/-css/stack.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_text_code_token extends $mol_dimmer {
         attr() {
             return {
@@ -9027,217 +10272,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $mol_list extends $mol_view {
-        render_visible_only() {
-            return true;
-        }
-        render_over() {
-            return 0;
-        }
-        sub() {
-            return this.rows();
-        }
-        Empty() {
-            const obj = new this.$.$mol_view();
-            return obj;
-        }
-        Gap_before() {
-            const obj = new this.$.$mol_view();
-            obj.style = () => ({
-                paddingTop: this.gap_before()
-            });
-            return obj;
-        }
-        Gap_after() {
-            const obj = new this.$.$mol_view();
-            obj.style = () => ({
-                paddingTop: this.gap_after()
-            });
-            return obj;
-        }
-        view_window() {
-            return [
-                0,
-                0
-            ];
-        }
-        rows() {
-            return [];
-        }
-        gap_before() {
-            return 0;
-        }
-        gap_after() {
-            return 0;
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $mol_list.prototype, "Empty", null);
-    __decorate([
-        $mol_mem
-    ], $mol_list.prototype, "Gap_before", null);
-    __decorate([
-        $mol_mem
-    ], $mol_list.prototype, "Gap_after", null);
-    $.$mol_list = $mol_list;
-})($ || ($ = {}));
-//mol/list/-view.tree/list.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    let cache = null;
-    function $mol_support_css_overflow_anchor() {
-        return cache ?? (cache = (!/Gecko\//.test(navigator.userAgent)
-            && this.$mol_dom_context.CSS?.supports('overflow-anchor:auto')) ?? false);
-    }
-    $.$mol_support_css_overflow_anchor = $mol_support_css_overflow_anchor;
-})($ || ($ = {}));
-//mol/support/css/css.ts
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $mol_list extends $.$mol_list {
-            sub() {
-                const rows = this.rows();
-                return (rows.length === 0) ? [this.Empty()] : rows;
-            }
-            render_visible_only() {
-                return this.$.$mol_support_css_overflow_anchor();
-            }
-            view_window(next) {
-                const kids = this.sub();
-                if (kids.length < 3)
-                    return [0, kids.length];
-                if (this.$.$mol_print.active())
-                    return [0, kids.length];
-                const rect = this.view_rect();
-                if (next)
-                    return next;
-                let [min, max] = $mol_mem_cached(() => this.view_window()) ?? [0, 0];
-                let max2 = max = Math.min(max, kids.length);
-                let min2 = min = Math.max(0, Math.min(min, max - 1));
-                const anchoring = this.render_visible_only();
-                const window_height = this.$.$mol_window.size().height + 40;
-                const over = Math.ceil(window_height * this.render_over());
-                const limit_top = -over;
-                const limit_bottom = window_height + over;
-                const gap_before = $mol_mem_cached(() => this.gap_before()) ?? 0;
-                const gap_after = $mol_mem_cached(() => this.gap_after()) ?? 0;
-                let top = Math.ceil(rect?.top ?? 0) + gap_before;
-                let bottom = Math.ceil(rect?.bottom ?? 0) - gap_after;
-                if (top <= limit_top && bottom >= limit_bottom) {
-                    return [min2, max2];
-                }
-                if (anchoring && ((bottom < limit_top) || (top > limit_bottom))) {
-                    min = 0;
-                    top = Math.ceil(rect?.top ?? 0);
-                    while (min < (kids.length - 1)) {
-                        const height = kids[min].minimal_height();
-                        if (top + height >= limit_top)
-                            break;
-                        top += height;
-                        ++min;
-                    }
-                    min2 = min;
-                    max2 = max = min;
-                    bottom = top;
-                }
-                let top2 = top;
-                let bottom2 = bottom;
-                if (anchoring && (top <= limit_top) && (bottom2 < limit_bottom)) {
-                    min2 = Math.max(0, max - 1);
-                    top2 = bottom;
-                }
-                if ((bottom >= limit_bottom) && (top2 >= limit_top)) {
-                    max2 = Math.min(min + 1, kids.length);
-                    bottom2 = top;
-                }
-                while (bottom2 < limit_bottom && max2 < kids.length) {
-                    bottom2 += kids[max2].minimal_height();
-                    ++max2;
-                }
-                while (anchoring && ((top2 >= limit_top) && (min2 > 0))) {
-                    --min2;
-                    top2 -= kids[min2].minimal_height();
-                }
-                return [min2, max2];
-            }
-            gap_before() {
-                const skipped = this.sub().slice(0, this.view_window()[0]);
-                return Math.max(0, skipped.reduce((sum, view) => sum + view.minimal_height(), 0));
-            }
-            gap_after() {
-                const skipped = this.sub().slice(this.view_window()[1]);
-                return Math.max(0, skipped.reduce((sum, view) => sum + view.minimal_height(), 0));
-            }
-            sub_visible() {
-                return [
-                    ...this.gap_before() ? [this.Gap_before()] : [],
-                    ...this.sub().slice(...this.view_window()),
-                    ...this.gap_after() ? [this.Gap_after()] : [],
-                ];
-            }
-            minimal_height() {
-                return this.sub().reduce((sum, view) => {
-                    try {
-                        return sum + view.minimal_height();
-                    }
-                    catch (error) {
-                        $mol_fail_log(error);
-                        return sum;
-                    }
-                }, 0);
-            }
-            force_render(path) {
-                const kids = this.rows();
-                const index = kids.findIndex(item => path.has(item));
-                if (index >= 0) {
-                    const win = this.view_window();
-                    if (index < win[0] || index >= win[1]) {
-                        this.view_window([this.render_visible_only() ? index : 0, index + 1]);
-                    }
-                    kids[index].force_render(path);
-                }
-            }
-        }
-        __decorate([
-            $mol_mem
-        ], $mol_list.prototype, "sub", null);
-        __decorate([
-            $mol_mem
-        ], $mol_list.prototype, "view_window", null);
-        __decorate([
-            $mol_mem
-        ], $mol_list.prototype, "gap_before", null);
-        __decorate([
-            $mol_mem
-        ], $mol_list.prototype, "gap_after", null);
-        __decorate([
-            $mol_mem
-        ], $mol_list.prototype, "sub_visible", null);
-        __decorate([
-            $mol_mem
-        ], $mol_list.prototype, "minimal_height", null);
-        $$.$mol_list = $mol_list;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-//mol/list/list.view.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("mol/list/list.view.css", "[mol_list] {\n\twill-change: contents;\n\tdisplay: flex;\n\tflex-direction: column;\n\tflex-shrink: 0;\n\tmax-width: 100%;\n\t/* display: flex;\n\talign-items: stretch;\n\talign-content: stretch; */\n\ttransition: none;\n\tmin-height: .5rem;\n}\n\n[mol_list_gap_before] ,\n[mol_list_gap_after] {\n\tdisplay: block !important;\n\tflex: none;\n\ttransition: none;\n\toverflow-anchor: none;\n}\n");
-})($ || ($ = {}));
-//mol/list/-css/list.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
     $.$mol_blob = ($node.buffer?.Blob ?? $mol_dom_context.Blob);
 })($ || ($ = {}));
 //mol/blob/blob.ts
@@ -9594,227 +10628,6 @@ var $;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
 //mol/text/code/code.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_string extends $mol_view {
-        dom_name() {
-            return "input";
-        }
-        enabled() {
-            return true;
-        }
-        minimal_height() {
-            return 40;
-        }
-        autocomplete() {
-            return false;
-        }
-        selection(next) {
-            if (next !== undefined)
-                return next;
-            return [
-                0,
-                0
-            ];
-        }
-        auto() {
-            return [
-                this.selection_watcher()
-            ];
-        }
-        field() {
-            return {
-                ...super.field(),
-                disabled: this.disabled(),
-                value: this.value_changed(),
-                placeholder: this.hint_visible(),
-                spellcheck: this.spellcheck(),
-                autocomplete: this.autocomplete_native(),
-                selectionEnd: this.selection_end(),
-                selectionStart: this.selection_start(),
-                inputMode: this.keyboard(),
-                enterkeyhint: this.enter()
-            };
-        }
-        attr() {
-            return {
-                ...super.attr(),
-                maxlength: this.length_max(),
-                type: this.type()
-            };
-        }
-        event() {
-            return {
-                ...super.event(),
-                input: (event) => this.event_change(event)
-            };
-        }
-        plugins() {
-            return [
-                this.Submit()
-            ];
-        }
-        selection_watcher() {
-            return null;
-        }
-        disabled() {
-            return false;
-        }
-        value(next) {
-            if (next !== undefined)
-                return next;
-            return "";
-        }
-        value_changed(next) {
-            return this.value(next);
-        }
-        hint() {
-            return "";
-        }
-        hint_visible() {
-            return this.hint();
-        }
-        spellcheck() {
-            return true;
-        }
-        autocomplete_native() {
-            return "";
-        }
-        selection_end() {
-            return 0;
-        }
-        selection_start() {
-            return 0;
-        }
-        keyboard() {
-            return "text";
-        }
-        enter() {
-            return "go";
-        }
-        length_max() {
-            return +Infinity;
-        }
-        type(next) {
-            if (next !== undefined)
-                return next;
-            return "text";
-        }
-        event_change(event) {
-            if (event !== undefined)
-                return event;
-            return null;
-        }
-        submit_with_ctrl() {
-            return false;
-        }
-        submit(event) {
-            if (event !== undefined)
-                return event;
-            return null;
-        }
-        Submit() {
-            const obj = new this.$.$mol_hotkey();
-            obj.mod_ctrl = () => this.submit_with_ctrl();
-            obj.key = () => ({
-                enter: (event) => this.submit(event)
-            });
-            return obj;
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $mol_string.prototype, "selection", null);
-    __decorate([
-        $mol_mem
-    ], $mol_string.prototype, "value", null);
-    __decorate([
-        $mol_mem
-    ], $mol_string.prototype, "type", null);
-    __decorate([
-        $mol_mem
-    ], $mol_string.prototype, "event_change", null);
-    __decorate([
-        $mol_mem
-    ], $mol_string.prototype, "submit", null);
-    __decorate([
-        $mol_mem
-    ], $mol_string.prototype, "Submit", null);
-    $.$mol_string = $mol_string;
-})($ || ($ = {}));
-//mol/string/-view.tree/string.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $mol_string extends $.$mol_string {
-            event_change(next) {
-                if (!next)
-                    return;
-                const el = next.target;
-                const from = el.selectionStart;
-                const to = el.selectionEnd;
-                el.value = this.value_changed(el.value);
-                if (to === null)
-                    return;
-                el.selectionEnd = to;
-                el.selectionStart = from;
-                this.selection_change(next);
-            }
-            hint_visible() {
-                return (this.enabled() ? this.hint() : '') || ' ';
-            }
-            disabled() {
-                return !this.enabled();
-            }
-            autocomplete_native() {
-                return this.autocomplete() ? 'on' : 'off';
-            }
-            selection_watcher() {
-                return new $mol_dom_listener(this.$.$mol_dom_context.document, 'selectionchange', $mol_wire_async(event => this.selection_change(event)));
-            }
-            selection_change(event) {
-                const el = this.dom_node();
-                if (el !== this.$.$mol_dom_context.document.activeElement)
-                    return;
-                const [from, to] = this.selection([
-                    el.selectionStart,
-                    el.selectionEnd,
-                ]);
-                el.selectionEnd = to;
-                el.selectionStart = from;
-            }
-            selection_start() {
-                const el = this.dom_node();
-                if (el.selectionStart === null)
-                    return undefined;
-                return this.selection()[0];
-            }
-            selection_end() {
-                const el = this.dom_node();
-                if (el.selectionEnd === null)
-                    return undefined;
-                return this.selection()[1];
-            }
-        }
-        __decorate([
-            $mol_mem
-        ], $mol_string.prototype, "selection_watcher", null);
-        $$.$mol_string = $mol_string;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-//mol/string/string.view.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("mol/string/string.view.css", "[mol_string] {\n\tbox-sizing: border-box;\n\toutline-offset: 0;\n\tborder: none;\n\tborder-radius: var(--mol_gap_round);\n\twhite-space: pre-line;\n\toverflow: hidden;\n\ttext-overflow: ellipsis;\n\tpadding: var(--mol_gap_text);\n\ttext-align: left;\n\tposition: relative;\n\tfont: inherit;\n\tflex: 1 1 auto;\n\tbackground: transparent;\n\tmin-width: 0;\n\tcolor: inherit;\n\tbackground: var(--mol_theme_field);\n}\n\n[mol_string]:disabled:not(:placeholder-shown) {\n\tbackground-color: transparent;\n\tcolor: var(--mol_theme_text);\n}\n\n[mol_string]:where(:not(:disabled)) {\n\tbox-shadow: inset 0 0 0 1px var(--mol_theme_line);\n}\n\n[mol_string]:where(:not(:disabled)):hover {\n\tbox-shadow: inset 0 0 0 2px var(--mol_theme_line);\n\tz-index: var(--mol_layer_hover);\n}\n\n[mol_string]:focus {\n\toutline: none;\n\tz-index: var(--mol_layer_focus);\n\tcolor: var(--mol_theme_text);\n\tbox-shadow: inset 0 0 0 1px var(--mol_theme_focus);\n}\n\n[mol_string]::placeholder {\n\tcolor: var(--mol_theme_shade);\n}\n\n[mol_string]::-ms-clear {\n\tdisplay: none;\n}\n");
-})($ || ($ = {}));
-//mol/string/-css/string.view.css.ts
 ;
 "use strict";
 var $;
@@ -15793,13 +16606,17 @@ var $;
                     if (field === 'length')
                         return size();
                     const index = Number(field);
+                    if (index < 0)
+                        return undefined;
+                    if (index >= size())
+                        return undefined;
                     if (index === Math.trunc(index))
                         return item(index);
                 }
                 return target[field];
             },
             set(target, field) {
-                return $mol_fail(new TypeError('Lazy range is read only'));
+                return $mol_fail(new TypeError(`Lazy range is read only (trying to set field ${JSON.stringify(field)})`));
             },
             ownKeys(target) {
                 return [...Array(size())].map((v, i) => String(i)).concat('length');
@@ -15862,7 +16679,7 @@ var $;
             }
             return result;
         }
-        reverse() {
+        toReversed() {
             return $mol_range2(index => this[this.length - 1 - index], () => this.length);
         }
         slice(from = 0, to = this.length) {
@@ -15881,6 +16698,12 @@ var $;
                     return false;
             }
             return true;
+        }
+        reverse() {
+            return $mol_fail(new TypeError(`Mutable reverse is forbidden. Use toReversed instead.`));
+        }
+        sort() {
+            return $mol_fail(new TypeError(`Mutable sort is forbidden. Use toSorted instead.`));
         }
     }
     $.$mol_range2_array = $mol_range2_array;
