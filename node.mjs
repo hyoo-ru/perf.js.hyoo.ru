@@ -8046,6 +8046,9 @@ var $;
                 ]);
                 el.selectionEnd = to;
                 el.selectionStart = from;
+                if (to !== from && el.selectionEnd === el.selectionStart) {
+                    el.selectionEnd = to;
+                }
             }
             selection_start() {
                 const el = this.dom_node();
@@ -16253,7 +16256,7 @@ var $;
             const styles = $mol_dom_context.getComputedStyle(el);
             restyle(re, styles);
             const before = $mol_dom_context.getComputedStyle(el, ':before');
-            if (before.content !== 'none') {
+            if (before.content[0] === '"') {
                 const kid = $mol_jsx("span", null, JSON.parse(before.content));
                 restyle(kid, before);
                 re.appendChild(kid);
@@ -16265,7 +16268,7 @@ var $;
                 re.appendChild(dup);
             }
             const after = $mol_dom_context.getComputedStyle(el, ':after');
-            if (after.content !== 'none') {
+            if (after.content[0] === '"') {
                 const kid = $mol_jsx("span", null, JSON.parse(after.content));
                 restyle(kid, after);
                 re.appendChild(kid);
