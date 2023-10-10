@@ -1673,7 +1673,7 @@ declare namespace $ {
     class $mol_fetch_response extends $mol_object2 {
         readonly native: Response;
         constructor(native: Response);
-        status(): "success" | "unknown" | "inform" | "redirect" | "wrong" | "failed";
+        status(): "redirect" | "success" | "unknown" | "inform" | "wrong" | "failed";
         code(): number;
         message(): string;
         headers(): Headers;
@@ -2666,6 +2666,9 @@ declare namespace $ {
     class $mol_link extends $mol_view {
         uri(): string;
         dom_name(): string;
+        uri_off(): string;
+        uri_native(): any;
+        external(): boolean;
         attr(): Record<string, any>;
         sub(): readonly $mol_view_content[];
         arg(): Record<string, any>;
