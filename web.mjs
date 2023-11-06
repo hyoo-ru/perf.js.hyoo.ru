@@ -805,11 +805,25 @@ var $;
                 }
                 if (!$mol_promise_like(this.cache))
                     return this.cache;
-                await this.cache;
+                await Promise.race([this.cache, this.step()]);
+                if (!$mol_promise_like(this.cache))
+                    return this.cache;
                 if (this.cursor === $mol_wire_cursor.final) {
                     await new Promise(() => { });
                 }
             }
+        }
+        step() {
+            return new Promise(done => {
+                const sub = new $mol_wire_pub_sub;
+                const prev = sub.track_on();
+                sub.track_next(this);
+                sub.track_off(prev);
+                sub.absorb = () => {
+                    done(null);
+                    sub.destructor();
+                };
+            });
         }
     }
     $.$mol_wire_fiber = $mol_wire_fiber;
@@ -13579,17 +13593,14 @@ var $;
             row_values(index) {
                 return this.rows_values()[index];
             }
-            expand_all(event, blacklist = new Set) {
-                if (blacklist.has(this.value()))
-                    return;
-                blacklist.add(this.value());
+            expand_all(event) {
                 this.expanded(true);
                 for (const row of this.expand_content()) {
                     if (!(row instanceof $mol_dump_list))
                         continue;
                     if (row.values()[0] === '__proto__:')
                         continue;
-                    row.expand_all(event, blacklist);
+                    row.expand_all(event);
                 }
             }
         }
@@ -13680,8 +13691,8 @@ var $;
             dump_value(index) {
                 return this.values()[index];
             }
-            expand_all(event, blacklist = new Set) {
-                this.Dump(1).expand_all(event, blacklist);
+            expand_all(event) {
+                this.Dump(1).expanded(true);
             }
         }
         __decorate([
