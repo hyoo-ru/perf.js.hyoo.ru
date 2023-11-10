@@ -144,6 +144,7 @@
     "$hyoo_sync_peer",
     "$mol_state_local",
     "$mol_state",
+    "$mol_storage",
     "$hyoo_crowd_world",
     "$hyoo_crowd_land",
     "$hyoo_crowd_clock",
