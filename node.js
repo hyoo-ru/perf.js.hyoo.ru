@@ -4139,18 +4139,43 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    $.$mol_mem_persist = $mol_wire_solid;
+})($ || ($ = {}));
+//mol/mem/persist/persist.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_storage extends $mol_object2 {
         static native() {
-            return null;
+            return this.$.$mol_dom_context.navigator.storage ?? {
+                persisted: async () => false,
+                persist: async () => false,
+                estimate: async () => ({}),
+                getDirectory: async () => null,
+            };
         }
-        static persisted(next) {
-            return false;
+        static persisted(next, cache) {
+            $mol_mem_persist();
+            if (cache)
+                return Boolean(next);
+            const native = this.native();
+            if (next && !$mol_mem_cached(() => this.persisted())) {
+                native.persist().then(actual => {
+                    setTimeout(() => this.persisted(actual, 'cache'), 5000);
+                    if (actual)
+                        this.$.$mol_log3_rise({ place: `$mol_storage`, message: `Persist: Yes` });
+                    else
+                        this.$.$mol_log3_fail({ place: `$mol_storage`, message: `Persist: No` });
+                });
+            }
+            return next ?? $mol_wire_sync(native).persisted();
         }
         static estimate() {
-            return 0;
+            return $mol_wire_sync(this.native() ?? {}).estimate();
         }
         static dir() {
-            return null;
+            return $mol_wire_sync(this.native()).getDirectory();
         }
     }
     __decorate([
@@ -4161,7 +4186,7 @@ var $;
     ], $mol_storage, "persisted", null);
     $.$mol_storage = $mol_storage;
 })($ || ($ = {}));
-//mol/storage/storage.node.ts
+//mol/storage/storage.ts
 ;
 "use strict";
 var $;
