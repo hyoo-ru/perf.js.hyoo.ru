@@ -132,8 +132,6 @@
     "$mol_data_value",
     "$mol_data_error",
     "$mol_error_mix",
-    "$mol_diff_path",
-    "$mol_diff",
     "$hyoo_crowd_peer",
     "$mol_crypto_auditor",
     "$mol_crypto",
