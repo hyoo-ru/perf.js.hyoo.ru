@@ -15667,7 +15667,7 @@ var $;
 			return true;
 		}
 		Case_measurable(id){
-			return (this.Case(id).Measurable());
+			return (this.Case("0").Measurable());
 		}
 		case_sample(id){
 			return "";
