@@ -35,7 +35,7 @@ $hyoo_js_perf_case_row $mol_view
 					click? <=> drop? null
 					hint @ \Drop case
 					sub /
-						<= Drop_icon $mol_icon_cross
+						<= Drop_icon $mol_icon_close
 				<= Dupe $mol_button_minor
 					click? <=> dupe? null
 					hint @ \Duplicate case
