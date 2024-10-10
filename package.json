@@ -178,6 +178,7 @@
     "$mol_avatar",
     "$mol_hash_string",
     "$mol_hash",
+    "$mol_icon_sync_off",
     "$mol_icon_sync",
     "$mol_link",
     "$hyoo_sync_yard",
