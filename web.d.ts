@@ -2831,12 +2831,7 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    function $mol_wait_timeout_async(this: $, timeout: number): Promise<void> & {
-        done: (res: void | PromiseLike<void>) => void;
-        fail: (error?: any) => void;
-    } & {
-        destructor: () => void;
-    };
+    function $mol_wait_timeout_async(this: $, timeout: number): Promise<void>;
     function $mol_wait_timeout(this: $, timeout: number): void;
 }
 
@@ -4868,7 +4863,7 @@ declare namespace $ {
 	>
 	export class $mol_portion extends $mol_view {
 		indicator_width_style( ): string
-		indicator( ): $mol_portion_indicator
+		Indicator( ): $mol_portion_indicator
 		portion( ): number
 		sub( ): readonly(any)[]
 	}
