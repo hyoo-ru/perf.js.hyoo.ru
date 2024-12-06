@@ -832,7 +832,7 @@ var $;
             }
             return this.cache;
         }
-        async async() {
+        async async_raw() {
             while (true) {
                 this.fresh();
                 if (this.cache instanceof Error) {
@@ -847,6 +847,12 @@ var $;
                     await new Promise(() => { });
                 }
             }
+        }
+        async() {
+            const promise = this.async_raw();
+            if (!promise.destructor)
+                promise.destructor = () => this.destructor();
+            return promise;
         }
         step() {
             return new Promise(done => {
@@ -9217,7 +9223,7 @@ var $;
         'code-docs': /\/\/\/.*?$/,
         'code-comment-block': /(?:\/\*[^]*?\*\/|\/\+[^]*?\+\/|<![^]*?>)/,
         'code-link': /(?:\w+:\/\/|#)\S+?(?=\s|\\\\|""|$)/,
-        'code-comment-inline': /\/\/.*?(?:$|\/\/)|- \\.*|#!? .*/,
+        'code-comment-inline': /\/\/.*?(?:$|\/\/)|- \\(?!\\).*|#!? .*/,
         'code-string': /(?:".*?"|'.*?'|`.*?`| ?\\\\.+?\\\\|\/.+?\/[dygimsu]*(?!\p{Letter})|[ \t]*\\[^\n]*)/u,
         'code-number': /[+-]?(?:\d*\.)?\d+\w*/,
         'code-call': /\.?\w+ *(?=\()/,
