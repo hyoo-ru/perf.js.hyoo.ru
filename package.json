@@ -331,7 +331,6 @@
   "dependencies": {
     "jsdom": "*",
     "chokidar": "*",
-    "fake-indexeddb": "*",
-    "undici": "*"
+    "fake-indexeddb": "*"
   }
 }
