@@ -122,6 +122,7 @@ declare namespace $ {
 declare namespace $ {
     interface $mol_wire_sub extends $mol_wire_pub {
         temp: boolean;
+        pub_list: $mol_wire_pub[];
         track_on(): $mol_wire_sub | null;
         track_next(pub?: $mol_wire_pub): $mol_wire_pub | null;
         pub_off(pub_pos: number): void;
@@ -147,8 +148,8 @@ declare namespace $ {
         hasBody: (val: any, config: any) => boolean;
         body: (val: any, config: any) => any;
     }): void;
-    let $mol_dev_format_head: symbol;
-    let $mol_dev_format_body: symbol;
+    const $mol_dev_format_head: unique symbol;
+    const $mol_dev_format_body: unique symbol;
     function $mol_dev_format_native(obj: any): any[];
     function $mol_dev_format_auto(obj: any): any[];
     function $mol_dev_format_element(element: string, style: object, ...content: any[]): any[];
@@ -168,7 +169,6 @@ declare namespace $ {
 
 declare namespace $ {
     class $mol_wire_pub_sub extends $mol_wire_pub implements $mol_wire_sub {
-        [x: symbol]: () => any[];
         protected pub_from: number;
         protected cursor: $mol_wire_cursor;
         get temp(): boolean;
@@ -183,6 +183,7 @@ declare namespace $ {
         complete(): void;
         complete_pubs(): void;
         absorb(quant?: $mol_wire_cursor): void;
+        [$mol_dev_format_head](): any[];
         get pub_empty(): boolean;
     }
 }
@@ -203,7 +204,6 @@ declare namespace $ {
 
 declare namespace $ {
     abstract class $mol_wire_fiber<Host, Args extends readonly unknown[], Result> extends $mol_wire_pub_sub {
-        [x: symbol]: string | (() => any[]);
         readonly task: (this: Host, ...args: Args) => Result;
         readonly host?: Host | undefined;
         static warm: boolean;
@@ -223,6 +223,7 @@ declare namespace $ {
         reap(): void;
         toString(): string;
         toJSON(): string;
+        [$mol_dev_format_head](): any[];
         get $(): any;
         emit(quant?: $mol_wire_cursor): void;
         fresh(): this | undefined;
@@ -234,6 +235,7 @@ declare namespace $ {
             destructor(): void;
         };
         step(): Promise<null>;
+        destructor(): void;
     }
 }
 
@@ -921,7 +923,6 @@ declare namespace $ {
     function $mol_view_visible_height(): number;
     function $mol_view_state_key(suffix: string): string;
     class $mol_view extends $mol_object {
-        [x: symbol]: () => any[];
         static Root<This extends typeof $mol_view>(this: This, id: number): InstanceType<This>;
         autorun(): void;
         static autobind(): void;
@@ -978,6 +979,7 @@ declare namespace $ {
             [x: string]: (event: Event) => Promise<void>;
         };
         plugins(): readonly $mol_view[];
+        [$mol_dev_format_head](): any[];
         view_find(check: (path: $mol_view, text?: string) => boolean, path?: $mol_view[]): Generator<$mol_view[]>;
         force_render(path: Set<$mol_view>): void;
         ensure_visible(view: $mol_view, align?: ScrollLogicalPosition): void;
@@ -1213,7 +1215,7 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    function $mol_charset_encode(value: string): Uint8Array<ArrayBufferLike>;
+    function $mol_charset_encode(value: string): Uint8Array<ArrayBuffer>;
 }
 
 declare namespace $ {
@@ -1245,12 +1247,12 @@ declare namespace $ {
         type(): "" | $mol_file_type;
         name(): string;
         ext(): string;
-        abstract buffer(next?: Uint8Array): Uint8Array;
+        abstract buffer(next?: Uint8Array<ArrayBuffer>): Uint8Array<ArrayBuffer>;
         text(next?: string, virt?: 'virt'): string;
         abstract sub(): $mol_file[];
         abstract resolve(path: string): $mol_file;
         abstract relate(base?: $mol_file): string;
-        abstract append(next: Uint8Array | string): void;
+        abstract append(next: Uint8Array<ArrayBuffer> | string): void;
         find(include?: RegExp, exclude?: RegExp): $mol_file[];
         size(): number;
         open(...modes: readonly ('create' | 'exists_truncate' | 'exists_fail' | 'read_only' | 'write_only' | 'read_write' | 'append')[]): number;
@@ -1281,11 +1283,11 @@ declare namespace $ {
         stat(next?: $mol_file_stat | null, virt?: 'virt'): $mol_file_stat | null;
         ensure(): void;
         drop(): void;
-        buffer(next?: Uint8Array): Uint8Array<ArrayBufferLike>;
+        buffer(next?: Uint8Array<ArrayBuffer>): Uint8Array<ArrayBuffer>;
         sub(): $mol_file[];
         resolve(path: string): $mol_file;
         relate(base?: $mol_file): string;
-        append(next: Uint8Array | string): undefined;
+        append(next: Uint8Array<ArrayBuffer> | string): undefined;
         open(...modes: readonly (keyof typeof $mol_file_mode_open)[]): number;
     }
 }
@@ -2608,16 +2610,16 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    function $mol_base64_decode(base64: string): Uint8Array;
+    function $mol_base64_decode(base64: string): Uint8Array<ArrayBuffer>;
 }
 
 declare namespace $ {
-    function $mol_base64_decode_node(base64Str: string): Uint8Array;
+    function $mol_base64_decode_node(base64Str: string): Uint8Array<ArrayBuffer>;
 }
 
 declare namespace $ {
     function $mol_base64_url_encode(buffer: Uint8Array): string;
-    function $mol_base64_url_decode(str: string): Uint8Array<ArrayBufferLike>;
+    function $mol_base64_url_decode(str: string): Uint8Array<ArrayBuffer>;
 }
 
 declare namespace $ {
@@ -2690,7 +2692,6 @@ declare namespace $ {
         data = 1
     }
     class $hyoo_crowd_unit extends Object {
-        [x: symbol]: (() => any[]) | (() => string);
         readonly land: $mol_int62_string;
         readonly auth: $mol_int62_string;
         readonly head: $mol_int62_string;
@@ -2705,13 +2706,14 @@ declare namespace $ {
         group(): $hyoo_crowd_unit_group;
         level(): $hyoo_crowd_peer_level;
         [Symbol.toPrimitive](): string;
+        [$mol_dev_format_head](): any[];
     }
-    class $hyoo_crowd_unit_bin extends DataView {
-        static from_buffer(buffer: Int16Array): any;
-        static from_unit(unit: $hyoo_crowd_unit): any;
-        sign(next?: Uint8Array): Uint8Array<any>;
+    class $hyoo_crowd_unit_bin extends DataView<ArrayBuffer> {
+        static from_buffer(buffer: Int16Array): $hyoo_crowd_unit_bin;
+        static from_unit(unit: $hyoo_crowd_unit): $hyoo_crowd_unit_bin;
+        sign(next?: Uint8Array): Uint8Array<ArrayBuffer>;
         size(): number;
-        sens(): Uint8Array<any>;
+        sens(): Uint8Array<ArrayBuffer>;
         unit(): $hyoo_crowd_unit;
     }
     function $hyoo_crowd_unit_compare(left: $hyoo_crowd_unit, right: $hyoo_crowd_unit): number;
@@ -2728,7 +2730,6 @@ declare namespace $ {
 
 declare namespace $ {
     class $hyoo_crowd_clock extends Map<$mol_int62_string, number> {
-        [x: symbol]: () => any[];
         static begin: number;
         last_time: number;
         constructor(entries?: Iterable<readonly [$mol_int62_string, number]>);
@@ -2742,17 +2743,17 @@ declare namespace $ {
         now(): number;
         last_stamp(): number;
         tick(peer: $mol_int62_string): number;
+        [$mol_dev_format_head](): any[];
     }
-    class $hyoo_crowd_clock_bin extends DataView {
-        static from(land_id: $mol_int62_string, clocks: readonly [$hyoo_crowd_clock, $hyoo_crowd_clock], count: number): any;
+    class $hyoo_crowd_clock_bin extends DataView<ArrayBuffer> {
+        static from(land_id: $mol_int62_string, clocks: readonly [$hyoo_crowd_clock, $hyoo_crowd_clock], count: number): $hyoo_crowd_clock_bin;
         land(): `${string}_${string}`;
-        count(): any;
+        count(): number;
     }
 }
 
 declare namespace $ {
     class $hyoo_crowd_node extends $mol_object2 {
-        [x: symbol]: (() => any[]) | (() => string);
         readonly land: $hyoo_crowd_land;
         readonly head: $mol_int62_string;
         constructor(land?: $hyoo_crowd_land, head?: $mol_int62_string);
@@ -2766,6 +2767,7 @@ declare namespace $ {
         virgin(): boolean;
         [Symbol.toPrimitive](): string;
         toJSON(): `${string}_${string}`;
+        [$mol_dev_format_head](): any[];
     }
 }
 
@@ -2788,7 +2790,6 @@ declare namespace $ {
 
 declare namespace $ {
     class $hyoo_crowd_land extends $mol_object {
-        [x: symbol]: () => any[];
         id(): `${string}_${string}`;
         toJSON(): `${string}_${string}`;
         peer(): $hyoo_crowd_peer;
@@ -2797,7 +2798,7 @@ declare namespace $ {
         get clock_auth(): $hyoo_crowd_clock;
         get clock_data(): $hyoo_crowd_clock;
         get clocks(): readonly [$hyoo_crowd_clock, $hyoo_crowd_clock];
-        get clocks_bin(): Uint8Array<any>;
+        get clocks_bin(): Uint8Array<ArrayBuffer>;
         readonly pub: $mol_wire_pub;
         readonly _clocks: readonly [$hyoo_crowd_clock, $hyoo_crowd_clock];
         _unit_all: Map<`${string}_${string}!${string}_${string}`, $hyoo_crowd_unit>;
@@ -2840,6 +2841,7 @@ declare namespace $ {
         wipe(unit: $hyoo_crowd_unit): $hyoo_crowd_unit;
         move(unit: $hyoo_crowd_unit, head: $mol_int62_string, prev: $mol_int62_string): void;
         insert(unit: $hyoo_crowd_unit, head: $mol_int62_string, seat: number): void;
+        [$mol_dev_format_head](): any[];
     }
 }
 
@@ -2922,7 +2924,6 @@ declare namespace $ {
 
 declare namespace $ {
     class $hyoo_sync_yard<Line> extends $mol_object2 {
-        [x: symbol]: () => any[];
         db_unit_persisted: WeakSet<$hyoo_crowd_unit>;
         log_pack(data: any): any;
         peer(next?: string): $hyoo_crowd_peer;
@@ -2964,9 +2965,10 @@ declare namespace $ {
             line: Line;
             land: $mol_int62_string;
         }, next?: Promise<any>[]): Promise<any>[];
-        line_receive(line: Line, message: Uint8Array): Promise<void>;
+        line_receive(line: Line, message: Uint8Array<ArrayBuffer>): Promise<void>;
         line_send_clocks(line: Line, land: $hyoo_crowd_land): void;
         line_send_units(line: Line, units: readonly $hyoo_crowd_unit[]): Promise<void>;
+        [$mol_dev_format_head](): any[];
     }
 }
 
