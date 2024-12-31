@@ -12471,7 +12471,6 @@ var $;
             maxHeight: per(100),
             boxSizing: 'border-box',
             color: $mol_theme.text,
-            backdropFilter: blur(`3px`),
             ':focus': {
                 outline: 'none',
             },
@@ -13976,6 +13975,14 @@ var $;
                 const fetch_data = () => fetch(request).then(response => {
                     if (response.status !== 200)
                         return response;
+                    const headers = new Headers(response.headers);
+                    headers.set("Cross-Origin-Embedder-Policy", "credentialless");
+                    headers.set("Cross-Origin-Opener-Policy", "same-origin");
+                    response = new Response(response.body, {
+                        status: response.status,
+                        statusText: response.statusText,
+                        headers,
+                    });
                     event.waitUntil(caches.open('$mol_offline').then(cache => cache.put(request, response)));
                     return response.clone();
                 });
