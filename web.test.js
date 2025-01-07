@@ -3133,7 +3133,7 @@ var $;
                 equal: (next, prev) => prev.textContent === next,
                 drop: (prev, lead) => list.removeChild(prev),
                 insert: (next, lead) => list.insertBefore($mol_jsx("p", { "data-rev": "new" }, next), lead ? lead.nextSibling : list.firstChild),
-                update: (next, prev, lead) => {
+                replace: (next, prev, lead) => {
                     prev.textContent = next;
                     prev.setAttribute('data-rev', 'up');
                     return prev;
@@ -3158,7 +3158,7 @@ var $;
                 equal: (next, prev) => prev.textContent === next,
                 drop: (prev, lead) => list.removeChild(prev),
                 insert: (next, lead) => list.insertBefore($mol_jsx("p", { "data-rev": "new" }, next), lead ? lead.nextSibling : list.firstChild),
-                update: (next, prev, lead) => {
+                replace: (next, prev, lead) => {
                     prev.textContent = next;
                     prev.setAttribute('data-rev', 'up');
                     return prev;
@@ -3183,7 +3183,7 @@ var $;
                 equal: (next, prev) => prev.textContent === next,
                 drop: (prev, lead) => list.removeChild(prev),
                 insert: (next, lead) => list.insertBefore($mol_jsx("p", { "data-rev": "new" }, next), lead ? lead.nextSibling : list.firstChild),
-                update: (next, prev, lead) => {
+                replace: (next, prev, lead) => {
                     prev.textContent = next;
                     prev.setAttribute('data-rev', 'up');
                     return prev;
@@ -3207,7 +3207,7 @@ var $;
                 equal: (next, prev) => prev.textContent === next,
                 drop: (prev, lead) => list.removeChild(prev),
                 insert: (next, lead) => list.insertBefore($mol_jsx("p", { "data-rev": "new" }, next), lead ? lead.nextSibling : list.firstChild),
-                update: (next, prev, lead) => {
+                replace: (next, prev, lead) => {
                     prev.textContent = next;
                     prev.setAttribute('data-rev', 'up');
                     return prev;
@@ -3235,7 +3235,7 @@ var $;
                 equal: (next, prev) => prev.textContent === next,
                 drop: (prev, lead) => list.removeChild(prev),
                 insert: (next, lead) => list.insertBefore($mol_jsx("p", { "data-rev": "new" }, next), lead ? lead.nextSibling : list.firstChild),
-                update: (next, prev, lead) => {
+                replace: (next, prev, lead) => {
                     prev.textContent = next;
                     prev.setAttribute('data-rev', 'up');
                     return prev;
@@ -3261,7 +3261,7 @@ var $;
                 equal: (next, prev) => prev.textContent === next,
                 drop: (prev, lead) => list.removeChild(prev),
                 insert: (next, lead) => list.insertBefore($mol_jsx("p", { "data-rev": "new" }, next), lead ? lead.nextSibling : list.firstChild),
-                update: (next, prev, lead) => {
+                replace: (next, prev, lead) => {
                     prev.textContent = next;
                     prev.setAttribute('data-rev', 'up');
                     return prev;
@@ -3417,7 +3417,7 @@ var $;
                         this.land.node(unit.self, $hyoo_crowd_text).str(next);
                         return unit;
                     },
-                    update: (next, prev, lead) => {
+                    replace: (next, prev, lead) => {
                         this.land.node(prev.self, $hyoo_crowd_text).str(next);
                         return prev;
                     },
