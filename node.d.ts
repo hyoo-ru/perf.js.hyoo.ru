@@ -2680,7 +2680,7 @@ declare namespace $ {
             name: string;
             dict: Dict;
         };
-        Value: ReturnType<Value>;
+        Value: Dict[keyof Dict];
     };
 }
 
