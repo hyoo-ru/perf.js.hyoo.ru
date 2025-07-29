@@ -10409,6 +10409,9 @@ var $;
 		row_numb(id){
 			return 0;
 		}
+		row_theme(id){
+			return "";
+		}
 		row_text(id){
 			return "";
 		}
@@ -10425,6 +10428,7 @@ var $;
 			const obj = new this.$.$mol_text_code_line();
 			(obj.numb_showed) = () => ((this.sidebar_showed()));
 			(obj.numb) = () => ((this.row_numb(id)));
+			(obj.theme) = () => ((this.row_theme(id)));
 			(obj.text) = () => ((this.row_text(id)));
 			(obj.syntax) = () => ((this.syntax()));
 			(obj.uri_resolve) = (id) => ((this.uri_resolve(id)));
@@ -10463,6 +10467,9 @@ var $;
 		}
 		uri_base(){
 			return "";
+		}
+		row_themes(){
+			return [];
 		}
 		sub(){
 			return [(this.Rows()), (this.Copy())];
@@ -10535,6 +10542,9 @@ var $;
             }
             text_export() {
                 return this.text() + '\n';
+            }
+            row_theme(row) {
+                return this.row_themes()[row - 1];
             }
         }
         __decorate([
@@ -12233,6 +12243,9 @@ var $;
 		pre_text(id){
 			return "";
 		}
+		pre_themes(id){
+			return [];
+		}
 		code_sidebar_showed(){
 			return true;
 		}
@@ -12347,6 +12360,7 @@ var $;
 		Pre(id){
 			const obj = new this.$.$mol_text_code();
 			(obj.text) = () => ((this.pre_text(id)));
+			(obj.row_themes) = () => ((this.pre_themes(id)));
 			(obj.highlight) = () => ((this.highlight()));
 			(obj.uri_resolve) = (id) => ((this.uri_resolve(id)));
 			(obj.sidebar_showed) = () => ((this.pre_sidebar_showed()));
@@ -12553,6 +12567,16 @@ var $;
                 const token = this.flow_tokens()[index];
                 return (token.chunks[2] ?? token.chunks[0].replace(/^(\t| (?:\+\+|--|\*\*|  ) )/gm, '')).replace(/[\n\r]*$/, '');
             }
+            pre_themes(index) {
+                const token = this.flow_tokens()[index];
+                const names = {
+                    ' ** ': '$mol_theme_accent',
+                    ' ++ ': '$mol_theme_current',
+                    ' -- ': '$mol_theme_special',
+                };
+                return token.chunks[0].split('\n')
+                    .map(line => names[line.match(/^ (?:\+\+|--|\*\*|  ) /gm)?.[0] ?? ''] ?? null);
+            }
             quote_text(index) {
                 return this.flow_tokens()[index].chunks[0].replace(/^[>"] /mg, '');
             }
@@ -12737,6 +12761,9 @@ var $;
         __decorate([
             $mol_mem_key
         ], $mol_text.prototype, "pre_text", null);
+        __decorate([
+            $mol_mem_key
+        ], $mol_text.prototype, "pre_themes", null);
         __decorate([
             $mol_mem_key
         ], $mol_text.prototype, "quote_text", null);
