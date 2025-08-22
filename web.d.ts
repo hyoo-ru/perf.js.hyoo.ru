@@ -323,6 +323,10 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    function $mol_try<Result>(handler2: () => Result): Result | Error;
+}
+
+declare namespace $ {
     function $mol_fail_log(error: unknown): boolean;
 }
 
@@ -3798,7 +3802,7 @@ declare namespace $ {
     function $mol_assert_not(value: any): void;
     function $mol_assert_fail(handler: () => any, ErrorRight: string | typeof Error | typeof Promise): any;
     function $mol_assert_like<Value>(...args: [Value, Value, ...Value[]]): void;
-    function $mol_assert_unique(...args: [any, any, ...any[]]): void;
+    function $mol_assert_unique(...args: [any, any, ...any[]]): undefined;
     function $mol_assert_equal<Value>(...args: Value[]): undefined;
 }
 
@@ -5393,10 +5397,6 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
-}
-
-declare namespace $ {
-    function $mol_try<Result>(handler2: () => Result): Result | Error;
 }
 
 declare namespace $ {
