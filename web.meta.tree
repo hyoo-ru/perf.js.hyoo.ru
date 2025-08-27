@@ -92,6 +92,8 @@
 \/hyoo/sync
 	- build $hyoo_sync_revision \git rev-parse --short HEAD
 	build $hyoo_sync_revision \echo echo
+\/mol/assert
+	include \/mol/dev/format
 \/mol/wire/lib
 	include \/mol/wire/pub
 	include \/mol/wire/pub/sub

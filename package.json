@@ -184,6 +184,7 @@
     "$mol_avatar",
     "$mol_hash_string",
     "$mol_hash",
+    "$mol_hash_numbers",
     "$mol_icon_sync_off",
     "$mol_icon_sync",
     "$mol_link",

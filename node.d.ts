@@ -6,6 +6,7 @@ declare class $ extends _$_ {
 declare namespace $ {
     export type $ = typeof $$;
     export class $$ extends $ {
+        static $: $;
     }
     namespace $$ {
         type $$ = $;
@@ -159,7 +160,7 @@ declare namespace $ {
     function $mol_dev_format_native(obj: any): any[];
     function $mol_dev_format_auto(obj: any): any[];
     function $mol_dev_format_element(element: string, style: object, ...content: any[]): any[];
-    function $mol_dev_format_span(style: object, ...content: any[]): any[];
+    let $mol_dev_format_span: (style: object, ...content: any[]) => any[];
     let $mol_dev_format_div: (style: object, ...content: any[]) => any[];
     let $mol_dev_format_ol: (style: object, ...content: any[]) => any[];
     let $mol_dev_format_li: (style: object, ...content: any[]) => any[];
@@ -2598,6 +2599,10 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
+}
+
+declare namespace $ {
+    function $mol_hash_numbers(buff: ArrayLike<number>, seed?: number): number;
 }
 
 declare namespace $ {
