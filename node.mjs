@@ -4442,7 +4442,7 @@ var $;
             return node;
         }
         auto() {
-            return null;
+            return [];
         }
         render() {
             const node = this.dom_node_actual();
@@ -9555,7 +9555,6 @@ var $;
 (function ($) {
     $.$hyoo_sync_masters = [
         `sync.hyoo.ru`,
-        `sync-pmzz.onrender.com`,
     ];
 })($ || ($ = {}));
 
