@@ -207,8 +207,6 @@
     "$mol_crypto_native",
     "$mol_base64_url",
     "$mol_base64",
-    "$mol_base64_encode",
-    "$mol_base64_decode",
     "$hyoo_sync_peer",
     "$hyoo_crowd_world",
     "$hyoo_crowd_land",
