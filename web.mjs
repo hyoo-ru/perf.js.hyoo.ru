@@ -15584,10 +15584,13 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    async function $mol_dom_capture_svg(el) {
+    async function $mol_dom_capture_svg(root) {
         function restyle(el, styles) {
+            const def = $mol_dom.getComputedStyle(el);
             for (let i = 0; i < styles.length; ++i) {
                 const prop = styles[i];
+                if (styles[prop] === def[prop])
+                    continue;
                 el.style[prop] = styles[prop];
             }
         }
@@ -15635,9 +15638,11 @@ var $;
             }
             return re;
         }
-        const { width, height } = el.getBoundingClientRect();
+        const { width, height } = root.getBoundingClientRect();
+        const dup = clone(root);
+        dup.style.margin = '0';
         return $mol_jsx("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: `0 0 ${width} ${height}`, width: String(width), height: String(height) },
-            $mol_jsx("foreignObject", { xmlns: "http://www.w3.org/2000/svg", width: String(width), height: String(height) }, clone(el)));
+            $mol_jsx("foreignObject", { xmlns: "http://www.w3.org/2000/svg", width: String(width), height: String(height) }, dup));
     }
     $.$mol_dom_capture_svg = $mol_dom_capture_svg;
     async function $mol_dom_capture_image(el) {

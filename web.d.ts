@@ -3816,7 +3816,7 @@ declare namespace $ {
     function $mol_assert_fail(handler: () => any, ErrorRight: string | typeof Error | typeof Promise): any;
     function $mol_assert_like<Value>(...args: [Value, Value, ...Value[]]): void;
     function $mol_assert_unique(...args: [any, any, ...any[]]): undefined;
-    function $mol_assert_equal<Value>(...args: Value[]): undefined;
+    function $mol_assert_equal<Value>(...args: [Value, Value, ...Value[]]): undefined;
 }
 
 declare namespace $ {
@@ -6356,7 +6356,7 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    function $mol_dom_capture_svg(el: Element): Promise<$mol_jsx.JSX.Element>;
+    function $mol_dom_capture_svg(root: Element): Promise<$mol_jsx.JSX.Element>;
     function $mol_dom_capture_image(el: Element): Promise<HTMLImageElement>;
     function $mol_dom_capture_canvas(el: Element): Promise<HTMLCanvasElement>;
 }

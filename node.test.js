@@ -15812,10 +15812,13 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    async function $mol_dom_capture_svg(el) {
+    async function $mol_dom_capture_svg(root) {
         function restyle(el, styles) {
+            const def = $mol_dom.getComputedStyle(el);
             for (let i = 0; i < styles.length; ++i) {
                 const prop = styles[i];
+                if (styles[prop] === def[prop])
+                    continue;
                 el.style[prop] = styles[prop];
             }
         }
@@ -15863,9 +15866,11 @@ var $;
             }
             return re;
         }
-        const { width, height } = el.getBoundingClientRect();
+        const { width, height } = root.getBoundingClientRect();
+        const dup = clone(root);
+        dup.style.margin = '0';
         return $mol_jsx("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: `0 0 ${width} ${height}`, width: String(width), height: String(height) },
-            $mol_jsx("foreignObject", { xmlns: "http://www.w3.org/2000/svg", width: String(width), height: String(height) }, clone(el)));
+            $mol_jsx("foreignObject", { xmlns: "http://www.w3.org/2000/svg", width: String(width), height: String(height) }, dup));
     }
     $.$mol_dom_capture_svg = $mol_dom_capture_svg;
     async function $mol_dom_capture_image(el) {
@@ -17874,16 +17879,16 @@ var $;
             $mol_assert_unique([1], [2], [3]);
         },
         'two must be alike'() {
-            $mol_assert_like([3], [3]);
+            $mol_assert_equal([3], [3]);
         },
         'three must be alike'() {
-            $mol_assert_like([3], [3], [3]);
+            $mol_assert_equal([3], [3], [3]);
         },
         'two object must be alike'() {
-            $mol_assert_like({ a: 1 }, { a: 1 });
+            $mol_assert_equal({ a: 1 }, { a: 1 });
         },
         'three object must be alike'() {
-            $mol_assert_like({ a: 1 }, { a: 1 }, { a: 1 });
+            $mol_assert_equal({ a: 1 }, { a: 1 }, { a: 1 });
         },
     });
 })($ || ($ = {}));
@@ -18593,7 +18598,7 @@ var $;
             }
             await $mol_wire_async(A).a();
             $mol_assert_equal(A.instances.length, 2);
-            $mol_assert_equal(A.instances[0] instanceof A);
+            $mol_assert_equal(A.instances[0] instanceof A, true);
             $mol_assert_equal(A.instances[0], A.instances[1]);
         }
     });
