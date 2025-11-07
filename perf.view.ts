@@ -262,7 +262,7 @@ namespace $.$$ {
 		@ $mol_mem_key
 		case_deps_names( index: number ) {
 			const src = ( this.case_prefix( index ) + '\n' + this.source( index ) )
-			const found = src.matchAll( /\$mol_import\.(?:script|module)\s*\(\s*['"]https?:\/\/[^/]*\/((?:@[\w.-]*\/)?[\w.-]*)/g )
+			const found = src.matchAll( /\$mol_import\.(?:script|module)\s*\(\s*['"]https?:\/\/[^/]*\/(?:npm\/)?((?:@[\w.-]*\/)?[\w.-]*)/g )
 			return [ ... found ].map( ([ imp, mod ])=> mod )
 		}
 		
