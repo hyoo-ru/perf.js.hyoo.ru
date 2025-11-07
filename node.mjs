@@ -7841,7 +7841,10 @@ var $;
 var $;
 (function ($) {
     function $mol_hash_string(str, seed = 0) {
-        return $mol_hash_numbers([...str].map(ch => ch.codePointAt(0)));
+        let nums = new Array(str.length);
+        for (let i = 0; i < str.length; ++i)
+            nums[i] = str.charCodeAt(i);
+        return $mol_hash_numbers(nums);
     }
     $.$mol_hash_string = $mol_hash_string;
 })($ || ($ = {}));
@@ -17598,7 +17601,7 @@ var $;
             }
             case_deps_names(index) {
                 const src = (this.case_prefix(index) + '\n' + this.source(index));
-                const found = src.matchAll(/\$mol_import\.(?:script|module)\s*\(\s*['"]https?:\/\/[^/]*\/((?:@[\w.-]*\/)?[\w.-]*)/g);
+                const found = src.matchAll(/\$mol_import\.(?:script|module)\s*\(\s*['"]https?:\/\/[^/]*\/(?:npm\/)?((?:@[\w.-]*\/)?[\w.-]*)/g);
                 return [...found].map(([imp, mod]) => mod);
             }
             case_deps(index) {
