@@ -5421,7 +5421,10 @@ var $;
 
 ;
 "use strict";
-let $hyoo_sync_revision = "echo";
+var $;
+(function ($) {
+    $.$hyoo_sync_revision = "echo";
+})($ || ($ = {}));
 
 ;
 	($.$mol_pop) = class $mol_pop extends ($.$mol_view) {
