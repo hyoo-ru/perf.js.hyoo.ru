@@ -169,6 +169,7 @@
     "$mol_button",
     "$mol_speck",
     "$mol_button_typed",
+    "$mol_dom_event",
     "$mol_dimmer",
     "$mol_paragraph",
     "$mol_regexp",
