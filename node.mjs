@@ -30,6 +30,9 @@ $.$$ = $
 
 ;
 "use strict";
+// namespace $ {
+// 	$mol_report_bugsnag = '18acf016ed2a2a4cc4445daa9dd2dd3c'
+// }
 
 ;
 "use strict";
@@ -44,7 +47,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    const mod = require('module');
+    const mod = require /****/('module');
     const internals = mod.builtinModules;
     function $node_internal_check(name) {
         if (name.startsWith('node:'))
@@ -84,7 +87,7 @@ var $;
 var $;
 (function ($) {
     function $mol_fail_hidden(error) {
-        throw error;
+        throw error; /// Use 'Never Pause Here' breakpoint in DevTools or simply blackbox this script
     }
     $.$mol_fail_hidden = $mol_fail_hidden;
 })($ || ($ = {}));
@@ -142,8 +145,8 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    const path = require('path');
-    const mod = require('module');
+    const path = require /****/('path');
+    const mod = require /****/('module');
     const localRequire = mod.createRequire(path.join(process.cwd(), 'package.json'));
     function $node_autoinstall(name) {
         try {
@@ -250,6 +253,7 @@ var $;
                     ])
                 ].map(frame_normalize).join('\n')
             });
+            // в nodejs, что б не дублировалось cause в консоли
             Object.defineProperty(this, 'cause', {
                 get: () => cause
             });
@@ -283,6 +287,11 @@ var $;
 var $;
 (function ($) {
     const instances = new WeakSet();
+    /**
+     * Proxy that delegates all to lazy returned target.
+     *
+     * 	$mol_delegate( Array.prototype , ()=> fetch_array() )
+     */
     function $mol_delegate(proto, target) {
         const proxy = new Proxy(proto, {
             get: (_, field) => {
@@ -426,6 +435,9 @@ var $;
         [Symbol.dispose]() {
             this.destructor();
         }
+        //[ Symbol.toPrimitive ]( hint: string ) {
+        //	return hint === 'number' ? this.valueOf() : this.toString()
+        //}
         toString() {
             return this[Symbol.toStringTag] || this.constructor.name + '<>';
         }
@@ -476,6 +488,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Generates unique identifier. */
     function $mol_guid(length = 8, exists = () => false) {
         for (;;) {
             let id = Math.random().toString(36).substring(2, length + 2).toUpperCase();
@@ -491,11 +504,16 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Special status statuses. */
     let $mol_wire_cursor;
     (function ($mol_wire_cursor) {
+        /** Update required. */
         $mol_wire_cursor[$mol_wire_cursor["stale"] = -1] = "stale";
+        /** Some of (transitive) pub update required. */
         $mol_wire_cursor[$mol_wire_cursor["doubt"] = -2] = "doubt";
+        /** Actual state but may be dropped. */
         $mol_wire_cursor[$mol_wire_cursor["fresh"] = -3] = "fresh";
+        /** State will never be changed. */
         $mol_wire_cursor[$mol_wire_cursor["final"] = -4] = "final";
     })($mol_wire_cursor = $.$mol_wire_cursor || ($.$mol_wire_cursor = {}));
 })($ || ($ = {}));
@@ -504,6 +522,9 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * Collects subscribers in compact array. 28B
+     */
     class $mol_wire_pub extends Object {
         constructor(id = `$mol_wire_pub:${$mol_guid()}`) {
             super();
@@ -511,10 +532,17 @@ var $;
         }
         [Symbol.toStringTag];
         data = [];
+        // Derived objects should be Arrays.
         static get [Symbol.species]() {
             return Array;
         }
-        sub_from = 0;
+        /**
+         * Index of first subscriber.
+         */
+        sub_from = 0; // 4B
+        /**
+         * All current subscribers.
+         */
         get sub_list() {
             const res = [];
             for (let i = this.sub_from; i < this.data.length; i += 2) {
@@ -522,14 +550,23 @@ var $;
             }
             return res;
         }
+        /**
+         * Has any subscribers or not.
+         */
         get sub_empty() {
             return this.sub_from === this.data.length;
         }
+        /**
+         * Subscribe subscriber to this publisher events and return position of subscriber that required to unsubscribe.
+         */
         sub_on(sub, pub_pos) {
             const pos = this.data.length;
             this.data.push(sub, pub_pos);
             return pos;
         }
+        /**
+         * Unsubscribe subscriber from this publisher events by subscriber position provided by `on(pub)`.
+         */
         sub_off(sub_pos) {
             if (!(sub_pos < this.data.length)) {
                 $mol_fail(new Error(`Wrong pos ${sub_pos}`));
@@ -542,21 +579,39 @@ var $;
             if (end === this.sub_from)
                 this.reap();
         }
+        /**
+         * Called when last sub was unsubscribed.
+         **/
         reap() { }
+        /**
+         * Autowire this publisher with current subscriber.
+         **/
         promote() {
             $mol_wire_auto()?.track_next(this);
         }
+        /**
+         * Enforce actualization. Should not throw errors.
+         */
         fresh() { }
+        /**
+         * Allow to put data to caches in the subtree.
+         */
         complete() { }
         get incompleted() {
             return false;
         }
+        /**
+         * Notify subscribers about self changes.
+         */
         emit(quant = $mol_wire_cursor.stale) {
             for (let i = this.sub_from; i < this.data.length; i += 2) {
                 ;
                 this.data[i].absorb(quant, this.data[i + 1]);
             }
         }
+        /**
+         * Moves peer from one position to another. Doesn't clear data at old position!
+         */
         peer_move(from_pos, to_pos) {
             const peer = this.data[from_pos];
             const self_pos = this.data[from_pos + 1];
@@ -564,6 +619,9 @@ var $;
             this.data[to_pos + 1] = self_pos;
             peer.peer_repos(self_pos, to_pos);
         }
+        /**
+         * Updates self position in the peer.
+         */
         peer_repos(peer_pos, self_pos) {
             this.data[peer_pos + 1] = self_pos;
         }
@@ -579,10 +637,16 @@ var $;
 var $;
 (function ($) {
     $.$mol_wire_auto_sub = null;
+    /**
+     * When fulfilled, all publishers are promoted to this subscriber on access to its.
+     */
     function $mol_wire_auto(next = $.$mol_wire_auto_sub) {
         return $.$mol_wire_auto_sub = next;
     }
     $.$mol_wire_auto = $mol_wire_auto;
+    /**
+     * Affection queue. Used to prevent accidental stack overflow on emit.
+     */
     $.$mol_wire_affected = [];
 })($ || ($ = {}));
 
@@ -590,6 +654,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    // https://docs.google.com/document/d/1FTascZXT9cxfetuPRT2eXPQKXui4nWFivUnS_335T3U/preview#
     $['devtoolsFormatters'] ||= [];
     function $mol_dev_format_register(config) {
         $['devtoolsFormatters'].push(config);
@@ -641,6 +706,7 @@ var $;
                 return false;
             if (!val)
                 return false;
+            // if( Error.isError( val ) ) true
             if (val[$.$mol_dev_format_body])
                 return true;
             return false;
@@ -658,12 +724,16 @@ var $;
                     return $.$mol_dev_format_accent($mol_dev_format_native(val), '💨', $mol_dev_format_native(error), '');
                 }
             }
+            // if( Error.isError( val ) ) {
+            // 	return $mol_dev_format_native( val )
+            // }
             return null;
         },
     });
     function $mol_dev_format_native(obj) {
         if (typeof obj === 'undefined')
             return $.$mol_dev_format_shade('undefined');
+        // if( ![ 'object', 'function', 'symbol' ].includes( typeof obj )  ) return obj
         return [
             'object',
             {
@@ -721,6 +791,9 @@ var $;
         'margin-left': '13px'
     });
     class Stack extends Array {
+        // [ Symbol.toPrimitive ]() {
+        // 	return this.toString()
+        // }
         toString() {
             return this.join('\n');
         }
@@ -743,6 +816,7 @@ var $;
             this.method = call.getMethodName() ?? '';
             if (this.method === this.function)
                 this.method = '';
+            // const func = c.getFunction()
             this.pos = [call.getEnclosingLineNumber() ?? 0, call.getEnclosingColumnNumber() ?? 0];
             this.eval = call.getEvalOrigin() ?? '';
             this.source = call.getScriptNameOrSourceURL() ?? '';
@@ -789,9 +863,16 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * Publisher that can auto collect other publishers. 32B
+     *
+     * 	P1 P2 P3 P4 S1 S2 S3
+     * 	^           ^
+     * 	pubs_from   subs_from
+     */
     class $mol_wire_pub_sub extends $mol_wire_pub {
-        pub_from = 0;
-        cursor = $mol_wire_cursor.stale;
+        pub_from = 0; // 4B
+        cursor = $mol_wire_cursor.stale; // 4B
         get temp() {
             return false;
         }
@@ -909,10 +990,27 @@ var $;
                 return;
             this.cursor = quant;
             this.emit($mol_wire_cursor.doubt);
+            // if( pos >= 0 && pos < this.sub_from - 2 ) {
+            // 	const pub = this.data[ pos ] as $mol_wire_pub
+            // 	if( pub instanceof $mol_wire_task ) return
+            // 	for(
+            // 		let cursor = this.pub_from;
+            // 		cursor < this.sub_from;
+            // 		cursor += 2
+            // 	) {
+            // 		const pub = this.data[ cursor ] as $mol_wire_pub
+            // 		if( pub instanceof $mol_wire_task ) {
+            // 			pub.destructor()
+            // 		}
+            // 	}
+            // }
         }
         [$mol_dev_format_head]() {
             return $mol_dev_format_native(this);
         }
+        /**
+         * Is subscribed to any publisher or not.
+         */
         get pub_empty() {
             return this.sub_from === this.pub_from;
         }
@@ -953,6 +1051,13 @@ var $;
 var $;
 (function ($) {
     const wrappers = new WeakMap();
+    /**
+     * Suspendable task with support both sync/async api.
+     *
+     * 	A1 A2 A3 A4 P1 P2 P3 P4 S1 S2 S3
+     * 	^           ^           ^
+     * 	args_from   pubs_from   subs_from
+     **/
     class $mol_wire_fiber extends $mol_wire_pub_sub {
         task;
         host;
@@ -973,6 +1078,7 @@ var $;
             });
         }
         static sync() {
+            // Sync whole fiber graph
             while (this.planning.size) {
                 for (const fiber of this.planning) {
                     this.planning.delete(fiber);
@@ -983,6 +1089,7 @@ var $;
                     fiber.fresh();
                 }
             }
+            // Collect garbage
             while (this.reaping.size) {
                 const fibers = this.reaping;
                 this.reaping = new Set;
@@ -1134,6 +1241,10 @@ var $;
             this.cursor = $mol_wire_cursor.stale;
             this.fresh();
         }
+        /**
+         * Synchronous execution. Throws Promise when waits async task (SuspenseAPI provider).
+         * Should be called inside SuspenseAPI consumer (ie fiber).
+         */
         sync() {
             if (!$mol_wire_fiber.warm) {
                 return this.result();
@@ -1148,6 +1259,10 @@ var $;
             }
             return this.cache;
         }
+        /**
+         * Asynchronous execution.
+         * It's SuspenseAPI consumer. So SuspenseAPI providers can be called inside.
+         */
         async async_raw() {
             while (true) {
                 this.fresh();
@@ -1160,6 +1275,7 @@ var $;
                 if (!$mol_promise_like(this.cache))
                     return this.cache;
                 if (this.cursor === $mol_wire_cursor.final) {
+                    // never ends on destructed fiber
                     await new Promise(() => { });
                 }
             }
@@ -1207,6 +1323,10 @@ var $;
 var $;
 (function ($) {
     $.$mol_compare_deep_cache = new WeakMap();
+    /**
+     * Deeply compares two values. Returns true if equal.
+     * Define `Symbol.toPrimitive` to customize.
+     */
     function $mol_compare_deep(left, right) {
         if (Object.is(left, right))
             return true;
@@ -1346,6 +1466,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Log begin of collapsed group only when some logged inside, returns func to close group */
     function $mol_log3_area_lazy(event) {
         const self = this.$;
         const stack = self.$mol_log3_stack;
@@ -1370,6 +1491,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Position in any resource. */
     class $mol_span extends $mol_object2 {
         uri;
         source;
@@ -1385,13 +1507,17 @@ var $;
             this.length = length;
             this[Symbol.toStringTag] = this.uri + ('#' + this.row + ':' + this.col + '/' + this.length);
         }
+        /** Span for begin of unknown resource */
         static unknown = $mol_span.begin('?');
+        /** Makes new span for begin of resource. */
         static begin(uri, source = '') {
             return new $mol_span(uri, source, 1, 1, 0);
         }
+        /** Makes new span for end of resource. */
         static end(uri, source) {
             return new $mol_span(uri, source, 1, source.length + 1, 0);
         }
+        /** Makes new span for entire resource. */
         static entire(uri, source) {
             return new $mol_span(uri, source, 1, 1, source.length);
         }
@@ -1406,15 +1532,19 @@ var $;
                 length: this.length
             };
         }
+        /** Makes new error for this span. */
         error(message, Class = Error) {
             return new Class(`${message} (${this})`);
         }
+        /** Makes new span for same uri. */
         span(row, col, length) {
             return new $mol_span(this.uri, this.source, row, col, length);
         }
+        /** Makes new span after end of this. */
         after(length = 0) {
             return new $mol_span(this.uri, this.source, this.row, this.col + this.length, length);
         }
+        /** Makes new span between begin and end. */
         slice(begin, end = -1) {
             let len = this.length;
             if (begin < 0)
@@ -1437,6 +1567,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Serializes tree to string in tree format. */
     function $mol_tree2_to_string(tree) {
         let output = [];
         function dump(tree, prefix = '') {
@@ -1480,12 +1611,25 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * Abstract Syntax Tree with human readable serialization.
+     * Avoid direct instantiation. Use static factories instead.
+     * @see https://github.com/nin-jin/tree.d
+     */
     class $mol_tree2 extends Object {
         type;
         value;
         kids;
         span;
-        constructor(type, value, kids, span) {
+        constructor(
+        /** Type of structural node, `value` should be empty */
+        type, 
+        /** Content of data node, `type` should be empty */
+        value, 
+        /** Child nodes */
+        kids, 
+        /** Position in most far source resource */
+        span) {
             super();
             this.type = type;
             this.value = value;
@@ -1493,12 +1637,15 @@ var $;
             this.span = span;
             this[Symbol.toStringTag] = type || '\\' + value;
         }
+        /** Makes collection node. */
         static list(kids, span = $mol_span.unknown) {
             return new $mol_tree2('', '', kids, span);
         }
+        /** Makes new derived collection node. */
         list(kids) {
             return $mol_tree2.list(kids, this.span);
         }
+        /** Makes data node for any string. */
         static data(value, kids = [], span = $mol_span.unknown) {
             const chunks = value.split('\n');
             if (chunks.length > 1) {
@@ -1512,21 +1659,26 @@ var $;
             }
             return new $mol_tree2('', value, kids, span);
         }
+        /** Makes new derived data node. */
         data(value, kids = []) {
             return $mol_tree2.data(value, kids, this.span);
         }
+        /** Makes struct node. */
         static struct(type, kids = [], span = $mol_span.unknown) {
             if (/[ \n\t\\]/.test(type)) {
                 $$.$mol_fail(span.error(`Wrong type ${JSON.stringify(type)}`));
             }
             return new $mol_tree2(type, '', kids, span);
         }
+        /** Makes new derived structural node. */
         struct(type, kids = []) {
             return $mol_tree2.struct(type, kids, this.span);
         }
+        /** Makes new derived node with different kids id defined. */
         clone(kids, span = this.span) {
             return new $mol_tree2(this.type, this.value, kids, span);
         }
+        /** Returns multiline text content. */
         text() {
             var values = [];
             for (var kid of this.kids) {
@@ -1536,15 +1688,20 @@ var $;
             }
             return this.value + values.join('\n');
         }
+        /** Parses tree format. */
+        /** @deprecated Use $mol_tree2_from_string */
         static fromString(str, uri = 'unknown') {
             return $$.$mol_tree2_from_string(str, uri);
         }
+        /** Serializes to tree format. */
         toString() {
             return $$.$mol_tree2_to_string(this);
         }
+        /** Makes new tree with node overrided by path. */
         insert(value, ...path) {
             return this.update($mol_maybe(value), ...path)[0];
         }
+        /** Makes new tree with node overrided by path. */
         update(value, ...path) {
             if (path.length === 0)
                 return value;
@@ -1577,6 +1734,7 @@ var $;
                 return [this.clone(kids)];
             }
         }
+        /** Query nodes by path. */
         select(...path) {
             let next = [this];
             for (const type of path) {
@@ -1603,6 +1761,7 @@ var $;
             }
             return this.list(next);
         }
+        /** Filter kids by path or value. */
         filter(path, value) {
             const sub = this.kids.filter(item => {
                 var found = item.select(...path);
@@ -1630,9 +1789,11 @@ var $;
                 $mol_fail_hidden(error);
             }
         }
+        /** Transform tree through context with transformers */
         hack(belt, context = {}) {
             return [].concat(...this.kids.map(child => child.hack_self(belt, context)));
         }
+        /** Makes Error with node coordinates. */
         error(message, Class = Error) {
             return this.span.error(`${message}\n${this.clone([])}`, Class);
         }
@@ -1650,6 +1811,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Syntax error with cordinates and source line snippet. */
     class $mol_error_syntax extends SyntaxError {
         reason;
         line;
@@ -1668,6 +1830,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Parses tree format from string. */
     function $mol_tree2_from_string(str, uri = '?') {
         const span = $mol_span.entire(uri, str);
         var root = $mol_tree2.list([], span);
@@ -1677,6 +1840,7 @@ var $;
             var indent = 0;
             var line_start = pos;
             row++;
+            // read indent
             while (str.length > pos && str[pos] == '\t') {
                 indent++;
                 pos++;
@@ -1685,8 +1849,10 @@ var $;
                 min_indent = indent;
             }
             indent -= min_indent;
+            // invalid tab size
             if (indent < 0 || indent >= stack.length) {
                 const sp = span.span(row, 1, pos - line_start);
+                // skip error line
                 while (str.length > pos && str[pos] != '\n') {
                     pos++;
                 }
@@ -1701,7 +1867,9 @@ var $;
             }
             stack.length = indent + 1;
             var parent = stack[indent];
+            // parse types
             while (str.length > pos && str[pos] != '\\' && str[pos] != '\n') {
+                // type can not contain space and tab
                 var error_start = pos;
                 while (str.length > pos && (str[pos] == ' ' || str[pos] == '\t')) {
                     pos++;
@@ -1713,6 +1881,7 @@ var $;
                     const sp = span.span(row, error_start - line_start + 1, pos - error_start);
                     this.$mol_fail(new this.$mol_error_syntax(`Wrong nodes separator`, str.substring(line_start, line_end), sp));
                 }
+                // read type
                 var type_start = pos;
                 while (str.length > pos &&
                     str[pos] != '\\' &&
@@ -1727,10 +1896,12 @@ var $;
                     parent_kids.push(next);
                     parent = next;
                 }
+                // read one space if exists
                 if (str.length > pos && str[pos] == ' ') {
                     pos++;
                 }
             }
+            // read data
             if (str.length > pos && str[pos] == '\\') {
                 var data_start = pos;
                 while (str.length > pos && str[pos] != '\n') {
@@ -1741,6 +1912,7 @@ var $;
                 parent_kids.push(next);
                 parent = next;
             }
+            // now must be end of text
             if (str.length === pos && stack.length > 0) {
                 const sp = span.span(row, pos - line_start + 1, 1);
                 this.$mol_fail(new this.$mol_error_syntax(`Unexpected EOF, LF required`, str.substring(line_start, str.length), sp));
@@ -1833,6 +2005,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Module for working with terminal. Text coloring when output in terminal */
     class $mol_term_color {
         static reset = this.ansi(0, 0);
         static bold = this.ansi(1, 22);
@@ -1904,6 +2077,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** One-shot fiber */
     class $mol_wire_task extends $mol_wire_fiber {
         static getter(task) {
             return function $mol_wire_task_get(host, args) {
@@ -1929,6 +2103,7 @@ var $;
                 }
                 const key = (host?.[Symbol.toStringTag] ?? host) + ('.' + task.name + '<#>');
                 const next = new $mol_wire_task(key, task, host, args);
+                // Disabled because non-idempotency is required for try-catch
                 if (existen?.temp) {
                     $$.$mol_log3_warn({
                         place: '$mol_wire_task',
@@ -1961,7 +2136,7 @@ var $;
                     try {
                         next[Symbol.toStringTag] = this[Symbol.toStringTag];
                     }
-                    catch {
+                    catch { // Promises throw in strict mode
                         Object.defineProperty(next, Symbol.toStringTag, { value: this[Symbol.toStringTag] });
                     }
                 }
@@ -2014,6 +2189,10 @@ var $;
         props[field] = get_val;
         return get_val;
     }
+    /**
+     * Convert asynchronous (promise-based) API to synchronous by wrapping function and method calls in a fiber.
+     * @see https://mol.hyoo.ru/#!section=docs/=1fcpsq_1wh0h2
+     */
     function $mol_wire_sync(obj) {
         return new Proxy(obj, {
             get(obj, field) {
@@ -2255,6 +2434,10 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * CSS Units
+     * @see https://mol.hyoo.ru/#!section=docs/=xwq9q5_f966fg
+     */
     class $mol_style_unit extends $mol_decor {
         literal;
         constructor(value, literal) {
@@ -2301,6 +2484,10 @@ var $;
 var $;
 (function ($) {
     const { per } = $mol_style_unit;
+    /**
+     * CSS Functions
+     * @see https://mol.hyoo.ru/#!section=docs/=xwq9q5_f966fg
+     */
     class $mol_style_func extends $mol_decor {
         name;
         constructor(name, value) {
@@ -2395,6 +2582,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Create record of CSS variables. */
     function $mol_style_prop(prefix, keys) {
         const record = keys.reduce((rec, key) => {
             rec[key] = $mol_style_func.vary(`--${prefix}_${key}`);
@@ -2409,6 +2597,10 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * Theme css variables
+     * @see https://mol.hyoo.ru/#!section=demos/demo=mol_textarea_demo
+     */
     $.$mol_theme = $mol_style_prop('mol_theme', [
         'back',
         'hover',
@@ -2437,11 +2629,18 @@ var $;
 
 ;
 "use strict";
+// namespace $ {
+// 	$mol_style_attach( '$mol_theme_lights', `:root { --mol_theme_back: oklch( ${ $$.$mol_lights() ? 92 : 20 }% .01 var(--mol_theme_hue) ) }` )
+// }
 
 ;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * Gap in CSS
+     * @see https://page.hyoo.ru/#!=msdb74_bm7nsq
+     */
     $.$mol_gap = $mol_style_prop('mol_gap', [
         'page',
         'block',
@@ -2531,6 +2730,12 @@ var $;
         createDocumentFragment: () => $mol_dom_context.document.createDocumentFragment(),
     };
     $.$mol_jsx_frag = '';
+    /**
+     * JSX adapter that makes DOM tree.
+     * Generates global unique ids for every DOM-element by components tree with ids.
+     * Ensures all local ids are unique.
+     * Can reuse an existing nodes by GUIDs when used inside [`mol_jsx_attach`](https://github.com/hyoo-ru/mam_mol/tree/master/jsx/attach).
+     */
     function $mol_jsx(Elem, props, ...childNodes) {
         const id = props && props.id || '';
         const guid = id ? $.$mol_jsx_prefix ? $.$mol_jsx_prefix + '/' + id : id : $.$mol_jsx_prefix;
@@ -2659,6 +2864,7 @@ var $;
 var $;
 (function ($) {
     const TypedArray = Object.getPrototypeOf(Uint8Array);
+    /** Returns string key for any value. */
     function $mol_key(value) {
         primitives: {
             if (typeof value === 'bigint')
@@ -2666,9 +2872,9 @@ var $;
             if (typeof value === 'symbol')
                 return `Symbol(${value.description})`;
             if (!value)
-                return JSON.stringify(value);
+                return JSON.stringify(value); // 0, null, ""
             if (typeof value !== 'object' && typeof value !== 'function')
-                return JSON.stringify(value);
+                return JSON.stringify(value); // boolean, number, string
         }
         caching: {
             let key = $mol_key_store.get(value);
@@ -2745,6 +2951,9 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * Decorates method to fiber to ensure it is executed only once inside other fiber.
+     */
     function $mol_wire_method(host, field, descr) {
         if (!descr)
             descr = Reflect.getOwnPropertyDescriptor(host, field);
@@ -2777,6 +2986,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Long-living fiber. */
     class $mol_wire_atom extends $mol_wire_fiber {
         static solo(host, task) {
             const field = task.name + '()';
@@ -2827,7 +3037,11 @@ var $;
             }
             $mol_wire_atom.watching.add(this);
         }
+        /**
+         * Update atom value through another temp fiber.
+         */
         resync(args) {
+            // enforce pulling tasks abort
             for (let cursor = this.pub_from; cursor < this.sub_from; cursor += 2) {
                 const pub = this.data[cursor];
                 if (pub && pub instanceof $mol_wire_task) {
@@ -2888,7 +3102,7 @@ var $;
                     try {
                         next[Symbol.toStringTag] = this[Symbol.toStringTag];
                     }
-                    catch {
+                    catch { // Promises throw in strict mode
                         Object.defineProperty(next, Symbol.toStringTag, { value: this[Symbol.toStringTag] });
                     }
                 }
@@ -2916,6 +3130,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Decorates solo object channel to [mol_wire_atom](../atom/atom.ts). */
     function $mol_wire_solo(host, field, descr) {
         if (!descr)
             descr = Reflect.getOwnPropertyDescriptor(host, field);
@@ -2954,6 +3169,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Reactive memoizing multiplexed property decorator. */
     function $mol_wire_plex(host, field, descr) {
         if (!descr)
             descr = Reflect.getOwnPropertyDescriptor(host, field);
@@ -2992,7 +3208,25 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * Reactive memoizing solo property decorator from [mol_wire](../wire/README.md)
+     * @example
+     * '@' $mol_mem
+     * name(next?: string) {
+     * 	return next ?? 'default'
+     * }
+     * @see https://mol.hyoo.ru/#!section=docs/=qxmh6t_sinbmb
+     */
     $.$mol_mem = $mol_wire_solo;
+    /**
+     * Reactive memoizing multiplexed property decorator [mol_wire](../wire/README.md)
+     * @example
+     * '@' $mol_mem_key
+     * name(id: number, next?: string) {
+     *  return next ?? 'default'
+     * }
+     * @see https://mol.hyoo.ru/#!section=docs/=qxmh6t_sinbmb
+     */
     $.$mol_mem_key = $mol_wire_plex;
 })($ || ($ = {}));
 
@@ -3116,6 +3350,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Run code without state changes */
     function $mol_wire_probe(task, def) {
         const warm = $mol_wire_fiber.warm;
         try {
@@ -3136,6 +3371,10 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * Real-time refresh current atom.
+     * Don't use if possible. May reduce performance.
+     */
     function $mol_wire_watch() {
         const atom = $mol_wire_auto();
         if (atom instanceof $mol_wire_atom) {
@@ -3152,6 +3391,11 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * Returns closure that returns constant value.
+     * @example
+     * const rnd = $mol_const( Math.random() )
+     */
     function $mol_const(value) {
         const getter = (() => value);
         getter['()'] = value;
@@ -3166,6 +3410,9 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * Disable reaping of current subscriber
+     */
     function $mol_wire_solid() {
         let current = $mol_wire_auto();
         if (current.temp)
@@ -3269,6 +3516,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Convert a pseudo-synchronous (Suspense API) API to an explicit asynchronous one (for integrating with external systems). */
     function $mol_wire_async(obj) {
         let fiber;
         const temp = $mol_wire_task.getter(obj);
@@ -3310,6 +3558,7 @@ var $;
 
 ;
 "use strict";
+/** @jsx $mol_jsx */
 var $;
 (function ($) {
     function $mol_view_visible_width() {
@@ -3324,6 +3573,11 @@ var $;
         return suffix;
     }
     $.$mol_view_state_key = $mol_view_state_key;
+    /**
+     * The base class for all visual components. It provides the infrastructure for reactive lazy rendering, handling exceptions.
+     * @see https://mol.hyoo.ru/#!section=docs/=vv2nig_s5zr0f
+     */
+    /// Reactive statefull lazy ViewModel
     class $mol_view extends $mol_object {
         static Root(id) {
             return new this;
@@ -3388,16 +3642,22 @@ var $;
         state_key(suffix = '') {
             return this.$.$mol_view_state_key(suffix);
         }
+        /// Name of element that created when element not found in DOM
         dom_name() {
             return $mol_dom_qname(this.constructor.toString()) || 'div';
         }
+        /// NameSpace of element that created when element not found in DOM
         dom_name_space() { return 'http://www.w3.org/1999/xhtml'; }
+        /// Raw child views
         sub() {
             return [];
         }
+        /// Visible sub views with defined ambient context
+        /// Render all by default
         sub_visible() {
             return this.sub();
         }
+        /// Minimal width that used for lazy rendering
         minimal_width() {
             let min = 0;
             try {
@@ -3419,6 +3679,7 @@ var $;
         maximal_width() {
             return this.minimal_width();
         }
+        /// Minimal height that used for lazy rendering
         minimal_height() {
             let min = 0;
             try {
@@ -3438,11 +3699,11 @@ var $;
         view_rect() {
             if ($mol_wire_probe(() => this.view_rect()) === undefined) {
                 $mol_wire_watch();
-                return null;
+                return null; // don't touch DOM to prevent instant reflow
             }
             else {
                 const { width, height, left, right, top, bottom } = this.dom_node().getBoundingClientRect();
-                return { width, height, left, right, top, bottom };
+                return { width, height, left, right, top, bottom }; // pick to optimize compare
             }
         }
         dom_id() {
@@ -3632,6 +3893,7 @@ var $;
         [$mol_dev_format_head]() {
             return $mol_dev_format_span({}, $mol_dev_format_native(this));
         }
+        /** Deep search view by predicate. */
         *view_find(check, path = []) {
             if (path.length === 0 && check(this))
                 return yield [this];
@@ -3660,6 +3922,7 @@ var $;
                 $mol_fail_log(error);
             }
         }
+        /** Renders path of views to DOM. */
         force_render(path) {
             const kids = this.sub();
             const index = kids.findIndex(item => {
@@ -3674,6 +3937,7 @@ var $;
                 kids[index].force_render(path);
             }
         }
+        /** Renders view to DOM and scroll to it. */
         ensure_visible(view, align = "start") {
             const path = this.view_find(v => v === view).next().value;
             this.force_render(new Set(path));
@@ -3688,6 +3952,9 @@ var $;
             const win = this.$.$mol_dom_context;
             if (win.parent !== win.self && !win.document.hasFocus())
                 return;
+            // new this.$.$mol_after_frame( ()=> {
+            // 	this.dom_node().scrollIntoView({ block: 'start', inline: 'nearest' })
+            // } )
             new this.$.$mol_after_timeout(0, () => {
                 this.focused(true);
             });
@@ -3768,6 +4035,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Plugin is component without its own DOM element, but instead uses the owner DOM element */
     class $mol_plugin extends $mol_view {
         dom_node_external(next) {
             return next ?? $mol_owning_get(this).host.dom_node();
@@ -3986,6 +4254,11 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * CSS in TS.
+     * Statically typed CSS style sheets. Following samples show which CSS code are generated from TS code.
+     * @see https://mol.hyoo.ru/#!section=docs/=xwq9q5_f966fg
+     */
     function $mol_style_define(Component, config) {
         return $mol_style_attach(Component.name, $mol_style_sheet(Component, config));
     }
@@ -3995,12 +4268,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Scrolling pane.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_scroll_demo
+         */
         class $mol_scroll extends $.$mol_scroll {
             scroll_top(next, cache) {
                 const el = this.dom_node();
@@ -4050,6 +4328,7 @@ var $;
                 direction: 'column',
                 grow: 1,
                 shrink: 1,
+                // basis: 0,
             },
             outline: 'none',
             align: {
@@ -4067,6 +4346,7 @@ var $;
             contain: 'content',
             '>': {
                 $mol_view: {
+                    // transform: 'translateZ(0)', // enforce gpu scroll in all agents
                     gridArea: '1/1',
                 },
             },
@@ -4136,6 +4416,10 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * Z-index values for layers
+     * https://page.hyoo.ru/#!=xthcpx_wqmiba
+     */
     $.$mol_layer = $mol_style_prop('mol_layer', [
         'hover',
         'focus',
@@ -4158,12 +4442,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Root component for adaptivity to various screen sizes. Implements booklet UX.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_book2_demo
+         */
         class $mol_book2 extends $.$mol_book2 {
             pages_deep() {
                 let result = [];
@@ -4206,6 +4495,7 @@ var $;
                             left: p.offsetLeft + p.offsetWidth - b.offsetWidth,
                             behavior: 'smooth',
                         });
+                        // new this.$.$mol_after_timeout( 1000, ()=> n.bring() )
                     });
                     break;
                 }
@@ -4260,6 +4550,10 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * Decorates method to fiber to ensure it is executed only once inside other fiber from [mol_wire](../wire/README.md)
+     * @see https://mol.hyoo.ru/#!section=docs/=1fcpsq_1wh0h2
+     */
     $.$mol_action = $mol_wire_method;
 })($ || ($ = {}));
 
@@ -4267,6 +4561,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** State of arguments like `foo=bar xxx` */
     class $mol_state_arg extends $mol_object {
         prefix;
         static prolog = '';
@@ -4581,7 +4876,8 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    let buf = new Uint8Array(2 ** 12);
+    let buf = new Uint8Array(2 ** 12); // 4KB Mem Page
+    /** Temporary buffer. Recursive usage isn't supported. */
     function $mol_charset_buffer(size) {
         if (buf.byteLength < size)
             buf = new Uint8Array(size);
@@ -4603,19 +4899,19 @@ var $;
         let pos = from;
         for (let i = 0; i < str.length; i++) {
             let code = str.charCodeAt(i);
-            if (code < 0x80) {
+            if (code < 0x80) { // ASCII - 1 octet
                 buf[pos++] = code;
             }
-            else if (code < 0x800) {
+            else if (code < 0x800) { // 2 octet
                 buf[pos++] = 0xc0 | (code >> 6);
                 buf[pos++] = 0x80 | (code & 0x3f);
             }
-            else if (code < 0xd800 || code >= 0xe000) {
+            else if (code < 0xd800 || code >= 0xe000) { // 3 octet
                 buf[pos++] = 0xe0 | (code >> 12);
                 buf[pos++] = 0x80 | ((code >> 6) & 0x3f);
                 buf[pos++] = 0x80 | (code & 0x3f);
             }
-            else {
+            else { // surrogate pair
                 const point = ((code - 0xd800) << 10) + str.charCodeAt(++i) + 0x2400;
                 buf[pos++] = 0xf0 | (point >> 18);
                 buf[pos++] = 0x80 | ((point >> 12) & 0x3f);
@@ -4679,12 +4975,16 @@ var $;
 (function ($) {
     let file_modes;
     (function (file_modes) {
+        /** create if it doesn't already exist */
         file_modes[file_modes["create"] = $node.fs.constants.O_CREAT] = "create";
+        /** truncate to zero size if it already exists */
         file_modes[file_modes["exists_truncate"] = $node.fs.constants.O_TRUNC] = "exists_truncate";
+        /** throw exception if it already exists */
         file_modes[file_modes["exists_fail"] = $node.fs.constants.O_EXCL] = "exists_fail";
         file_modes[file_modes["read_only"] = $node.fs.constants.O_RDONLY] = "read_only";
         file_modes[file_modes["write_only"] = $node.fs.constants.O_WRONLY] = "write_only";
         file_modes[file_modes["read_write"] = $node.fs.constants.O_RDWR] = "read_write";
+        /** data will be appended to the end */
         file_modes[file_modes["append"] = $node.fs.constants.O_APPEND] = "append";
     })(file_modes || (file_modes = {}));
     function mode_mask(modes) {
@@ -4749,12 +5049,24 @@ var $;
         root() {
             const path = this.path();
             const base = this.constructor.base;
+            // Если путь выше или равен base или если parent такойже как и this - считаем это корнем
             return base.startsWith(path) || this == this.parent();
         }
         stat(next, virt) {
             const path = this.path();
             const parent = this.parent();
+            // Отслеживать проверку наличия родительской папки не стоит до корня диска
+            // Лучше ограничить mam-ом
             if (!this.root()) {
+                /*
+                Если parent папка удалилась, надо ресетнуть все объекты в ней на любой глубине.
+                Например, rm -rf с последующим git pull: parent папка может удалиться, потом создасться,
+                а текущая папка успеет только удалиться до момента выполнения stat.
+                Поэтому parent.exists() не запустит перевычисления, нужна именно parent.version()
+
+                Однако, parent.version() меняется не только при удалении, будет ложное срабатывание
+                С этим придется мириться, красивого решения пока нет.
+                */
                 parent.version();
             }
             parent.watcher();
@@ -4768,9 +5080,19 @@ var $;
             if (/([\/\\]\.|___$)/.test(path))
                 return;
             const file = this.relative(path.at(-1) === '/' ? path.slice(0, -1) : path);
+            // console.log(type, path)
+            // add (change): добавился файл - у parent надо обновить список sub, если он был заюзан
+            // change, unlink (rename): обновился или удалился файл - ресетим
+            // addDir (change), добавилась папка, у parent обновляем список директорий в sub
+            // дочерние ресетим
+            // unlinkDir (rename), удалилась папка, ресетим ее
+            // stat у всех дочерних обновится сам, т.к. связан с parent.version()
             this.changed.add(file);
             if (!this.watching)
                 return;
+            // throttle, пока события поступают не сбрасываем.
+            // аналог awaitWriteFinish из chokidar
+            // интервалы между change-сообщениями модифицируемого файла должны быть меньше watch_debounce
             this.frame?.destructor();
             this.frame = new this.$.$mol_after_timeout(this.watch_debounce(), () => {
                 if (!this.watching)
@@ -4779,8 +5101,16 @@ var $;
                 $mol_wire_async(this).flush();
             });
         }
+        /**
+         * Должно быть больше, чем время между событиями от вотчера при записи внешним процессом.
+         * Иначе запуск ресетов паралельно с изменением может привести к неконсистентности.
+         */
         static watch_debounce() { return 500; }
         static flush() {
+            // Пока flush работает, вотчер сюда не заходит, но может добавлять новые изменения
+            // на каждом перезапуске они применятся
+            // Пока run выполняется, изменения накапливаются, в конце run вызывается flush
+            // Пока применяются изменения, run должен ожидать конца flush
             for (const file of this.changed) {
                 const parent = file.parent();
                 try {
@@ -4795,16 +5125,32 @@ var $;
             }
             this.changed.clear();
             this.watching = true;
+            // this.watch_wd?.destructor()
+            // this.watch_wd = null
         }
         static watching = true;
         static lock = new $mol_lock;
         static watch_off(path) {
             this.watching = false;
+            // run должен ожидать конца flush
             this.flush();
             this.watching = false;
+            /*
+            watch запаздывает и событие может прилететь через 3 сек после окончания сайд эффекта
+            поэтому добавляем папку, которую меняет side_effect
+            Когда дойдет до выполнения flush, он ресетнет ее
+            
+            Иначе будут лишние срабатывания
+            Например, удалили hyoo/board, watch ресетит и exists начинает отдавать false, срабатывает git clone
+            Сразу после него событие addDir еще не успело прийти,
+            на следующем перезапуске вызывается git pull, т.к.
+            с точки зрения реактивной системы hyoo/board еще не существует.
+            */
             this.changed.add(this.absolute(path));
         }
+        // protected static watch_wd = null as null | $mol_after_timeout
         static unwatched(side_effect, affected_dir) {
+            // ждем, пока выполнится предыдущий unwatched
             const unlock = this.lock.grab();
             this.watch_off(affected_dir);
             try {
@@ -4827,6 +5173,7 @@ var $;
         modified() { return this.stat()?.mtime ?? null; }
         version() {
             const next = this.stat()?.mtime.getTime().toString(36).toUpperCase() ?? '';
+            // console.log('version', next, this.path())
             return next;
         }
         info(path) { return null; }
@@ -4844,15 +5191,19 @@ var $;
         writable(opts) {
             return new WritableStream;
         }
+        // open( ... modes: readonly $mol_file_mode[] ) { return 0 }
         buffer(next) {
+            // Если версия пустая - возвращаем пустой буфер
             let readed = new Uint8Array();
             if (next === undefined) {
+                // Если меняется версия файла, буфер надо перечитать
                 if (this.version())
                     readed = this.read();
             }
             const prev = $mol_mem_cached(() => this.buffer());
             const changed = prev === undefined || !$mol_compare_array(prev, next ?? readed);
             if (prev !== undefined && changed) {
+                // Логируем, если повторно читаем/пишем и буфер поменялся
                 this.$.$mol_log3_rise({
                     place: `$mol_file_node.buffer()`,
                     message: 'Changed',
@@ -4861,6 +5212,11 @@ var $;
             }
             if (next === undefined)
                 return changed ? readed : prev;
+            // Если буфер при записи не поменялся и файл не удаляли перед этим - не записываем новую версию.
+            // Если записывать, это приведет к смене mtime и вотчер снова триггернется, даже если содержимое файла не поменялось.
+            // В этом алгоритме есть изъян.
+            // Если файл записали, потом отключили вотчер, кто-то из вне его поменял, потом включили вотчер, снова записали тот же буфер,
+            // то буфер не запишется на диск, т.к. кэш не консистентен с диском.
             if (!changed && this.exists())
                 return prev;
             this.parent().exists(true);
@@ -4896,13 +5252,21 @@ var $;
             }
             return null;
         }
+        // static watch_root = ''
+        // static watcher_warned = false
         watcher() {
+            // const constructor = this.constructor as typeof $mol_file_base
+            // if (! constructor.watcher_warned) {
+            // 	console.warn(`${constructor}.watcher() not implemented`)
+            // 	constructor.watcher_warned = true
+            // }
             return {
                 destructor() { }
             };
         }
         exists(next) {
             const exists = Boolean(this.stat());
+            // console.log('exists current', exists, 'next', next, this.path())
             if (next === undefined)
                 return exists;
             if (next === exists)
@@ -4928,6 +5292,10 @@ var $;
             return match ? match[1].substring(1) : '';
         }
         text(next, virt) {
+            // Если записываем text, и вотчер ресетнул записанный файл,
+            // то надо снова его обновить, вызвать логику, которая делала пуш в text.
+            // Например файл удалили, потом снова создали, версия поменялась - перезаписываем
+            // Если использовать version, то вновь созданный файл, через вотчер запустит свое пересоздание
             if (next !== undefined)
                 this.exists();
             return this.text_int(next, virt);
@@ -4952,6 +5320,7 @@ var $;
             if (this.type() !== 'dir')
                 return [];
             this.version();
+            // Если дочерний file удалился, список надо обновить
             return this.kids().filter(file => file.exists());
         }
         resolve(path) {
@@ -5096,10 +5465,15 @@ var $;
         watcher(reset) {
             const path = this.path();
             const root = this.root();
+            // Если папки/файла нет, watch упадет с ошибкой
+            // exists обратится к parent.version и parent.watcher
+            // Поэтому у root-папки и выше не надо вызывать exists, иначе поднимется выше base до корня диска
+            // exists вызывать надо, что б пересоздавать вотчер при появлении папки или файла
             if (!root && !this.exists())
                 return super.watcher();
             let watcher;
             try {
+                // Между exists и watch файл может удалиться, в любом случае надо обрабатывать ENOENT
                 watcher = $node.fs.watch(path);
             }
             catch (error) {
@@ -5109,6 +5483,8 @@ var $;
                 if (root || error.code !== 'ENOENT') {
                     this.$.$mol_fail_log(error);
                 }
+                // Если файла нет - вотчер не создается, создастся потом, когда exists поменяется на true.
+                // Если создание упало с другой ошибкой - не ломаем работу mol_file, деградируем до не реактивной fs.
                 return super.watcher();
             }
             watcher.on('change', (type, name) => {
@@ -5120,6 +5496,7 @@ var $;
             watcher.on('error', e => this.$.$mol_fail_log(e));
             let destructed = false;
             watcher.on('close', () => {
+                // Если в процессе работы вотчер сам закрылся, надо его переоткрыть
                 if (!destructed)
                     setTimeout(() => $mol_wire_async(this).watcher(null), 500);
             });
@@ -5308,6 +5685,10 @@ var $;
             return false;
         return null;
     }
+    /**
+     * Switcher between light/dark themes (usually for `mol_theme_auto` plugin).
+     * @see https://mol.hyoo.ru/#!section=demos/demo=mol_lights_demo
+     */
     function $mol_lights(next) {
         const arg = parse(this.$mol_state_arg.value('mol_lights'));
         const base = this.$mol_media.match('(prefers-color-scheme: light)');
@@ -5330,12 +5711,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * The [plugin](../../plugin/readme.md) which defines theme based on [mol_lights](../../lights/readme.md).
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_lights_demo
+         */
         class $mol_theme_auto extends $.$mol_theme_auto {
             theme() {
                 return this.$.$mol_lights() ? this.light() : this.dark();
@@ -5374,6 +5760,10 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+    * Key names code for hotkey
+    * @see [mol_hotkey](../../hotkey/hotkey.view.ts)
+    */
     let $mol_keyboard_code;
     (function ($mol_keyboard_code) {
         $mol_keyboard_code[$mol_keyboard_code["backspace"] = 8] = "backspace";
@@ -5482,12 +5872,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Plugin which adds handlers for keyboard keys.
+         * @see [mol_keyboard_code](../keyboard/code/code.ts)
+         */
         class $mol_hotkey extends $.$mol_hotkey {
             key() {
                 return super.key();
@@ -5533,12 +5928,16 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Mixin view logic to DOM node of another component.
+         */
         class $mol_ghost extends $.$mol_ghost {
             dom_node_external(next) {
                 return this.Sub().dom_node(next);
@@ -5608,12 +6007,16 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Marker on top of another component with tracking of its position.
+         */
         class $mol_follower extends $.$mol_follower {
             pos() {
                 const self_rect = this.view_rect();
@@ -5749,12 +6152,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * `Bubble` that can be shown anchored to `Anchor` element.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_pop_demo
+         */
         class $mol_pop extends $.$mol_pop {
             showed(next = false) {
                 this.focused();
@@ -5895,6 +6303,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_button) = class $mol_button extends ($.$mol_view) {
 		event_activate(next){
@@ -5983,12 +6392,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Simple button.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_button_demo
+         */
         class $mol_button extends $.$mol_button {
             disabled() {
                 return !this.enabled();
@@ -6004,6 +6418,7 @@ var $;
                     this.status([null]);
                 }
                 catch (error) {
+                    // Calling actions from catch section, if throwing promise breaks idempotency
                     Promise.resolve().then(() => this.status([error]));
                     $mol_fail_hidden(error);
                 }
@@ -6073,6 +6488,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_button_minor) = class $mol_button_minor extends ($.$mol_button_typed) {};
 
@@ -6086,6 +6502,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_check) = class $mol_check extends ($.$mol_button_minor) {
@@ -6167,12 +6584,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Checkbox UI component. See Variants for more concrete implementations.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_check_box_demo
+         */
         class $mol_check extends $.$mol_check {
             click(next) {
                 const event = next ? $mol_dom_event.wrap(next) : null;
@@ -6243,12 +6665,18 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Pop-up display and hide by mouse click, also hide by unfocus.
+         * Based on [mol_pop](https://mol.hyoo.ru/#!section=demos/demo=mol_pop_demo) component.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_pick_demo
+         */
         class $mol_pick extends $.$mol_pick {
             keydown(event) {
                 if (!this.trigger_enabled())
@@ -6296,6 +6724,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -6401,8 +6830,10 @@ var $;
 var $;
 (function ($) {
     let x = /x/[Symbol.matchAll];
+    /** Type safe reguar expression builder */
     class $mol_regexp extends RegExp {
         groups;
+        /** Prefer to use $mol_regexp.from */
         constructor(source, flags = 'gsu', groups = []) {
             super(source, flags);
             this.groups = groups;
@@ -6422,12 +6853,14 @@ var $;
                 this.lastIndex = index;
             }
         }
+        /** Parses input and returns found capture groups or null */
         [Symbol.match](str) {
             const res = [...this[Symbol.matchAll](str)].filter(r => r.groups).map(r => r[0]);
             if (!res.length)
                 return null;
             return res;
         }
+        /** Splits string by regexp edges */
         [Symbol.split](str) {
             const res = [];
             let token_last = null;
@@ -6482,12 +6915,14 @@ var $;
         get native() {
             return new RegExp(this.source, this.flags);
         }
+        /** Makes regexp that greedy repeats this pattern with delimiter */
         static separated(chunk, sep) {
             return $mol_regexp.from([
                 $mol_regexp.repeat_greedy([[chunk], sep], 0),
                 chunk,
             ]);
         }
+        /** Makes regexp that non-greedy repeats this pattern from min to max count */
         static repeat(source, min = 0, max = Number.POSITIVE_INFINITY) {
             const regexp = $mol_regexp.from(source);
             const upper = Number.isFinite(max) ? max : '';
@@ -6503,6 +6938,7 @@ var $;
             };
             return regexp2;
         }
+        /** Makes regexp that greedy repeats this pattern from min to max count */
         static repeat_greedy(source, min = 0, max = Number.POSITIVE_INFINITY) {
             const regexp = $mol_regexp.from(source);
             const upper = Number.isFinite(max) ? max : '';
@@ -6518,6 +6954,7 @@ var $;
             };
             return regexp2;
         }
+        /** Makes regexp that match any of options */
         static vary(sources, flags = 'gsu') {
             const groups = [];
             const chunks = sources.map(source => {
@@ -6527,17 +6964,21 @@ var $;
             });
             return new $mol_regexp(`(?:${chunks.join('|')})`, flags, groups);
         }
+        /** Makes regexp that allow absent of this pattern */
         static optional(source) {
             return $mol_regexp.repeat_greedy(source, 0, 1);
         }
+        /** Makes regexp that look ahead for pattern */
         static force_after(source) {
             const regexp = $mol_regexp.from(source);
             return new $mol_regexp(`(?=${regexp.source})`, regexp.flags, regexp.groups);
         }
+        /** Makes regexp that look ahead for pattern */
         static forbid_after(source) {
             const regexp = $mol_regexp.from(source);
             return new $mol_regexp(`(?!${regexp.source})`, regexp.flags, regexp.groups);
         }
+        /** Converts some js values to regexp */
         static from(source, { ignoreCase, multiline } = {
             ignoreCase: false,
             multiline: false,
@@ -6638,9 +7079,11 @@ var $;
                 return regexp;
             }
         }
+        /** Makes regexp which includes only unicode category */
         static unicode_only(...category) {
             return new $mol_regexp(`\\p{${category.join('=')}}`);
         }
+        /** Makes regexp which excludes unicode category */
         static unicode_except(...category) {
             return new $mol_regexp(`\\P{${category.join('=')}}`);
         }
@@ -6681,12 +7124,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Output text with dimmed mismatched substrings.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_dimmer_demo
+         */
         class $mol_dimmer extends $.$mol_dimmer {
             parts() {
                 const needle = this.needle();
@@ -6736,6 +7184,10 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * Localisation in $mol framework
+     * @see https://mol.hyoo.ru/#!section=docs/=s5aqnb_odub8l
+     */
     class $mol_locale extends $mol_object {
         static lang_default() {
             return 'en';
@@ -6868,12 +7320,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Plugin which can navigate in list of items
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_nav_demo
+         */
         class $mol_nav extends $.$mol_nav {
             event_key(event) {
                 if (!event)
@@ -7040,12 +7497,18 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * The list of rows with lazy/virtual rendering support based on `minimal_height` of rows.
+         * `mol_list` should contain only components that inherits `mol_view`. You should not place raw strings or numbers in list.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_list_demo
+         */
         class $mol_list extends $.$mol_list {
             sub() {
                 const rows = this.rows();
@@ -7087,9 +7550,11 @@ var $;
                 const gap_after = $mol_mem_cached(() => this.gap_after()) ?? 0;
                 let top = Math.ceil(rect?.top ?? 0) + gap_before;
                 let bottom = Math.ceil(rect?.bottom ?? 0) - gap_after;
+                // change nothing when already covers all limits
                 if (top <= limit_top && bottom >= limit_bottom) {
                     return [min2, max2];
                 }
+                // jumps when fully over limits
                 if (anchoring && ((bottom < limit_top) || (top > limit_bottom))) {
                     min = 0;
                     top = Math.ceil(rect?.top ?? 0);
@@ -7106,18 +7571,22 @@ var $;
                 }
                 let top2 = top;
                 let bottom2 = bottom;
+                // force recalc min when overlapse top limit
                 if (anchoring && (top < limit_top) && (bottom < limit_bottom) && (max < kids.length)) {
                     min2 = max;
                     top2 = bottom;
                 }
+                // force recalc max when overlapse bottom limit
                 if ((bottom > limit_bottom) && (top > limit_top) && (min > 0)) {
                     max2 = min;
                     bottom2 = top;
                 }
+                // extend min to cover top limit
                 while (anchoring && ((top2 > limit_top) && (min2 > 0))) {
                     --min2;
                     top2 -= this.item_height_min(min2);
                 }
+                // extend max to cover bottom limit
                 while (bottom2 < limit_bottom && max2 < kids.length) {
                     bottom2 += this.item_height_min(max2);
                     ++max2;
@@ -7346,12 +7815,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * An input field for entering single line text.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_string_demo
+         */
         class $mol_string extends $.$mol_string {
             event_change(next) {
                 if (!next)
@@ -7476,6 +7950,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** State of time moment */
     class $mol_state_time extends $mol_object {
         static task(precision, reset) {
             if (precision) {
@@ -7502,12 +7977,14 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /** Base SVG component to display SVG images or icons. */
         class $mol_svg extends $.$mol_svg {
             computed_style() {
                 const win = this.$.$mol_dom_context;
@@ -7567,6 +8044,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_svg_path) = class $mol_svg_path extends ($.$mol_svg) {
 		geometry(){
@@ -7583,6 +8061,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_icon) = class $mol_icon extends ($.$mol_svg_root) {
@@ -7620,6 +8099,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_close) = class $mol_icon_close extends ($.$mol_icon) {
 		path(){
@@ -7630,6 +8110,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_search) = class $mol_search extends ($.$mol_pop) {
@@ -7788,12 +8269,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Search input with suggest and clear button.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_search_demo
+         */
         class $mol_search extends $.$mol_search {
             anchor_content() {
                 return [
@@ -7883,6 +8369,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_select) = class $mol_select extends ($.$mol_pick) {
@@ -8037,12 +8524,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Allow user to select value from various options and displays current value.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_select_demo_colors
+         */
         class $mol_select extends $.$mol_select {
             filter_pattern(next) {
                 this.focused();
@@ -8149,6 +8641,10 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * 48-bit streamable array hash function
+     * Based on cyrb53: https://stackoverflow.com/a/52171480
+     */
     function $mol_hash_numbers(buff, seed = 0) {
         let h1 = 0xdeadbeef ^ seed;
         let h2 = 0x41c6ce57 ^ seed;
@@ -8168,6 +8664,10 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * 48-bit streamable string hash function
+     * Based on cyrb53: https://stackoverflow.com/a/52171480
+     */
     function $mol_hash_string(str, seed = 0) {
         let nums = new Array(str.length);
         for (let i = 0; i < str.length; ++i)
@@ -8180,12 +8680,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Avatar uniquely-generated by id string
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_avatar_demo
+         */
         class $mol_avatar extends $.$mol_avatar {
             path() {
                 const id = $mol_hash_string(this.id());
@@ -8229,6 +8734,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_sync_off) = class $mol_icon_sync_off extends ($.$mol_icon) {
 		path(){
@@ -8239,6 +8745,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_link) = class $mol_link extends ($.$mol_view) {
@@ -8312,12 +8819,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Dynamic hyperlink. It can add, change or remove parameters. A link that leads to the current page has [mol_link_current] attribute set to true.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_link_demo
+         */
         class $mol_link extends $.$mol_link {
             uri_toggle() {
                 return this.current() ? this.uri_off() : this.uri();
@@ -8539,6 +9051,10 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * Checks for value of given enum and returns expected type.
+     * @see https://mol.hyoo.ru/#!section=demos/demo=mol_data_enum_demo
+     */
     function $mol_data_enum(name, dict) {
         const index = {};
         for (let key in dict) {
@@ -8592,6 +9108,7 @@ var $;
         $.$mol_base64_url_encode = $mol_base64_url_encode_node;
     }
     function $mol_base64_url_decode_node(str) {
+        // without Uint8Array breaks $mol_compare_deep
         const buffer = Buffer.from(str, 'base64url');
         return new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength);
     }
@@ -8605,11 +9122,13 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** @FIXME Need polyfill for Safari and Node (https://github.com/microsoft/MSR-JavaScript-Crypto/) */
     const algorithm = {
         name: 'ECDSA',
         hash: 'SHA-256',
         namedCurve: "P-256",
     };
+    /** Asymmetric signing pair with shortest payload */
     async function $mol_crypto_auditor_pair() {
         const pair = await $mol_crypto_native.subtle.generateKey(algorithm, true, ['sign', 'verify']);
         return {
@@ -8618,8 +9137,10 @@ var $;
         };
     }
     $.$mol_crypto_auditor_pair = $mol_crypto_auditor_pair;
+    /** Asymmetric signing public key wrapper with shortest payload */
     class $mol_crypto_auditor_public extends Object {
         native;
+        /** Key size in bytes. */
         static size_str = 86;
         static size_bin = 64;
         constructor(native) {
@@ -8640,10 +9161,12 @@ var $;
                 y: serial.slice(43, 86),
             }, algorithm, true, ['verify']));
         }
+        /** 86 bytes */
         async serial() {
             const { x, y } = await $mol_crypto_native.subtle.exportKey('jwk', this.native);
             return x + y;
         }
+        /** 64 bytes */
         async toArray() {
             const { x, y, d } = await $mol_crypto_native.subtle.exportKey('jwk', this.native);
             return new Uint8Array([
@@ -8656,8 +9179,10 @@ var $;
         }
     }
     $.$mol_crypto_auditor_public = $mol_crypto_auditor_public;
+    /** Asymmetric signing private key wrapper with shortest payload */
     class $mol_crypto_auditor_private extends Object {
         native;
+        /** Key size in bytes. */
         static size_str = 129;
         static size_bin = 96;
         constructor(native) {
@@ -8680,10 +9205,12 @@ var $;
                 d: serial.slice(86, 129),
             }, algorithm, true, ['sign']));
         }
+        /** 129 bytes */
         async serial() {
             const { x, y, d } = await $mol_crypto_native.subtle.exportKey('jwk', this.native);
             return x + y + d;
         }
+        /** 96 bytes */
         async toArray() {
             const { x, y, d } = await $mol_crypto_native.subtle.exportKey('jwk', this.native);
             return new Uint8Array([
@@ -8692,14 +9219,17 @@ var $;
                 ...$mol_base64_url_decode(d),
             ]);
         }
+        /** 64 bytes */
         async sign(data) {
             return await $mol_crypto_native.subtle.sign(algorithm, this.native, data);
         }
+        /** Makes public key from private */
         async public() {
             return await $mol_crypto_auditor_public.from($mol_crypto_auditor_private_to_public(await this.serial()));
         }
     }
     $.$mol_crypto_auditor_private = $mol_crypto_auditor_private;
+    /** Sign size in bytes. */
     $.$mol_crypto_auditor_sign_size = 64;
     function $mol_crypto_auditor_private_to_public(serial) {
         return serial.slice(0, 86);
@@ -8751,16 +9281,23 @@ var $;
     const level = $mol_data_enum('level', $hyoo_crowd_peer_level);
     let $hyoo_crowd_unit_kind;
     (function ($hyoo_crowd_unit_kind) {
+        /** Grab Land by King */
         $hyoo_crowd_unit_kind[$hyoo_crowd_unit_kind["grab"] = 0] = "grab";
+        /** Join Peer to Land */
         $hyoo_crowd_unit_kind[$hyoo_crowd_unit_kind["join"] = 1] = "join";
+        /* Give Level for Peer for Land */
         $hyoo_crowd_unit_kind[$hyoo_crowd_unit_kind["give"] = 2] = "give";
+        /** Add Data to Land by joined Peer with right Level */
         $hyoo_crowd_unit_kind[$hyoo_crowd_unit_kind["data"] = 3] = "data";
     })($hyoo_crowd_unit_kind = $.$hyoo_crowd_unit_kind || ($.$hyoo_crowd_unit_kind = {}));
     let $hyoo_crowd_unit_group;
     (function ($hyoo_crowd_unit_group) {
+        /** Join and Give units */
         $hyoo_crowd_unit_group[$hyoo_crowd_unit_group["auth"] = 0] = "auth";
+        /** Data units */
         $hyoo_crowd_unit_group[$hyoo_crowd_unit_group["data"] = 1] = "data";
     })($hyoo_crowd_unit_group = $.$hyoo_crowd_unit_group || ($.$hyoo_crowd_unit_group = {}));
+    /** Independent part of data. */
     class $hyoo_crowd_unit extends Object {
         land;
         auth;
@@ -8771,7 +9308,24 @@ var $;
         time;
         data;
         bin;
-        constructor(land, auth, head, self, next, prev, time, data, bin) {
+        constructor(
+        /** Identifier of land. */
+        land, 
+        /** Identifier of auth. */
+        auth, 
+        /** Identifier of head node. */
+        head, 
+        /** Self identifier inside head after prev before next. */
+        self, 
+        /** Identifier of next node. */
+        next, 
+        /** Identifier of prev node. */
+        prev, 
+        /** Monotonic real clock. 4B / info = 31b */
+        time, 
+        /** type-size = bin<0 | null=0 | json>0 */
+        /** Associated atomic data. mem = 4B+ / bin = (0|8B)+ / type-size-info = 16b */
+        data, bin) {
             super();
             this.land = land;
             this.auth = auth;
@@ -8899,9 +9453,28 @@ var $;
             buff.set(next);
             return buff;
         }
+        // land( next?: $mol_int62_pair ) {
+        // 	if( next ) {
+        // 		this.setInt32( offset.land_lo, next.lo, true )
+        // 		this.setInt32( offset.land_hi, next.hi, true )
+        // 		return next
+        // 	} else {
+        // 		return {
+        // 			lo: this.getInt32( offset.land_lo, true ),
+        // 			hi: this.getInt32( offset.land_hi, true ),
+        // 		}
+        // 	}
+        // }
         size() {
             return Math.ceil(Math.abs(this.getInt16(offset.size, true)) / 8) * 8 + offset.data + $mol_crypto_auditor_sign_size;
         }
+        // data() {
+        // 	const info = this.getUint16( offset.data )
+        // 	const size = Math.abs( info )
+        // 	const buf = new Uint8Array( this.buffer, this.byteOffset + offset.sens, size )
+        // 	const data = info > 0 ? JSON.parse( $mol_charset_decode( buf ) ) : info < 0 ? buf : null
+        // 	return data
+        // }
         sens() {
             return new Uint8Array(this.buffer, this.byteOffset, this.size() - $mol_crypto_auditor_sign_size);
         }
@@ -8983,10 +9556,12 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Internal int31 representation of current time. */
     function $hyoo_crowd_time_now() {
         return Math.floor(Date.now() / 100) - 1767e7;
     }
     $.$hyoo_crowd_time_now = $hyoo_crowd_time_now;
+    /** Returns unix timestamp for internal time representation. */
     function $hyoo_crowd_time_stamp(time) {
         return 1767e9 + time * 100;
     }
@@ -8997,8 +9572,10 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Vector clock. Stores real timestamps. */
     class $hyoo_crowd_clock extends Map {
         static begin = -1 * 2 ** 30;
+        /** Maximum time for all peers. */
         last_time = $hyoo_crowd_clock.begin;
         constructor(entries) {
             super(entries);
@@ -9008,16 +9585,19 @@ var $;
                 this.see_time(time);
             }
         }
+        /** Synchronize this clock with another. */
         sync(right) {
             for (const [peer, time] of right) {
                 this.see_peer(peer, time);
             }
         }
+        /** Increase `last` to latest. */
         see_time(time) {
             if (time < this.last_time)
                 return;
             this.last_time = time;
         }
+        /** Add new `time` for `peer` and increase `last`. */
         see_peer(peer, time) {
             if (!this.fresh(peer, time))
                 return;
@@ -9032,9 +9612,11 @@ var $;
                 }), bin.getInt32(cursor + 8 + 4 * group, true));
             }
         }
+        /** Checks if time from future. */
         fresh(peer, time) {
             return time > this.time(peer);
         }
+        /** Checks if this clock from future of another. */
         ahead(clock) {
             for (const [peer, time] of this) {
                 if (clock.fresh(peer, time))
@@ -9051,6 +9633,7 @@ var $;
         last_stamp() {
             return $hyoo_crowd_time_stamp(this.last_time);
         }
+        /** Gererates new time for peer that greater then other seen. */
         tick(peer) {
             let time = this.now();
             if (time <= this.last_time) {
@@ -9107,6 +9690,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Stateless non-unique adapter to CROWD Tree for given Head. */
     class $hyoo_crowd_node extends $mol_object2 {
         land;
         head;
@@ -9129,16 +9713,20 @@ var $;
         world() {
             return this.land.world();
         }
+        /** Returns another representation of this node. */
         as(Node) {
             return this.world()?.Fund(Node).Item(`${this.land.id()}!${this.head}`) ?? new Node(this.land, this.head);
         }
+        /** Ordered inner alive Units. */
         units() {
             return this.land.unit_alives(this.head);
         }
+        /** Ordered inner alive Node. */
         nodes(Node) {
             const fund = this.world()?.Fund(Node);
             return this.units().map(unit => fund?.Item(`${this.land.id()}!${unit.self}`) ?? new Node(this.land, unit.self));
         }
+        /** Returns true when node value is never changed. */
         virgin() {
             return this.land.unit_list(this.head).length === 0;
         }
@@ -9166,6 +9754,7 @@ var $;
 var $;
 (function ($) {
     class $hyoo_crowd_reg extends $hyoo_crowd_node {
+        /** Atomic value. */
         value(next) {
             const unit = this.units().at(-1);
             if (next === undefined)
@@ -9175,12 +9764,15 @@ var $;
             this.land.put(this.head, unit?.self ?? this.land.id_new(), '0_0', next);
             return next;
         }
+        /** Atomic string. */
         str(next) {
             return String(this.value(next) ?? '');
         }
+        /** Atomic number. */
         numb(next) {
             return Number(this.value(next));
         }
+        /** Atomic boolean. */
         bool(next) {
             return Boolean(this.value(next));
         }
@@ -9205,6 +9797,7 @@ var $;
 var $;
 (function ($) {
     class $hyoo_crowd_struct extends $hyoo_crowd_node {
+        /** Returns inner node for key. */
         sub(key, Node) {
             const head = $mol_int62_hash_string(key + '\n' + this.head);
             return this.world()?.Fund(Node).Item(`${this.land.id()}!${head}`) ?? new Node(this.land, head);
@@ -9221,6 +9814,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Conflict-free Reinterpretable Ordered Washed Data Tree */
     class $hyoo_crowd_land extends $mol_object {
         id() {
             return $mol_int62_to_string($mol_int62_random());
@@ -9254,21 +9848,26 @@ var $;
         }
         pub = new $mol_wire_pub;
         _clocks = [new $hyoo_crowd_clock, new $hyoo_crowd_clock];
+        /** unit by head + self */
         _unit_all = new Map();
         unit(head, self) {
             return this._unit_all.get(`${head}!${self}`);
         }
+        /** units by head */
         _unit_lists = new Map();
+        /** Units by Head without tombstones */
         _unit_alives = new Map();
         size() {
             return this._unit_all.size;
         }
+        /** Returns list of all Units for Node. */
         unit_list(head) {
             let kids = this._unit_lists.get(head);
             if (!kids)
                 this._unit_lists.set(head, kids = Object.assign([], { dirty: false }));
             return kids;
         }
+        /** Returns list of alive Units for Node. */
         unit_alives(head) {
             this.pub.promote();
             let kids = this._unit_alives.get(head);
@@ -9281,23 +9880,27 @@ var $;
             }
             return kids;
         }
+        /** Node by id and type. */
         node(head, Node) {
             return new Node(this, head);
         }
+        /** Root Node. */
         chief = this.node('0_0', $hyoo_crowd_struct);
+        /** Generates new identifier. */
         id_new() {
             for (let i = 0; i < 1000; ++i) {
                 const id = $mol_int62_to_string($mol_int62_random());
                 if (id === '0_0')
-                    continue;
+                    continue; // zero reserved for empty
                 if (id === this.id())
-                    continue;
+                    continue; // reserved for rights
                 if (this._unit_lists.has(id))
-                    continue;
+                    continue; // skip already exists
                 return id;
             }
             throw new Error(`Can't generate ID after 1000 times`);
         }
+        /** Makes independent clone with defined peer. */
         fork(auth) {
             const fork = $hyoo_crowd_land.make({
                 id: $mol_const(this.id()),
@@ -9305,6 +9908,7 @@ var $;
             });
             return fork.apply(this.delta());
         }
+        /** Makes Delta bettween Clock and now. */
         delta(clocks = [new $hyoo_crowd_clock, new $hyoo_crowd_clock]) {
             this.pub.promote();
             const delta = [];
@@ -9365,6 +9969,7 @@ var $;
             kids.dirty = false;
             return kids;
         }
+        /** Applies Delta to current state. */
         apply(delta) {
             for (const next of delta) {
                 this._clocks[next.group()].see_peer(next.auth, next.time);
@@ -9388,6 +9993,7 @@ var $;
             return this;
         }
         _joined = false;
+        /** Register public key of current peer **/
         join() {
             if (this._joined)
                 return;
@@ -9406,6 +10012,7 @@ var $;
             this._joined = true;
             this.pub.emit();
         }
+        /** Unregister public key of current peer **/
         leave() {
             const auth = this.peer();
             if (!auth)
@@ -9434,6 +10041,7 @@ var $;
         level_base(next) {
             this.level('0_0', next);
         }
+        /** Access level for peer. Use empty string for current peer. **/
         level(peer, next) {
             if (next)
                 this.join();
@@ -9464,6 +10072,7 @@ var $;
             this.pub.promote();
             return this._unit_all.size > 0;
         }
+        /** All peers who have special rights to write o land. */
         peers() {
             this.pub.promote();
             const lords = [];
@@ -9476,6 +10085,7 @@ var $;
             }
             return lords;
         }
+        /** All peers who joined to land except king. */
         residents() {
             this.pub.promote();
             const lords = [];
@@ -9488,6 +10098,7 @@ var $;
             }
             return lords;
         }
+        /** All peers who have alive data inside land. */
         authors() {
             this.pub.promote();
             const authors = new Set();
@@ -9519,6 +10130,7 @@ var $;
         selection(peer) {
             return this.world().land_sync(peer).chief.sub('$hyoo_crowd_land..selection', $hyoo_crowd_reg);
         }
+        /** Places data to tree. */
         put(head, self, prev, data) {
             this.join();
             const old_id = `${head}!${self}`;
@@ -9536,18 +10148,25 @@ var $;
             const unit_new = new $hyoo_crowd_unit(this.id(), auth, head, self, next, prev, time, data, null);
             this._unit_all.set(old_id, unit_new);
             unit_list.splice(seat, 0, unit_new);
+            // unit_list.dirty = true
             this._unit_alives.set(head, undefined);
+            // this.apply([ unit_new ])
             this.pub.emit();
             return unit_new;
         }
+        /** Marks unit as deleted and wipes its data. */
         wipe(unit) {
             if (unit.data === null)
                 return unit;
+            // for( const kid of this.unit_list( unit.self ) ) {
+            // 	this.wipe( kid )
+            // }
             const unit_list = this.unit_list(unit.head);
             const seat = unit_list.indexOf(unit);
             const prev = seat > 0 ? unit_list[seat - 1].self : seat < 0 ? unit.prev : '0_0';
             return this.put(unit.head, unit.self, prev, null);
         }
+        /** Moves Unit after another Prev inside some Head. */
         move(unit, head, prev) {
             const unit_list = this.unit_list(unit.head);
             const seat = unit_list.indexOf(unit);
@@ -9557,6 +10176,7 @@ var $;
                 this.put(next.head, next.self, unit_list[unit_list.indexOf(next) - 2]?.self ?? '0_0', next.data);
             this.put(head, unit.self, prev, unit.data);
         }
+        /** Moves Unit at given Seat inside given Head. */
         insert(unit, head, seat) {
             const list = this.unit_list(head);
             const prev = seat ? list[seat - 1].self : '0_0';
@@ -9576,6 +10196,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Registry of nodes as domain entities. */
     class $hyoo_crowd_fund extends $mol_object {
         world;
         node_class;
@@ -9608,7 +10229,11 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** @deprecated */
     $.$mol_dict_key = $mol_key;
+    /**
+     * Dictionary with extended keys support
+     */
     class $mol_dict extends Map {
         get(key) {
             return super.get($mol_key(key));
@@ -9655,6 +10280,7 @@ var $;
                     if (iteration.done)
                         return iteration;
                     iteration.value = [JSON.parse(iteration.value[0]), iteration.value[1]];
+                    // iteration.value[0] = JSON.parse( iteration.value[0] as any as string )
                     return iteration;
                 }
             };
@@ -9711,6 +10337,7 @@ var $;
         _knights = new $mol_dict();
         _signs = new WeakMap();
         async grab(law = [''], mod = [], add = []) {
+            // if( !law.length && !mod.length && !add.length ) $mol_fail( new Error( 'Grabbing dead land' ) )
             const knight = await $hyoo_crowd_peer.generate();
             this._knights.set(knight.id, knight);
             const land_inner = this.land(knight.id);
@@ -9791,7 +10418,7 @@ var $;
         }
         async audit_delta(land, delta) {
             const all = new Map();
-            const desync = 60 * 60 * 10;
+            const desync = 60 * 60 * 10; // 1 hour
             const deadline = land.clock_data.now() + desync;
             const get_unit = (id) => {
                 return all.get(id) ?? land._unit_all.get(id);
@@ -9908,6 +10535,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Starts subtasks concurrently instead of serial. */
     function $mol_wire_race(...tasks) {
         const results = tasks.map(task => {
             try {
@@ -9934,6 +10562,7 @@ var $;
 (function ($) {
     $.$hyoo_sync_masters = [
         `sync.hyoo.ru`,
+        //`sync-pmzz.onrender.com`,
     ];
 })($ || ($ = {}));
 
@@ -10054,6 +10683,12 @@ var $;
             $mol_wire_sync(this).db_land_save(land, units);
             for (const unit of units)
                 this.db_unit_persisted.add(unit);
+            // this.$.$mol_log3_rise({
+            // 	place: this,
+            // 	land: land.id(),
+            // 	message: 'Base Save',
+            // 	units: this.log_pack( units ),
+            // })
         }
         db_land_init(land) {
             try {
@@ -10073,6 +10708,12 @@ var $;
                 this.db_unit_persisted.add(unit);
             units.sort($hyoo_crowd_unit_compare);
             land.apply(units);
+            // this.$.$mol_log3_rise({
+            // 	place: this,
+            // 	land: land.id(),
+            // 	message: 'Base Load',
+            // 	units: this.log_pack( units ),
+            // })
         }
         async db_land_load(land) {
             return [];
@@ -10105,6 +10746,11 @@ var $;
         }
         line_land_clocks({ line, land }, next) {
             $mol_wire_solid();
+            // try{
+            // 	this.master()
+            // } catch( error ) {
+            // 	$mol_fail_log( error )
+            // }
             return next;
         }
         line_sync(line) {
@@ -10119,13 +10765,29 @@ var $;
             if (!units.length)
                 return;
             this.line_send_units(line, units);
+            /*this.$.$mol_log3_rise({
+                place: this,
+                land: land.id(),
+                message: 'Sync Sent',
+                line: $mol_key( line ),
+                units: this.log_pack( units ),
+            })*/
             for (const unit of units) {
                 clocks[unit.group()].see_peer(unit.auth, unit.time);
             }
         }
         line_land_init({ line, land }) {
             this.db_land_init(land);
+            // const lands = this.line_land_clocks({ line, land })
+            // if( lands ) return
             this.line_send_clocks(line, land);
+            // this.$.$mol_log3_come({
+            // 	place: this,
+            // 	land: land.id(),
+            // 	message: 'Sync Open',
+            // 	line: $mol_key( line ),
+            // 	clocks: land._clocks,
+            // })
         }
         line_land_neck({ line, land }, next = []) {
             return next;
@@ -10169,6 +10831,13 @@ var $;
                     }
                     else {
                         this.line_lands(line, [...lands, land]);
+                        // this.$.$mol_log3_done({
+                        // 	place: this,
+                        // 	land: land.id(),
+                        // 	message: 'Sync Pair',
+                        // 	line: $mol_key( line ),
+                        // 	clocks,
+                        // })
                     }
                     return;
                 }
@@ -10343,6 +11012,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -10424,6 +11094,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_script_text) = class $mol_icon_script_text extends ($.$mol_icon) {
 		path(){
@@ -10434,6 +11105,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_link_source) = class $mol_link_source extends ($.$mol_link) {
@@ -10454,6 +11126,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_help) = class $mol_icon_help extends ($.$mol_icon) {
 		path(){
@@ -10464,6 +11137,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_icon_help_circle) = class $mol_icon_help_circle extends ($.$mol_icon) {
@@ -10476,6 +11150,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_help_circle_outline) = class $mol_icon_help_circle_outline extends ($.$mol_icon) {
 		path(){
@@ -10486,6 +11161,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_check_icon) = class $mol_check_icon extends ($.$mol_check) {};
@@ -10501,6 +11177,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_brightness_4) = class $mol_icon_brightness_4 extends ($.$mol_icon) {
 		path(){
@@ -10511,6 +11188,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_lights_toggle) = class $mol_lights_toggle extends ($.$mol_check_icon) {
@@ -10539,12 +11217,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Toggle for Switcher between light/dark themes (usually for `mol_theme_auto` plugin).
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_lights_demo
+         */
         class $mol_lights_toggle extends $.$mol_lights_toggle {
             lights(next) {
                 return this.$.$mol_lights(next);
@@ -10568,10 +11251,12 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
+    /** Creates lexer by dictionary of lexems. Lexem that started first wins. Then lexem that declared earlier wins. Use regexp capture to take parts of token. */
     class $mol_syntax2 {
         lexems;
         constructor(lexems) {
@@ -10652,6 +11337,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -10792,6 +11478,8 @@ var $;
         'code': /```(.+?)```|;;(.+?);;|`(.+?)`/,
         'insert': /\+\+(.+?)\+\+/,
         'delete': /~~(.+?)~~|--(.+?)--/,
+        // 'remark' : /(\()(.+?)(\))/ ,
+        // 'quote' : /(")(.+?)(")/ ,
         'embed': /""(?:(.*?)\\)?(.*?)""/,
         'link': /\\\\(?:(.*?)\\)?(.*?)\\\\/,
         'image-link': /!\[([^\[\]]*?)\]\((.*?)\)/,
@@ -10821,6 +11509,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -10837,6 +11526,7 @@ var $;
             tokens(path) {
                 const tokens = [];
                 const text = (path.length > 0)
+                    // @FIXME: this logic compatible only with `string`
                     ? this.tokens(path.slice(0, path.length - 1))[path[path.length - 1]].found.slice(1, -1)
                     : this.text();
                 this.syntax().tokenize(text, (name, found, chunks) => {
@@ -10983,6 +11673,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_clipboard_outline) = class $mol_icon_clipboard_outline extends ($.$mol_icon) {
 		path(){
@@ -10993,6 +11684,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_button_copy) = class $mol_button_copy extends ($.$mol_button_minor) {
@@ -11053,12 +11745,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Button copy text() value to clipboard
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_button_demo
+         */
         class $mol_button_copy extends $.$mol_button_copy {
             data() {
                 return Object.fromEntries(this.blobs().map(blob => [blob.type, blob]));
@@ -11173,12 +11870,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Code visualizer.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_text_code_demo
+         */
         class $mol_text_code extends $.$mol_text_code {
             render_visible_only() {
                 return this.$.$mol_support_css_overflow_anchor();
@@ -11465,12 +12167,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * An input field for entering multiline text.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_textarea_demo
+         */
         class $mol_textarea extends $.$mol_textarea {
             indent_inc() {
                 let text = this.value();
@@ -11604,22 +12311,39 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * Argument must be Truthy
+     * @deprecated use $mol_assert_equal instead
+     */
     function $mol_assert_ok(value) {
         if (value)
             return;
         $mol_fail(new Error(`${value} ≠ true`));
     }
     $.$mol_assert_ok = $mol_assert_ok;
+    /**
+     * Argument must be Falsy
+     * @deprecated use $mol_assert_equal instead
+     */
     function $mol_assert_not(value) {
         if (!value)
             return;
         $mol_fail(new Error(`${value} ≠ false`));
     }
     $.$mol_assert_not = $mol_assert_not;
+    /**
+     * Handler must throw an error.
+     * @example
+     * $mol_assert_fail( ()=>{ throw new Error( 'Parse error' ) } ) // Passes because throws error
+     * $mol_assert_fail( ()=>{ throw new Error( 'Parse error' ) } , 'Parse error' ) // Passes because throws right message
+     * $mol_assert_fail( ()=>{ throw new Error( 'Parse error' ) } , Error ) // Passes because throws right class
+     * @see https://mol.hyoo.ru/#!section=docs/=9q9dv3_fgxjsf
+     */
     function $mol_assert_fail(handler, ErrorRight) {
         const fail = $.$mol_fail;
         try {
@@ -11642,10 +12366,18 @@ var $;
         $mol_fail(new Error('Not failed', { cause: { expect: ErrorRight } }));
     }
     $.$mol_assert_fail = $mol_assert_fail;
+    /** @deprecated Use $mol_assert_equal */
     function $mol_assert_like(...args) {
         $mol_assert_equal(...args);
     }
     $.$mol_assert_like = $mol_assert_like;
+    /**
+     * All arguments must not be structural equal to each other.
+     * @example
+     * $mol_assert_unique( 1 , 2 , 3 ) // Passes
+     * $mol_assert_unique( 1 , 1 , 2 ) // Fails because 1 === 1
+     * @see https://mol.hyoo.ru/#!section=docs/=9q9dv3_fgxjsf
+     */
     function $mol_assert_unique(...args) {
         for (let i = 0; i < args.length; ++i) {
             for (let j = 0; j < args.length; ++j) {
@@ -11658,6 +12390,13 @@ var $;
         }
     }
     $.$mol_assert_unique = $mol_assert_unique;
+    /**
+     * All arguments must be structural equal each other.
+     * @example
+     * $mol_assert_like( [1] , [1] , [1] ) // Passes
+     * $mol_assert_like( [1] , [1] , [2] ) // Fails because 1 !== 2
+     * @see https://mol.hyoo.ru/#!section=docs/=9q9dv3_fgxjsf
+     */
     function $mol_assert_equal(...args) {
         for (let i = 1; i < args.length; ++i) {
             if ($mol_compare_deep(args[0], args[i]))
@@ -11672,6 +12411,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Dynamic sources import. */
     class $mol_import extends $mol_object2 {
         static module(uri) {
             $mol_wire_solid();
@@ -11739,6 +12479,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_chevron) = class $mol_icon_chevron extends ($.$mol_icon) {
 		path(){
@@ -11749,6 +12490,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_check_expand) = class $mol_check_expand extends ($.$mol_check) {
@@ -11786,12 +12528,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Expander for trees, lists, etc
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_check_expand_demo
+         */
         class $mol_check_expand extends $.$mol_check_expand {
             level_style() {
                 return `${this.level() * 1 - 1}rem`;
@@ -12016,6 +12763,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -12221,6 +12969,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -12294,6 +13043,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -12303,6 +13053,7 @@ var $;
         class $mol_link_iconed extends $.$mol_link_iconed {
             icon() {
                 return `https://favicon.yandex.net/favicon/${this.host()}?color=0,0,0,0&size=32&stub=1`;
+                // return `https://api.faviconkit.com/${ this.host() }/16`
             }
             host() {
                 const base = this.$.$mol_state_arg.href();
@@ -12387,6 +13138,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -12477,6 +13229,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_frame) = class $mol_frame extends ($.$mol_embed_native) {
 		allow(){
@@ -12523,14 +13276,19 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_frame_demo
+         */
         class $mol_frame extends $.$mol_frame {
             window() {
+                // if( this.html() ) return ( this.dom_node() as HTMLIFrameElement ).contentWindow!
                 return super.window();
             }
             allow() {
@@ -12619,6 +13377,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -12652,6 +13411,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -12692,6 +13452,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -12728,6 +13489,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -12813,6 +13575,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -12909,12 +13672,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Component which expands any content on title click.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_expander_demo
+         */
         class $mol_expander extends $.$mol_expander {
             rows() {
                 return [
@@ -13244,12 +14012,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Markdown visualizer.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_text_demo
+         */
         class $mol_text extends $.$mol_text {
             flow_tokens() {
                 const tokens = [];
@@ -13673,6 +14446,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -13693,6 +14467,8 @@ var $;
             maxHeight: per(100),
             boxSizing: 'border-box',
             color: $mol_theme.text,
+            // backdropFilter: blur( `3px` ), enforces layering
+            // zIndex: 0 ,
             ':focus': {
                 outline: 'none',
             },
@@ -13820,6 +14596,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -13866,6 +14643,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_check_box) = class $mol_check_box extends ($.$mol_check) {
 		Icon(){
@@ -13886,6 +14664,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_bar) = class $mol_bar extends ($.$mol_view) {};
 
@@ -13900,6 +14679,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_chevron_double_down) = class $mol_icon_chevron_double_down extends ($.$mol_icon) {
 		path(){
@@ -13911,6 +14691,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_unfold_more_horizontal) = class $mol_icon_unfold_more_horizontal extends ($.$mol_icon) {
 		path(){
@@ -13921,6 +14702,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -13975,12 +14757,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Component to see progress state of any operation.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_portion_demo
+         */
         class $mol_portion extends $.$mol_portion {
             indicator_width_style() {
                 return this.portion() * 100 + '%';
@@ -14273,6 +15060,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -14368,6 +15156,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_bookmark) = class $mol_icon_bookmark extends ($.$mol_icon) {
 		path(){
@@ -14378,6 +15167,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_icon_bookmark_outline) = class $mol_icon_bookmark_outline extends ($.$mol_icon) {
@@ -14390,6 +15180,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_play) = class $mol_icon_play extends ($.$mol_icon) {
 		path(){
@@ -14401,6 +15192,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_flash) = class $mol_icon_flash extends ($.$mol_icon) {
 		path(){
@@ -14411,6 +15203,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_dump_value) = class $mol_dump_value extends ($.$mol_view) {
@@ -14519,12 +15312,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Dumps any JS values.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_dump_demo
+         */
         class $mol_dump_value extends $.$mol_dump_value {
             sub() {
                 const value = this.value();
@@ -14613,6 +15411,11 @@ var $;
                         const descr = Reflect.getOwnPropertyDescriptor(value, key);
                         if ('value' in descr) {
                             const line = [prefix, descr.value];
+                            // let proto = descr.value
+                            // while( proto && typeof proto === 'object' ) {
+                            // 	proto = Reflect.getPrototypeOf( proto )
+                            // 	if( proto ) line.push( ' - ', proto )
+                            // }
                             res.push(line);
                         }
                         else {
@@ -14725,12 +15528,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Dumps any JS values.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_dump_demo
+         */
         class $mol_dump_list extends $.$mol_dump_list {
             sub() {
                 return this.values().map((_, index) => this.Dump(index));
@@ -15031,6 +15839,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Incompatible with instance fields with initializators */
     function $mol_wire_field(host, field, descr) {
         if (!descr)
             descr = Reflect.getOwnPropertyDescriptor(host, field);
@@ -15064,6 +15873,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Transition atom value */
     function $mol_wire_easing(next) {
         const atom = $mol_wire_auto();
         if (!(atom instanceof $mol_wire_atom))
@@ -15133,8 +15943,10 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Reactive Set */
     class $mol_wire_set extends Set {
         pub = new $mol_wire_pub;
+        // Accessors
         has(value) {
             this.pub.promote();
             return super.has(value);
@@ -15163,6 +15975,7 @@ var $;
             this.pub.promote();
             return super.size;
         }
+        // Mutators
         add(value) {
             if (super.has(value))
                 return this;
@@ -15182,6 +15995,7 @@ var $;
             super.clear();
             this.pub.emit();
         }
+        // Extensions
         item(val, next) {
             if (next === undefined)
                 return this.has(val);
@@ -15214,6 +16028,7 @@ var $;
         if (type !== 'object' && type !== 'function')
             return target;
         return new Proxy(target, {
+            // Readers
             get(target, property) {
                 $mol_wire_proxy_pub(id, target).promote();
                 const suffix = '.' + (typeof property === 'symbol' ? property.description : property);
@@ -15239,6 +16054,7 @@ var $;
                 $mol_wire_proxy_pub(id, target).promote();
                 return Reflect.isExtensible(target);
             },
+            // Writers
             set(target, property, next) {
                 const pub = pubs.get(target);
                 if (pub) {
@@ -15274,8 +16090,10 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** reactive Dictionary */
     class $mol_wire_dict extends Map {
         pub = new $mol_wire_pub;
+        // Accessors
         has(key) {
             this.pub.promote();
             return super.has(key);
@@ -15308,11 +16126,12 @@ var $;
             this.pub.promote();
             return super.size;
         }
+        // Mutators
         set(key, value) {
             if (super.get(key) === value)
                 return this;
             super.set(key, value);
-            this.pub?.emit();
+            this.pub?.emit(); // undefined in constructor
             return this;
         }
         delete(key) {
@@ -15327,6 +16146,7 @@ var $;
             super.clear();
             this.pub.emit();
         }
+        // Extensions
         item(key, next) {
             if (next === undefined)
                 return this.get(key) ?? null;
@@ -15344,6 +16164,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Watch and logs reactive states. Logger automatically added to test bundle which is adding to `test.html`. */
     class $mol_wire_log extends $mol_object2 {
         static watch(task) {
             return task;
@@ -15408,6 +16229,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -15894,6 +16716,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -15978,6 +16801,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_check_all) = class $mol_icon_check_all extends ($.$mol_icon) {
 		path(){
@@ -15989,8 +16813,10 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -15998,6 +16824,10 @@ var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Checkbox for group of check boxes.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_check_group_demo
+         */
         class $mol_check_group extends $.$mol_check_group {
             checked(next) {
                 if (next !== undefined) {
@@ -16046,6 +16876,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_share) = class $mol_icon_share extends ($.$mol_icon) {
 		path(){
@@ -16057,6 +16888,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_share_variant) = class $mol_icon_share_variant extends ($.$mol_icon) {
 		path(){
@@ -16067,6 +16899,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_button_share) = class $mol_button_share extends ($.$mol_button_minor) {
@@ -16106,6 +16939,7 @@ var $;
 
 ;
 "use strict";
+/** @jsx $mol_jsx */
 var $;
 (function ($) {
     async function $mol_dom_capture_svg(root) {
@@ -16120,16 +16954,17 @@ var $;
         }
         function clone(el) {
             const re = el.cloneNode();
+            // if( el === root ) document.body.appendChild( re )
             if (el instanceof HTMLImageElement && !/^(data|blob):/.test(el.src)) {
                 const canvas = $mol_jsx("canvas", { width: el.naturalWidth, height: el.naturalHeight });
                 const context = canvas.getContext('2d');
                 context.drawImage(el, 0, 0);
                 try {
                     ;
-                    re.src = canvas.toDataURL();
+                    re.src = canvas.toDataURL(); // external urls don't works
                 }
                 catch (error) {
-                    $mol_fail_log(error);
+                    $mol_fail_log(error); // CORS don't supported
                 }
             }
             if (re instanceof HTMLInputElement) {
@@ -16160,6 +16995,7 @@ var $;
                 restyle(kid, after);
                 re.appendChild(kid);
             }
+            // if( el === root ) document.body.removeChild( re )
             return re;
         }
         const { width, height } = root.getBoundingClientRect();
@@ -16196,12 +17032,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Button Share title() and uri() to other app
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_button_share_demo
+         */
         class $mol_button_share extends $.$mol_button_share {
             capture() {
                 return this.$.$mol_dom_context.document.body;
@@ -16240,6 +17081,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_directions_fork) = class $mol_icon_directions_fork extends ($.$mol_icon) {
 		path(){
@@ -16250,6 +17092,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_icon_plus_box) = class $mol_icon_plus_box extends ($.$mol_icon) {
@@ -16262,10 +17105,12 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
+    /** Converts IDBResult to Promise */
     function $mol_db_response(request) {
         return new Promise((done, fail) => {
             request.onerror = () => fail(new Error(request.error.message));
@@ -16279,6 +17124,14 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * Creates new or returns existen database with automatic schema migration.
+     * Schema version is based on migrations count.
+     * Migrations code mustn't be changed after deploy.
+     * Only adding migrations at the end is allowed.
+     * Only new migrations will be applyed to existen DB.
+     * Schema changes allowed only through migratios.
+     */
     async function $mol_db(name, ...migrations) {
         const request = this.$mol_dom_context.indexedDB.open(name, migrations.length ? migrations.length + 1 : undefined);
         request.onupgradeneeded = event => {
@@ -16297,6 +17150,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** IndexedDB ObjectStore wrapper. */
     class $mol_db_store {
         native;
         constructor(native) {
@@ -16311,6 +17165,7 @@ var $;
         get incremental() {
             return this.native.autoIncrement;
         }
+        /** Returns dictionary of all existen Indexes. */
         get indexes() {
             return new Proxy({}, {
                 ownKeys: () => [...this.native.indexNames],
@@ -16318,9 +17173,11 @@ var $;
                 get: (_, name) => new $mol_db_index(this.native.index(name))
             });
         }
+        /** Creates new Index */
         index_make(name, path = [], unique = false, multiEntry = false) {
             return this.native.createIndex(name, path, { multiEntry, unique });
         }
+        /** Drops existen Index */
         index_drop(name) {
             this.native.deleteIndex(name);
             return this;
@@ -16331,21 +17188,27 @@ var $;
         get db() {
             return this.transaction.db;
         }
+        /** Deletes all stored Documents */
         clear() {
             return $mol_db_response(this.native.clear());
         }
+        /** Counts Documents by primary key(s) */
         count(keys) {
             return $mol_db_response(this.native.count(keys));
         }
+        /** Stores single Document by primary key. */
         put(doc, key) {
             return $mol_db_response(this.native.put(doc, key));
         }
+        /** Returns Document by primary key. */
         get(key) {
             return $mol_db_response(this.native.get(key));
         }
+        /** Selects Documents by primary keys. */
         select(key, count) {
             return $mol_db_response(this.native.getAll(key, count));
         }
+        /** Deletes Documents by primary key(s). */
         drop(keys) {
             return $mol_db_response(this.native.delete(keys));
         }
@@ -16360,6 +17223,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** IndexedDB Index wrapper. */
     class $mol_db_index {
         native;
         constructor(native) {
@@ -16386,12 +17250,15 @@ var $;
         get db() {
             return this.store.db;
         }
+        /** Counts Documents by key(s) */
         count(keys) {
             return $mol_db_response(this.native.count(keys));
         }
+        /** Returns Document by primary key. */
         get(key) {
             return $mol_db_response(this.native.get(key));
         }
+        /** Selects Documents by primary keys. */
         select(key, count) {
             return $mol_db_response(this.native.getAll(key, count));
         }
@@ -16427,32 +17294,46 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** IndexedDB instance wrapper. */
     class $mol_db_database {
         native;
         constructor(native) {
             this.native = native;
         }
+        /** Returns database name. */
         get name() {
             return this.native.name;
         }
+        /** Returns database schema version. */
         get version() {
             return this.native.version;
         }
+        /** Returns all stores names. */
         get stores() {
             return [...this.native.objectStoreNames];
         }
+        /** Create read-only transaction. */
         read(...names) {
             return new $mol_db_transaction(this.native.transaction(names, 'readonly', { durability: 'relaxed' })).stores;
         }
+        /** Create read/write transaction. */
         change(...names) {
             return new $mol_db_transaction(this.native.transaction(names, 'readwrite', { durability: 'relaxed' }));
         }
+        /**
+         * Deletes database.
+         * DB can be deleted only after end of all transactions.
+         */
         kill() {
             this.native.close();
             const request = $mol_dom_context.indexedDB.deleteDatabase(this.name);
             request.onblocked = console.warn;
             return $mol_db_response(request);
         }
+        /**
+         * Closes DB connection.
+         * Connection really be closed only after end of all transactions.
+         */
         destructor() {
             this.native.close();
         }
@@ -16464,11 +17345,13 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** IndexedDB Transaction wrapper. */
     class $mol_db_transaction {
         native;
         constructor(native) {
             this.native = native;
         }
+        /** Returns dictionary of all existen Stores. */
         get stores() {
             return new Proxy({}, {
                 ownKeys: () => [...this.native.objectStoreNames],
@@ -16478,18 +17361,22 @@ var $;
                     : undefined,
             });
         }
+        /** Creates new Store */
         store_make(name) {
             return this.native.db.createObjectStore(name, { autoIncrement: true });
         }
+        /** Drops existen Store */
         store_drop(name) {
             this.native.db.deleteObjectStore(name);
             return this;
         }
+        /** Instant abort transaction. Any errors aborts transactions automatically. */
         abort() {
             if (this.native.error)
                 return;
             this.native.abort();
         }
+        /** Instant commits transaction. Without errors commit proceed automatically later. */
         commit() {
             this.native.commit?.();
             return new Promise((done, fail) => {
@@ -16610,6 +17497,29 @@ var $;
                 };
             });
         }
+        // @ $mol_mem
+        // server() {
+        // 	return new $mol_dom_listener(
+        // 		$mol_dom_context,
+        // 		'message',
+        // 		$mol_wire_async( ( event: MessageEvent<[ string, $mol_int62_string, readonly $hyoo_crowd_unit[] ]> )=> {
+        // 			if( !event ) return
+        // 			if( !Array.isArray( event.data ) ) return
+        // 			switch( event.data[0] ) {
+        // 				case 'hyoo_sync_units': {
+        // 					const [, land_id, units ] = event.data
+        // 					const line = event.source! as Window
+        // 					const land = this.land( land_id )
+        // 					land.apply( units )
+        // 					this.slaves([ ... new Set([ ... this.slaves(), line ]) ])
+        // 					this.line_lands( line, [ ... new Set([ ... this.line_lands( line ), land ]) ] )
+        // 					this.line_land_clocks({ line, land })
+        // 					line.postMessage([ 'hyoo_sync_units', land.id(), [] ])
+        // 				}
+        // 			}
+        // 		} )
+        // 	)
+        // }
         line_send_clocks(line, land) {
             if (line instanceof WebSocket) {
                 line.send(land.clocks_bin);
@@ -16651,9 +17561,9 @@ var $;
         if (!replace)
             replace = (next, prev, lead) => insert(next, drop(prev, lead));
         if (to > prev.length)
-            to = prev.length;
+            to = prev.length; // $mol_fail( new RangeError( `To(${ to }) greater then length(${ prev.length })` ) )
         if (from > to)
-            from = to;
+            from = to; // $mol_fail( new RangeError( `From(${ to }) greater then to(${ to })` ) )
         let p = from;
         let n = 0;
         let lead = p ? prev[p - 1] : null;
@@ -16686,6 +17596,7 @@ var $;
 var $;
 (function ($) {
     class $hyoo_crowd_list extends $hyoo_crowd_node {
+        /** Data list representation. */
         list(next) {
             const units = this.units();
             if (next === undefined) {
@@ -16879,6 +17790,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$hyoo_js_perf) = class $hyoo_js_perf extends ($.$mol_book2) {
@@ -17219,6 +18131,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Lazy computed lists with native Array interface. $mol_range2_array is mutable but all derived ranges are immutable. */
     function $mol_range2(item = index => index, size = () => Number.POSITIVE_INFINITY) {
         const source = typeof item === 'function' ? new $mol_range2_array() : item;
         if (typeof item !== 'function') {
@@ -17267,6 +18180,7 @@ var $;
     }
     $.$mol_range2 = $mol_range2;
     class $mol_range2_array extends Array {
+        // Lazy
         concat(...tail) {
             if (tail.length === 0)
                 return this;
@@ -17278,6 +18192,7 @@ var $;
             }
             return $mol_range2(index => index < this.length ? this[index] : tail[0][index - this.length], () => this.length + tail[0].length);
         }
+        // Lazy
         filter(check, context) {
             const filtered = [];
             let cursor = -1;
@@ -17290,13 +18205,16 @@ var $;
                 return filtered[index];
             }, () => cursor < this.length ? Number.POSITIVE_INFINITY : filtered.length);
         }
+        // Diligent
         forEach(proceed, context) {
             for (let [key, value] of this.entries())
                 proceed.call(context, value, key, this);
         }
+        // Lazy
         map(proceed, context) {
             return $mol_range2(index => proceed.call(context, this[index], index, this), () => this.length);
         }
+        // Diligent
         reduce(merge, result) {
             let index = 0;
             if (arguments.length === 1) {
@@ -17307,12 +18225,15 @@ var $;
             }
             return result;
         }
+        // Lazy
         toReversed() {
             return $mol_range2(index => this[this.length - 1 - index], () => this.length);
         }
+        // Lazy
         slice(from = 0, to = this.length) {
             return $mol_range2(index => this[from + index], () => Math.min(to, this.length) - from);
         }
+        // Lazy
         some(check, context) {
             for (let index = 0; index < this.length; ++index) {
                 if (check.call(context, this[index], index, this))
@@ -17546,6 +18467,7 @@ var $;
             });
             return Object.assign(promise, {
                 destructor: () => {
+                    // Abort of done request breaks response parsing
                     if (!done && !controller.signal.aborted)
                         controller.abort();
                 },
@@ -17653,6 +18575,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -17822,8 +18745,8 @@ var $;
             }
             case_size(index) {
                 return (this.case_prefix(index) + '\n' + this.source(index))
-                    .replace(/(\/\*)?\/\/.*$/gm, '')
-                    .match(/\w+/g)?.length ?? 0;
+                    .replace(/(\/\*)?\/\/.*$/gm, '') // drop inline (pseudo?) comments
+                    .match(/\w+/g)?.length ?? 0; // calc named tokens
             }
             case_deps_names(index) {
                 const src = (this.case_prefix(index) + '\n' + this.source(index));
