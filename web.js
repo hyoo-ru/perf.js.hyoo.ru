@@ -4561,13 +4561,6 @@ var $;
 })($ || ($ = {}));
 
 ;
-"use strict";
-var $;
-(function ($) {
-    $.$hyoo_sync_revision = "echo";
-})($ || ($ = {}));
-
-;
 	($.$mol_ghost) = class $mol_ghost extends ($.$mol_view) {
 		Sub(){
 			const obj = new this.$.$mol_view();
@@ -10947,9 +10940,6 @@ var $;
                     return [this.Fail()];
                 }
             }
-            hint() {
-                return super.hint() + ' ' + $hyoo_sync_revision;
-            }
             master_link() {
                 return this.yard().master_link().replace(/^ws(s?):/, 'http$1:');
             }
@@ -10969,9 +10959,6 @@ var $;
         __decorate([
             $mol_mem
         ], $hyoo_sync_online.prototype, "link_content", null);
-        __decorate([
-            $mol_mem
-        ], $hyoo_sync_online.prototype, "hint", null);
         __decorate([
             $mol_mem
         ], $hyoo_sync_online.prototype, "master_link", null);
